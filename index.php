@@ -47,7 +47,7 @@ Util::navbar();
 		<!--Welome message-->
 		<div class="col-12 mt-3 mb-2">
 			<div class="alert alert-primary" role="alert">
-				Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username) ?></b></a>.
+				Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?>.</b></a>
 			</div>
 		</div>
 

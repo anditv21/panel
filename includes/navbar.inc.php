@@ -17,11 +17,11 @@
 
 					<!-- Check if logged in --> 
 					<?php if (Session::isLogged() == true) : ?>
-
+						<?php if (Session::isBanned() == false) : ?>
 						<li class="nav-item">
 							<a class="nav-link" href="<?= SUB_DIR ?>/profile.php">Profile <i class="fas fa-user"></i></a>
 						</li>
-
+						<?php endif; ?>
 						<!-- Check if admin --> 
 						<?php if (Session::isAdmin() == true) : ?>
 							

@@ -9,4 +9,4 @@ if (!Session::isLogged()) { Util::redirect('/auth/login.php'); }
 $user = new UserController;
 $user->logoutUser();
 
-Util::redirect('/login.php');
+Util::redirect('/auth/login.php');
