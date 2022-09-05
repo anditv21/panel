@@ -55,7 +55,7 @@ Util::navbar();
 		<!--Statistics-->
 		<div class="col-lg-9 col-md-12">
 			<div class="rounded p-3 mb-3">
-				<div class="h5 border-bottom border-secondary pb-1">Statistics</div>
+				<div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-chart-line"></i> Statistics</div>
 				<div class="row text-muted">
 
 					<!--Total Users-->
@@ -81,17 +81,17 @@ Util::navbar();
 
 					<!--Detected // Undetected-->
 					<div class="col-12 clearfix">
-						Status: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->status); ?></p>
+					<i class="fas fa-info-circle"></i> Status: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->status); ?></p>
 					</div>
 
 					<!--Cheat version-->
 					<div class="col-12 clearfix">
-						Version: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->version); ?></p>
+					<i class="fas fa-code-branch"></i>&nbsp; Version: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->version); ?></p>
 					</div>
 					
 										
 					<div class="col-12 clearfix">
-					Subscription status: <p class="float-right mb-0"><?php if($sub>0){Util::display('Active');}else{Util::display('Inactive');} ?></p>
+					<i class="fas fa-user-clock"></i> Subscription status: <p class="float-right mb-0"><?php if($sub>0){Util::display('Active');}else{Util::display('Inactive');} ?></p>
 					</div>
 	
 					<!-- Check if has sub --> 
