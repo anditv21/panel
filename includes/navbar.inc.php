@@ -5,7 +5,7 @@
 
 		<div class="container">
 
-			<a class="navbar-brand" href="<?php echo SITE_URL ?>" style="font-family: 'Raleway', sans--serif;"><?php echo SITE_NAME ?></a>
+			<a class="navbar-brand" href="<?php echo SITE_URL . SUB_DIR ?>" style="font-family: 'Raleway', sans--serif;"><?php echo SITE_NAME ?></a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
