@@ -1,40 +1,42 @@
 <?php
 
-require_once '../app/require.php';
-require_once '../app/controllers/AdminController.php';
-require_once '../app/controllers/CheatController.php';
+require_once "../app/require.php";
+require_once "../app/controllers/AdminController.php";
+require_once "../app/controllers/CheatController.php";
 
-$user = new UserController;
-$cheat = new CheatController;
-$admin = new AdminController;
+$user = new UserController();
+$cheat = new CheatController();
+$admin = new AdminController();
 
 Session::init();
 
 $username = Session::get("username");
 
 Util::adminCheck();
-Util::head('Admin Panel');
+Util::head("Admin Panel");
 Util::navbar();
 
-// if post request 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// if post request
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST["cheatStatus"])) {
+    $admin->setCheatStatus();
+  }
 
+  if (isset($_POST["cheatMaint"])) {
+    $admin->setCheatMaint();
+  }
 
-	if (isset($_POST["cheatStatus"])) {
-		$admin->setCheatStatus(); 
-	}
+  if (isset($_POST["cheatVersion"])) {
+    $ver = floatval($_POST["version"]);
+    $admin->setCheatVersion($ver);
+  }
 
-	if (isset($_POST["cheatMaint"])) {
-		$admin->setCheatMaint(); 
-	}
+  if (isset($_POST["invite"])) {
+    Util::adminCheck();
+    $admin->setinvite();
+  }
 
-	if (isset($_POST["cheatVersion"])) {
-		$ver = floatval($_POST['version']);
-		$admin->setCheatVersion($ver); 
-	}
-
-	header("location: cheat.php");
-
+  header("location: cheat.php");
 }
 ?>
 
@@ -65,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<?php Util::adminNavbar(); ?>
 
 
-		<!--Total Users-->
+		<!--Status-->
 		<div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
 			<div class="card">
 				<div class=" card-body row">
@@ -80,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			</div>
 		</div>
 
-		<!--Total Users-->
+		<!--Version-->
 		<div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
 			<div class="card">
 				<div class=" card-body row">
@@ -95,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			</div>
 		</div>
 
-		<!--Total Users-->
+		<!--maintenance-->
 		<div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
 			<div class="card">
 				<div class=" card-body row">
@@ -105,6 +107,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<div class="col-6">
 						<h4><?php Util::display($cheat->getCheatData()->maintenance); ?></h4>
 						<span class="small text-muted text-uppercase">maintenance</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--invite system-->
+		<div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+			<div class="card">
+				<div class=" card-body row">
+					<div class="col-6 text-center">
+						<h3><i class="fas fa-envelope fa-2x"></i></h3>
+					</div>
+					<div class="col-6">
+						<h4>                                         <?php if (
+        $cheat->getCheatData()->invites == "0"
+      ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color:#ff0000;">Disabled</span></div>
+                                            <?php elseif (
+        $cheat->getCheatData()->invites == "1"
+      ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Enabled</span></div>
+                                            <?php endif; ?></h4>
+						<span class="small text-muted text-uppercase">invites</span>
 					</div>
 				</div>
 			</div>
@@ -121,6 +146,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 								
 					<button name="cheatMaint" type="submit" class="btn btn-outline-primary btn-sm">
 						SET maintenance+-
+					</button>
+
+					<button name="invite" type="submit" class="btn btn-outline-primary btn-sm">
+						SET invites+-
 					</button>
 
 				</form>
