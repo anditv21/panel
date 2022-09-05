@@ -1,6 +1,6 @@
 
 		<footer class="fixed-bottom text-center pb-3 pr-5">
-			<h5>gamesense theme by index panel by <a style="color: white;" href="https://youtube.com/znixbtw/">znix</a></h5>
+			<h5>View this project on <a style="color: white;" target="_blank" href="https://github.com/anditv21/panel">GitHub</a></h5>
 		</footer>
 
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
