@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<div class="card">
 				<div class=" card-body row">
 					<div class="col-6 text-center">
-						<h3><i class="fas fa-thermometer fa-2x"></i></h3>
+						<h3><i class="fas fa-syringe fa-2x"></i></h3>
 					</div>
 					<div class="col-6">
 						<h4><?php Util::display($cheat->getCheatData()->status); ?></h4>
