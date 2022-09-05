@@ -97,6 +97,76 @@ Util::navbar();
 			</div>
 		</div>
 
+		<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
+			<div class="card">
+				<div class="card-body">
+
+					<h4 class="card-title text-center">Avatar</h4>
+
+					<form method="POST" enctype="multipart/form-data">
+                              <center>
+                                 <div class="mb-3"><input class="btn btn-outline-primary btn-block" type="button" id="loadFileXml"  value="Select Image" onclick="document.getElementById('file').click();" /></div>
+                                 <input type="file" name='file_up' style="display:none;" id="file" >					 
+                                 <button  onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Upload Profile Picture</button>
+                              <br>
+                              </center>
+                              <br>
+                           </form>
+						   <?php # most of the upload script from -> https://www.plus2net.com/php_tutorial/php_file_upload.php
+         if (isset($_FILES["file_up"]["tmp_name"])) {
+           $file_upload_flag = "true";
+           $file_up_size = $_FILES["file_up"]["size"];
+           if ($_FILES["file_up"]["size"] > 3000000) {
+             echo '<script>alert("Your uploaded file size is more than 3MB")</script>';
+             $file_upload_flag = "false";
+           }
+           if (
+             !(
+               $_FILES["file_up"]["type"] == "image/jpeg" or
+               $_FILES["file_up"]["type"] == "image/gif" or
+               $_FILES["file_up"]["type"] == "image/png"
+             )
+           ) {
+             echo '<script>alert("Your uploaded file must be of JPG PNG or GIF.")</script>';
+             $file_upload_flag = "false";
+           }
+           $ext = pathinfo($_FILES["file_up"]["name"], PATHINFO_EXTENSION);
+           $file_name = $_FILES["file_up"]["name"];
+           $path = IMG_DIR . $uid;
+           if ($file_upload_flag == "true") {
+             if (@getimagesize($path . ".png")) {
+               unlink($path . ".png");
+             } elseif (@getimagesize($path . ".jpg")) {
+               unlink($path . ".jpg");
+             } elseif (@getimagesize($path . ".gif")) {
+               unlink($path . ".gif");
+             }
+             if (
+               move_uploaded_file(
+                 $_FILES["file_up"]["tmp_name"],
+                 $path . "." . $ext
+               )
+             ) {
+               chmod($path . "." . $ext, 775);
+               echo '<script>alert("File successfully uploaded")</script>';
+             } else {
+               echo '<script>alert("Failed to to move the file.")</script>';
+             }
+           } else {
+             echo '<script>alert("Failed to upload file.")</script>';
+           }
+         } ?>
+
+		 <center>
+		 <?php if (Util::getavatar($uid) == false): ?>
+                                <img width="120" height="120" class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+
+                                <?php else: ?>
+                                <img width="120" height="120" class="rounded-circle img-profile" src="<?php echo Util::getavatar($uid); ?>" style="border-color: rgb(255,255,255)!important;">
+                                <?php endif; ?></center>
+				</div>
+			</div>
+		</div>
 
 		<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
 			<div class="row">
@@ -140,8 +210,8 @@ Util::navbar();
 
 <div class="col-12 clearfix">
 <i class="fas fa-clock"></i> Joined: <p class="float-right mb-0"><?php Util::display(
-         Util::getjoin() . " days ago"
-        ); ?></p>
+  Util::getjoin() . " days ago"
+); ?></p>
 								</div>
 							</div>
 							

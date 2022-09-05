@@ -19,6 +19,10 @@ define('SITE_DESC', 'CS:GO Private Cheat | Invite Only');
  */
 define('SUB_DIR', '/panel');
 
+
+define('IMG_DIR', SITE_ROOT . "/usercontent/avatar/");
+define('IMG_URL', SITE_URL . SUB_DIR ."/usercontent/avatar/");
+
 // Loader link // From Root folder
 define('LOADER_URL', SITE_ROOT.'/x.exe');
 

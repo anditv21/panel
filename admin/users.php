@@ -73,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				<thead>
 					<tr>
 
+						<th scope="col" >Picture</th>
+
 						<th scope="col" class="text-center">UID</th>
 
 						<th scope="col">Username</th>
@@ -92,7 +94,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<!--Loop for number of rows-->
 					<?php foreach ($userList as $row) : ?>
 						<tr>
+						<center><td>                               
+						 <?php if (Util::getavatar($row->uid) == false): ?>
+                                <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
 
+                                <?php else: ?>
+                                    <?php
+                                    $ext = pathinfo(Util::getavatar($row->$uid), PATHINFO_EXTENSION);
+                                    $name = $row->$uid . "." . $ext;
+                                    ?>
+                                <a href="<?php Util::display(Util::getavatar($row->$uid));?>" download="<?php Util::display($name);  ?>">
+                                <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(Util::getavatar($row->uid)); ?>"></a>
+
+
+                              
+                                <?php endif; ?></td></center>
 							<th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
 
 							<td><?php Util::display($row->username); ?></td>
