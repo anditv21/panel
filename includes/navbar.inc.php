@@ -38,11 +38,11 @@
 					<?php else : ?>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/login.php">Login</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/auth/login.php">Login</a>
 						</li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/register.php">Register</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/auth/register.php">Register</a>
 						</li>
 
 					<?php endif; ?>
