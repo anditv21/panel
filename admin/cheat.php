@@ -75,7 +75,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 						<h3><i class="fas fa-syringe fa-2x"></i></h3>
 					</div>
 					<div class="col-6">
-						<h4><?php Util::display($cheat->getCheatData()->status); ?></h4>
+						<h4>                                            <?php if (
+        $cheat->getCheatData()->status == "Undetected"
+      ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: green;">Undetected</span></div>
+                                            <?php elseif (
+        $cheat->getCheatData()->status == "Detected"
+      ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Detected</span></div>
+                                            <?php endif; ?></h4>
 						<span class="small text-muted text-uppercase">status</span>
 					</div>
 				</div>
@@ -105,7 +113,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 						<h3><i class="fas fa-wrench fa-2x"></i></h3>
 					</div>
 					<div class="col-6">
-						<h4><?php Util::display($cheat->getCheatData()->maintenance); ?></h4>
+						<h4>                                            <?php if (
+                                                $cheat->getCheatData()
+                                                    ->maintenance == '-'
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: white;">No</span></div>
+                                            <?php elseif (
+                                                $cheat->getCheatData()
+                                                    ->maintenance == 'UNDER'
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: yellow;">Yes</span></div>
+                                            <?php endif; ?></h4>
 						<span class="small text-muted text-uppercase">maintenance</span>
 					</div>
 				</div>
