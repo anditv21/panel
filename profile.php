@@ -1,25 +1,25 @@
 <?php
 
-require_once 'app/require.php';
-require_once 'app/controllers/CheatController.php';
+require_once "app/require.php";
+require_once "app/controllers/CheatController.php";
 
-$user = new UserController;
+$user = new UserController();
 $cheat = new CheatController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/auth/login.php'); }
+if (!Session::isLogged()) {
+  Util::redirect("/auth/login.php");
+}
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST["updatePassword"])) {
+    $error = $user->updateUserPass($_POST);
+  }
 
-	if (isset($_POST["updatePassword"])) {
-		$error = $user->updateUserPass($_POST);
-	}
-
-
-	if (isset($_POST["activateSub"])) {
-		$error = $user->activateSub($_POST);
-	}
+  if (isset($_POST["activateSub"])) {
+    $error = $user->activateSub($_POST);
+  }
 }
 
 $uid = Session::get("uid");
@@ -31,7 +31,6 @@ $sub = $user->getSubStatus();
 Util::banCheck();
 Util::head($username);
 Util::navbar();
-
 ?>
 
 <style>
@@ -61,7 +60,7 @@ Util::navbar();
 
 		<div class="col-12 mt-3 mb-2">
 
-			<?php if (isset($error)) : ?>
+			<?php if (isset($error)): ?>
 				<div class="alert alert-primary" role="alert">
 					<?php Util::display($error); ?>
 				</div>
@@ -106,10 +105,14 @@ Util::navbar();
 				<div class="col-12 mb-4">
 					<div class="card">
 						<div class="card-body">
-							<div class="h5 border-bottom border-secondary pb-1"><?php Util::display($username); ?></div>
+							<div class="h5 border-bottom border-secondary pb-1"><?php Util::display(
+         $username
+       ); ?></div>
 							<div class="row">
 								<div class="col-12 clearfix">
-								<i class="fas fa-id-card"></i> UID: <p class="float-right mb-0"><?php Util::display($uid); ?></p>
+								<i class="fas fa-id-card"></i> UID: <p class="float-right mb-0"><?php Util::display(
+          $uid
+        ); ?></p>
 								</div>
 
 								<div class="col-12 clearfix">
@@ -117,32 +120,37 @@ Util::navbar();
 
 								<i class="fas fa-calendar-alt"></i> Sub:
 									<p class="float-right mb-0">
-										<?php 
-                                    if ($cheat->getCheatData()->frozen != 0) {
-                                        Util::display("Frozen");
-                                    } else {
-                                        if ($sub > 8000) {
-                                            Util::display("Lifetime");
-                                        } else {
-                                            if ($sub >= 0) {
-                                                Util::display("$sub days");
-                                            } else {
-                                                Util::display(
-                                                    '<i class="fa fa-times"></i>'
-                                                );
-                                            }
-                                        }
-                                    } ?>
+										<?php if ($cheat->getCheatData()->frozen != 0) {
+            Util::display("Frozen");
+          } else {
+            if ($sub > 8000) {
+              Util::display("Lifetime");
+            } else {
+              if ($sub >= 0) {
+                Util::display("$sub days");
+              } else {
+                Util::display('<i class="fa fa-times"></i>');
+              }
+            }
+          } ?>
 									</p>
 
 								</div>
+
+
+<div class="col-12 clearfix">
+<i class="fas fa-clock"></i> Joined: <p class="float-right mb-0"><?php Util::display(
+         Util::getjoin() . " days ago"
+        ); ?></p>
+								</div>
 							</div>
+							
 						</div>
 					</div>
 				</div>
 
 
-				<?php if ($sub <= 0) : ?>
+				<?php if ($sub <= 0): ?>
 					<div class="col-12 mb-4">
 						<div class="card">
 							<div class="card-body">
