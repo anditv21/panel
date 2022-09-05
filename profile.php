@@ -6,7 +6,7 @@ $user = new UserController;
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/login.php'); }
+if (!Session::isLogged()) { Util::redirect('/auth/login.php'); }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

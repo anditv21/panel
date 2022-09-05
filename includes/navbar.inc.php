@@ -32,7 +32,7 @@
 						<?php endif; ?>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/logout.php">Logout <i class="fas fa-sign-out-alt"></i></a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/auth/logout.php">Logout <i class="fas fa-sign-out-alt"></i></a>
 						</li>
 
 					<?php else : ?>
