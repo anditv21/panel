@@ -99,7 +99,7 @@ Util::navbar();
 						<div class="col-12 text-center pt-1">
 							<div class="border-top border-secondary pt-1">
 
-							<a style="background-color: #191919; color: white;" class="btn" href="/panel/download.php">Download Loader</a>
+							<a style="background-color: #191919; color: white;" class="btn" href="/panel/download.php">Download Loader <i class="fas fa-download"></i></a>
 							</div>
 						</div>
 					<?php endif; ?>

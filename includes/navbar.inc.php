@@ -5,7 +5,7 @@
 
 		<div class="container">
 
-			<a class="navbar-brand" href="<?php echo SITE_URL ?>" style="font-family: 'Raleway', sans--serif;">gamesense type theme</a>
+			<a class="navbar-brand" href="<?php echo SITE_URL ?>" style="font-family: 'Raleway', sans--serif;"><?php echo SITE_NAME ?></a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -19,20 +19,20 @@
 					<?php if (Session::isLogged() == true) : ?>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/profile.php">Profile</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/profile.php">Profile <i class="fas fa-user"></i></a>
 						</li>
 
 						<!-- Check if admin --> 
 						<?php if (Session::isAdmin() == true) : ?>
 							
 							<li class="nav-item">
-								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin</a>
+								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>
 							</li>
 
 						<?php endif; ?>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/logout.php">Logout</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/logout.php">Logout <i class="fas fa-sign-out-alt"></i></a>
 						</li>
 
 					<?php else : ?>
