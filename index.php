@@ -125,7 +125,7 @@ Util::navbar();
 					}
 					else
 					{
-						Util::display("None")
+						Util::display("None");
 					}
 					?></p>
 					</div>
