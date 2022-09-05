@@ -29,6 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$admin->setBanned($rowUID); 
 	}
 
+	if (isset($_POST['setsupp'])) {
+        Util::adminCheck();
+        $rowUID = $_POST['setsupp'];
+        $admin->setsupp($rowUID);
+    }
+
 	if (isset($_POST["setAdmin"])) { 
 		$rowUID = $_POST['setAdmin'];
 		$admin->setAdmin($rowUID); 
@@ -67,6 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<?php Util::adminNavbar(); ?>
 
 		<div class="col-12 mt-3 mb-2">
+
+		<button onclick="window.location.href = 'users.php?min=1&max=99999';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;All</button>
+                    <button onclick="window.location.href = 'users.php?min=1&max=10';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;1-10</button>
+                    <button onclick="window.location.href = 'users.php?min=10&max=20';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;10-20</button>
+                    <button onclick="window.location.href = 'users.php?min=20&max=30';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;20-30</button>
+                    <button onclick="window.location.href = 'users.php?min=30&max=40';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;30-40</button>
+                    <button onclick="window.location.href = 'users.php?min=40&max=50';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;40-50</button>
+
 			<table class="rounded table">
 
 
@@ -92,7 +106,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				<tbody>
 
 					<!--Loop for number of rows-->
-					<?php foreach ($userList as $row) : ?>
+                    <?php foreach ($userList as $row): ?>
+						<?php if (
+                                                !isset($_GET['max']) ||
+                                                !isset($_GET['min'])
+                                            ) {
+                                          $_GET['min'] = 1;
+                                          $_GET['max'] = 10;
+                                      } ?>
+										<?php if ($row->uid <= $_GET['max'] && $row->uid >= $_GET['min']): ?>
+											
+											<br>
 						<tr>
 						<center><td>                               
 						 <?php if (Util::getavatar($row->uid) == false): ?>
@@ -148,6 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							</td>
 
 						</tr>
+						<?php endif; ?>
 					<?php endforeach; ?>
 
 				</tbody>
