@@ -8,7 +8,8 @@
 			<a href='users.php' class="btn btn-outline-primary btn-sm">Users</a>
 			<a href='invites.php' class="btn btn-outline-primary btn-sm">Invite codes</a>
 			<a href='sub.php' class="btn btn-outline-primary btn-sm">Sub codes</a>
-			<a href='cheat.php' class="btn btn-outline-primary btn-sm">cheat</a>
+			<a href='gift.php' class="btn btn-outline-primary btn-sm">Gift Sub</a>
+			<a href='cheat.php' class="btn btn-outline-primary btn-sm">Cheat</a>
 		</div>
 	</div>
 <?php endif; ?>
