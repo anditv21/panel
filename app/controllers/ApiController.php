@@ -5,12 +5,10 @@
 
 require_once SITE_ROOT . '/app/models/ApiModel.php';
 
-class ApiController extends API {
-
-	public function getUserAPI($username, $password, $hwid) {
-
-		return $this->userAPI($username, $password, $hwid);
-
-	}
-
+class ApiController extends API
+{
+    public function getUserAPI($username, $password, $hwid)
+    {
+        return $this->userAPI($username, $password, $hwid);
+    }
 }

@@ -6,26 +6,22 @@
 
 require_once SITE_ROOT . '/app/core/Database.php';
 
-class Cheat extends Database {
+class Cheat extends Database
+{
+    // Get Cheat Data
+    protected function cheatData()
+    {
+        $this->prepare('SELECT * FROM `cheat`');
+        $this->statement->execute();
+        $result = $this->statement->fetch();
 
-	// Get Cheat Data
-	protected function cheatData() {
+        // Status
+        $result->status =
+            (int) $result->status === 0 ? 'Undetected' : 'Detected';
 
-		$this->prepare('SELECT * FROM `cheat`');
-		$this->statement->execute();
-		$result = $this->statement->fetch();
+        // Maintenance
+        $result->maintenance = (int) $result->maintenance === 0 ? '-' : 'UNDER';
 
-
-		// Status
-		$result->status = ((int)$result->status === 0) ? 'Undetected' : 'Detected';
-
-		
-		// Maintenance
-		$result->maintenance = ((int)$result->maintenance === 0) ? '-' : 'UNDER';
-
-
-		return $result;
-
-	}
-
+        return $result;
+    }
 }

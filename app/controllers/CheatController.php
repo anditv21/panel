@@ -5,11 +5,11 @@
 
 require_once SITE_ROOT . '/app/models/CheatModel.php';
 
-class CheatController extends Cheat {
-
-	// Get number of users
-	public function getCheatData() {
-		return $this->cheatData();
-	}
-
+class CheatController extends Cheat
+{
+    // Get number of users
+    public function getCheatData()
+    {
+        return $this->cheatData();
+    }
 }
