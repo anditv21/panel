@@ -1,0 +1,55 @@
+:root {
+    --bg-main: #101010;
+    --bg-secondary: #222;
+    --bg-contrast: rgb(24, 26, 48);
+    --accent: #6cc312;
+    --textcolor: #ffffff;
+}
+body {
+    background-color: var(--bg-main) !important;
+    overflow-x: hidden;
+    color: white;
+}
+
+.bg-dark {
+    background-color: var(--bg-secondary) !important;
+}
+
+.card {
+    background-color: var(--bg-secondary) !important;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+    border-top: 2px solid #6cc312;
+    font-family: 'Raleway', sans-serif;
+}
+
+.alert {
+    border: none;
+}
+
+.alert-primary,
+.rounded {
+    background-color: var(--bg-secondary) !important;
+    color: #eee;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+    border-top: 2px solid var(--accent);
+}
+.btn-outline-primary {
+    color: var(--accent) !important;
+    border-color: #6cc312 !important;
+}
+
+.btn-outline-primary:hover {
+    color: white !important;
+    background-color: var(--accent) !important;
+}
+
+.form-control {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--accent) !important;
+    color: var(--textcolor) !important;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
