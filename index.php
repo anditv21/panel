@@ -1,14 +1,16 @@
 <?php
 
-require_once 'app/require.php';
-require_once 'app/controllers/CheatController.php';
+require_once "app/require.php";
+require_once "app/controllers/CheatController.php";
 
-$user = new UserController;
-$cheat = new CheatController;
+$user = new UserController();
+$cheat = new CheatController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/auth/login.php'); }
+if (!Session::isLogged()) {
+  Util::redirect("/auth/login.php");
+}
 
 $username = Session::get("username");
 $sub = $user->getSubStatus();
@@ -16,7 +18,6 @@ $sub = $user->getSubStatus();
 Util::banCheck();
 Util::head($username);
 Util::navbar();
-
 ?>
 
 <style>
@@ -47,10 +48,24 @@ Util::navbar();
 		<!--Welome message-->
 		<div class="col-12 mt-3 mb-2">
 			<div class="alert alert-primary" role="alert">
-				Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?>.</b></a>
+				Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
+      $username
+    ); ?>.</b></a>
 			</div>
 		</div>
 
+
+		<!--News-->
+		<div class="col-lg-9 col-md-12">
+			<div class="rounded p-3 mb-3">
+				<div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-newspaper"></i> News</div>
+				<div class="row text-muted">
+				<div class="col-12 clearfix">				
+				<strong><?php Util::display($user->getusernews()); ?></strong>		
+				</div>
+				</div>
+			</div>
+		</div>
 
 		<!--Statistics-->
 		<div class="col-lg-9 col-md-12">
@@ -60,12 +75,16 @@ Util::navbar();
 
 					<!--Total Users-->
 					<div class="col-12 clearfix">
-						Users: <p class="float-right mb-0"><?php Util::display($user->getUserCount()); ?></p>
+						Users: <p class="float-right mb-0"><?php Util::display(
+        $user->getUserCount()
+      ); ?></p>
 					</div>
 
 					<!--Latest User-->
 					<div class="col-12 clearfix">
-						Latest User: <p class="float-right mb-0"><?php Util::display($user->getNewUser()); ?></p>
+						Latest User: <p class="float-right mb-0"><?php Util::display(
+        $user->getNewUser()
+      ); ?></p>
 					</div>
 
 				</div>
@@ -81,21 +100,31 @@ Util::navbar();
 
 					<!--Detected // Undetected-->
 					<div class="col-12 clearfix">
-					<i class="fas fa-info-circle"></i> Status: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->status); ?></p>
+					<i class="fas fa-info-circle"></i> Status: <p class="float-right mb-0"><?php Util::display(
+       $cheat->getCheatData()->status
+     ); ?></p>
 					</div>
 
 					<!--Cheat version-->
 					<div class="col-12 clearfix">
-					<i class="fas fa-code-branch"></i>&nbsp; Version: <p class="float-right mb-0"><?php Util::display($cheat->getCheatData()->version); ?></p>
+					<i class="fas fa-code-branch"></i>&nbsp; Version: <p class="float-right mb-0"><?php Util::display(
+       $cheat->getCheatData()->version
+     ); ?></p>
 					</div>
 					
 										
 					<div class="col-12 clearfix">
-					<i class="fas fa-user-clock"></i> Subscription status: <p class="float-right mb-0"><?php if($sub>0){Util::display('Active');}else{Util::display('Inactive');} ?></p>
+					<i class="fas fa-user-clock"></i> Subscription status: <p class="float-right mb-0"><?php if (
+       $sub > 0
+     ) {
+       Util::display("Active");
+     } else {
+       Util::display("Inactive");
+     } ?></p>
 					</div>
 	
 					<!-- Check if has sub --> 
-					<?php if ($user->getSubStatus() > 0) : ?>
+					<?php if ($user->getSubStatus() > 0): ?>
 						<div class="col-12 text-center pt-1">
 							<div class="border-top border-secondary pt-1">
 

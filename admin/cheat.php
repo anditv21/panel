@@ -38,6 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   header("location: cheat.php");
 }
+
+
+if (isset($_POST['setnews'])) {
+	Util::adminCheck();
+	$news = $_POST['msg'];
+	$admin->setnews($news);
+}
+
 ?>
 
 <style>
@@ -180,6 +188,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 						
     					<div class="col">
 							<button class="btn btn-outline-primary btn-sm" name="cheatVersion" type="submit" value="submit">Update</button>
+    					</div>
+  					</div>
+					
+				</form>
+
+				<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+					<div class="form-row mt-1">
+    					<div class="col">
+							<input type="text" class="form-control form-control-sm" placeholder='News e.g Version 3.0 is out!' name="msg" required>
+						</div>
+						
+    					<div class="col">
+							<button class="btn btn-outline-primary btn-sm" name="setnews" type="submit" value="submit">Update</button>
     					</div>
   					</div>
 					
