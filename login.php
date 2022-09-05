@@ -55,7 +55,7 @@ Util::navbar();
 					<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
 
 						<div class="form-group">
-							<input type="text" class="form-control form-control-sm" placeholder="Username" name="username" required>
+							<input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Username" name="username" required>
 						</div>
 
 						<div class="form-group">
