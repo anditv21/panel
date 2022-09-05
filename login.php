@@ -7,11 +7,12 @@ Session::init();
 
 if (Session::isLogged()) { Util::redirect('/'); }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); }
+if (isset($_COOKIE["login_cookie"])) {$error = $user->tokenlogin($_COOKIE["login_cookie"]); }
 
 Util::head('Login');
 Util::navbar();
 
-?>
+?> 
 <style>
 .divide {
 	padding: 0;
