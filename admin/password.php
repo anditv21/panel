@@ -1,39 +1,39 @@
 <?php
    require_once "../app/require.php";
    require_once "../app/controllers/AdminController.php";
-   
+
    $user = new UserController();
    $admin = new AdminController();
-   
+
    Session::init();
-   
+
    $userList = $admin->getUserArray();
    $username = Session::get('username');
    $uid = Session::get('uid');
-   
+
    $userList = $admin->getUserArray();
-   
+
    Util::adminCheck();
    Util::banCheck();
    Util::head("Admin Panel");
    Util::navbar();
-   
+
    // if post request
    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-     if (isset($_POST["u"])) {
-       Util::adminCheck();
-       $uid = $_POST["u"];
-   
-       $reason = $_POST["r"];
-       if ($reason === " " or $reason === "" or empty($reason)) {
-         $reason = "none";
+       if (isset($_POST["u"])) {
+           Util::adminCheck();
+           $uid = $_POST["u"];
+
+           $reason = $_POST["r"];
+           if ($reason === " " or $reason === "" or empty($reason)) {
+               $reason = "none";
+           }
+
+           $admin->setBannreason($reason, $uid);
+           $admin->setBanned($uid);
+
+           header("location: bans.php");
        }
-   
-       $admin->setBannreason($reason, $uid);
-       $admin->setBanned($uid);
-   
-       header("location: bans.php");
-     }
    }
    ?>
 <style>
@@ -66,8 +66,8 @@
                   <div class="card-body">
                      <?php if (Session::isAdmin()): ?>
                      <form action="<?php Util::display(
-                        $_SERVER['PHP_SELF']
-                        ); ?>" method="post">
+       $_SERVER['PHP_SELF']
+   ); ?>" method="post">
                         <label>Select a user:</label><br>
                         <select name="passwordreset" class="form-control form-control-sm">
                         <br>
@@ -89,34 +89,34 @@
                <?php if (
                   $_SERVER['REQUEST_METHOD'] === 'POST'
                   ) {
-                                              if (isset($_POST['passwordreset'])) {
-                                                  $name = $_POST['passwordreset'];
-                  
-                                                  $unhashedpassword = Util::randomCode(
-                                                      20
-                                                  );
-                                                  $hashedpassword = password_hash(
-                                                      $unhashedpassword,
-                                                      PASSWORD_DEFAULT
-                                                  );
-                  
-                                                  $text = 'New password is: ';
-                                                  $admin->resetpw($hashedpassword, $name);
-                                              }
-                                              unset($_POST['passwordreset']);
-                                              header('location: password.php');
-                                          } ?>
+                               if (isset($_POST['passwordreset'])) {
+                                   $name = $_POST['passwordreset'];
+
+                                   $unhashedpassword = Util::randomCode(
+                                       20
+                                   );
+                                   $hashedpassword = password_hash(
+                                       $unhashedpassword,
+                                       PASSWORD_DEFAULT
+                                   );
+
+                                   $text = 'New password is: ';
+                                   $admin->resetpw($hashedpassword, $name);
+                               }
+                               unset($_POST['passwordreset']);
+                               header('location: password.php');
+                           } ?>
                <?php if (isset($text)) {
-                  Util::display($text);
-                  } ?>
+                               Util::display($text);
+                           } ?>
                <?php if (isset($unhashedpassword)); ?>
                <p title="Click to copy" data-toggle="tooltip" data-placement="top" onclick="setClipboard('<?php if (isset($unhashedpassword)) {
-                  Util::Display($unhashedpassword);
-                  } ?>'" class='spoiler' title='Click to copy password' data-toggle='tooltip' data-placement='top'><?php if (
+                               Util::Display($unhashedpassword);
+                           } ?>'" class='spoiler' title='Click to copy password' data-toggle='tooltip' data-placement='top'><?php if (
                   isset($unhashedpassword)
                   ) {
-                                                                              Util::display($unhashedpassword);
-                                                                          } ?>
+                               Util::display($unhashedpassword);
+                           } ?>
             </div>
          </div>
       </div>

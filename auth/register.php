@@ -2,13 +2,17 @@
 include '../app/require.php';
 require_once '../app/controllers/CheatController.php';
 
-$user = new UserController;
+$user = new UserController();
 $cheat = new CheatController();
 
 Session::init();
 
-if (Session::isLogged()) { Util::redirect('/'); }
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->registerUser($_POST); }
+if (Session::isLogged()) {
+    Util::redirect('/');
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $error = $user->registerUser($_POST);
+}
 
 Util::head('Register');
 Util::navbar();

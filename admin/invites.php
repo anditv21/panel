@@ -3,8 +3,8 @@
 require_once '../app/require.php';
 require_once '../app/controllers/AdminController.php';
 
-$user = new UserController;
-$admin = new AdminController;
+$user = new UserController();
+$admin = new AdminController();
 
 Session::init();
 
@@ -18,17 +18,14 @@ Util::navbar();
 
 
 
-// if post request 
+// if post request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST["genInv"])) {
+        Util::suppCheck();
+        $admin->getInvCodeGen($username);
+    }
 
-
-	if (isset($_POST["genInv"])) {
-		Util::suppCheck();
-		$admin->getInvCodeGen($username); 
-	}
-
-	header("location: invites.php");
-
+    header("location: invites.php");
 }
 ?>
 

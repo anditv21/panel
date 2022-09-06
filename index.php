@@ -2,28 +2,28 @@
    require_once "app/require.php";
    require_once "app/controllers/CheatController.php";
    require_once "app/controllers/ShoutBoxController.php";
-   
+
    $user = new UserController();
    $cheat = new CheatController();
    $shoutbox = new ShoutBoxController();
       Session::init();
-      
+
       if (!Session::isLogged()) {
-        Util::redirect("/auth/login.php");
+          Util::redirect("/auth/login.php");
       }
-      
+
       $username = Session::get("username");
       $sub = $user->getSubStatus();
       $uid = Session::get("uid");
       Util::banCheck();
       Util::head($username);
       Util::navbar();
-      
+
       if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if (isset($_POST["sendmsg"])) {
-          $msg = trim($_POST["msg"]);
-          $shoutbox->postmsg($username, $uid, $msg);
-        }
+          if (isset($_POST["sendmsg"])) {
+              $msg = trim($_POST["msg"]);
+              $shoutbox->postmsg($username, $uid, $msg);
+          }
       }
       ?>
 <style>
@@ -50,8 +50,8 @@
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
             Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
-               $username
-               ); ?>.</b></a>
+          $username
+      ); ?>.</b></a>
          </div>
       </div>
       <!--News-->
@@ -74,14 +74,14 @@
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-                     $user->getUserCount()
-                     ); ?></p>
+                   $user->getUserCount()
+               ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                     $user->getNewUser()
+                         $user->getNewUser()
                      ); ?></p>
                </div>
             </div>
@@ -96,14 +96,14 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-                     $cheat->getCheatData()->status
+                         $cheat->getCheatData()->status
                      ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-                     $cheat->getCheatData()->version
+                         $cheat->getCheatData()->version
                      ); ?></p>
                </div>
                <div class="col-12 clearfix">
@@ -111,11 +111,11 @@
                   <p class="float-right mb-0"><?php if (
                      $cheat->getCheatData()->frozen == 0
                      ) {
-                     Util::display("Frozen");
+                         Util::display("Frozen");
                      } elseif ($sub > 0) {
-                     Util::display("Active");
+                         Util::display("Active");
                      } else {
-                     Util::display("None");
+                         Util::display("None");
                      } ?></p>
                </div>
                <!-- Check if has sub --> 
