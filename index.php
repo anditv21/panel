@@ -103,20 +103,20 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-                   $cheat->getCheatData()->version
-               ); ?></p>
+          $cheat->getCheatData()->version
+      ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Subscription status: 
                   <p class="float-right mb-0"><?php if (
                      $cheat->getCheatData()->frozen == 0
                      ) {
-                         Util::display("Frozen");
-                     } elseif ($sub > 0) {
-                         Util::display("Active");
-                     } else {
-                         Util::display("None");
-                     } ?></p>
+                   Util::display("Frozen");
+               } elseif ($sub > 0) {
+                   Util::display("Active");
+               } else {
+                   Util::display("None");
+               } ?></p>
                </div>
                <!-- Check if has sub --> 
                <?php if ($user->getSubStatus() > 0): ?>
