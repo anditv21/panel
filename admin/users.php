@@ -115,9 +115,9 @@
                <!--Loop for number of rows-->
                <?php foreach ($userList as $row): ?>
                <?php if (!isset($_GET["max"]) || !isset($_GET["min"])) {
-             $_GET["min"] = 1;
-             $_GET["max"] = 10;
-         } ?>
+       $_GET["min"] = 1;
+       $_GET["max"] = 10;
+   } ?>
                <?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
                <br>
                <tr>
@@ -128,9 +128,9 @@
                         <?php else: ?>
                         <?php
                            $ext = pathinfo(
-             Util::getavatar($row->$uid),
-             PATHINFO_EXTENSION
-         );
+       Util::getavatar($row->$uid),
+       PATHINFO_EXTENSION
+   );
                            $name = $row->$uid . "." . $ext;
                            ?>
                         <a href="<?php Util::display(
@@ -149,10 +149,10 @@
                                $row->lastIP
                            ); ?>')" style="color: rgb(255,255,255);">
                      <?php Util::display(
-                         "<p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
+                               "<p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
                           $row->lastIP .
                           "</p>"
-                     ); ?>
+                           ); ?>
                   </td>
                   <td><?php Util::display($row->username); ?></td>
                   <td class="text-center">
@@ -172,8 +172,8 @@
                   <td>
                      <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
                         <button value="<?php Util::display(
-                            $row->uid
-                        ); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                               $row->uid
+                           ); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-microchip"></i>
                         </button>
                         <button value="<?php Util::display(

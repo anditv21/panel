@@ -74,15 +74,15 @@
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-                   $user->getUserCount()
-               ); ?></p>
+          $user->getUserCount()
+      ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                         $user->getNewUser()
-                     ); ?></p>
+          $user->getNewUser()
+      ); ?></p>
                </div>
             </div>
          </div>
@@ -96,27 +96,27 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-                         $cheat->getCheatData()->status
-                     ); ?></p>
+          $cheat->getCheatData()->status
+      ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-                         $cheat->getCheatData()->version
-                     ); ?></p>
+          $cheat->getCheatData()->version
+      ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Subscription status: 
                   <p class="float-right mb-0"><?php if (
                      $cheat->getCheatData()->frozen == 0
                      ) {
-                         Util::display("Frozen");
-                     } elseif ($sub > 0) {
-                         Util::display("Active");
-                     } else {
-                         Util::display("None");
-                     } ?></p>
+          Util::display("Frozen");
+      } elseif ($sub > 0) {
+          Util::display("Active");
+      } else {
+          Util::display("None");
+      } ?></p>
                </div>
                <!-- Check if has sub --> 
                <?php if ($user->getSubStatus() > 0): ?>

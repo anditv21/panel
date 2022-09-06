@@ -74,12 +74,12 @@
                         <br>
                         <?php foreach ($userList as $row): ?>
                         <?php Util::display(
-                            "<option value='$row->uid'>" .
+       "<option value='$row->uid'>" .
                              $row->username .
                              " " .
                              "($row->uid)" .
                              "</option>"
-                        ); ?>
+   ); ?>
                         <?php endforeach; ?>
                         </select>
                         <br>
@@ -105,9 +105,9 @@
                <!--Loop for number of rows-->
                <?php foreach ($userList2 as $row): ?>
                <?php if (!isset($_GET["max"]) || !isset($_GET["min"])) {
-                               $_GET["min"] = 1;
-                               $_GET["max"] = 10;
-                           } ?>
+       $_GET["min"] = 1;
+       $_GET["max"] = 10;
+   } ?>
                <?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
                <br>
                <tr>
@@ -118,9 +118,9 @@
                         <?php else: ?>
                         <?php
                            $ext = pathinfo(
-                               Util::getavatar($row->$uid),
-                               PATHINFO_EXTENSION
-                           );
+       Util::getavatar($row->$uid),
+       PATHINFO_EXTENSION
+   );
                            $name = $row->$uid . "." . $ext;
                            ?>
                         <a href="<?php Util::display(
