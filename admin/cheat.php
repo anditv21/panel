@@ -2,54 +2,54 @@
    require_once "../app/require.php";
    require_once "../app/controllers/AdminController.php";
    require_once "../app/controllers/CheatController.php";
-   
+
    $user = new UserController();
    $cheat = new CheatController();
    $admin = new AdminController();
-   
+
    Session::init();
-   
+
    $username = Session::get("username");
-   
+
    Util::adminCheck();
    Util::head("Admin Panel");
    Util::navbar();
-   
+
    // if post request
    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-     if (isset($_POST["cheatStatus"])) {
-       $admin->setCheatStatus();
-     }
-   
-     if (isset($_POST["cheatMaint"])) {
-       $admin->setCheatMaint();
-     }
-   
-     if (isset($_POST["cheatVersion"])) {
-       $ver = floatval($_POST["version"]);
-       $admin->setCheatVersion($ver);
-     }
-   
-     if (isset($_POST["invite"])) {
-       Util::adminCheck();
-       $admin->setinvite();
-     }
-   
-     header("location: cheat.php");
+       if (isset($_POST["cheatStatus"])) {
+           $admin->setCheatStatus();
+       }
+
+       if (isset($_POST["cheatMaint"])) {
+           $admin->setCheatMaint();
+       }
+
+       if (isset($_POST["cheatVersion"])) {
+           $ver = floatval($_POST["version"]);
+           $admin->setCheatVersion($ver);
+       }
+
+       if (isset($_POST["invite"])) {
+           Util::adminCheck();
+           $admin->setinvite();
+       }
+
+       header("location: cheat.php");
    }
-   
+
    if (isset($_POST["setnews"])) {
-     Util::adminCheck();
-     $news = $_POST["msg"];
-     $admin->setnews($news);
+       Util::adminCheck();
+       $news = $_POST["msg"];
+       $admin->setnews($news);
    }
-   
-   
+
+
    if (isset($_POST['cheatfreeze'])) {
-   	Util::adminCheck();
-   	$admin->setCheatfreeze();
+       Util::adminCheck();
+       $admin->setCheatfreeze();
    }
-   
+
 
    ?>
 <style>

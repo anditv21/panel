@@ -3,8 +3,8 @@
 require_once '../app/require.php';
 require_once '../app/controllers/AdminController.php';
 
-$user = new UserController;
-$admin = new AdminController;
+$user = new UserController();
+$admin = new AdminController();
 
 Session::init();
 

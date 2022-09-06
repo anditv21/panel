@@ -1,40 +1,40 @@
 <?php
    require_once "../app/require.php";
    require_once "../app/controllers/AdminController.php";
-   
+
    $user = new UserController();
    $admin = new AdminController();
-   
+
    Session::init();
-   
+
    $userList = $admin->getUserArray();
    $userList2 = $admin->getbannedArray();
    $username = Session::get("username");
    $uid = Session::get("uid");
-   
+
    $userList = $admin->getUserArray();
-   
+
    Util::suppCheck();
    Util::banCheck();
    Util::head("Admin Panel");
    Util::navbar();
-   
+
    // if post request
    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-     if (isset($_POST["u"])) {
-       Util::adminCheck();
-       $uid = $_POST["u"];
-   
-       $reason = $_POST["r"];
-       if ($reason === " " or $reason === "" or empty($reason)) {
-         $reason = "none";
+       if (isset($_POST["u"])) {
+           Util::adminCheck();
+           $uid = $_POST["u"];
+
+           $reason = $_POST["r"];
+           if ($reason === " " or $reason === "" or empty($reason)) {
+               $reason = "none";
+           }
+
+           $admin->setBannreason($reason, $uid);
+           $admin->setBanned($uid);
+
+           header("location: bans.php");
        }
-   
-       $admin->setBannreason($reason, $uid);
-       $admin->setBanned($uid);
-   
-       header("location: bans.php");
-     }
    }
    ?>
 <style>
@@ -67,19 +67,19 @@
                   <div class="card-body">
                   <?php if (Session::isAdmin()): ?>
                      <form action="<?php Util::display(
-                        $_SERVER["PHP_SELF"]
-                        ); ?>" method="post">
+       $_SERVER["PHP_SELF"]
+   ); ?>" method="post">
                         <label for="u">Select a user:</label><br>
                         <select  class="form-control form-control-sm"id="u" name="u">
                         <br>
                         <?php foreach ($userList as $row): ?>
                         <?php Util::display(
-                           "<option value='$row->uid'>" .
+       "<option value='$row->uid'>" .
                              $row->username .
                              " " .
                              "($row->uid)" .
                              "</option>"
-                           ); ?>
+   ); ?>
                         <?php endforeach; ?>
                         </select>
                         <br>
@@ -105,9 +105,9 @@
                <!--Loop for number of rows-->
                <?php foreach ($userList2 as $row): ?>
                <?php if (!isset($_GET["max"]) || !isset($_GET["min"])) {
-                  $_GET["min"] = 1;
-                  $_GET["max"] = 10;
-                  } ?>
+       $_GET["min"] = 1;
+       $_GET["max"] = 10;
+   } ?>
                <?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
                <br>
                <tr>
@@ -118,18 +118,18 @@
                         <?php else: ?>
                         <?php
                            $ext = pathinfo(
-                             Util::getavatar($row->$uid),
-                             PATHINFO_EXTENSION
-                           );
+       Util::getavatar($row->$uid),
+       PATHINFO_EXTENSION
+   );
                            $name = $row->$uid . "." . $ext;
                            ?>
                         <a href="<?php Util::display(
-                           Util::getavatar($row->$uid)
+                               Util::getavatar($row->$uid)
                            ); ?>" download="<?php Util::display(
-                           $name
+                               $name
                            ); ?>">
                         <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(
-                           Util::getavatar($row->uid)
+                               Util::getavatar($row->uid)
                            ); ?>"></a>
                         <?php endif; ?>
                      </td>

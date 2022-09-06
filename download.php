@@ -3,14 +3,18 @@
 require_once 'app/require.php';
 require_once 'app/controllers/CheatController.php';
 
-$user = new UserController;
-$cheat = new CheatController;
+$user = new UserController();
+$cheat = new CheatController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/login.php'); }
+if (!Session::isLogged()) {
+    Util::redirect('/login.php');
+}
 Util::banCheck();
-if ($user->getSubStatus() < 0) { Util::redirect('/'); }
+if ($user->getSubStatus() < 0) {
+    Util::redirect('/');
+}
 
 $cheat = Util::randomCode(5);
 
