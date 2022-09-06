@@ -74,15 +74,15 @@
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-                   $user->getUserCount()
-               ); ?></p>
+          $user->getUserCount()
+      ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                         $user->getNewUser()
-                     ); ?></p>
+                   $user->getNewUser()
+               ); ?></p>
                </div>
             </div>
          </div>

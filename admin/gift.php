@@ -63,9 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                        <br>
                                        <?php foreach ($userList as $row): ?>
                                           <?php Util::display(
-             "<option value='$row->username'>" .
+    "<option value='$row->username'>" .
                                               "$row->username  ($row->uid)</option>"
-         ); ?>
+); ?>
                                        <?php endforeach; ?>
                                     </select>
                <br>
