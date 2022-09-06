@@ -1,10 +1,10 @@
 <?php
 
-require_once '../app/require.php';
-require_once '../app/controllers/AdminController.php';
+require_once "../app/require.php";
+require_once "../app/controllers/AdminController.php";
 
-$user = new UserController;
-$admin = new AdminController;
+$user = new UserController();
+$admin = new AdminController();
 
 Session::init();
 
@@ -13,39 +13,36 @@ $username = Session::get("username");
 $userList = $admin->getUserArray();
 
 Util::suppCheck();
-Util::head('Admin Panel');
+Util::head("Admin Panel");
 Util::navbar();
 
-// if post request 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// if post request
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST["resetHWID"])) {
+    Util::suppCheck();
+    $rowUID = $_POST["resetHWID"];
+    $admin->resetHWID($rowUID);
+  }
 
-	if (isset($_POST["resetHWID"])) { 
-		Util::suppCheck();
-		$rowUID = $_POST['resetHWID'];
-		$admin->resetHWID($rowUID); 
-	}
+  if (isset($_POST["setBanned"])) {
+    Util::adminCheck();
+    $rowUID = $_POST["setBanned"];
+    $admin->setBanned($rowUID);
+  }
 
-	if (isset($_POST["setBanned"])) { 
-		Util::adminCheck();
-		$rowUID = $_POST['setBanned'];
-		$admin->setBanned($rowUID); 
-	}
+  if (isset($_POST["setsupp"])) {
+    Util::adminCheck();
+    $rowUID = $_POST["setsupp"];
+    $admin->setsupp($rowUID);
+  }
 
-	if (isset($_POST['setsupp'])) {
-        Util::adminCheck();
-        $rowUID = $_POST['setsupp'];
-        $admin->setsupp($rowUID);
-    }
+  if (isset($_POST["setAdmin"])) {
+    $rowUID = $_POST["setAdmin"];
+    $admin->setAdmin($rowUID);
+  }
 
-	if (isset($_POST["setAdmin"])) { 
-		$rowUID = $_POST['setAdmin'];
-		$admin->setAdmin($rowUID); 
-	}
-
-	header("location: users.php");
-
+  header("location: users.php");
 }
-
 ?>
 
 <style>
@@ -92,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						<th scope="col" >Picture</th>
 
 						<th scope="col" class="text-center">UID</th>
-
+						<th scope="col">IP</th>
 						<th scope="col">Username</th>
 
 						<th scope="col" class="text-center">Admin</th>
@@ -109,14 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 					<!--Loop for number of rows-->
                     <?php foreach ($userList as $row): ?>
-						<?php if (
-                                                !isset($_GET['max']) ||
-                                                !isset($_GET['min'])
-                                            ) {
-                                          $_GET['min'] = 1;
-                                          $_GET['max'] = 10;
-                                      } ?>
-										<?php if ($row->uid <= $_GET['max'] && $row->uid >= $_GET['min']): ?>
+						<?php if (!isset($_GET["max"]) || !isset($_GET["min"])) {
+        $_GET["min"] = 1;
+        $_GET["max"] = 10;
+      } ?>
+										<?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
 											
 											<br>
 						<tr>
@@ -126,31 +120,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                 <?php else: ?>
                                     <?php
-                                    $ext = pathinfo(Util::getavatar($row->$uid), PATHINFO_EXTENSION);
+                                    $ext = pathinfo(
+                                      Util::getavatar($row->$uid),
+                                      PATHINFO_EXTENSION
+                                    );
                                     $name = $row->$uid . "." . $ext;
                                     ?>
-                                <a href="<?php Util::display(Util::getavatar($row->$uid));?>" download="<?php Util::display($name);  ?>">
-                                <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(Util::getavatar($row->uid)); ?>"></a>
+                                <a href="<?php Util::display(
+                                  Util::getavatar($row->$uid)
+                                ); ?>" download="<?php Util::display(
+  $name
+); ?>">
+                                <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(
+                                  Util::getavatar($row->uid)
+                                ); ?>"></a>
 
 
                               
                                 <?php endif; ?></td></center>
 							<th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
-
+							<td   onclick="setClipboard('<?php Util::display($row->lastIP); ?>')" style="color: rgb(255,255,255);">
+                                                    <?php Util::display(
+                                                      "<p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
+                                                        $row->lastIP .
+                                                        "</p>"
+                                                    ); ?>
+                                                </td>
 							<td><?php Util::display($row->username); ?></td>
 
 							<td class="text-center">
-								<?php if ($row->admin == 1) : ?>
+								<?php if ($row->admin == 1): ?>
 									<i class="fas fa-check-circle"></i>
-								<?php else : ?>
+								<?php else: ?>
 									<i class="fas fa-times-circle"></i>
 								<?php endif; ?>
 							</td>
 
 							<td class="text-center">
-								<?php if ($row->banned == 1) : ?>
+								<?php if ($row->banned == 1): ?>
 									<i class="fas fa-check-circle"></i>
-								<?php else : ?>
+								<?php else: ?>
 									<i class="fas fa-times-circle"></i>
 								<?php endif; ?>
 							</td>
@@ -158,15 +167,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							<td>
 								<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
 								
-									<button value="<?php Util::display($row->uid); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+									<button value="<?php Util::display(
+           $row->uid
+         ); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
 										<i class="fas fa-microchip"></i>
 									</button>
 
-									<button value="<?php Util::display($row->uid); ?>" name="setBanned"  title="Ban/unban user" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+									<button value="<?php Util::display(
+           $row->uid
+         ); ?>" name="setBanned"  title="Ban/unban user" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
 										<i class="fas fa-user-slash"></i>
 									</button>
 
-									<button value="<?php Util::display($row->uid); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+									<button value="<?php Util::display(
+           $row->uid
+         ); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
 										<i class="fas fa-crown"></i>
 									</button>
 
@@ -185,7 +200,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </div>
 <?php Util::footer(); ?>
+<style>
+        .spoiler:hover {
+            color: white;
+        }
 
+        .spoiler {
+            color: black;
+            background-color: black;
+        }
+        p
+        {
+            max-width: fit-content;
+        }
+    </style>
 <script>
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();   
