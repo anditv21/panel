@@ -17,13 +17,13 @@ Util::navbar();
 
 // if post request
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST["giftsub"])) {
-    $name = $_POST["giftsub"];
-    $time = $_POST["days"];
-    $sub = $admin->subcheckbyusername($name);
-    $admin->giftsub($name, $sub, $time);
-  }
-  header("location: gift.php");
+    if (isset($_POST["giftsub"])) {
+        $name = $_POST["giftsub"];
+        $time = $_POST["days"];
+        $sub = $admin->subcheckbyusername($name);
+        $admin->giftsub($name, $sub, $time);
+    }
+    header("location: gift.php");
 }
 ?>
 <style>
@@ -56,16 +56,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <div class="card">
          <div class="card-body">
          <form action="<?php Util::display(
-           $_SERVER["PHP_SELF"]
-         ); ?>" method="post">
+    $_SERVER["PHP_SELF"]
+); ?>" method="post">
                <label for="u">Select a user:</label><br>
                <select name="giftsub" class="form-control form-control-sm">
                                        <br>
                                        <?php foreach ($userList as $row): ?>
                                           <?php Util::display(
-                                            "<option value='$row->username'>" .
+             "<option value='$row->username'>" .
                                               "$row->username  ($row->uid)</option>"
-                                          ); ?>
+         ); ?>
                                        <?php endforeach; ?>
                                     </select>
                <br>

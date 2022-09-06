@@ -21,11 +21,10 @@ class Util
         include SITE_ROOT . '/includes/navbar.inc.php';
     }
 
-	public static function adminNavbar() {
-
-		include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
-
-	}
+    public static function adminNavbar()
+    {
+        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
+    }
 
     public static function footer()
     {
