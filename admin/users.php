@@ -36,6 +36,7 @@
      }
    
      if (isset($_POST["setAdmin"])) {
+		Util::adminCheck();
        $rowUID = $_POST["setAdmin"];
        $admin->setAdmin($rowUID);
      }
@@ -65,6 +66,7 @@
    <div class="row">
       <?php Util::adminNavbar(); ?>
       <div class="col-12 mt-3 mb-2">
+		&nbsp;&nbsp;&nbsp;
          <button onclick="window.location.href = 'users.php?min=1&max=99999';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;All</button>
          <button onclick="window.location.href = 'users.php?min=1&max=10';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;1-10</button>
          <button onclick="window.location.href = 'users.php?min=10&max=20';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;"> &nbsp;10-20</button>
