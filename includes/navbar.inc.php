@@ -23,7 +23,7 @@
 						</li>
 						<?php endif; ?>
 						<!-- Check if admin --> 
-						<?php if (Session::isAdmin() == true) : ?>
+						<?php if (Session::isAdmin() == true or Session::isSupp() == true) : ?>
 							
 							<li class="nav-item">
 								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>

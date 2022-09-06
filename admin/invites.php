@@ -12,7 +12,7 @@ $username = Session::get("username");
 
 $invList = $admin->getInvCodeArray();
 
-Util::adminCheck();
+Util::suppCheck();
 Util::head('Admin Panel');
 Util::navbar();
 
@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 	if (isset($_POST["genInv"])) {
+		Util::suppCheck();
 		$admin->getInvCodeGen($username); 
 	}
 

@@ -12,7 +12,7 @@ $username = Session::get("username");
 
 $userList = $admin->getUserArray();
 
-Util::adminCheck();
+Util::suppCheck();
 Util::head('Admin Panel');
 Util::navbar();
 
@@ -20,11 +20,13 @@ Util::navbar();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	if (isset($_POST["resetHWID"])) { 
+		Util::suppCheck();
 		$rowUID = $_POST['resetHWID'];
 		$admin->resetHWID($rowUID); 
 	}
 
 	if (isset($_POST["setBanned"])) { 
+		Util::adminCheck();
 		$rowUID = $_POST['setBanned'];
 		$admin->setBanned($rowUID); 
 	}

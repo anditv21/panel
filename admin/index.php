@@ -10,7 +10,7 @@ Session::init();
 
 $username = Session::get("username");
 
-Util::adminCheck();
+Util::suppCheck();
 Util::head('Admin Panel');
 Util::navbar();
 

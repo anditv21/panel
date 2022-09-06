@@ -1,7 +1,7 @@
 <!--Admin navigation-->
 
 <!-- Check if admin // This is not important really.-->
-<?php if (Session::isAdmin()) : ?>
+<?php if (Session::isAdmin() or Session::isSupp() == true) : ?>
 	<div class="col-12 mt-3 mb-2">
 		<div class="rounded p-3">
 			<a href='index.php' class="btn btn-outline-primary btn-sm">Home</a>
