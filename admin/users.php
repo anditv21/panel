@@ -182,18 +182,18 @@
                         <i class="fas fa-user-slash"></i>
                         </button>
                         <button value="<?php Util::display(
-                         $row->uid
-                     ); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                               $row->uid
+                           ); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-crown"></i>
                         </button>
                         <button value="<?php Util::display(
-                            $row->uid
-                        ); ?>" name="setAdmin"  title="Set supp/non supp" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                         $row->uid
+                     ); ?>" name="setAdmin"  title="Set supp/non supp" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-crown"></i>
                         </button>
                         <a href="<?php Util::display(
-                               SITE_URL . SUB_DIR . "/viewprofile.php?uid=$row->uid"
-                           ); ?>" target="_blank" name="setAdmin"  title="View Profile" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white">
+                            SITE_URL . SUB_DIR . "/viewprofile.php?uid=$row->uid"
+                        ); ?>" target="_blank" name="setAdmin"  title="View Profile" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white">
                         <i class="fas fa-user-circle"></i>
                         </a>
                      </form>
