@@ -131,7 +131,7 @@
       </div>
       <div class="col-lg-9 col-md-12">
          <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-chart-line"></i> ShoutBox</div>
+            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
             <div class="row text-muted">
                <div class="col-lg-9 col-md-8 col-sm-12">
                   <div class="scroll chatbox">
