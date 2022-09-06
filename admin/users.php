@@ -172,18 +172,18 @@
                   <td>
                      <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
                         <button value="<?php Util::display(
-                         $row->uid
-                     ); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                               $row->uid
+                           ); ?>" name="resetHWID"  title="Reset HWID" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-microchip"></i>
                         </button>
                         <button value="<?php Util::display(
-                            $row->uid
-                        ); ?>" name="setBanned"  title="Ban/unban user" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                         $row->uid
+                     ); ?>" name="setBanned"  title="Ban/unban user" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-user-slash"></i>
                         </button>
                         <button value="<?php Util::display(
-                               $row->uid
-                           ); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                            $row->uid
+                        ); ?>" name="setAdmin"  title="Set admin/non admin" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
                         <i class="fas fa-crown"></i>
                         </button>
                         <button value="<?php Util::display(

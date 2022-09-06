@@ -107,25 +107,25 @@
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
                               <?php if ($cheat->getCheatData()->frozen != 0) {
-                            Util::display("Frozen <i class='fas fa-snowflake fa-sm' ></i>");
-                        } else {
-                            if ($sub > 8000) {
-                                Util::display("Lifetime");
-                            } else {
-                                if ($sub >= 0) {
-                                    Util::display("$sub days");
-                                } else {
-                                    Util::display('<i class="fa fa-times"></i>');
-                                }
-                            }
-                        } ?>
+                         Util::display("Frozen <i class='fas fa-snowflake fa-sm' ></i>");
+                     } else {
+                         if ($sub > 8000) {
+                             Util::display("Lifetime");
+                         } else {
+                             if ($sub >= 0) {
+                                 Util::display("$sub days");
+                             } else {
+                                 Util::display('<i class="fa fa-times"></i>');
+                             }
+                         }
+                     } ?>
                            </p>
                         </div>
                         <div class="col-12 clearfix">
                            <i class="fas fa-clock"></i> Joined: 
                            <p class="float-right mb-0"><?php Util::display(
-                            Util::getjoinprofile($userbyid->createdAt) . " days ago"
-                        ); ?></p>
+                         Util::getjoinprofile($userbyid->createdAt) . " days ago"
+                     ); ?></p>
                         </div>
                      </div>
                   </div>
