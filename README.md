@@ -68,25 +68,27 @@ Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
 
 ## Authors
 
+## panel edit
 👤 **anditv21**
 
 * Website: [anditv.it](https://anditv.it)
 * Github: [@anditv21](https://github.com/anditv21)
 
+## original panel
 👤 **znixbtw**
 
 * Website: [znix.me](https://znix.me)
 * Github: [@znixbtw](https://github.com/znixbtw)
 
+### gamesense theme
 👤 **index**
 
 * Github: [@Phantom-1337](https://github.com/Phantom-1337)
 
 ## Setup ##
 
-- Download The Repository
 - Upload all files to your PHP host of choice
-- Then copy and paste db.sql into SQL import tab on phpmyadmin
+- Copy and paste db.sql into SQL import tab on phpmyadmin
 - Change https://github.com/anditv21/panel/blob/main/app/core/Database#L5#L8 to your database credentials
 - Rename https://github.com/anditv21/panel/blob/main/app/core/Database to Database.php
 - Put your Loader in the main directory of the panel. (x.exe)
