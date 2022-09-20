@@ -92,6 +92,8 @@
 
                   </div>
                </div>
+               <br>
+               </center>
                <table class="rounded table">
             <thead>
                <tr>
@@ -111,7 +113,6 @@
                <?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
                <br>
                <tr>
-                  <center>
                      <td>                               
                         <?php if (Util::getavatar($row->uid) == false): ?>
                         <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
@@ -133,7 +134,6 @@
                            ); ?>"></a>
                         <?php endif; ?>
                      </td>
-                  </center>
                   <th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
                   <td class="text-center">
                   <?php Util::display($row->username); ?>
