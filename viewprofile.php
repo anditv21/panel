@@ -17,7 +17,8 @@
            $userbyid = $user->getuserbyuid($getuid);
            $username = $userbyid->username;
        } else {
-           Util::display("<script>window.history.back();</script>");
+            Util::display("<script>alert('No/invalid UID was given');</script>");
+            Util::display("<script>window.history.back();</script>");
        }
    }
 
