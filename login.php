@@ -59,7 +59,7 @@ Util::navbar();
 
 					<h4 class="card-title text-center">Login</h4>
 
-					<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+					<form method="POST" action="<?php Util::Display($_SERVER["PHP_SELF"]); ?>">
 
 						<div class="form-group">
 							<input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Username" name="username" required>
