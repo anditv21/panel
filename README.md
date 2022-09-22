@@ -10,6 +10,11 @@
 > Default login: `admin`:`admin` <br />
 ---
 
+
+
+## 🤝 Contributing
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/anditv21/panel/issues). 
+---
 ### Overview
 <p align="center">
   <img src="https://i.imgur.com/VB2ial8.png" />
@@ -104,9 +109,5 @@ Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
 - Set a website description in https://github.com/anditv21/panel/blob/main/app/core/Config.php#L11
 - Change https://github.com/anditv21/panel/blob/main/app/core/Config.php#L30 to a secure API key
 
----
 
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/anditv21/panel/issues). 
 
