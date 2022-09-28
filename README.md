@@ -2,7 +2,7 @@
 <p align="center">
  | 
   <a href="#preview">Preview</a> |
-  <a href="setup">Setup</a> |
+  <a href="#setup">Setup</a> |
   <a href="#features">Features </a> |
   <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
 </p>
