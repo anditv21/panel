@@ -1,20 +1,19 @@
 <h1 align="center">:zap: User Management Panel</h1>
-<p>
+<p align="center">
+ | 
+  <a href="#preview">Preview</a> |
+  <a href="setup">Setup</a> |
+  <a href="#features">Features </a> |
+  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
 </p>
 
-
-
+---
 * Original Panel: https://github.com/znixbtw/php-panel-v2
 * Panel Edit: https://github.com/Phantom-1337/gamesensethemeforznixpanel
 * Old Panel: https://github.com/anditv21/znixv2-panel-edit-edit
 > Default login: `admin`:`admin` <br />
 ---
 
-
-
-## 🤝 Contributing
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/anditv21/panel/issues). 
----
 ### Overview
 <p align="center">
   <img src="https://i.imgur.com/VB2ial8.png" />
