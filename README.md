@@ -31,12 +31,13 @@
 * Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3RziB40)
 * Banned Page (Screenshot: https://bit.ly/3erfTj1)
 ###### USER
-Screenshot: https://bit.ly/3esOs8x / https://bit.ly/3D1cXE6
+Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 * Change password
 * Activate multiple subscription´s with code (30/90 days)
 * Activate Trail subscription´s with code (3 days)
 * Download loader (Needs a sub)
 * Set a Profile Picture
+  * Get Profile Picture from Discord
 * Shoutbox
   * View user profiles
 ### SUPPORTER/ADMINISTRATOR PANEL
@@ -109,4 +110,8 @@ Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
 - Change https://github.com/anditv21/panel/blob/main/app/core/Config.php#L30 to a secure API key
 
 
-
+- Rename https://github.com/anditv21/panel/blob/main/app/core/DiscordConfig to DiscordConfig.php
+- Open https://discord.com/developers/applications and create a new Discord application
+- Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php
+- Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
+- Paste your Profile page url and hit "Save Changes"
