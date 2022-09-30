@@ -109,11 +109,11 @@ class Util
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png";
+            return IMG_URL . $uid. ".png?" . Util::randomCode(5);
         } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg";
+            return IMG_URL . $uid . ".jpg?". Util::randomCode(5);
         } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif";
+            return IMG_URL . $uid . ".gif?". Util::randomCode(5);
         } else {
             return false;
         }
