@@ -2,7 +2,7 @@
 
 // SITE PRESETS
 define('SITE_ROOT', dirname(__FILE__, 3)); // DO NOT CHANGE
-define('SITE_URL', 'http://'.$_SERVER['SERVER_NAME']); // DO NOT CHANGE
+define('SITE_URL', 'https://'.$_SERVER['SERVER_NAME']); // DO NOT CHANGE
 
 // Website Name
 define('SITE_NAME', 'anditv21`s Panel edit');

@@ -1,0 +1,5 @@
+<?php
+
+define('client_id', '1234');
+define('client_secret', 'yoursecret');
+
