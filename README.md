@@ -37,7 +37,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 * Activate Trail subscription´s with code (3 days)
 * Download loader (Needs a sub)
 * Set a Profile Picture
-  * Get Profile Picture from Discord
+  * Get Profile Picture from Discord (currently only static)
 * Shoutbox
   * View user profiles
 ### SUPPORTER/ADMINISTRATOR PANEL
