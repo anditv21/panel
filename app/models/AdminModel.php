@@ -12,7 +12,6 @@ require_once SITE_ROOT . "/app/require.php";
 
 class Admin extends Database
 {
-    
     // Get array of all users
     // - includes hashed passwords too.
     protected function UserArray()
@@ -69,7 +68,6 @@ class Admin extends Database
 
     protected function subgift($name, $sub, $time)
     {
-        
         if (Session::isAdmin()) {
             if ($sub <= 0) {
                 if ($time === 'LT') {
@@ -248,7 +246,7 @@ class Admin extends Database
                 $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
                 $result = $this->statement->fetch();
-                
+
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Unbanned $result->username ($uid)", admin_logs);
@@ -289,7 +287,7 @@ class Admin extends Database
                 $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
                 $result = $this->statement->fetch();
-                
+
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Removed Admin perms from $result->username ($uid)", admin_logs);

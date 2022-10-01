@@ -22,7 +22,7 @@ class UserController extends Users
     }
 
     public function logoutUser()
-    {  
+    {
         $username = Session::get("username");
         $this->log($username, "Logged out", auth_logs);
         setcookie("login_cookie", "", time() - 1);
