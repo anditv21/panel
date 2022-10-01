@@ -23,7 +23,9 @@
 <details align="center">
    <summary><h3>Preview</h3></summary>
 <p align="center">
-  <a href="https://i.ibb.co/sgsdrcv/image.png"><img src="https://i.ibb.co/sgsdrcv/image.png" /></a>
+  <a href=https://i.ibb.co/897qQpS/image.png"><img src="https://i.ibb.co/897qQpS/image.png" /></a>
+<a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
+<a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
 </p>
 </details>
 
