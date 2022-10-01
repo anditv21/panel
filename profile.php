@@ -297,8 +297,8 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                   <div class="card-body">
                      <h4 class="card-title text-center">Activate Sub</h4>
                      <form method="POST" action="<?php Util::display(
-                        $_SERVER["PHP_SELF"]
-                    ); ?>">
+    $_SERVER["PHP_SELF"]
+); ?>">
                         <div class="form-group">
                            <input autocomplete="off" class="form-control form-control-sm" placeholder="Subscription Code" name="subCode" required>
                         </div>
