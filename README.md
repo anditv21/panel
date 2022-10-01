@@ -19,60 +19,103 @@
   <img src="https://i.imgur.com/VB2ial8.png" />
 </p>
 
-### Preview
+
+<details align="center">
+   <summary><h3>Preview</h3></summary>
 <p align="center">
   <a href="https://i.ibb.co/sgsdrcv/image.png"><img src="https://i.ibb.co/sgsdrcv/image.png" /></a>
 </p>
-
+</details>
 
 ### Features
 ###### AUTH
-* Login (Remember Login) (Screenshot: https://bit.ly/3QlQDaW)
-* Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3RziB40)
-* Banned Page (Screenshot: https://bit.ly/3erfTj1)
+<details>
+  <summary>Click to see Auth Features</summary>
+<ul>
+<li>Login (Remember Login) (Screenshot: https://bit.ly/3QlQDaW)</li>
+<li>Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3RziB40)</li>
+<li>Banned Page (Screenshot: https://bit.ly/3erfTj1)</li>
+</ul>
+</details>
+
 ###### USER
+<details>
+  <summary>Click to see User Features</summary>
+<ul>
 Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
-* Change password
-* Activate multiple subscription´s with code (30/90 days)
-* Activate Trail subscription´s with code (3 days)
-* Download loader (Needs a sub)
-* Set a Profile Picture
-  * Get Profile Picture from Discord (currently only static)
-* Shoutbox
-  * View user profiles
-### SUPPORTER/ADMINISTRATOR PANEL
-Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
-* Disable Invite System (Admin only)
-* Freeze all subscriptions (experimental) (Admin only)
-* Gift user subscription (Admin only) (Screenshot: https://bit.ly/3enQmqP) 
-  * Input options:
-    * `LT for Lifetime`
-    * `T for a trail subscription (3 days)`
-    * `- to remove a users subscription`
-    * `Intager for custom amount in days`
-* User-Ranges with buttons in User Table (Screenshot: https://bit.ly/3THQuSe)
-  * Input options:
-	  * `1-10 10-20 20-30 30-40 40-50`
-	  * `custom`
-	  * `ALL`
-* View a users last known IP address 
-* Password Reset (Admin only)
-* Set News
-* Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3AJVIUI)
-* Generate invite code
-* Generate subscription code (Admin only)
-* Ban/unban user (Admin only)
-* Make user admin/non-admin 
-* Make user supporter/non-supp 
-* Reset HWID
-* Set cheat detected/undetected/version/maintenance/non-maintenance  (Admin only)
+<li>Change password</li>
+<li>Activate multiple subscription´s with code (30/90 days)</li>
+<li>Activate Trail subscription´s with code (3 days)</li>
+<li>Download loader (Needs a sub)</li>
+<li>Set a Profile Picture</li>
+<ul>
+<li>
+ Get Profile Picture from Discord (currently only static)</li></ul>
+<li>Shoutbox</li>
+<ul><li>View user profiles
+
+</li></ul>
+
+</ul>
+</details>
 
 
-###### API
-###### Note: User pass and hwid has to be sent in base64 format.
-* Sends user data in JSON format on call
-	* Usage: `api.php?user={username}&pass={password}&hwid={hwid}&key={key}`
-	* Example: `api.php?user=admin&pass=YWRtaW4=&hwid=aHdpZA==&key=dmyeXILqwHb4X5r1x7O2wUgsrP9yF1`
+###### Support/Admin-Panel
+<details>
+   <summary>Click to see Supporter/Admin-Panel Features</summary>
+   <ul>
+      <li>Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf</li>
+      <li>Disable Invite System (Admin only)</li>
+      <li>Freeze all subscriptions (experimental) (Admin only)</li> 
+      <li>Gift user subscription (Admin only) (Screenshot: https://bit.ly/3enQmqP)</li>
+
+<ul>
+ <li>Input options: </li>
+ <ul><li> <code>LT for Lifetime </code> </li>
+ <li> <code>T for a trail subscription (3 days)</code> </li>
+ <li> <code>- to remove a users subscription</code> </li>
+ <li> <code>Intager for custom amount in days</code> </li></ul>
+</ul>
+   </ul>
+<ul>
+<li>User-Ranges with buttons in User Table (Screenshot: https://bit.ly/3THQuSe)</li>
+    <ul><li>Input options: </li><ul>
+
+
+<li><code>1-10 10-20 20-30 30-40 40-50</code> </li>
+<li><code>custom</code> </li>
+<li><code>ALL</code> </li>
+ </ul>
+</ul>
+</ul>
+
+<li>View a users last known IP address </li>
+<li>Password Reset (Admin only)</li>
+<li>Set News</li>
+<li>Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3AJVIUI)</li>
+<li>Generate invite code</li>
+<li>Generate subscription code (Admin only)</li>
+<li>Ban/unban user (Admin only)</li>
+<li>Make user admin/non-admin </li>
+<li>Make user supporter/non-supp </li>
+<li>Reset HWID</li>
+<li>Set cheat detected/undetected/version/maintenance/non-maintenance  (Admin only)</li>
+
+</details>
+
+
+
+<details>
+   <summary><h3>API</h3></summary>
+Note: User pass and hwid has to be sent in base64 format.
+<ul>
+<li>Sends user data in JSON format on call</li>
+	<ul><li>Usage: <code>api.php?user={username}&pass={password}&hwid={hwid}&key={key}</code></li>
+	<li>Example: <code>api.php?user=admin&pass=YWRtaW4=&hwid=aHdpZA==&key=dmyeXILqwHb4X5r1x7O2wUgsrP9yF1</code></li></ul>
+
+</ul>
+</details>
+
 
 ---
 
@@ -96,7 +139,9 @@ Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
 
 * Github: [@Phantom-1337](https://github.com/Phantom-1337)
 
-## Setup ##
+<details>
+   <summary><h3>Setup</h3></summary>
+
 
 - Upload all files to your PHP host of choice
 - Copy and paste db.sql into SQL import tab on phpmyadmin
@@ -115,3 +160,4 @@ Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf
 - Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php
 - Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
 - Paste your Profile page url and hit "Save Changes"
+</details>
