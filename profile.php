@@ -281,13 +281,12 @@
                      </div>
                   </div>
                </div>
-            </div>
-            <?php if ($sub <= 0): ?>
+<br>
             <div class="col-12 mb-4">
                <div class="card">
                   <div class="card-body">
                      <h4 class="card-title text-center">Activate Sub</h4>
-                     <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+                     <form method="POST" action="<?php Util::display($_SERVER["PHP_SELF"]);  ?>">
                         <div class="form-group">
                            <input type="password" class="form-control form-control-sm" placeholder="Subscription Code" name="subCode" required>
                         </div>
@@ -296,7 +295,7 @@
                   </div>
                </div>
             </div>
-            <?php endif; ?>
+
          </div>
       </div>
    </div>
