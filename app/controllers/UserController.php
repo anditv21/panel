@@ -22,7 +22,9 @@ class UserController extends Users
     }
 
     public function logoutUser()
-    {
+    {  
+        $username = Session::get("username");
+        $this->log($username, "Logged out", auth_logs);
         setcookie("login_cookie", "", time() - 1);
         session_unset();
         $_SESSION = [];
@@ -108,8 +110,10 @@ class UserController extends Users
 
             $result = $this->register($username, $hashedPassword, $invCode);
 
+
             // Session start
             if ($result) {
+                $this->log($username, "Just registered", auth_logs);
                 Util::redirect("/auth/login.php");
             } else {
                 return "Something went wrong.";
@@ -168,7 +172,7 @@ class UserController extends Users
 
                 setcookie("login_cookie", $token, time() + 31556926);
                 $_SESSION["username"] = $username;
-
+                $this->log($username, "Logged in", auth_logs);
                 Util::redirect("/index.php");
             } else {
                 return "Username/Password is wrong.";
@@ -182,8 +186,9 @@ class UserController extends Users
 
         if ($result) {
             // Session start
-
             $this->createUserSession($result);
+            $username = Session::get("username");
+            $this->log($username, "Logged in via token", auth_logs);
             Util::redirect("/index.php");
         }
     }
@@ -200,6 +205,7 @@ class UserController extends Users
             $subCodeExists = $this->subCodeCheck($subCode);
 
             if ($subCodeExists) {
+                $this->log($username, "Activated a sub", user_logs);
                 return $this->subscription($subCode, $username);
             } else {
                 return "Subscription code is invalid.";
@@ -286,5 +292,10 @@ class UserController extends Users
     public function getuserbyuid($uid)
     {
         return $this->getbyuid($uid);
+    }
+
+    public function log($username, $action, $webhook)
+    {
+        return $this->sendlog($username, $action, $webhook);
     }
 }

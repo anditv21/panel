@@ -156,10 +156,17 @@ Note: User pass and hwid has to be sent in base64 format.
 - Set a website description in https://github.com/anditv21/panel/blob/main/app/core/Config.php#L11
 - Change https://github.com/anditv21/panel/blob/main/app/core/Config.php#L30 to a secure API key
 
+<br>
 
 - Rename https://github.com/anditv21/panel/blob/main/app/core/DiscordConfig to DiscordConfig.php
 - Open https://discord.com/developers/applications and create a new Discord application
 - Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php
 - Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
 - Paste your Profile page url and hit "Save Changes"
+
+<br>
+- Fill in your discord log webhook url in DiscordConfig.php
+
+
+
 </details>
