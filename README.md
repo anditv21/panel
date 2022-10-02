@@ -21,7 +21,7 @@
 
 
 <details align="center">
-   <summary><h3>Preview</h3></summary>
+   <summary>Preview</summary>
 <p align="center">
   <a href=https://i.ibb.co/897qQpS/image.png"><img src="https://i.ibb.co/897qQpS/image.png" /></a>
 <a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
@@ -108,7 +108,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 
 
 <details>
-   <summary><h3>API</h3></summary>
+   <summary>API</summary>
 Note: User pass and hwid has to be sent in base64 format.
 <ul>
 <li>Sends user data in JSON format on call</li>
@@ -142,7 +142,7 @@ Note: User pass and hwid has to be sent in base64 format.
 * Github: [@Phantom-1337](https://github.com/Phantom-1337)
 
 <details>
-   <summary><h3>Setup</h3></summary>
+   <summary>Setup</summary>
 
 
 - Upload all files to your PHP host of choice
