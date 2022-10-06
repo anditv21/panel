@@ -109,7 +109,7 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Subscription status: 
                   <p class="float-right mb-0"><?php if (
-                     $cheat->getCheatData()->frozen == 0
+                     $cheat->getCheatData()->frozen == 1
                      ) {
           Util::display("Frozen");
       } elseif ($sub > 0) {
