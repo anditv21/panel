@@ -268,7 +268,15 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
                               <?php if ($cheat->getCheatData()->frozen != 0) {
-    Util::display("Frozen");
+                        $sub = $sub + $time;
+                        if($sub < 1000)
+                        {
+                           Util::display("$sub (Frozen)");
+                        }
+                        else
+                        {
+                           Util::display("Lifetime");
+                        }
 } else {
     if ($sub > 8000) {
         Util::display("Lifetime");

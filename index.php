@@ -55,10 +55,12 @@
          </div>
       </div>
       <!--Sub frozen warning -->
-      <?php if ($cheat->getCheatData()->frozen == 1): ?>
+      <?php
+       $time = $user->gettime();
+       if ($cheat->getCheatData()->frozen == 1): ?>
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
-            <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN!"); ?></b>
+            <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"); ?></b>
          </div>
       </div>
       <?php endif; ?>
@@ -115,11 +117,20 @@
       ); ?></p>
                </div>
                <div class="col-12 clearfix">
-                  <i class="fas fa-user-clock"></i> Subscription status: 
+                  <i class="fas fa-user-clock"></i> Sub status: 
                   <p class="float-right mb-0"><?php if (
                      $cheat->getCheatData()->frozen == 1
                      ) {
-          Util::display("Frozen");
+                        $sub = $sub + $time;
+                        if($sub < 1000)
+                        {
+                           Util::display("$sub (Frozen)");
+                        }
+                        else
+                        {
+                           Util::display("Lifetime");
+                        }
+
       } elseif ($sub > 0) {
           Util::display("Active");
       } else {

@@ -294,6 +294,11 @@ class UserController extends Users
         return $this->getbyuid($uid);
     }
 
+    public function gettime()
+    {
+        return $this->timesincefrozen();
+    }
+
     public function log($username, $action, $webhook)
     {
         return $this->sendlog($username, $action, $webhook);

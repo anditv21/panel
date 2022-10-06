@@ -376,6 +376,29 @@ class Users extends Database
         return $row->username;
     }
 
+    protected function timesincefrozen()
+    {
+        $this->prepare(
+            'UPDATE `users` SET `frozen` = 0 where `username` = ? '
+        );
+        $this->statement->execute([$row->username]);
+
+        $this->prepare('SELECT * FROM `cheat`');
+        $this->statement->execute();
+        $result = $this->statement->fetch();
+        $freezingtime = $result->freezingtime;
+        $freezingtime = gmdate('Y-m-d', $freezingtime);
+
+        $timenow = gmdate('Y-m-d', time());
+
+        $date1 = date_create($freezingtime); // Convert String to date format
+        $date2 = date_create($timenow); // Convert String to date format
+        $diff = date_diff($date1, $date2);
+        $diff = intval($diff->format('%R%a'));
+
+        return $diff;
+    }
+
     protected function sendlog($username, $action, $webhook)
     {
         if ($webhook == auth_logs) {
@@ -573,4 +596,6 @@ class Users extends Database
         }
         return $ip;
     }
+
+
 }
