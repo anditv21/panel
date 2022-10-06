@@ -54,6 +54,14 @@
       ); ?>.</b></a>
          </div>
       </div>
+      <!--Sub frozen warning -->
+      <?php if ($cheat->getCheatData()->frozen == 1): ?>
+      <div class="col-12 mt-3 mb-2">
+         <div class="alert alert-primary" role="alert">
+            <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN!"); ?></b>
+         </div>
+      </div>
+      <?php endif; ?>
       <!--News-->
       <div class="col-lg-9 col-md-12">
          <div class="rounded p-3 mb-3">
