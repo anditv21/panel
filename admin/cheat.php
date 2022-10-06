@@ -191,7 +191,7 @@
                SET invites+-
                </button>
 			   <button name="cheatfreeze" type="submit" class="btn btn-outline-primary btn-sm">
-               SET subscriptions+-
+               SET subscriptions+- (BETA)
                </button>
             </form>
             <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
