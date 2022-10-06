@@ -84,8 +84,8 @@
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-          $user->getUserCount()
-      ); ?></p>
+           $user->getUserCount()
+       ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
@@ -121,16 +121,12 @@
                   <p class="float-right mb-0"><?php if (
                      $cheat->getCheatData()->frozen == 1
                      ) {
-                        $sub = $sub + $time;
-                        if($sub < 1000)
-                        {
-                           Util::display("$sub (Frozen)");
-                        }
-                        else
-                        {
-                           Util::display("Lifetime");
-                        }
-
+          $sub = $sub + $time;
+          if ($sub < 1000) {
+              Util::display("$sub (Frozen)");
+          } else {
+              Util::display("Lifetime");
+          }
       } elseif ($sub > 0) {
           Util::display("Active");
       } else {
