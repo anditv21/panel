@@ -120,19 +120,19 @@
                   <i class="fas fa-user-clock"></i> Sub status: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
-          $sub = $sub + $time;
-          if ($sub < 1000) {
-              Util::display("$sub (Frozen)");
-          } elseif ($sub < 1) {
-              Util::display('<i class="fa fa-times"></i>');
-          } else {
-              Util::display("Lifetime");
-          }
-      } elseif ($sub > 0) {
-          Util::display("Active");
-      } else {
-          Util::display("None");
-      } ?></p>
+           $sub = $sub + $time;
+           if ($sub < 1000) {
+               Util::display("$sub (Frozen)");
+           } elseif ($sub < 1) {
+               Util::display('<i class="fa fa-times"></i>');
+           } else {
+               Util::display("Lifetime");
+           }
+       } elseif ($sub > 0) {
+           Util::display("Active");
+       } else {
+           Util::display("None");
+       } ?></p>
                </div>
                <!-- Check if has sub --> 
                <?php if ($user->getSubStatus() > 0): ?>
