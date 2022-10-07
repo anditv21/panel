@@ -113,8 +113,8 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-          $cheat->getCheatData()->version
-      ); ?></p>
+           $cheat->getCheatData()->version
+       ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub status: 
