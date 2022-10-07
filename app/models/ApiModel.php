@@ -41,6 +41,10 @@ class API extends Database
                     $avatarurl = SITE_URL . SUB_DIR ."/assets/img/avatars/Portrait_Placeholder.png";
                 }
 
+                $this->prepare('SELECT * FROM `cheat`');
+                $this->statement->execute();
+                $res = $this->statement->fetch();
+
                 $response = [
                     'status' => 'success',
                     'uid' => $row->uid,
@@ -53,6 +57,10 @@ class API extends Database
                     'invitedBy' => $row->invitedBy,
                     'createdAt' => $row->createdAt,
                     'avatarurl' => $avatarurl,
+                    'frozen' => $res->frozen,
+                    'cheatstatus' => $res->status,
+                    'cheatversion' => $res->version,
+                    'cheatmaintenance' => $res->aintenance,
                     
                 ];
             } else {
