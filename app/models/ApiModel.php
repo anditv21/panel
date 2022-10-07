@@ -61,7 +61,7 @@ class API extends Database
                     'cheatstatus' => $res->status,
                     'cheatversion' => $res->version,
                     'cheatmaintenance' => $res->aintenance,
-                    
+
                 ];
             } else {
                 // Wrong pass, user exists

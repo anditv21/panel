@@ -596,6 +596,4 @@ class Users extends Database
         }
         return $ip;
     }
-
-
 }
