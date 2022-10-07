@@ -32,11 +32,11 @@ class API extends Database
                 $uid = $row->uid;
                 $path = IMG_DIR . $uid;
                 if (@getimagesize($path . ".png")) {
-                    $avatarurl = IMG_URL . $uid. ".png";
+                    $avatarurl = IMG_URL . $uid. ".png?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".jpg")) {
-                    $avatarurl = IMG_URL . $uid . ".jpg";
+                    $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".gif")) {
-                    $avatarurl = IMG_URL . $uid . ".gif";
+                    $avatarurl = IMG_URL . $uid . ".gif?" . Util::randomCode(5);
                 } else {
                     $avatarurl = SITE_URL . SUB_DIR ."/assets/img/avatars/Portrait_Placeholder.png";
                 }
@@ -53,6 +53,7 @@ class API extends Database
                     'invitedBy' => $row->invitedBy,
                     'createdAt' => $row->createdAt,
                     'avatarurl' => $avatarurl,
+                    
                 ];
             } else {
                 // Wrong pass, user exists
