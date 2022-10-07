@@ -271,6 +271,8 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
     $sub = $sub + $time;
     if ($sub < 1000) {
         Util::display("$sub (Frozen)");
+    } elseif ($sub < 1) {
+        Util::display('<i class="fa fa-times"></i>');
     } else {
         Util::display("Lifetime");
     }
