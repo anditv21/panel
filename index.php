@@ -91,8 +91,8 @@
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-          $user->getNewUser()
-      ); ?></p>
+           $user->getNewUser()
+       ); ?></p>
                </div>
             </div>
          </div>
