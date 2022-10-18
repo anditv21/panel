@@ -8,6 +8,27 @@ require_once SITE_ROOT . "/app/core/Database.php";
 
 class API extends Database
 {
+
+
+    protected function botAPI()
+    {
+        $response = [
+            "status" => "success",
+        ];
+
+        return $response;
+    }
+
+
+
+
+
+
+
+
+
+
+
     protected function userAPI($username, $password, $hwid)
     {
         // fetch username
