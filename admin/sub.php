@@ -22,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin->getSubCodeGen($username);
     }
 
+	if (isset($_POST["genSub2"])) {
+        $admin->getSubCodeGen3M($username);
+    }
+
     header("location: sub.php");
 }
 ?>
@@ -59,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 								
 					<button name="genSub" type="submit" class="btn btn-outline-primary btn-sm">
 						Gen Subscription code
+					</button>
+					<button name="genSub2" type="submit" class="btn btn-outline-primary btn-sm">
+						Gen Subscription code (90d/3m)
 					</button>
 
 				</form>
