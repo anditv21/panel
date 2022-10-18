@@ -113,7 +113,7 @@ Note: User pass and hwid has to be sent in base64 format.
 <ul>
 <li>Sends user data in JSON format on call</li>
 	<ul><li>Usage: <code>api.php?user={username}&pass={password}&hwid={hwid}&key={key}</code></li>
-	<li>Example: <code>api.php?user=admin&pass=YWRtaW4=&hwid=aHdpZA==&key=dmyeXILqwHb4X5r1x7O2wUgsrP9yF1</code></li></ul>
+	<li>Example: <code>api.php?user=admin&pass=YWRtaW4=&hwid=aHdpZA==&key=yes</code></li></ul>
 
 </ul>
 There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomment-1262149890">API examples</a> for some popular languages
