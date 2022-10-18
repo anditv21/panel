@@ -288,9 +288,15 @@ class API extends Database
             $this->prepare("SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()");
             $this->statement->execute();
             $sub = $this->statement->rowCount();
+
+            $this->prepare("SELECT `injectcount` FROM `cheat`");
+            $this->statement->execute();
+            $result = $this->statement->fetch();
+            $injectcount = $result->injectcount;
+            
         } catch (Exception $e) {
             $response = [
-                "status" => "error",
+                "status" => "failed",
                 "exception" => $e,
             ];
         }
@@ -302,6 +308,7 @@ class API extends Database
             "usercount" => $usercount,
             "bannedcount" => $banned,
             "activeusers" => $sub,
+            "injects" => $injectcount,
         ];
         return $response;
     }
