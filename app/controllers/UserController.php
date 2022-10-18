@@ -173,6 +173,7 @@ class UserController extends Users
                 setcookie("login_cookie", $token, time() + 31556926);
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
+                $this->loglogin();
                 Util::redirect("/index.php");
             } else {
                 return "Username/Password is wrong.";
@@ -189,6 +190,7 @@ class UserController extends Users
             $this->createUserSession($result);
             $username = Session::get("username");
             $this->log($username, "Logged in via token", auth_logs);
+            $this->loglogin();
             Util::redirect("/index.php");
         }
     }
@@ -302,5 +304,16 @@ class UserController extends Users
     public function log($username, $action, $webhook)
     {
         return $this->sendlog($username, $action, $webhook);
+    }
+
+    public function getlastlogin()
+    {
+        return $this->lastlogin(Session::Get("username"));
+    }
+
+    public function getlastip()
+    {
+        $username = Session::Get("username");
+        return $this->lastip($username);
     }
 }

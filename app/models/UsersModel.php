@@ -5,9 +5,11 @@
 // Only interats with 'users' table
 
 require_once SITE_ROOT . "/app/core/Database.php";
-
+date_default_timezone_set('Europe/Vienna');
 class Users extends Database
 {
+    
+
     // Check if username exists
     protected function usernameCheck($username)
     {
@@ -574,6 +576,42 @@ class Users extends Database
             curl_exec($ch);
             curl_close($ch);
         }
+    }
+
+    protected function loglogin()
+    {
+        // fetch last login time
+        $username = Session::get("username");
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        $oldlogin = $result->currentLogin;
+
+        // save last login time
+        $this->prepare("UPDATE `users` SET `lastLogin` = ? WHERE `username` = ?");
+        $this->statement->execute([$oldlogin, $username]);
+
+
+        // save new login time
+        $time = date('Y-m-d H:i:s');
+        $this->prepare("UPDATE `users` SET `currentLogin` = ? WHERE `username` = ?");
+        $this->statement->execute([$time, $username]);
+    }
+
+    protected function lastlogin($username)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->lastLogin;
+    }
+
+    protected function lastip($username)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->lastIP;
     }
 
 

@@ -1,31 +1,31 @@
 <?php
-   require_once "app/require.php";
-   require_once "app/controllers/CheatController.php";
-   require_once "app/controllers/ShoutBoxController.php";
+require_once "app/require.php";
+require_once "app/controllers/CheatController.php";
+require_once "app/controllers/ShoutBoxController.php";
 
-   $user = new UserController();
-   $cheat = new CheatController();
-   $shoutbox = new ShoutBoxController();
-      Session::init();
+$user = new UserController();
+$cheat = new CheatController();
+$shoutbox = new ShoutBoxController();
+Session::init();
 
-      if (!Session::isLogged()) {
-          Util::redirect("/auth/login.php");
-      }
+if (!Session::isLogged()) {
+  Util::redirect("/auth/login.php");
+}
 
-      $username = Session::get("username");
-      $sub = $user->getSubStatus();
-      $uid = Session::get("uid");
-      Util::banCheck();
-      Util::head($username);
-      Util::navbar();
+$username = Session::get("username");
+$sub = $user->getSubStatus();
+$uid = Session::get("uid");
+Util::banCheck();
+Util::head($username);
+Util::navbar();
 
-      if ($_SERVER["REQUEST_METHOD"] === "POST") {
-          if (isset($_POST["sendmsg"])) {
-              $msg = trim($_POST["msg"]);
-              $shoutbox->postmsg($username, $uid, $msg);
-          }
-      }
-      ?>
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST["sendmsg"])) {
+    $msg = trim($_POST["msg"]);
+    $shoutbox->postmsg($username, $uid, $msg);
+  }
+}
+?>
 <style>
    .divide {
    padding: 0;
@@ -50,20 +50,27 @@
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
             Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
-          $username
-      ); ?>.</b></a>
+              $username
+            ); ?>. </b></a><?php Util::display(
+  "Last login: " .
+    $user->getlastlogin() .
+    " from " .
+    "<em class='spoiler'>" .$user->getlastip(). "</em>"); ?>
          </div>
       </div>
       <!--Sub frozen warning -->
       <?php
-       $time = $user->gettime();
-       if ($cheat->getCheatData()->frozen == 1): ?>
+      $time = $user->gettime();
+      if ($cheat->getCheatData()->frozen == 1): ?>
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
-            <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"); ?></b>
+            <b style="color: #6cc312;"><?php Util::display(
+              "WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"
+            ); ?></b>
          </div>
       </div>
-      <?php endif; ?>
+      <?php endif;
+      ?>
       <!--News-->
       <div class="col-lg-9 col-md-12">
          <div class="rounded p-3 mb-3">
@@ -84,15 +91,15 @@
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-           $user->getUserCount()
-       ); ?></p>
+                    $user->getUserCount()
+                  ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-           $user->getNewUser()
-       ); ?></p>
+                    $user->getNewUser()
+                  ); ?></p>
                </div>
             </div>
          </div>
@@ -106,33 +113,33 @@
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-           $cheat->getCheatData()->status
-       ); ?></p>
+                    $cheat->getCheatData()->status
+                  ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-           $cheat->getCheatData()->version
-       ); ?></p>
+                    $cheat->getCheatData()->version
+                  ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub status: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
-           $sub = $sub + $time;
-           if ($sub < 1000) {
-               Util::display("$sub (Frozen)");
-           } elseif ($sub < 1) {
-               Util::display('<i class="fa fa-times"></i>');
-           } else {
-               Util::display("Lifetime");
-           }
-       } elseif ($sub > 0) {
-           Util::display("Active");
-       } else {
-           Util::display("None");
-       } ?></p>
+                    $sub = $sub + $time;
+                    if ($sub < 1000) {
+                      Util::display("$sub (Frozen)");
+                    } elseif ($sub < 1) {
+                      Util::display('<i class="fa fa-times"></i>');
+                    } else {
+                      Util::display("Lifetime");
+                    }
+                  } elseif ($sub > 0) {
+                    Util::display("Active");
+                  } else {
+                    Util::display("None");
+                  } ?></p>
                </div>
                <!-- Check if has sub --> 
                <?php if ($user->getSubStatus() > 0): ?>
@@ -178,6 +185,15 @@
    
 </script>
 <style>
+   .spoiler:hover {
+   color: white;
+   max-width: fit-content;
+   }
+   .spoiler {
+   color: black;
+   background-color: black;
+   max-width: fit-content;
+   }
    .chat
    {
    padding-top: 2%;
