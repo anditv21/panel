@@ -378,10 +378,13 @@ class Users extends Database
 
     protected function timesincefrozen()
     {
+        /*
         $this->prepare(
             'UPDATE `users` SET `frozen` = 0 where `username` = ? '
         );
         $this->statement->execute([$row->username]);
+*/
+
 
         $this->prepare('SELECT * FROM `cheat`');
         $this->statement->execute();

@@ -8,6 +8,14 @@ require_once 'app/controllers/ApiController.php';
 $API = new ApiController();
 
 // Check data
+
+if($_GET['stats'])
+{
+    $response = $API->getStatsAPI();
+    echo(json_encode($response));
+    return true;
+}
+
 if (empty($_GET['user']) || empty($_GET['pass']) || empty($_GET['hwid']) || empty($_GET['key'])) {
     $response = array('status' => 'failed', 'error' => 'Missing arguments');
 } else {
