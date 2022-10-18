@@ -71,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <br>
                <label>Sub time in days:</label><br>
                <input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: 12" name="days"  required>
+               <br>
                <button class="btn btn-outline-primary btn-block"  id="submit" type="submit" value="submit">Gift Sub</button>
             </form>
          </div>
