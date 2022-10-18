@@ -11,14 +11,34 @@ $API = new ApiController();
 
 
 if (empty($_GET['key'])) {
-    $response = array('status' => 'failed', 'error' => 'Missing argument "key"');
+    $response = array('status' => 'failed', 'error' => 'Missing argument key');
 } else {
     $key = $_GET['key'];
 
     if (BOT_KEY === $key) {
+        if($_GET['action'] === "redeem" && !empty($_GET['code']) && !empty($_GET['username']))
+        {
+
+            $username = $_GET['username'];
+            $code = $_GET['code'];
+            $response = $API->redeem($username, $code);
+        }
+        elseif($_GET['action' === ""])
+        {
+
+        }
+        elseif($_GET['action' === ""])
+        {
+
+        }
+
+        else
+        {
+            $response = array('status' => 'failed', 'error' => 'Missing arguments');
+        }
 
 
-        $response = $API->getbotAPI();
+        //$response = $API->getbotAPI();
     } else {
         $response = array('status' => 'failed', 'error' => 'Invalid API key');
     }

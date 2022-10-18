@@ -21,4 +21,9 @@ class ApiController extends API
     {
         return $this->botAPI();
     }
+
+    public function redeem($username, $code)
+    {
+        return $this->redeemsub($username, $code);
+    }
 }
