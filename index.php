@@ -9,7 +9,7 @@ $shoutbox = new ShoutBoxController();
 Session::init();
 
 if (!Session::isLogged()) {
-  Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -20,10 +20,10 @@ Util::head($username);
 Util::navbar();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST["sendmsg"])) {
-    $msg = trim($_POST["msg"]);
-    $shoutbox->postmsg($username, $uid, $msg);
-  }
+    if (isset($_POST["sendmsg"])) {
+        $msg = trim($_POST["msg"]);
+        $shoutbox->postmsg($username, $uid, $msg);
+    }
 }
 ?>
 <style>
@@ -50,12 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
             Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
-              $username
-            ); ?>. </b></a><?php Util::display(
-  "Last login: " .
+    $username
+); ?>. </b></a><?php Util::display(
+                "Last login: " .
     $user->getlastlogin() .
     " from " .
-    "<em class='spoiler'>" .$user->getlastip(). "</em>"); ?>
+    "<em class='spoiler'>" .$user->getlastip(). "</em>"
+            ); ?>
          </div>
       </div>
       <!--Sub frozen warning -->
@@ -65,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
             <b style="color: #6cc312;"><?php Util::display(
-              "WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"
-            ); ?></b>
+          "WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"
+      ); ?></b>
          </div>
       </div>
       <?php endif;
@@ -91,14 +92,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-                    $user->getUserCount()
-                  ); ?></p>
+          $user->getUserCount()
+      ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                    $user->getNewUser()
+                      $user->getNewUser()
                   ); ?></p>
                </div>
             </div>
@@ -113,32 +114,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-                    $cheat->getCheatData()->status
+                      $cheat->getCheatData()->status
                   ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-                    $cheat->getCheatData()->version
+                      $cheat->getCheatData()->version
                   ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub status: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
-                    $sub = $sub + $time;
-                    if ($sub < 1000) {
-                      Util::display("$sub (Frozen)");
-                    } elseif ($sub < 1) {
-                      Util::display('<i class="fa fa-times"></i>');
-                    } else {
-                      Util::display("Lifetime");
-                    }
+                      $sub = $sub + $time;
+                      if ($sub < 1000) {
+                          Util::display("$sub (Frozen)");
+                      } elseif ($sub < 1) {
+                          Util::display('<i class="fa fa-times"></i>');
+                      } else {
+                          Util::display("Lifetime");
+                      }
                   } elseif ($sub > 0) {
-                    Util::display("Active");
+                      Util::display("Active");
                   } else {
-                    Util::display("None");
+                      Util::display("None");
                   } ?></p>
                </div>
                <!-- Check if has sub --> 
