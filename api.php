@@ -9,8 +9,7 @@ $API = new ApiController();
 
 // Check data
 
-if($_GET['stats'])
-{
+if ($_GET['stats']) {
     $response = $API->getStatsAPI();
     echo(json_encode($response));
     return true;
