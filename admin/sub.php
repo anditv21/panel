@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin->getSubCodeGen($username);
     }
 
-	if (isset($_POST["genSub2"])) {
+    if (isset($_POST["genSub2"])) {
         $admin->getSubCodeGen3M($username);
     }
 
