@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2022 at 11:09 AM
+-- Generation Time: Oct 18, 2022 at 02:50 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.11
 
@@ -98,6 +98,13 @@ CREATE TABLE `subscription` (
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `subscription`
+--
+
+INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
+('3m-LHr4SVVAa3jY3KbnFeSG', 'admin', '2022-10-18 14:49:56');
+
 -- --------------------------------------------------------
 
 --
@@ -117,6 +124,8 @@ CREATE TABLE `users` (
   `invitedBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp(),
   `lastIP` varchar(255) DEFAULT NULL,
+  `currentLogin` datetime DEFAULT NULL,
+  `lastLogin` datetime DEFAULT NULL,
   `remembertoken` varchar(50) DEFAULT NULL,
   `banreason` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -125,8 +134,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, NULL, 'none');
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-18 15:14:47', '2022-10-18 13:12:35', NULL, NULL);
 
 --
 -- Indexes for dumped tables
