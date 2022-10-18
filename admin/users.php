@@ -102,7 +102,7 @@
          <table class="rounded table">
             <thead>
                <tr>
-                  <th scope="col" >Picture</th>
+                  <th scope="col">Picture</th>
                   <th scope="col" class="text-center">UID</th>
                   <th scope="col">IP</th>
                   <th scope="col">Username</th>
@@ -149,7 +149,7 @@
                                $row->lastIP
                            ); ?>')" style="color: rgb(255,255,255);">
                      <?php Util::display(
-                               "<p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
+                               "<br><p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
                           $row->lastIP .
                           "</p>"
                            ); ?>
