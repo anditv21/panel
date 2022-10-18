@@ -52,11 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
     $username
 ); ?>. </b></a><?php Util::display(
-                "Last login: " .
+    "Last login: " .
     $user->getlastlogin() .
     " from " .
     "<em class='spoiler'>" .$user->getlastip(). "</em>"
-            ); ?>
+); ?>
          </div>
       </div>
       <!--Sub frozen warning -->
@@ -99,8 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                      $user->getNewUser()
-                  ); ?></p>
+          $user->getNewUser()
+      ); ?></p>
                </div>
             </div>
          </div>
