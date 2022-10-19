@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 18, 2022 at 07:27 PM
+-- Generation Time: Oct 19, 2022 at 11:18 AM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.11
 
@@ -85,7 +85,7 @@ CREATE TABLE `shoutbox` (
 --
 
 INSERT INTO `shoutbox` (`id`, `user`, `uid`, `msg`, `time`) VALUES
-(1, 'anditv21', 0, 'Hi', '2022-08-22 02:24:14.863472');
+(1, 'System', 0, 'Hi', '2022-08-22 02:24:14.863472');
 
 -- --------------------------------------------------------
 
@@ -113,6 +113,7 @@ CREATE TABLE `users` (
   `admin` int(1) NOT NULL DEFAULT 0,
   `supp` int(1) NOT NULL DEFAULT 0,
   `sub` date DEFAULT NULL,
+  `dcid` int(11) NOT NULL,
   `frozen` int(1) NOT NULL,
   `banned` int(1) NOT NULL DEFAULT 0,
   `invitedBy` varchar(255) NOT NULL,
@@ -128,8 +129,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2023-01-16', 1, 0, '', '2022-07-05 22:04:37', '2001:67c:2628:647:12::12d', '2022-10-18 21:12:33', '2022-10-18 19:43:52', 'a54994dc576c4de6dd7a32ae26b4ce1f', NULL);
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `dcid`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
+(1, 'admin', '$2y$10$Z1lyC8jFwsuTs8AM3NjoledhS8R89xlid/vaTQMCrI2FOsaTih5X6', 'hwid', 1, 1, '2023-01-16', 0, 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-19 08:20:54', '2022-10-18 21:12:33', '2acf9618be70312d41ea28f2720099a0', 'test');
 
 --
 -- Indexes for dumped tables
