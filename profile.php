@@ -270,34 +270,34 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                               <?php
                               $time =  $user->gettime();
                               if ($cheat->getCheatData()->frozen != 0) {
-    $sub = $sub + $time;
-    if ($sub < 1000) {
-        Util::display("$sub (Frozen)");
-    } elseif ($sub < 1) {
-        Util::display('<i class="fa fa-times"></i>');
-    } else {
-        Util::display("Lifetime");
-    }
-} else {
-    if ($sub > 8000) {
-        Util::display("Lifetime");
-    } else {
-        if ($sub >= 0) {
-            Util::display("$sub days");
-        } else {
-            Util::display(
-                '<i class="fa fa-times"></i>'
-            );
-        }
-    }
-} ?>
+                                  $sub = $sub + $time;
+                                  if ($sub < 1000) {
+                                      Util::display("$sub (Frozen)");
+                                  } elseif ($sub < 1) {
+                                      Util::display('<i class="fa fa-times"></i>');
+                                  } else {
+                                      Util::display("Lifetime");
+                                  }
+                              } else {
+                                  if ($sub > 8000) {
+                                      Util::display("Lifetime");
+                                  } else {
+                                      if ($sub >= 0) {
+                                          Util::display("$sub days");
+                                      } else {
+                                          Util::display(
+                                              '<i class="fa fa-times"></i>'
+                                          );
+                                      }
+                                  }
+                              } ?>
                            </p>
                         </div>
                         <div class="col-12 clearfix">
                            <i class="fas fa-clock"></i> Joined: 
                            <p class="float-right mb-0"><?php Util::display(
-    Util::getjoin() . " days ago"
-); ?></p>
+                                  Util::getjoin() . " days ago"
+                              ); ?></p>
                         </div>
                      </div>
                   </div>
@@ -308,8 +308,8 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                   <div class="card-body">
                      <h4 class="card-title text-center">Activate Sub</h4>
                      <form method="POST" action="<?php Util::display(
-    $_SERVER["PHP_SELF"]
-); ?>">
+                                  $_SERVER["PHP_SELF"]
+                              ); ?>">
                         <?php if ($cheat->getCheatData()->frozen != 0): ?>
 
                         <div class="form-group">
