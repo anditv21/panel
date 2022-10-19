@@ -308,8 +308,8 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                   <div class="card-body">
                      <h4 class="card-title text-center">Activate Sub</h4>
                      <form method="POST" action="<?php Util::display(
-    $_SERVER["PHP_SELF"]
-); ?>">
+                                  $_SERVER["PHP_SELF"]
+                              ); ?>">
                         <?php if ($cheat->getCheatData()->frozen != 0): ?>
 
                         <div class="form-group">
