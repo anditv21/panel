@@ -26,4 +26,9 @@ class ApiController extends API
     {
         return $this->redeemsub($username, $code);
     }
+
+    public function ban($usertoban, $reason)
+    {
+        return $this->banuser($usertoban, $reason);
+    }
 }

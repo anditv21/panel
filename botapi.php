@@ -23,15 +23,16 @@ if (empty($_GET['key'])) {
             $code = $_GET['code'];
             $response = $API->redeem($username, $code);
         }
-        elseif($_GET['action' === ""])
+        elseif($_GET['action'] === "ban" && !empty($_GET['usertoban']))
         {
+            $usertoban = $_GET['usertoban'];
 
+            $response = $API->ban($usertoban, $_GET['reason']);
         }
         elseif($_GET['action' === ""])
         {
 
         }
-
         else
         {
             $response = array('status' => 'failed', 'error' => 'Missing arguments');
@@ -45,3 +46,4 @@ if (empty($_GET['key'])) {
 }
 
 echo(json_encode($response));
+
