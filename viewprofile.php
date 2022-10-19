@@ -108,7 +108,7 @@
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
                               <?php if ($cheat->getCheatData()->frozen != 0) {
-                                 $sub = $sub + $time;
+                         $sub = $sub + $time;
                          Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
                      } else {
                          if ($sub > 8000) {
