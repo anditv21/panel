@@ -308,10 +308,21 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                      <form method="POST" action="<?php Util::display(
     $_SERVER["PHP_SELF"]
 ); ?>">
+                        <?php if ($cheat->getCheatData()->frozen != 0): ?>
+
+                        <div class="form-group">
+                           <input disabled="disabled" autocomplete="off" class="form-control form-control-sm" placeholder="Subscription Code" name="subCode" required>
+                        </div>
+                        
+                        <button disabled="disabled" class="btn btn-outline-primary btn-block" name="activateSub" type="submit" value="submit">Activate Sub</button>
+
+                        <?php else : ?>
                         <div class="form-group">
                            <input autocomplete="off" class="form-control form-control-sm" placeholder="Subscription Code" name="subCode" required>
                         </div>
+                        
                         <button class="btn btn-outline-primary btn-block" name="activateSub" type="submit" value="submit">Activate Sub</button>
+                        <?php endif; ?>
                      </form>
                   </div>
                </div>
