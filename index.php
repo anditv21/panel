@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       ); ?></p>
                </div>
                <div class="col-12 clearfix">
-                  <i class="fas fa-user-clock"></i> Sub status: 
+                  <i class="fas fa-user-clock"></i> Sub: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
           $sub = $sub + $time;
