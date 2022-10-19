@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["genSub2"])) {
         $admin->getSubCodeGen3M($username);
     }
-	if (isset($_POST["genSub3"])) {
+    if (isset($_POST["genSub3"])) {
         $admin->getSubCodeGentrail($username);
     }
 
