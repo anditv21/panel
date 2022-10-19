@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 19, 2022 at 11:18 AM
+-- Generation Time: Oct 19, 2022 at 12:24 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.11
 
@@ -43,7 +43,7 @@ CREATE TABLE `cheat` (
 --
 
 INSERT INTO `cheat` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `injectcount`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 1, 1659443779, 0, 1);
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 1, 1666182207, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -95,9 +95,18 @@ INSERT INTO `shoutbox` (`id`, `user`, `uid`, `msg`, `time`) VALUES
 
 CREATE TABLE `subscription` (
   `code` varchar(255) NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT 0,
+  `dcid` int(11) NOT NULL,
   `createdBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `subscription`
+--
+
+INSERT INTO `subscription` (`code`, `used`, `dcid`, `createdBy`, `createdAt`) VALUES
+('Trail-6DMUlLXHQ38YbaM2A9A2', 1, 0, 'admin', '2022-10-19 11:57:23');
 
 -- --------------------------------------------------------
 
@@ -130,7 +139,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `dcid`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$Z1lyC8jFwsuTs8AM3NjoledhS8R89xlid/vaTQMCrI2FOsaTih5X6', 'hwid', 1, 1, '2023-01-16', 0, 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-19 08:20:54', '2022-10-18 21:12:33', '2acf9618be70312d41ea28f2720099a0', 'test');
+(1, 'admin', '$2y$10$Z1lyC8jFwsuTs8AM3NjoledhS8R89xlid/vaTQMCrI2FOsaTih5X6', 'hwid', 1, 1, '2023-04-07', 0, 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-19 13:20:18', '2022-10-19 08:20:54', '2acf9618be70312d41ea28f2720099a0', 'test');
 
 --
 -- Indexes for dumped tables
