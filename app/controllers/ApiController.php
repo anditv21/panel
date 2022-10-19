@@ -22,9 +22,9 @@ class ApiController extends API
         return $this->botAPI();
     }
 
-    public function redeem($username, $code)
+    public function redeem($dcid, $code, $username)
     {
-        return $this->redeemsub($username, $code);
+        return $this->redeemsub($dcid, $code, $username);
     }
 
     public function ban($usertoban, $reason)

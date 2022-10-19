@@ -16,12 +16,13 @@ if (empty($_GET['key'])) {
     $key = $_GET['key'];
 
     if (BOT_KEY === $key) {
-        if($_GET['action'] === "redeem" && !empty($_GET['code']) && !empty($_GET['dcid']))
+        if($_GET['action'] === "redeem" && !empty($_GET['code']) && !empty($_GET['dcid']) && !empty($_GET['username']))
         {
 
             $dcid = $_GET['dcid'];
             $code = $_GET['code'];
-            $response = $API->redeem($dcid, $code);
+            $username = $_GET['username'];
+            $response = $API->redeem($dcid, $code, $username);
         }
         elseif($_GET['action'] === "ban" && !empty($_GET['usertoban']))
         {
@@ -29,7 +30,7 @@ if (empty($_GET['key'])) {
 
             $response = $API->ban($usertoban, $_GET['reason']);
         }
-        elseif($_GET['action' === ""])
+        elseif($_GET['action'] === "")
         {
 
         }

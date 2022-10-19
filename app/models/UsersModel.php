@@ -59,7 +59,12 @@ class Users extends Database
         $this->statement->execute([$subCode]);
 
         if ($this->statement->rowCount() > 0) {
-            return true;
+
+            if($this->statement->used === 0 || FALSE)
+            {
+                return true;
+            }
+            return false;
         } else {
             return false;
         }
@@ -202,8 +207,8 @@ class Users extends Database
         $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
                 } else {
                     return "Something went wrong";
@@ -218,7 +223,7 @@ class Users extends Database
         $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                 $this->statement->execute([$subTime, $username]);
 
-                $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                 $this->statement->execute([$subCode]);
             }
         }
@@ -236,8 +241,8 @@ class Users extends Database
         $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
                 } else {
                     return "Something went wrong";
@@ -252,7 +257,7 @@ class Users extends Database
         $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                 $this->statement->execute([$subTime, $username]);
 
-                $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                 $this->statement->execute([$subCode]);
             }
         } else {
@@ -265,8 +270,8 @@ class Users extends Database
         $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
                     return "Your subscription is now active!";
                 } else {
@@ -287,7 +292,7 @@ class Users extends Database
           $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                     $this->statement->execute([$subTime, $username]);
 
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
                 }
                 return "Your subscription is now active!";

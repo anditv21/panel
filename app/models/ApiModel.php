@@ -79,7 +79,7 @@ class API extends Database
     return intval($diff->format("%R%a"));
   }
 
-  protected function redeemsub($username, $code)
+  protected function redeemsub($dcid, $code, $username)
   {
     $this->prepare("SELECT * FROM `subscription` WHERE `code` = ?");
     $this->statement->execute([$code]);
@@ -90,13 +90,19 @@ class API extends Database
       $subcheck = false;
     }
 
-    $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
-    $this->statement->execute([$username]);
+    $this->prepare("UPDATE `subscription` SET `dcid` = ? WHERE `code` = ?");
+    $this->statement->execute([$dcid, $code]);
 
     if ($this->statement->rowCount() > 0) {
       $usercheck = true;
     } else {
       $usercheck = false;
+    }
+
+    if ($this->statement->used == 1 || True) {
+      $usedcheck = true;
+    } else {
+      $usedcheck = false;
     }
 
     if (!$subcheck) {
@@ -111,7 +117,16 @@ class API extends Database
         "error" => "User not found",
       ];
       return $response;
-    } else {
+    } 
+    elseif (!$usedcheck)
+    {
+      $response = [
+        "status" => "failed",
+        "error" => "Sub code already used",
+      ];
+      return $response;
+    }
+    else {
       $word = "3m-";
 
       // Test if subCode contains the 3 months keyword
@@ -125,9 +140,9 @@ class API extends Database
           $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
           if ($this->statement->execute([$subTime, $username])) {
-            // Delete the sub code
-            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-            $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$subCode]);
           } else {
             $response = [
               "status" => "failed",
@@ -145,8 +160,9 @@ class API extends Database
           $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
           $this->statement->execute([$subTime, $username]);
 
-          $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-          $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$subCode]);
         }
       }
 
@@ -163,9 +179,9 @@ class API extends Database
           $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
           if ($this->statement->execute([$subTime, $username])) {
-            // Delete the sub code
-            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-            $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$subCode]);
           } else {
             $response = [
               "status" => "failed",
@@ -183,8 +199,9 @@ class API extends Database
           $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
           $this->statement->execute([$subTime, $username]);
 
-          $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-          $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$subCode]);
         }
       } else {
         $sub = $this->subActiveCheck($username);
@@ -196,9 +213,9 @@ class API extends Database
           $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
           if ($this->statement->execute([$subTime, $username])) {
-            // Delete the sub code
-            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-            $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$code]);
             return "Your subscription is now active!";
           } else {
             $response = [
@@ -222,8 +239,9 @@ class API extends Database
             $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
             $this->statement->execute([$subTime, $username]);
 
-            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-            $this->statement->execute([$code]);
+                    // Set sub code to "used"
+                    $this->prepare("UPDATE `subscription` SET `used` = 1 WHERE `code` = ?");
+                    $this->statement->execute([$code]);
           }
           $response = [
             "status" => "success",
