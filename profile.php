@@ -267,7 +267,9 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                         <div class="col-12 clearfix">
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
-                              <?php if ($cheat->getCheatData()->frozen != 0) {
+                              <?php
+                              $time =  $user->gettime();
+                              if ($cheat->getCheatData()->frozen != 0) {
     $sub = $sub + $time;
     if ($sub < 1000) {
         Util::display("$sub (Frozen)");
