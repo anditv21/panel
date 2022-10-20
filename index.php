@@ -26,6 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    	<script src="bootstrap/js/bootstrap.min.js"></script>
 <style>
    .divide {
    padding: 0;
@@ -55,7 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     "Last login: " .
     $user->getlastlogin() .
     " from " .
-    "<em class='spoiler'>" .$user->getlastip(). "</em>"
+    "<em class='spoiler'>" .
+    $user->getlastip() .
+    "</em>"
 ); ?>
          </div>
       </div>
@@ -130,7 +135,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                   <?php if ($cheat->getCheatData()->frozen != 0) {
           $sub = $sub + $time;
           if ($sub < 1000) {
-              Util::display("$sub (Frozen) days");
+              Util::display(
+                  "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
+              );
           } elseif ($sub < 1) {
               Util::display('<i class="fa fa-times"></i>');
           } else {
@@ -165,7 +172,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                </div>
             </div>
             <br>
-            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+            <form method="POST" action="<?php Util::Display(
+          $_SERVER["PHP_SELF"]
+      ); ?>">
                <input autocomplete="off" maxlength="255" type="text" name="msg" maxlength="255" placeholder="What`s on your mind?" required class="form-control form-control-sm">
                <br>
                <button type="submit" value="submit" name="sendmsg" class="btn btn-outline-primary btn-sm" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Send!</button>
@@ -183,7 +192,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
    });
    
    }
-   
+   $(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();   
+		});
 </script>
 <style>
    .spoiler:hover {

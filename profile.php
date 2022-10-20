@@ -119,6 +119,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 }
 ?>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    	<script src="bootstrap/js/bootstrap.min.js"></script>
 <style>
    .divide {
    padding: 0;
@@ -272,7 +275,7 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                               if ($cheat->getCheatData()->frozen != 0) {
                                   $sub = $sub + $time;
                                   if ($sub < 1000) {
-                                      Util::display("$sub (Frozen)");
+                                      Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
                                   } elseif ($sub < 1) {
                                       Util::display('<i class="fa fa-times"></i>');
                                   } else {
@@ -334,4 +337,9 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
       </div>
    </div>
 </main>
+<script>
+       $(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();   
+		});
+</script>
 <?php Util::footer(); ?>
