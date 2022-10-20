@@ -161,12 +161,12 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 
 - Rename https://github.com/anditv21/panel/blob/main/app/core/DiscordConfig to DiscordConfig.php
 - Open https://discord.com/developers/applications and create a new Discord application
-- Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php
+- Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php (A valid SSL certificate is required)
 - Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
 - Paste your Profile page url and hit "Save Changes"
 
-<br>
 - Fill in your discord log webhook url in DiscordConfig.php
+
 
 
 
