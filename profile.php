@@ -275,7 +275,7 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                               if ($cheat->getCheatData()->frozen != 0) {
                                   $sub = $sub + $time;
                                   if ($sub < 1000) {
-                                    Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+                                      Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
                                   } elseif ($sub < 1) {
                                       Util::display('<i class="fa fa-times"></i>');
                                   } else {
