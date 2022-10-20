@@ -55,13 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
     $username
 ); ?>. </b></a><?php Util::display(
-                "Last login: " .
+    "Last login: " .
     $user->getlastlogin() .
     " from " .
     "<em class='spoiler'>" .
     $user->getlastip() .
     "</em>"
-            ); ?>
+); ?>
          </div>
       </div>
       <!--Sub frozen warning -->
@@ -118,15 +118,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-                $cheat->getCheatData()->status
-            ); ?></p>
+          $cheat->getCheatData()->status
+      ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version: 
                   <p class="float-right mb-0"><?php Util::display(
-                      $cheat->getCheatData()->version
-                  ); ?></p>
+                $cheat->getCheatData()->version
+            ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub: 
