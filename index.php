@@ -119,8 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status: 
                   <p class="float-right mb-0"><?php Util::display(
-                      $cheat->getCheatData()->status
-                  ); ?></p>
+          $cheat->getCheatData()->status
+      ); ?></p>
                </div>
                <!--Cheat version-->
                <div class="col-12 clearfix">
