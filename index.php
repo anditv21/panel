@@ -132,21 +132,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                   <i class="fas fa-user-clock"></i> Sub: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
-                $sub = $sub + $time;
-                if ($sub < 1000) {
-                    Util::display(
-                        "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
-                    );
-                } elseif ($sub < 1) {
-                    Util::display('<i class="fa fa-times"></i>');
-                } else {
-                    Util::display("Lifetime");
-                }
-            } elseif ($sub > 0) {
-                Util::display("Active");
-            } else {
-                Util::display("None");
-            } ?></p>
+          $sub = $sub + $time;
+          if ($sub < 1000) {
+              Util::display(
+                  "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
+              );
+          } elseif ($sub < 1) {
+              Util::display('<i class="fa fa-times"></i>');
+          } else {
+              Util::display("Lifetime");
+          }
+      } elseif ($sub > 0) {
+          Util::display("Active");
+      } else {
+          Util::display("None");
+      } ?></p>
                </div>
             </div>
             <br>
@@ -157,15 +157,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                <div class="col-12 clearfix">
                   Users: 
                   <p class="float-right mb-0"><?php Util::display(
-                $user->getUserCount()
-            ); ?></p>
+          $user->getUserCount()
+      ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User: 
                   <p class="float-right mb-0"><?php Util::display(
-                      $user->getNewUser()
-                  ); ?></p>
+                $user->getNewUser()
+            ); ?></p>
                </div>
             </div>
             <br>
