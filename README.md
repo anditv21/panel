@@ -23,7 +23,7 @@
 <details align="center">
    <summary>Preview</summary>
 <p align="center">
-  <a href=https://i.ibb.co/897qQpS/image.png"><img src="https://i.ibb.co/897qQpS/image.png" /></a>
+  <a href="https://i.ibb.co/RyvRyDB/image.png"><img src="https://i.ibb.co/RyvRyDB/image.png" /></a>
 <a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 <a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
 </p>
@@ -66,7 +66,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 <details>
    <summary>Click to see Supporter/Admin-Panel Features</summary>
    <ul>
-      <li>Screenshot: https://bit.ly/3QhZ7Qv / https://bit.ly/3REAwXf</li>
+      <li>Screenshot: https://bit.ly/3yZujOF / https://bit.ly/3REAwXf</li>
       <li>Disable Invite System (Admin only)</li>
       <li>Freeze all subscriptions (experimental) (Admin only)</li> 
       <li>Gift user subscription (Admin only) (Screenshot: https://bit.ly/3enQmqP)</li>
