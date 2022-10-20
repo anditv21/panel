@@ -133,21 +133,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                   <i class="fas fa-user-clock"></i> Sub: 
                   <p class="float-right mb-0">
                   <?php if ($cheat->getCheatData()->frozen != 0) {
-                      $sub = $sub + $time;
-                      if ($sub < 1000) {
-                          Util::display(
-                              "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
-                          );
-                      } elseif ($sub < 1) {
-                          Util::display('<i class="fa fa-times"></i>');
-                      } else {
-                          Util::display("Lifetime");
-                      }
-                  } elseif ($sub > 0) {
-                      Util::display("Active");
-                  } else {
-                      Util::display("None");
-                  } ?></p>
+          $sub = $sub + $time;
+          if ($sub < 1000) {
+              Util::display(
+                  "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
+              );
+          } elseif ($sub < 1) {
+              Util::display('<i class="fa fa-times"></i>');
+          } else {
+              Util::display("Lifetime");
+          }
+      } elseif ($sub > 0) {
+          Util::display("Active");
+      } else {
+          Util::display("None");
+      } ?></p>
                </div>
                <!-- Check if has sub --> 
                <?php if ($user->getSubStatus() > 0): ?>
@@ -173,8 +173,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
             <br>
             <form method="POST" action="<?php Util::Display(
-                      $_SERVER["PHP_SELF"]
-                  ); ?>">
+          $_SERVER["PHP_SELF"]
+      ); ?>">
                <input autocomplete="off" maxlength="255" type="text" name="msg" maxlength="255" placeholder="What`s on your mind?" required class="form-control form-control-sm">
                <br>
                <button type="submit" value="submit" name="sendmsg" class="btn btn-outline-primary btn-sm" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Send!</button>
