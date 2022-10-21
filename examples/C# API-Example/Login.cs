@@ -80,7 +80,7 @@ namespace loader
                 httpWebRequest.ContentType = "application/json";
                 JObject jobject = JObject.Parse(new StreamReader((httpWebRequest.GetResponse() as HttpWebResponse).GetResponseStream()).ReadToEnd());
 
-                
+
 
                 if (jobject["status"].ToString() == "failed")
                 {
