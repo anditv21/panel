@@ -1,9 +1,17 @@
 version = 1
 
 [[analyzers]]
+name = "csharp"
+enabled = true
+
+[[analyzers]]
 name = "php"
 enabled = true
 
 [[transformers]]
 name = "php-cs-fixer"
+enabled = true
+
+[[transformers]]
+name = "dotnet-format"
 enabled = true
