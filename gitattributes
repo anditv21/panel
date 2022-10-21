@@ -1,0 +1,3 @@
+*.sql linguist-detectable=true
+*.cs linguist-detectable=true
+*.js linguist-detectable=true
