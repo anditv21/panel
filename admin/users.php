@@ -123,18 +123,18 @@
                <tr>
                   <center>
                      <td>                               
-                        <?php if (Util::getavatar($row->uid) == false): ?>
+                     <?php if (Util::getavatar($row->uid) == false): ?>
                         <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
                         <?php else: ?>
                         <?php
                            $ext = pathinfo(
-       Util::getavatar($row->$uid),
+       Util::getavatardl($row->uid),
        PATHINFO_EXTENSION
    );
-                           $name = $row->$uid . "." . $ext;
+                           $name = $row->uid . "." . $ext;
                            ?>
                         <a href="<?php Util::display(
-                               Util::getavatar($row->$uid)
+                               Util::getavatar($row->uid)
                            ); ?>" download="<?php Util::display(
                                $name
                            ); ?>">
