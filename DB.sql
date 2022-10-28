@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 18, 2022 at 02:50 PM
+-- Generation Time: Oct 28, 2022 at 11:18 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.11
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `panel`
+-- Database: `panel-edit`
 --
 
 -- --------------------------------------------------------
@@ -119,7 +119,7 @@ CREATE TABLE `users` (
   `admin` int(1) NOT NULL DEFAULT 0,
   `supp` int(1) NOT NULL DEFAULT 0,
   `sub` date DEFAULT NULL,
-  `frozen` int(1) NOT NULL,
+  `frozen` int(1) NOT NULL DEFAULT 0,
   `banned` int(1) NOT NULL DEFAULT 0,
   `invitedBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp(),
