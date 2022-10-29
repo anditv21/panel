@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2022 at 11:18 PM
+
+-- Generation Time: Oct 19, 2022 at 12:24 PM
+
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.11
 
@@ -34,15 +36,16 @@ CREATE TABLE `cheat` (
   `maintenance` int(1) NOT NULL DEFAULT 0,
   `frozen` int(1) NOT NULL DEFAULT 0,
   `freezingtime` int(13) NOT NULL,
-  `invites` int(1) NOT NULL DEFAULT 1
+  `invites` int(1) NOT NULL DEFAULT 1,
+  `injectcount` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cheat`
 --
 
-INSERT INTO `cheat` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 1, 1659443779, 0);
+INSERT INTO `cheat` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `injectcount`) VALUES
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 1, 1666182207, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -94,6 +97,8 @@ INSERT INTO `shoutbox` (`id`, `user`, `uid`, `msg`, `time`) VALUES
 
 CREATE TABLE `subscription` (
   `code` varchar(255) NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT 0,
+  `dcid` int(11) NOT NULL,
   `createdBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -102,8 +107,8 @@ CREATE TABLE `subscription` (
 -- Dumping data for table `subscription`
 --
 
-INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('3m-LHr4SVVAa3jY3KbnFeSG', 'admin', '2022-10-18 14:49:56');
+INSERT INTO `subscription` (`code`, `used`, `dcid`, `createdBy`, `createdAt`) VALUES
+('Trail-6DMUlLXHQ38YbaM2A9A2', 1, 0, 'admin', '2022-10-19 11:57:23');
 
 -- --------------------------------------------------------
 
@@ -120,6 +125,7 @@ CREATE TABLE `users` (
   `supp` int(1) NOT NULL DEFAULT 0,
   `sub` date DEFAULT NULL,
   `frozen` int(1) NOT NULL DEFAULT 0,
+  `dcid` int(11) NOT NULL,
   `banned` int(1) NOT NULL DEFAULT 0,
   `invitedBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp(),
@@ -134,8 +140,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-18 15:14:47', '2022-10-18 13:12:35', NULL, NULL);
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `dcid`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
+(1, 'admin', '$2y$10$Z1lyC8jFwsuTs8AM3NjoledhS8R89xlid/vaTQMCrI2FOsaTih5X6', 'hwid', 1, 1, '2023-04-07', 0, 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-19 13:20:18', '2022-10-19 08:20:54', '2acf9618be70312d41ea28f2720099a0', 'test');
 
 --
 -- Indexes for dumped tables

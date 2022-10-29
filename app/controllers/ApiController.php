@@ -16,4 +16,19 @@ class ApiController extends API
     {
         return $this->statsAPI();
     }
+
+    public function getbotAPI()
+    {
+        return $this->botAPI();
+    }
+
+    public function redeem($dcid, $code, $username)
+    {
+        return $this->redeemsub($dcid, $code, $username);
+    }
+
+    public function ban($usertoban, $reason)
+    {
+        return $this->banuser($usertoban, $reason);
+    }
 }

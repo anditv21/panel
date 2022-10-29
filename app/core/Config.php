@@ -28,3 +28,6 @@ define('LOADER_URL', SITE_ROOT.'/x.exe');
 
 // API key
 define('API_KEY', 'yes');
+
+// BOT key
+define('BOT_KEY', 'pknnpqbqtrbpohrcsyaikcwcwucsieou');
