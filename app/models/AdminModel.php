@@ -92,7 +92,7 @@ class Admin extends Database
 
                 $user = new UserController();
                 $username = Session::get('username');
-                $user->log($username, "Gifted a $time day/s sub.", admin_logs);
+                $user->log($username, "Gifted a $time day/s sub. \n to: $name", admin_logs);
             } else {
                 if ($time === '-') {
                     $this->prepare(
@@ -128,7 +128,7 @@ class Admin extends Database
 
                     $user = new UserController();
                     $username = Session::get('username');
-                    $user->log($username, "Gifted a $time day/s sub.", admin_logs);
+                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
                 }
             }
         }
