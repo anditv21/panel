@@ -9,7 +9,7 @@
 
 ---
 * Original Panel: https://github.com/znixbtw/php-panel-v2
-* Panel Edit: https://github.com/Phantom-1337/gamesensethemeforznixpanel
+* Gamesense Theme: https://github.com/Phantom-1337/gamesensethemeforznixpanel
 * Old Panel: https://github.com/anditv21/znixv2-panel-edit-edit
 > Default login: `admin`:`admin` <br />
 ---
