@@ -430,8 +430,9 @@ class Admin extends Database
 
                     $username = Session::get('username');
                     $user = new UserController();
-                    $user->log($username, "Freezed all subs", system_logs);
+                
                 }
+                $user->log($username, "Freezed all subs", system_logs);
             } else {
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
