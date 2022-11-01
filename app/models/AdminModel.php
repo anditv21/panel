@@ -430,7 +430,6 @@ class Admin extends Database
 
                     $username = Session::get('username');
                     $user = new UserController();
-                
                 }
                 $user->log($username, "Freezed all subs", system_logs);
             } else {
