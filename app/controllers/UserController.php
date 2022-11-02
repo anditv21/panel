@@ -316,4 +316,10 @@ class UserController extends Users
         $username = Session::Get("username");
         return $this->lastip($username);
     }
+
+    public function getfrozen()
+    {
+        $username = Session::Get("username");
+        return $this->isfrozen($username);
+    }
 }

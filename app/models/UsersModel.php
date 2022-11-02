@@ -635,4 +635,12 @@ class Users extends Database
         }
         return $ip;
     }
+
+    public function isfrozen($username)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->frozen;
+    }
 }

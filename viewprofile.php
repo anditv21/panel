@@ -27,6 +27,7 @@
    $admin = Session::get("admin");
 
    $sub = $user->getSubStatus($username);
+   $userfrozen = $user->getfrozen();
 
    Util::banCheck();
    Util::head($username);
@@ -107,20 +108,30 @@
                         <div class="col-12 clearfix">
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
-                              <?php if ($cheat->getCheatData()->frozen != 0) {
-                         $sub = $sub + $time;
-                         Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-                     } else {
-                         if ($sub > 8000) {
-                             Util::display("Lifetime");
-                         } else {
-                             if ($sub >= 0) {
-                                 Util::display("$sub days");
-                             } else {
-                                 Util::display('<i class="fa fa-times"></i>');
-                             }
-                         }
-                     } ?>
+                           <?php
+                              $time =  $user->gettime();
+                               if ($cheat->getCheatData()->frozen == 1 && $userfrozen == 1) {
+                                  $sub = $sub + $time;
+                                  if ($sub < 1000) {
+                                      Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+                                  } elseif ($sub < 1) {
+                                      Util::display('<i class="fa fa-times"></i>');
+                                  } else {
+                                      Util::display("Lifetime");
+                                  }
+                              } else {
+                                  if ($sub > 8000) {
+                                      Util::display("Lifetime");
+                                  } else {
+                                      if ($sub >= 0) {
+                                          Util::display("$sub days");
+                                      } else {
+                                          Util::display(
+                                              '<i class="fa fa-times"></i>'
+                                          );
+                                      }
+                                  }
+                              } ?>
                            </p>
                         </div>
                         <div class="col-12 clearfix">
