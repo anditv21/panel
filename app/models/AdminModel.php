@@ -427,10 +427,9 @@ class Admin extends Database
                         );
                         $this->statement->execute([$row->username]);
                     }
-
-                    $username = Session::get('username');
-                    $user = new UserController();
                 }
+                $username = Session::get('username');
+                $user = new UserController();
                 $user->log($username, "Freezed all subs", system_logs);
             } else {
                 $this->prepare('SELECT * FROM `users`');
