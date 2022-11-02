@@ -142,11 +142,13 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 
 * Github: [@Phantom-1337](https://github.com/Phantom-1337)
 
+## Setup
 <details>
+
    <summary>Setup</summary>
 
 
-- Upload all files to your PHP host of choice
+- Extract all files and upload them to your PHP host of choice
 - Copy and paste db.sql into SQL import tab on phpmyadmin
 - Change https://github.com/anditv21/panel/blob/main/app/core/Database#L5#L8 to your database credentials
 - Rename https://github.com/anditv21/panel/blob/main/app/core/Database to Database.php
