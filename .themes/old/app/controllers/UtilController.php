@@ -23,7 +23,7 @@ class Util
 
     public static function adminNavbar()
     {
-        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
+        include(SITE_ROOT . '/includes/adminNavbar.inc.php');
     }
 
     public static function footer()
