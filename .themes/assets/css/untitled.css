@@ -1,0 +1,65 @@
+.bg-gradient-primary {
+  background-color: #252935;
+  background-image: linear-gradient(
+    180deg,
+    #252935 10%,
+    #252935 100%
+  ) !important;
+  background-size: cover;
+}
+
+.bg-white {
+  --bs-bg-opacity: 1;
+  background-color: #252935 !important;
+}
+
+.text-dark {
+  --bs-text-opacity: 1;
+  color: #fff !important;
+}
+
+.btn-check:focus + .btn,
+.btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0);
+}
+
+*::-webkit-scrollbar {
+  width: 3px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #252935;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #f9c43d;
+  border-radius: 0px;
+  border: 0px solid #ffffff;
+}
+
+.text-primary {
+  --bs-text-opacity: 1;
+  color: #fff !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  color: #fff !important;
+  background-color: #121421;
+}
+
+.btn-link:hover {
+  color: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.btn-link {
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.topbar #sidebarToggleTop:hover {
+  background-color: rgba(227, 227, 227, 0.27);
+}
