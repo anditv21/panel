@@ -1,2 +1,4 @@
-<h1 align="center">:zap: User Management Panel</h1>
-<h1 align="center">MOVED TO: https://github.com/anditv21/panel/</h1>
+### old theme
+👤 **sxck1337**
+
+* Github: [@sxck1337](https://github.com/sxck1337)
