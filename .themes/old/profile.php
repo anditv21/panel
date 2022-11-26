@@ -31,7 +31,100 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("location: profile.php?suc=2");
     }
 }
+
+
+
+
+// if post request
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    !isset($_FILES["file_up"]["tmp_name"]) &&
+    !isset($_POST["activateSub"]) &&
+    !isset($_POST["updatePassword"])
+  ) {
+      header(
+          "location: https://discord.com/api/oauth2/authorize?client_id=" .
+        client_id .
+        "&redirect_uri=" .
+        SITE_URL .
+        SUB_DIR .
+        "/profile.php&response_type=code&scope=identify"
+      );
+  }
+  
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+      if (isset($_GET["code"]) && empty($_GET["code"])) {
+          echo "Error: Please try again!";
+      }
+  
+      if (isset($_GET["code"])) {
+          $discord_code = $_GET["code"];
+  
+          $payload = [
+        "code" => $discord_code,
+        "client_id" => client_id,
+        "client_secret" => client_secret,
+        "grant_type" => "authorization_code",
+        "redirect_uri" => SITE_URL . SUB_DIR . "/profile.php",
+        "scope" => "identify",
+      ];
+  
+          #print_r($payload);
+  
+          $payload_string = http_build_query($payload);
+          $discord_token_url = "https://discordapp.com/api/oauth2/token";
+  
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, $discord_token_url);
+          curl_setopt($ch, CURLOPT_POST, true);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $result = curl_exec($ch);
+  
+          if (!$result) {
+              echo curl_error($ch);
+          }
+  
+          $result = json_decode($result, true);
+  
+          $access_token = $result["access_token"];
+          $discord_users_url = "https://discordapp.com/api/users/@me";
+          $header = [
+        "Authorization: Bearer $access_token",
+        "Content-Type: application/x-www-form-urlencoded",
+      ];
+  
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+          curl_setopt($ch, CURLOPT_URL, $discord_users_url);
+          curl_setopt($ch, CURLOPT_POST, false);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  
+          $result = curl_exec($ch);
+          $result = json_decode($result, true);
+  
+          $id = $result["id"];
+          $avatar = $result["avatar"];
+  
+          $path = IMG_DIR . $uid;
+  
+          if (@getimagesize($path . ".png")) {
+              unlink($path . ".png");
+          } elseif (@getimagesize($path . ".jpg")) {
+              unlink($path . ".jpg");
+          } elseif (@getimagesize($path . ".gif")) {
+              unlink($path . ".gif");
+          }
+  
+          $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
+          $img = $path . ".png";
+          file_put_contents($img, file_get_contents($url));
+          chmod($path . ".png", 775);  
+          header("location: profile.php");
+      }
+  }
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -190,6 +283,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                    echo '<script>alert("Failed to upload file.")</script>';
                                }
                            } ?>
+                                          <form method="POST" enctype="multipart/form-data">
+                  <center>			 
+                     <button style="color: white;" onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-success btn-sm" type="submit">Get from Discord (BETA)</button>
+                     <br>
+                  </center>
+                  <br>
+               </form>
                             </div>
                         </div>
                         <div class="col-lg-8">
