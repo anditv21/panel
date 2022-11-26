@@ -23,7 +23,7 @@ class Util
 
     public static function adminNavbar()
     {
-        include SITE_ROOT . '/includes/admin.navbar.inc.php';
+        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
     }
 
     public static function footer()
@@ -109,7 +109,20 @@ class Util
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png";
+            return IMG_URL . $uid. ".png?" . Util::randomCode(5);
+        } elseif (@getimagesize($path . ".jpg")) {
+            return IMG_URL . $uid . ".jpg?". Util::randomCode(5);
+        } elseif (@getimagesize($path . ".gif")) {
+            return IMG_URL . $uid . ".gif?". Util::randomCode(5);
+        } else {
+            return false;
+        }
+    }
+    public static function getavatardl($uid)
+    {
+        $path = IMG_DIR . $uid;
+        if (@getimagesize($path . ".png")) {
+            return IMG_URL . $uid. ".png" ;
         } elseif (@getimagesize($path . ".jpg")) {
             return IMG_URL . $uid . ".jpg";
         } elseif (@getimagesize($path . ".gif")) {

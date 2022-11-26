@@ -7,5 +7,6 @@ ini_set('session.cookie_samesite', 'Lax');
 ini_set('session.cookie_lifetime', 0);
 
 require_once 'core/Config.php';
+require_once 'core/DiscordConfig.php';
 require_once 'controllers/UtilController.php';
 require_once 'controllers/UserController.php';

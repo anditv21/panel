@@ -7,6 +7,8 @@
 // ** Every block should be wrapped in Session::isAdmin(); check **
 
 require_once SITE_ROOT . '/app/core/Database.php';
+require_once SITE_ROOT . "/app/require.php";
+
 
 class Admin extends Database
 {
@@ -48,6 +50,11 @@ class Admin extends Database
                 'UPDATE `users` SET `password` = ? WHERE `username` = ?'
             );
             $this->statement->execute([$hashedPassword, $username]);
+
+            $old = $username;
+            $username = Session::get('username');
+            $user = new UserController();
+            $user->log($username, "Reset the password for $old", user_logs);
             return true;
         }
     }
@@ -82,12 +89,20 @@ class Admin extends Database
                     'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
                 );
                 $this->statement->execute([$subTime, $name]);
+
+                $user = new UserController();
+                $username = Session::get('username');
+                $user->log($username, "Gifted a $time day/s sub. \n to: $name", admin_logs);
             } else {
                 if ($time === '-') {
                     $this->prepare(
                         'UPDATE `users` SET `sub` = NULL WHERE  `username` = ?'
                     );
                     $this->statement->execute([$name]);
+
+                    $username = Session::get('username');
+                    $user = new UserController();
+                    $user->log($username, "Removed $name`s sub", admin_logs);
                 } else {
                     if ($time === 'LT') {
                         $time = '24000';
@@ -110,6 +125,10 @@ class Admin extends Database
                         'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
                     );
                     $this->statement->execute([$subTime, $name]);
+
+                    $user = new UserController();
+                    $username = Session::get('username');
+                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
                 }
             }
         }
@@ -146,6 +165,8 @@ class Admin extends Database
                 'INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)'
             );
             $this->statement->execute([$code, $createdBy]);
+            $user = new UserController();
+            $user->log($createdBy, "Generated an invitation", admin_logs);
         }
     }
 
@@ -169,6 +190,8 @@ class Admin extends Database
                 'INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)'
             );
             $this->statement->execute([$code, $createdBy]);
+            $user = new UserController();
+            $user->log($createdBy, "Generated an subscription code", admin_logs);
         }
     }
 
@@ -178,6 +201,18 @@ class Admin extends Database
         if (Session::isAdmin() or Session::isSupp()) {
             $this->prepare('UPDATE `users` SET `hwid` = NULL WHERE `uid` = ?');
             $this->statement->execute([$uid]);
+
+
+
+
+
+            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $result = $this->statement->fetch();
+
+            $username = Session::get('username');
+            $user = new UserController();
+            $user->log($username, "Reset the hwid of $result->username ($uid)", admin_logs);
         }
     }
 
@@ -194,11 +229,27 @@ class Admin extends Database
                     'UPDATE `users` SET `banned` = 1 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+
+                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+                $this->statement->execute([$uid]);
+                $result = $this->statement->fetch();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Banned $result->username ($uid)", admin_logs);
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `banned` = 0 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+
+                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+                $this->statement->execute([$uid]);
+                $result = $this->statement->fetch();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Unbanned $result->username ($uid)", admin_logs);
             }
         }
     }
@@ -220,6 +271,9 @@ class Admin extends Database
                     'UPDATE `users` SET `supp` = 1 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Added Admin perms to $result->username ($uid)", admin_logs);
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `admin` = 0 WHERE `uid` = ?'
@@ -229,6 +283,14 @@ class Admin extends Database
                     'UPDATE `users` SET `supp` = 0 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+
+                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+                $this->statement->execute([$uid]);
+                $result = $this->statement->fetch();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Removed Admin perms from $result->username ($uid)", admin_logs);
             }
         }
     }
@@ -249,11 +311,17 @@ class Admin extends Database
                     'UPDATE `users` SET `supp` = 1 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Added Supp perms to $result->username ($uid)", admin_logs);
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `supp` = 0 WHERE `uid` = ?'
                 );
                 $this->statement->execute([$uid]);
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Removed Supp perms from $result->username ($uid)", admin_logs);
             }
         }
     }
@@ -269,9 +337,17 @@ class Admin extends Database
             if ((int) $result->status === 0) {
                 $this->prepare('UPDATE `cheat` SET `status` = 1');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Set the cheat status to DETECTED", system_logs);
             } else {
                 $this->prepare('UPDATE `cheat` SET `status` = 0');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Set the cheat status to UN-DETECTED", system_logs);
             }
         }
     }
@@ -287,9 +363,17 @@ class Admin extends Database
             if ((int) $result->maintenance === 0) {
                 $this->prepare('UPDATE `cheat` SET `maintenance` = 1');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Set the cheat status to under maintenance", system_logs);
             } else {
                 $this->prepare('UPDATE `cheat` SET `maintenance` = 0');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Set the cheat status to no maintenance", system_logs);
             }
         }
     }
@@ -300,6 +384,10 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('UPDATE `cheat` SET `version` = ?');
             $this->statement->execute([$ver]);
+
+            $username = Session::get('username');
+            $user = new UserController();
+            $user->log($username, "Updated the cheat version to $ver", system_logs);
         }
     }
 
@@ -340,6 +428,9 @@ class Admin extends Database
                         $this->statement->execute([$row->username]);
                     }
                 }
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Freezed all subs", system_logs);
             } else {
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
@@ -395,6 +486,10 @@ class Admin extends Database
 
                 $this->prepare('UPDATE `cheat` SET `freezingtime` = 0');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Unfreezed all subs", system_logs);
             }
         }
     }
@@ -410,9 +505,17 @@ class Admin extends Database
             if ((int) $result->invites === 0) {
                 $this->prepare('UPDATE `cheat` SET `invites` = 1');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Activated the Invite-System", system_logs);
             } else {
                 $this->prepare('UPDATE `cheat` SET `invites` = 0');
                 $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Deactivated the Invite-System", system_logs);
             }
         }
     }
