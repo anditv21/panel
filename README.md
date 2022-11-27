@@ -4,13 +4,12 @@
   <a href="#preview">Preview</a> |
   <a href="#setup">Setup</a> |
   <a href="#features">Features </a> |
-  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
+  <a href="https://github.com/anditv21/panel/tree/main/.themes/old/">Old Theme</a> |
 </p>
 
 ---
 * Original Panel: https://github.com/znixbtw/php-panel-v2
 * Gamesense Theme: https://github.com/Phantom-1337/gamesensethemeforznixpanel
-* Old Panel: https://github.com/anditv21/znixv2-panel-edit-edit
 > Default login: `admin`:`admin` <br />
 ---
 
