@@ -122,25 +122,6 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 ---
 
 
-## Authors
-
-## panel edit
-👤 **anditv21**
-
-* Website: [anditv.it](https://anditv.it)
-* Github: [@anditv21](https://github.com/anditv21)
-
-## original panel
-👤 **znixbtw**
-
-* Website: [znix.me](https://znix.me)
-* Github: [@znixbtw](https://github.com/znixbtw)
-
-### gamesense theme
-👤 **index**
-
-* Github: [@Phantom-1337](https://github.com/Phantom-1337)
-
 ## Setup
 <details>
 
