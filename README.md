@@ -25,6 +25,9 @@
   <a href="https://i.ibb.co/RyvRyDB/image.png"><img src="https://i.ibb.co/RyvRyDB/image.png" /></a>
 <a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 <a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
+<a href="https://i.ibb.co/vYTnFJd/image.png"><img src="https://i.ibb.co/vYTnFJd/image.png"></a>
+<a href="https://i.ibb.co/D1vBv3d/image.png"><img src="https://i.ibb.co/D1vBv3d/image.png"></a>
+<a href="https://i.ibb.co/7KjsQzc/image.png"><img src="https://i.ibb.co/7KjsQzc/image.png"></a>
 </p>
 </details>
 
