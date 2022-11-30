@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2022 at 11:18 PM
+-- Generation Time: Nov 30, 2022 at 06:11 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
--- PHP Version: 8.1.11
+-- PHP Version: 8.1.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -108,6 +108,29 @@ INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `userlogs`
+--
+
+CREATE TABLE `userlogs` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `browser` varchar(255) NOT NULL,
+  `os` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `time` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `userlogs`
+--
+
+INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
+(2, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'November 30 th, 19:11');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -135,7 +158,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-10-18 15:14:47', '2022-10-18 13:12:35', NULL, NULL);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2022-11-30 18:56:16', '2022-11-30 18:54:12', '', NULL);
 
 --
 -- Indexes for dumped tables
@@ -166,6 +189,12 @@ ALTER TABLE `subscription`
   ADD UNIQUE KEY `code` (`code`);
 
 --
+-- Indexes for table `userlogs`
+--
+ALTER TABLE `userlogs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -183,6 +212,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `shoutbox`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `userlogs`
+--
+ALTER TABLE `userlogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`

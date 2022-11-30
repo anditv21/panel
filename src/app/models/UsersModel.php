@@ -43,6 +43,26 @@ class Users extends Database
         return $result->news;
     }
 
+    protected function logarray($username)
+    {
+      $this->prepare("SELECT * FROM `userlogs` WHERE `username` = ? ORDER BY `id` DESC");
+      $this->statement->execute([$username]);
+  
+      $result = $this->statement->fetchAll();
+      return $result;
+    }
+
+    protected function flushlogs()
+    {
+      $username = Session::get('username');
+      $this->prepare("DELETE FROM `userlogs` WHERE `username` = ?");
+      $this->statement->execute([$username]);
+  
+  
+      $this->loguser($username, "Flushed all logs");
+      return true;
+    }
+
     protected function getbanreason($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
@@ -180,6 +200,7 @@ class Users extends Database
         if (password_verify($currentPassword, $currentHashedPassword)) {
             $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
             $this->statement->execute([$hashedPassword, $username]);
+            $this->loguser($username, "Changed password");
             return true;
         } else {
             return false;
@@ -205,6 +226,9 @@ class Users extends Database
                     // Delete the sub code
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
+                    
+                    $this->loguser($username, "Redeemed: $subCode");
+                    return "Your subscription is now active!";
                 } else {
                     return "Something went wrong";
                 }
@@ -220,6 +244,8 @@ class Users extends Database
 
                 $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                 $this->statement->execute([$subCode]);
+                $this->loguser($username, "Redeemed: $subCode");
+                return "Your subscription is now active!";
             }
         }
 
@@ -239,6 +265,8 @@ class Users extends Database
                     // Delete the sub code
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
+                    $this->loguser($username, "Redeemed: $subCode");
+                    return "Your subscription is now active!";
                 } else {
                     return "Something went wrong";
                 }
@@ -254,6 +282,8 @@ class Users extends Database
 
                 $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                 $this->statement->execute([$subCode]);
+                $this->loguser($username, "Redeemed: $subCode");
+                return "Your subscription is now active!";
             }
         } else {
             $sub = $this->subActiveCheck($username);
@@ -268,6 +298,7 @@ class Users extends Database
                     // Delete the sub code
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
+                    $this->loguser($username, "Redeemed: $subCode");
                     return "Your subscription is now active!";
                 } else {
                     return "Something went wrong";
@@ -290,6 +321,7 @@ class Users extends Database
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
                 }
+                $this->loguser($username, "Redeemed: $subCode");
                 return "Your subscription is now active!";
             }
         }
@@ -597,6 +629,8 @@ class Users extends Database
         $time = date('Y-m-d H:i:s');
         $this->prepare("UPDATE `users` SET `currentLogin` = ? WHERE `username` = ?");
         $this->statement->execute([$time, $username]);
+
+        $this->loguser($username, "Login");
     }
 
     protected function lastlogin($username)
@@ -643,4 +677,88 @@ class Users extends Database
         $result = $this->statement->fetch();
         return $result->frozen;
     }
+
+    public function loguser($username, $action)
+    {
+      $ip = $this->getip();
+      $browser = $this->get_user_Browser();
+      $os = $this->get_user_os();
+  
+  
+      $Time = date("F d S, G:i");
+      $this->prepare('INSERT INTO `userlogs` (`username` , `action` , `browser`, `os` , `ip`, `time`) VALUES (?,?,?,?,?,?)');
+      $this->statement->execute([$username, $action , $browser , $os, $ip , $Time]);
+    }
+
+
+    protected function get_user_Browser()
+    {
+      global $user_agent;
+      $user_agent = $_SERVER["HTTP_USER_AGENT"];
+      $browser = "Unknown Browser";
+      $browser_array = [
+        "/msie/i" => "Internet Explorer",
+        "/firefox/i" => "Firefox",
+        "/Mozilla/i" => "Mozila",
+        "/Mozilla/5.0/i" => "Mozila",
+        "/safari/i" => "Safari",
+        "/chrome/i" => "Chrome",
+        "/edge/i" => "Edge",
+        "/opera/i" => "Opera",
+        "/OPR/i" => "Opera",
+        "/netscape/i" => "Netscape",
+        "/maxthon/i" => "Maxthon",
+        "/konqueror/i" => "Konqueror",
+        "/Bot/i" => "Spam/Unknown",
+        "/Valve Steam GameOverlay/i" => "Steam",
+        "/mobile/i" => "Mobile",
+      ];
+      foreach ($browser_array as $regex => $value) {
+        if (preg_match($regex, $user_agent)) {
+          $browser = $value;
+        }
+      }
+      return $browser;
+    }
+  
+    protected function get_user_os()
+    {
+      global $user_agent;
+      $user_agent = $_SERVER["HTTP_USER_AGENT"];
+      $os_platform = "Unknown";
+      $os_array = [
+        "/windows nt 10/i" => "Windows 10",
+        "/windows nt 6.3/i" => "Windows 8.1",
+        "/windows nt 6.2/i" => "Windows 8",
+        "/windows nt 6.1/i" => "Windows 7",
+        "/windows nt 6.0/i" => "Windows Vista",
+        "/windows nt 5.2/i" => "Windows Server 2003/XP x64",
+        "/windows nt 5.1/i" => "Windows XP",
+        "/windows xp/i" => "Windows XP",
+        "/windows nt 5.0/i" => "Windows 2000",
+        "/windows me/i" => "Windows ME",
+        "/win98/i" => "Windows 98",
+        "/win95/i" => "Windows 95",
+        "/win16/i" => "Windows 3.11",
+        "/macintosh|mac os x/i" => "Mac OS X",
+        "/mac_powerpc/i" => "Mac OS 9",
+        "/linux/i" => "Linux",
+        "/kalilinux/i" => "Wannabe Hacker",
+        "/ubuntu/i" => "Ubuntu",
+        "/iphone/i" => "iPhone",
+        "/ipod/i" => "iPod",
+        "/ipad/i" => "iPad",
+        "/android/i" => "Android",
+        "/blackberry/i" => "BlackBerry",
+        "/webos/i" => "Mobile",
+        "/Windows Phone/i" => "Windows Phone",
+      ];
+      foreach ($os_array as $regex => $value) {
+        if (preg_match($regex, $user_agent)) {
+          $os_platform = $value;
+        }
+      }
+      return $os_platform;
+    }
+  
 }

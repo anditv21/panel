@@ -19,7 +19,10 @@
 					<?php if (Session::isLogged() == true) : ?>
 						<?php if (Session::isBanned() == false) : ?>
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/profile.php">Profile <i class="fas fa-user"></i></a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/user/profile.php">Profile <i class="fas fa-user"></i></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="<?= SUB_DIR ?>/user/log.php">Account-Logs <i class="fas fa-history"></i></a>
 						</li>
 						<?php endif; ?>
 						<!-- Check if admin --> 

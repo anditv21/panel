@@ -1,6 +1,6 @@
 <?php
-require_once "app/require.php";
-require_once "app/controllers/CheatController.php";
+require_once "../app/require.php";
+require_once "../app/controllers/CheatController.php";
 
 $user = new UserController();
 $cheat = new CheatController();
@@ -44,7 +44,7 @@ if (
       "&redirect_uri=" .
       SITE_URL .
       SUB_DIR .
-      "/profile.php&response_type=code&scope=identify"
+      "user/profile.php&response_type=code&scope=identify"
     );
 }
 

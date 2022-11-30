@@ -55,6 +55,8 @@ class Admin extends Database
             $username = Session::get('username');
             $user = new UserController();
             $user->log($username, "Reset the password for $old", user_logs);
+            $suser = Session::get('username');
+            $user->loguser($username, "HWID resetted by $suser");
             return true;
         }
     }
@@ -92,7 +94,7 @@ class Admin extends Database
 
                 $user = new UserController();
                 $username = Session::get('username');
-                $user->log($username, "Gifted a $time day/s sub. \n to: $name", admin_logs);
+                $user->loguser($name, "$username gifted you a $time day/s sub");
             } else {
                 if ($time === '-') {
                     $this->prepare(
@@ -103,6 +105,7 @@ class Admin extends Database
                     $username = Session::get('username');
                     $user = new UserController();
                     $user->log($username, "Removed $name`s sub", admin_logs);
+                    $user->loguser($name, "$username removed your sub");
                 } else {
                     if ($time === 'LT') {
                         $time = '24000';
@@ -129,6 +132,7 @@ class Admin extends Database
                     $user = new UserController();
                     $username = Session::get('username');
                     $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
+                    $user->loguser($name, "$username gifted you a $time day/s sub");
                 }
             }
         }
@@ -213,6 +217,7 @@ class Admin extends Database
             $username = Session::get('username');
             $user = new UserController();
             $user->log($username, "Reset the hwid of $result->username ($uid)", admin_logs);
+            $user->loguser($result->username, "$username resetted your HWID");
         }
     }
 
@@ -237,6 +242,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Banned $result->username ($uid)", admin_logs);
+                ser->loguser($result->username, "Banned by $username");
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `banned` = 0 WHERE `uid` = ?'
@@ -250,6 +256,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Unbanned $result->username ($uid)", admin_logs);
+                $user->loguser($result->username, "Unbanned by $username");
             }
         }
     }
@@ -274,6 +281,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Added Admin perms to $result->username ($uid)", admin_logs);
+                $user->loguser($result->username, "Set to admin by $username");
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `admin` = 0 WHERE `uid` = ?'
@@ -291,6 +299,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Removed Admin perms from $result->username ($uid)", admin_logs);
+                $user->loguser($result->username, "Admin removed by $username");
             }
         }
     }
@@ -314,6 +323,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Added Supp perms to $result->username ($uid)", admin_logs);
+                $user->loguser($result->username, "Set to Supp by $username");
             } else {
                 $this->prepare(
                     'UPDATE `users` SET `supp` = 0 WHERE `uid` = ?'
@@ -322,6 +332,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Removed Supp perms from $result->username ($uid)", admin_logs);
+                $user->loguser($result->username, "Supp removed by $username");
             }
         }
     }
@@ -431,6 +442,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Freezed all subs", system_logs);
+                $user->loguser($row->username, "Sub freezed by $username");
             } else {
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
@@ -478,6 +490,8 @@ class Admin extends Database
                             'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
                         );
                         $this->statement->execute([$subTime, $row->username]);
+                        $user = new UserController();
+                        $user->loguser($row->username, "Sub unfreezed by ". Session::get('username'));
                     }
                 }
 
