@@ -45,22 +45,22 @@ class Users extends Database
 
     protected function logarray($username)
     {
-      $this->prepare("SELECT * FROM `userlogs` WHERE `username` = ? ORDER BY `id` DESC");
-      $this->statement->execute([$username]);
-  
-      $result = $this->statement->fetchAll();
-      return $result;
+        $this->prepare("SELECT * FROM `userlogs` WHERE `username` = ? ORDER BY `id` DESC");
+        $this->statement->execute([$username]);
+
+        $result = $this->statement->fetchAll();
+        return $result;
     }
 
     protected function flushlogs()
     {
-      $username = Session::get('username');
-      $this->prepare("DELETE FROM `userlogs` WHERE `username` = ?");
-      $this->statement->execute([$username]);
-  
-  
-      $this->loguser($username, "Flushed all logs");
-      return true;
+        $username = Session::get('username');
+        $this->prepare("DELETE FROM `userlogs` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+
+
+        $this->loguser($username, "Flushed all logs");
+        return true;
     }
 
     protected function getbanreason($username)
@@ -226,7 +226,7 @@ class Users extends Database
                     // Delete the sub code
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
                     $this->statement->execute([$subCode]);
-                    
+
                     $this->loguser($username, "Redeemed: $subCode");
                     return "Your subscription is now active!";
                 } else {
@@ -680,23 +680,23 @@ class Users extends Database
 
     public function loguser($username, $action)
     {
-      $ip = $this->getip();
-      $browser = $this->get_user_Browser();
-      $os = $this->get_user_os();
-  
-  
-      $Time = date("F d S, G:i");
-      $this->prepare('INSERT INTO `userlogs` (`username` , `action` , `browser`, `os` , `ip`, `time`) VALUES (?,?,?,?,?,?)');
-      $this->statement->execute([$username, $action , $browser , $os, $ip , $Time]);
+        $ip = $this->getip();
+        $browser = $this->get_user_Browser();
+        $os = $this->get_user_os();
+
+
+        $Time = date("F d S, G:i");
+        $this->prepare('INSERT INTO `userlogs` (`username` , `action` , `browser`, `os` , `ip`, `time`) VALUES (?,?,?,?,?,?)');
+        $this->statement->execute([$username, $action , $browser , $os, $ip , $Time]);
     }
 
 
     protected function get_user_Browser()
     {
-      global $user_agent;
-      $user_agent = $_SERVER["HTTP_USER_AGENT"];
-      $browser = "Unknown Browser";
-      $browser_array = [
+        global $user_agent;
+        $user_agent = $_SERVER["HTTP_USER_AGENT"];
+        $browser = "Unknown Browser";
+        $browser_array = [
         "/msie/i" => "Internet Explorer",
         "/firefox/i" => "Firefox",
         "/Mozilla/i" => "Mozila",
@@ -713,20 +713,20 @@ class Users extends Database
         "/Valve Steam GameOverlay/i" => "Steam",
         "/mobile/i" => "Mobile",
       ];
-      foreach ($browser_array as $regex => $value) {
-        if (preg_match($regex, $user_agent)) {
-          $browser = $value;
+        foreach ($browser_array as $regex => $value) {
+            if (preg_match($regex, $user_agent)) {
+                $browser = $value;
+            }
         }
-      }
-      return $browser;
+        return $browser;
     }
-  
+
     protected function get_user_os()
     {
-      global $user_agent;
-      $user_agent = $_SERVER["HTTP_USER_AGENT"];
-      $os_platform = "Unknown";
-      $os_array = [
+        global $user_agent;
+        $user_agent = $_SERVER["HTTP_USER_AGENT"];
+        $os_platform = "Unknown";
+        $os_array = [
         "/windows nt 10/i" => "Windows 10",
         "/windows nt 6.3/i" => "Windows 8.1",
         "/windows nt 6.2/i" => "Windows 8",
@@ -753,12 +753,11 @@ class Users extends Database
         "/webos/i" => "Mobile",
         "/Windows Phone/i" => "Windows Phone",
       ];
-      foreach ($os_array as $regex => $value) {
-        if (preg_match($regex, $user_agent)) {
-          $os_platform = $value;
+        foreach ($os_array as $regex => $value) {
+            if (preg_match($regex, $user_agent)) {
+                $os_platform = $value;
+            }
         }
-      }
-      return $os_platform;
+        return $os_platform;
     }
-  
 }
