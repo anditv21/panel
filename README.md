@@ -133,18 +133,18 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 
 - Extract all files and upload them to your PHP host of choice
 - Copy and paste db.sql into SQL import tab on phpmyadmin
-- Change https://github.com/anditv21/panel/blob/main/app/core/Database#L5#L8 to your database credentials
-- Rename https://github.com/anditv21/panel/blob/main/app/core/Database to Database.php
+- Change https://github.com/anditv21/panel/blob/main/src/app/core/Database#L5#L8 to your database credentials
+- Rename https://github.com/anditv21/panel/blob/main/src/app/core/Database to Database.php
 - Put your Loader in the main directory of the panel. (x.exe)
 - Login with the default credentials
 - Change the default password to a secure one
-- Set https://github.com/anditv21/panel/blob/main/app/core/Config.php#L8 to your Website name
-- Set a website description in https://github.com/anditv21/panel/blob/main/app/core/Config.php#L11
-- Change https://github.com/anditv21/panel/blob/main/app/core/Config.php#L30 to a secure API key
+- Set https://github.com/anditv21/panel/blob/main/src/app/core/Config.php#L8 to your Website name
+- Set a website description in https://github.com/anditv21/panel/blob/main/src/app/core/Config.php#L11
+- Change https://github.com/anditv21/panel/blob/main/src/app/core/Config.php#L30 to a secure API key
 
 <br>
 
-- Rename https://github.com/anditv21/panel/blob/main/app/core/DiscordConfig to DiscordConfig.php
+- Rename https://github.com/anditv21/panel/blob/main/src/app/core/DiscordConfig to DiscordConfig.php
 - Open https://discord.com/developers/applications and create a new Discord application
 - Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php (A valid SSL certificate is required)
 - Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
