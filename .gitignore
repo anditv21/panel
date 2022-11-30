@@ -1,5 +1,5 @@
-/app/core/Database.php
-/app/core/DiscordConfig.php
+src/app/core/Database.php
+src/app/core/DiscordConfig.php
 .themes/old/app/core/DiscordConfig.php
 
 ## Ignore Visual Studio temporary files, build results, and
