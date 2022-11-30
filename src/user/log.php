@@ -89,8 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ); ?>
                         </td>
                         <td><?php Util::display(
-                               $row->os
-                           ); ?>
+    $row->os
+); ?>
                         </td>
                         <td  ><?php Util::display("<br><p class='spoiler'>".
                            $row->ip. "</p>"); ?>
