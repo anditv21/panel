@@ -8,7 +8,8 @@
             <div id="centerside" style="margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">
                 <ul class="navbar-nav text-light" id="accordionSidebar" style="text-align: center;">
                     <li class="nav-item"><a class="nav-link active" href="../index.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="../profile.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="../user/profile.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="../user/log.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>User logs</span></a></li>
 
                     <?php if (Session::isAdmin()) : ?>
                         <li class="nav-item"><a class="nav-link active" href="index.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Admin-Dashboard</span></a></li>

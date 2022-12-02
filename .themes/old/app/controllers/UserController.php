@@ -40,6 +40,19 @@ class UserController extends Users
         return $this->getnews();
     }
 
+    public function getlogarray($username)
+    {
+        $result = $this->logarray($username);
+        return $result;
+    }
+
+    public function flush()
+    {
+        $result = $this->flushlogs();
+        return $result;
+    }
+
+
     public function registerUser($data)
     {
         // Bind login data
