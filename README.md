@@ -56,6 +56,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 <li>
  Get Profile Picture from Discord (currently only static)</li></ul>
 <li>Shoutbox</li>
+
 <ul><li>View user profiles
 
 </li></ul>
@@ -63,6 +64,14 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 </ul>
 </details>
 
+###### USER-LOGS
+
+<details>
+  <summary>Click to see a preview</summary>
+<img src="https://i.ibb.co/NxKf9FS/image.png">
+<br>
+<img src="https://i.ibb.co/txhMf6J/image.png">
+</details>
 
 ###### Support/Admin-Panel
 <details>
