@@ -1,15 +1,13 @@
 <h1 align="center">:zap: User Management Panel</h1>
 <p align="center">
- | 
-  <a href="#preview">Preview</a> |
-  <a href="#setup">Setup</a> |
-  <a href="#features">Features </a> |
-  <a href="https://github.com/anditv21/panel/tree/main/.themes/old/">Old Theme</a> |
+   |
+  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
+  <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
+  <a href="https://github.com/anditv21/panel/tree/main/.themes/old/">Other Theme</a> |
+  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">GS Theme</a> |
 </p>
 
 ---
-* Original Panel: https://github.com/znixbtw/php-panel-v2
-* Gamesense Theme: https://github.com/Phantom-1337/gamesensethemeforznixpanel
 > Default login: `admin`:`admin` <br />
 ---
 
