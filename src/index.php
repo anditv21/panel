@@ -6,6 +6,7 @@ require_once "app/controllers/ShoutBoxController.php";
 $user = new UserController();
 $cheat = new CheatController();
 $shoutbox = new ShoutBoxController();
+
 Session::init();
 
 if (!Session::isLogged()) {
@@ -13,11 +14,11 @@ if (!Session::isLogged()) {
 }
 
 $username = Session::get("username");
-$sub = $user->getSubStatus();
 $uid = Session::get("uid");
+$sub = $user->getSubStatus();
+
 Util::banCheck();
 Util::head($username);
-Util::navbar();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["sendmsg"])) {
@@ -26,195 +27,278 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Brand</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+   <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+   <link rel="stylesheet" href="assets/css/untitled.css">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <?php Util::navbar(); ?>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content" style="background: #121421;">
+            <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars" style="color: rgb(255,255,255);"></i></button>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small" style="color: #ffffff !important;"><?php Util::display(
+    Session::get("username")
+); ?></span>
+                                <?php if (Util::getavatar($uid) == false): ?>
+                                <img class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+
+                                <?php else: ?>
+                                <img class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar(
+    $uid
+)); ?>" style="border-color: rgb(255,255,255)!important;">
+                                <?php endif; ?>
+
+                              </a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
+                                      SUB_DIR .
+                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4" data-aos="fade-down" data-aos-duration="800">
+                        <h3 class="text-dark mb-0">Dashboard</h3>
+                    </div>
+                    <div class="row" data-aos="fade-down" data-aos-duration="600">
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2" style="background: rgb(37,41,53);border-style: none;">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Cheat status</span></div>
+                                            <?php if (
+                                              $cheat->getCheatData()->status ==
+                                              "Undetected"
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-green);">Undetected</span></div>
+                                            <?php elseif (
+                                              $cheat->getCheatData()->status ==
+                                              "Detected"
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-red);">Detected</span></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-info-circle fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2" style="background: rgb(37,41,53);border-style: none;">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">version</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php Util::display(
+                                                $cheat->getCheatData()->version
+                                            ); ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-code-branch fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-5">
+                            <div class="card shadow border-start-primary py-2" style="background: rgb(37,41,53);border-style: none;">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Maintenance</span></div>
+                                            <?php if (
+                                              $cheat->getCheatData()
+                                                ->maintenance == "-"
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color:#fff;">No</span></div>
+                                            <?php elseif (
+                                              $cheat->getCheatData()
+                                                ->maintenance == "UNDER"
+                                            ): ?>
+                                                <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-yellow);">Yes</span></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-wrench fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-3 mb-4" id="SUBCOL">
+                            <div class="card shadow border-start-primary py-2" style="background: rgb(37,41,53);border-style: none;">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">subscription</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span style="color: rgb(255,255,255);">
+                                                    <?php if (
+                                                      $cheat->getCheatData()
+                                                        ->frozen != 0
+                                                    ) {
+                                                Util::display("Frozen");
+                                            } else {
+                                                if ($sub > 0) {
+                                                    if ($sub > 8000) {
+                                                        Util::display(
+                                                            "Lifetime"
+                                                        );
+                                                    } else {
+                                                        Util::display(
+                                                            $sub . " days"
+                                                        );
+                                                    }
+                                                } else {
+                                                    Util::display(
+                                                        '<i class="fa fa-times"></i>'
+                                                    );
+                                                }
+                                            } ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-calendar-alt fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" data-aos="fade-down" data-aos-duration="400">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4" style="border-style: none;background: rgb(37,41,53);max-width: 664px;">
+                                <div class="card-header py-3" style="border-style: none;background: rgb(37,41,53);">
+                                    <h6 class="text-primary fw-bold m-0" style="color: rgb(255,255,255)!important;">News</h6>
+                                </div>
+                                <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
+                                    <li class="list-group-item" style="background: rgb(37,41,53);">
+                                        <div class="row align-items-center no-gutters">
+                                            <div class="col me-2" style="color: rgb(255,255,255);">
+                                                <h6 class="mb-0"><strong><?php Util::display(
+                                                $user->getusernews()
+                                            ); ?></strong></h6>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <?php if ($user->getSubStatus() > 0): ?>
+                            <div class="col-lg-6 mb-4" id="DOWNLOADCOL">
+                                <div class="card shadow mb-4" style="border-style: none;background: rgb(37,41,53);max-width: 664px;">
+                                    <div class="card-header py-3" style="border-style: none;background: rgb(37,41,53);">
+                                        <h6 class="text-primary fw-bold m-0" style="color: rgb(255,255,255)!important;">Loader</h6>
+                                    </div>
+                                    <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
+                                        <li class="list-group-item" style="background: rgb(37,41,53);">
+                                            <div class="row align-items-center no-gutters">
+                                                <a style="margin-left: 0px;font-size: 12px;color: rgb(255,255,255);margin-bottom: 10px;" class='nav-link' href=download.php>Download <i class="fas fa-download"></i></a>
+
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="col-lg-6 mb-4">
+                        <div class="card shadow mb-4" style="border-style: none;background: rgb(37,41,53);max-width: 664px;">
+                                    <div class="card-header py-3" style="border-style: none;background: rgb(37,41,53);">
+                                        <h6 class="text-primary fw-bold m-0" style="color: rgb(255,255,255)!important;">ShoutBox</h6>
+                                    </div>
+                        <form action="<?php Util::display(
+                                                $_SERVER["PHP_SELF"]
+                                            ); ?>" method="POST">
+                                <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
+                                <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
+                                    <li class="list-group-item" style="background: rgb(37,41,53);">
+                                        <div class="row align-items-center no-gutters">
+                                            <div class="col me-2" style="color: rgb(255,255,255);">
+                                            <div id="shoutbox">
+
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <li class="list-group-item" style="background: rgb(37,41,53);">
+
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2" style="color: rgb(255,255,255);height: 68px;">
+
+                                                    <input autocomplete="off" maxlength="255" type="text" name="msg" maxlength="255" placeholder="What`s on your mind?" required style="background: #121421;border-style: none;outline: none;color: rgb(255,255,255);border-radius: 5px;padding-left: 5px;padding-right: 5px;margin-top: -4px;">
+                                                    <br>
+
+                                                    <button type="submit" name="sendmsg" class="btn btn-success" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Send!</button>
+                                                </div>
+                                            </div>
+                                            </li>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <br>
+                                <br>
+
+                                </ul>
+                            </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 <style>
-   .divide {
-   padding: 0;
-   margin: 0;
-   margin-bottom: 30px;
-   background: #1e5799;
-   background: -moz-linear-gradient(left,  #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-   background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1e5799), color-stop(50%,#f300ff), color-stop(100%,#e0ff00));
-   background: -webkit-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
-   background: -o-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
-   background: -ms-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
-   background: linear-gradient(to right,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
-   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#e0ff00',GradientType=1 );
-   height: 3px;
-   border-bottom: 1px solid #000;
-   }
+    .chat
+    {
+        padding-top: 2%;
+        padding-left: 2%;
+        background-color: #121421;
+    }
+    img
+    {
+        margin-bottom: 1%;
+    }
+    body
+    {
+        overflow: hidden;
+    }
 </style>
-<div class="divide"></div>
-<main class="container mt-2">
-   <div class="row">
-      <!--Welome message-->
-      <div class="col-12 mt-3 mb-2">
-         <div class="alert alert-primary" role="alert">
-            Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
-    $username
-); ?>. </b></a><?php Util::display(
-    "Last login: " .
-    $user->getlastlogin() .
-    " from " .
-    "<em class='spoiler'>" .
-    $user->getlastip() .
-    "</em>"
-); ?>
-         </div>
-      </div>
-      <!--Sub frozen warning -->
-      <?php
-      $time = $user->gettime();
-      if ($cheat->getCheatData()->frozen == 1): ?>
-      <div class="col-12 mt-3 mb-2">
-         <div class="alert alert-primary" role="alert">
-            <b style="color: #6cc312;"><?php Util::display(
-          "WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"
-      ); ?></b>
-         </div>
-      </div>
-      <?php endif;
-      ?>
-      <!--News-->
-      <div class="col-lg-9 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-newspaper"></i> News</div>
-            <div class="row text-muted">
-               <div class="col-12 clearfix">				
-                  <strong><?php Util::display($user->getusernews()); ?></strong>		
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="col-lg-9 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
-            <div class="row text-muted">
-               <div class="col-lg-9 col-md-8 col-sm-12">
-                  <div class="scroll chatbox">
-                     <div id="shoutbox">
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <br>
-            <form method="POST" action="<?php Util::Display(
-          $_SERVER["PHP_SELF"]
-      ); ?>">
-               <input autocomplete="off" maxlength="255" type="text" name="msg" maxlength="255" placeholder="What`s on your mind?" required class="form-control form-control-sm">
-               <br>
-               <button type="submit" value="submit" name="sendmsg" class="btn btn-outline-primary btn-sm" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Send!</button>
-            </form>
-         </div>
-      </div>
-            <!--Status-->
-            <div class="col-lg-3 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Status</div>
-            <div class="row text-muted">
-               <!--Detected // Undetected-->
-               <div class="col-12 clearfix">
-                  <i class="fas fa-info-circle"></i> Status: 
-                  <p class="float-right mb-0"><?php Util::display(
-          $cheat->getCheatData()->status
-      ); ?></p>
-               </div>
-               <!--Cheat version-->
-               <div class="col-12 clearfix">
-                  <i class="fas fa-code-branch"></i>&nbsp; Version: 
-                  <p class="float-right mb-0"><?php Util::display(
-          $cheat->getCheatData()->version
-      ); ?></p>
-               </div>
-               <div class="col-12 clearfix">
-                  <i class="fas fa-user-clock"></i> Sub: 
-                  <p class="float-right mb-0">
-                  <?php if ($cheat->getCheatData()->frozen != 0) {
-          $sub = $sub + $time;
-          if ($sub < 1000) {
-              Util::display(
-                  "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
-              );
-          } elseif ($sub < 1) {
-              Util::display('<i class="fa fa-times"></i>');
-          } else {
-              Util::display("Lifetime");
-          }
-      } elseif ($sub > 0) {
-          Util::display("Active");
-      } else {
-          Util::display("None");
-      } ?></p>
-               </div>
-            </div>
-            <br>
-                  <!--Statistics-->
-            <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Statistics</div>
-            <div class="row text-muted">
-               <!--Total Users-->
-               <div class="col-12 clearfix">
-                  Users: 
-                  <p class="float-right mb-0"><?php Util::display(
-          $user->getUserCount()
-      ); ?></p>
-               </div>
-               <!--Latest User-->
-               <div class="col-12 clearfix">
-                  Latest User: 
-                  <p class="float-right mb-0"><?php Util::display(
-          $user->getNewUser()
-      ); ?></p>
-               </div>
-            </div>
-            <br>
-                                    <!-- Check if has sub --> 
-                                    <?php if ($user->getSubStatus() > 0): ?>
-                                    <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;"></div>
-               <div class="col-12 text-center pt-1">
+<script>        setInterval("reload();", 500);</script>
+    <script>
+        function reload()
+        {
+            $(document).ready(function() {
+                $("#shoutbox").load("shoutbox.php");
+    });
 
-                     <a style="background-color: #191919; color: white;" class="btn" href="/panel/download.php">Download Loader <i class="fas fa-download"></i></a>
+        }
 
-               </div>
-               <?php endif; ?>
-         </div>
-      </div>
-
-
-   </div>
-</main>
-<script>setInterval("reload();", 500);</script>
-<script>
-   function reload()
-   {
-       $(document).ready(function() {
-           $("#shoutbox").load("shoutbox.php");
-   });
-   
-   }
-   $(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip();   
-		});
-</script>
-<style>
-   .spoiler:hover {
-   color: white;
-   max-width: fit-content;
-   }
-   .spoiler {
-   color: black;
-   background-color: black;
-   max-width: fit-content;
-   }
-   .chat
-   {
-   padding-top: 2%;
-   padding-left: 2%;
-   }
-   img
-   {
-   margin-bottom: 1%;
-   }
-</style>
+    </script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/jquery.js"></script>
+</body>
 <?php Util::footer(); ?>
+</html>

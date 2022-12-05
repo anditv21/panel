@@ -1,59 +1,39 @@
-<body>
- <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
-	<nav style="background-image: linear-gradient(to bottom, #303030 0%, #151515 100%);" class="navbar navbar-expand-lg navbar-dark">
+<!-- Check if logged in -->
+<?php if (Session::isLogged() == true) : ?>
+    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+        <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#" style="text-align: center;width: 100%;"><span id="icons" style="text-align: center;margin-left: 30px;"><img src=<?php Util::Display(SITE_URL.SUB_DIR ."/assets/img/gey.gif"); ?> style="width: 54px;"></span>
+                <div class="sidebar-brand-text mx-3"></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <div id="centerside" style="margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">
+                <ul class="navbar-nav text-light" id="accordionSidebar" style="text-align: center;">
+                    <li class="nav-item"><a class="nav-link active" href="../index.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="<?php Util::Display(SITE_URL.SUB_DIR . "/user/profile.php"); ?>" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link active"  href="<?php Util::Display(SITE_URL.SUB_DIR . "/user/log.php"); ?>" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>User logs</span></a></li>
 
-		<div class="container">
+                    <?php if (Session::isAdmin()) : ?>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/index.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Admin-Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/table.php" );?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Users</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/codes.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Codes</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/gift.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Sub-Gift</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/password.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Reset-Password</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/bans.php"); ?>  style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Ban-Manager</span></a></li>
+                    <?php endif; ?>
 
-			<a class="navbar-brand" href="<?php echo SITE_URL . SUB_DIR ?>" style="font-family: 'Raleway', sans--serif;"><?php echo SITE_NAME ?></a>
+                    <?php if (Session::isSupp() && !Session::isAdmin()) : ?>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/index.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Admin-Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/table.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Users</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/codes.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Codes</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/admin/bans.php"); ?>  style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Ban-Manager</span></a></li>
+                    <?php endif; ?>
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+                    <li class="nav-item"></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"></div>
+            </div>
+        </div>
+    </nav>
 
-			<div class="collapse navbar-collapse" id="navbarNav">
+<?php else : ?>
 
-				<ul class="navbar-nav ml-auto">
-
-					<!-- Check if logged in --> 
-					<?php if (Session::isLogged() == true) : ?>
-						<?php if (Session::isBanned() == false) : ?>
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/profile.php">Profile <i class="fas fa-user"></i></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/log.php">Account-Logs <i class="fas fa-history"></i></a>
-						</li>
-						<?php endif; ?>
-						<!-- Check if admin --> 
-						<?php if (Session::isAdmin() == true or Session::isSupp() == true) : ?>
-							
-							<li class="nav-item">
-								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>
-							</li>
-
-						<?php endif; ?>
-
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/auth/logout.php">Logout <i class="fas fa-sign-out-alt"></i></a>
-						</li>
-
-					<?php else : ?>
-
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/auth/login.php">Login</a>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/auth/register.php">Register</a>
-						</li>
-
-					<?php endif; ?>
-
-				</ul>
-
-			</div>
-
-		</div>
-
-	</nav>
+<?php endif; ?>

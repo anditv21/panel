@@ -265,3 +265,4 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
+.themes/gamesense/app/core/Database.php

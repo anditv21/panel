@@ -3,13 +3,13 @@
    |
   <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
-  <a href="https://github.com/anditv21/panel/tree/main/.themes/old/">Other Theme</a> |
-  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">GS Theme</a> |
+  <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
+  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
 </p>
 
----
-> Default login: `admin`:`admin` <br />
----
+> Default login: `admin`:`admin`
+
+
 
 ### Overview
 <p align="center">
@@ -20,20 +20,28 @@
 <details align="center">
    <summary>Preview</summary>
 <p align="center">
-  <a href="https://i.ibb.co/RyvRyDB/image.png"><img src="https://i.ibb.co/RyvRyDB/image.png" /></a>
-<a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
-<a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
+<a href="https://i.ibb.co/vYTnFJd/image.png"><img src="https://i.ibb.co/vYTnFJd/image.png"></a>
+<a href="https://i.ibb.co/D1vBv3d/image.png"><img src="https://i.ibb.co/D1vBv3d/image.png"></a>
+<a href="https://i.ibb.co/7KjsQzc/image.png"><img src="https://i.ibb.co/7KjsQzc/image.png"><h1 align="center">:zap: User Management Panel</h1>
+<p align="center">
+   |
+  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
+  <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
+  <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
+  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
 </p>
 </details>
+
+
 
 ### Features
 ###### AUTH
 <details>
   <summary>Click to see Auth Features</summary>
 <ul>
-<li>Login (Remember Login) (Screenshot: https://bit.ly/3QlQDaW)</li>
-<li>Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3RziB40)</li>
-<li>Banned Page (Screenshot: https://bit.ly/3erfTj1)</li>
+<li>Login (Remember Login) (Screenshot: https://bit.ly/3UEg4Xn)</li>
+<li>Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3FqPU6a)</li>
+<li>Banned Page (Screenshot: https://bit.ly/39USjsR)</li>
 </ul>
 </details>
 
@@ -41,7 +49,7 @@
 <details>
   <summary>Click to see User Features</summary>
 <ul>
-Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
+Screenshot: https://bit.ly/3VGk2QY / https://bit.ly/3D1cXE6
 <li>Change password</li>
 <li>Activate multiple subscription´s with code (30/90 days)</li>
 <li>Activate Trail subscription´s with code (3 days)</li>
@@ -63,8 +71,6 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 
 <details>
   <summary>Click to see a preview</summary>
-<img src="https://i.ibb.co/NxKf9FS/image.png">
-<br>
 <img src="https://i.ibb.co/txhMf6J/image.png">
 </details>
 
@@ -72,10 +78,10 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 <details>
    <summary>Click to see Supporter/Admin-Panel Features</summary>
    <ul>
-      <li>Screenshot: https://bit.ly/3yZujOF / https://bit.ly/3REAwXf</li>
+      <li>Screenshot: https://bit.ly/3Be6xQ5 / https://bit.ly/3iFlmVx</li>
       <li>Disable Invite System (Admin only)</li>
       <li>Freeze all subscriptions (experimental) (Admin only)</li> 
-      <li>Gift user subscription (Admin only) (Screenshot: https://bit.ly/3enQmqP)</li>
+      <li>Gift user subscription (Admin only) (Screenshot: https://bit.ly/3utA7gA)</li>
 
 <ul>
  <li>Input options: </li>
@@ -86,7 +92,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 </ul>
    </ul>
 <ul>
-<li>User-Ranges with buttons in User Table (Screenshot: https://bit.ly/3THQuSe)</li>
+<li>User-Ranges with buttons in User Table (Screenshot: https://bit.ly/3BdxSSB)</li>
     <ul><li>Input options: </li><ul>
 
 
@@ -100,7 +106,7 @@ Screenshot: https://bit.ly/3fx1Vg2 / https://bit.ly/3D1cXE6
 <li>View a users last known IP address </li>
 <li>Password Reset (Admin only)</li>
 <li>Set News</li>
-<li>Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3AJVIUI)</li>
+<li>Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3VS78if)</li>
 <li>Generate invite code</li>
 <li>Generate subscription code (Admin only)</li>
 <li>Ban/unban user (Admin only)</li>
@@ -159,4 +165,7 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 
 
 
+</details>
+</a>
+</p>
 </details>
