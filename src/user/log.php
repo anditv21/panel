@@ -19,14 +19,14 @@ Util::banCheck();
 $logarray = $user->getlogarray($username);
 
 
-   
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["flush"])) {
-      $error = $user->flush();
+        $error = $user->flush();
     }
 
     header('location: log.php');
-  }
+}
 ?>
 <!DOCTYPE html>
 <html>
