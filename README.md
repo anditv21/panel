@@ -4,7 +4,7 @@
   <a href="https://github.com/anditv21/panel/issues/">Issues and feature requests</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/old/">Other Theme</a> |
-  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">GS Theme</a> |
+  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
 </p>
 
 ---
