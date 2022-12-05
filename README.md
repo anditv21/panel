@@ -1,7 +1,7 @@
 <h1 align="center">:zap: User Management Panel</h1>
 <p align="center">
    |
-  <a href="https://github.com/anditv21/panel/issues/">Issues and feature requests</a> |
+  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
   <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
@@ -11,7 +11,7 @@
 
 
 
-### Overview
+<h3 align="center">Overview</h3>
 <p align="center">
   <img src="https://i.imgur.com/VB2ial8.png" />
 </p>
