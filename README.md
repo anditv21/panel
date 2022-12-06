@@ -6,9 +6,9 @@
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
   <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
 </p>
-
-> Default login: `admin`:`admin`
-
+<p align="center">
+ Default login: <code>admin</code>:<code>admin</code>
+</p>
 
 
 <h3 align="center">Overview</h3>
