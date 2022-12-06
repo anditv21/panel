@@ -4,7 +4,6 @@
   <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
-  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
 </p>
 <p align="center">
  Default login: <code>admin</code>:<code>admin</code>
