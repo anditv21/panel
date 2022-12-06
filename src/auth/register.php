@@ -67,6 +67,18 @@ Util::head('Register');
                                                 <div class="custom-control custom-checkbox small"></div>
                                             </div><button class="btn btn-success d-block btn-user w-100" id="submit" type="submit" style="border-radius: 4px;color: rgb(255,255,255);">Regsiter</button>
                                             <hr>
+                                            <p style="display: none; color: yellow;"id="warning">WARNING! Caps lock is ON.</p>
+						<script>
+                        var input = document.getElementById("exampleInputPassword");
+                        var input1 = document.getElementById("exampleInputPassword-1");
+                        var text = document.getElementById("warning");
+                        input.addEventListener("keyup", function(event) {
+                            check();
+                        });
+                        input1.addEventListener("keyup", function(event) {
+                            check();
+                        });
+                        </script>
                                         </form>
                                         <div class="text-center" style="margin-bottom: -22px;margin-top: 18px;"><a class="small" href="login.php" style="color: rgb(152,152,152);margin-top: 8px;">Login instead?</a></div>
                                     </div>
@@ -81,6 +93,16 @@ Util::head('Register');
     <script src="../assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script>
+        function check()
+        {
+            if (event.getModifierState("CapsLock")) {
+                            text.style.display = "block";
+                        } else {
+                            text.style.display = "none"
+                        }
+        }
+    </script>
 </body>
 
 </html>

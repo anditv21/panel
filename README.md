@@ -39,7 +39,7 @@
 <details>
   <summary>Click to see Auth Features</summary>
 <ul>
-<li>Login (Remember Login) (Screenshot: https://bit.ly/3UEg4Xn)</li>
+<li>Login (Remember Login) (Screenshot: https://bit.ly/3uweFYx)</li>
 <li>Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3FqPU6a)</li>
 <li>Banned Page (Screenshot: https://bit.ly/39USjsR)</li>
 </ul>
