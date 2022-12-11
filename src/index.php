@@ -2,24 +2,24 @@
    require_once "app/require.php";
    require_once "app/controllers/CheatController.php";
    require_once "app/controllers/ShoutBoxController.php";
-   
+
    $user = new UserController();
    $cheat = new CheatController();
    $shoutbox = new ShoutBoxController();
-   
+
    Session::init();
-   
+
    if (!Session::isLogged()) {
        Util::redirect("/auth/login.php");
    }
-   
+
    $username = Session::get("username");
    $uid = Session::get("uid");
    $sub = $user->getSubStatus();
-   
+
    Util::banCheck();
    Util::head($username);
-   
+
    if ($_SERVER["REQUEST_METHOD"] === "POST") {
        if (isset($_POST["sendmsg"])) {
            $msg = trim($_POST["msg"]);
@@ -55,14 +55,14 @@
                         <li class="nav-item dropdown no-arrow">
                            <div class="nav-item dropdown no-arrow">
                               <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small" style="color: #ffffff !important;"><?php Util::display(
-                                 Session::get("username")
-                                 ); ?></span>
+       Session::get("username")
+   ); ?></span>
                               <?php if (Util::getavatar($uid) == false): ?>
                               <img class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
                               <?php else: ?>
                               <img class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar(
-                                 $uid
-                                 )); ?>" style="border-color: rgb(255,255,255)!important;">
+       $uid
+   )); ?>" style="border-color: rgb(255,255,255)!important;">
                               <?php endif; ?>
                               </a>
                               <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
@@ -108,7 +108,7 @@
                                  <div class="col me-2">
                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">version</span></div>
                                     <div class="text-dark fw-bold h5 mb-0"><span><?php Util::display(
-                                       $cheat->getCheatData()->version
+                                           $cheat->getCheatData()->version
                                        ); ?></span></div>
                                  </div>
                                  <div class="col-auto"><i class="fas fa-code-branch fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
@@ -150,24 +150,24 @@
                                           $cheat->getCheatData()
                                             ->frozen != 0
                                           ) {
-                                          Util::display("Frozen");
-                                          } else {
-                                          if ($sub > 0) {
-                                          if ($sub > 8000) {
-                                            Util::display(
-                                                "Lifetime"
-                                            );
-                                          } else {
-                                            Util::display(
-                                                $sub . " days"
-                                            );
-                                          }
-                                          } else {
-                                          Util::display(
-                                            '<i class="fa fa-times"></i>'
-                                          );
-                                          }
-                                          } ?></span>
+                                           Util::display("Frozen");
+                                       } else {
+                                           if ($sub > 0) {
+                                               if ($sub > 8000) {
+                                                   Util::display(
+                                                       "Lifetime"
+                                                   );
+                                               } else {
+                                                   Util::display(
+                                                       $sub . " days"
+                                                   );
+                                               }
+                                           } else {
+                                               Util::display(
+                                                   '<i class="fa fa-times"></i>'
+                                               );
+                                           }
+                                       } ?></span>
                                     </div>
                                  </div>
                                  <div class="col-auto"><i class="fas fa-calendar-alt fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
@@ -187,8 +187,8 @@
                                  <div class="row align-items-center no-gutters">
                                     <div class="col me-2" style="color: rgb(255,255,255);">
                                        <h6 class="mb-0"><strong><?php Util::display(
-                                          $user->getusernews()
-                                          ); ?></strong></h6>
+                                           $user->getusernews()
+                                       ); ?></strong></h6>
                                     </div>
                                  </div>
                               </li>
