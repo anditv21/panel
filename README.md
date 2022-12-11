@@ -57,7 +57,7 @@ Screenshot: https://bit.ly/3VGk2QY / https://bit.ly/3D1cXE6
 <ul>
 <li>
  Get Profile Picture from Discord (currently only static)</li></ul>
-<li>Shoutbox</li>
+
 
 <ul><li>View user profiles
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 30, 2022 at 06:11 PM
+-- Generation Time: Dec 11, 2022 at 09:32 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.13
 
@@ -68,27 +68,6 @@ INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `shoutbox`
---
-
-CREATE TABLE `shoutbox` (
-  `id` int(255) NOT NULL,
-  `user` varchar(255) NOT NULL,
-  `uid` int(255) NOT NULL,
-  `msg` varchar(255) NOT NULL,
-  `time` datetime(6) NOT NULL DEFAULT current_timestamp(6)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `shoutbox`
---
-
-INSERT INTO `shoutbox` (`id`, `user`, `uid`, `msg`, `time`) VALUES
-(1, 'System', 0, 'Hi', '2022-08-22 02:24:14.863472');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `subscription`
 --
 
@@ -103,7 +82,11 @@ CREATE TABLE `subscription` (
 --
 
 INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('3m-LHr4SVVAa3jY3KbnFeSG', 'admin', '2022-10-18 14:49:56');
+('V1oGGZsaGh', 'System', '2022-12-06 14:46:15'),
+('yaHDB9NqjD', 'System', '2022-12-06 14:45:44'),
+('zxBLQn3Ddi', 'System', '2022-12-06 14:45:43'),
+('uO1i8HmeMj', 'System', '2022-12-06 14:45:16'),
+('RU1eqwp7Cg', 'System', '2022-12-06 14:44:35');
 
 -- --------------------------------------------------------
 
@@ -126,7 +109,8 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(2, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'November 30 th, 19:11');
+(2, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'November 30 th, 19:11'),
+(3, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'December 11 th, 21:55');
 
 -- --------------------------------------------------------
 
@@ -158,7 +142,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2022-11-30 18:56:16', '2022-11-30 18:54:12', '', NULL);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-11 21:55:02', '2022-11-30 18:56:16', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -175,12 +159,6 @@ ALTER TABLE `cheat`
 --
 ALTER TABLE `invites`
   ADD UNIQUE KEY `code` (`code`);
-
---
--- Indexes for table `shoutbox`
---
-ALTER TABLE `shoutbox`
-  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- Indexes for table `subscription`
@@ -208,16 +186,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `shoutbox`
---
-ALTER TABLE `shoutbox`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
