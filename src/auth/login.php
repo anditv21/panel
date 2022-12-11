@@ -55,7 +55,7 @@ Util::head('Login');
                                             <div class="custom-control custom-checkbox small"></div>
                                         </div><button class="btn btn-success d-block btn-user w-100" id="submit" type="submit" style="border-radius: 4px;color: rgb(255,255,255);">Login</button>
                                         <hr>
-                                        <p style="display: none; color: yellow;"id="warning">WARNING! Caps lock is ON.</p>
+                                        <p style="display: none; color: yellow;"id="warning">WARNING: Caps lock is ON!</p>
                                         <div class="text-center" style="margin-bottom: -22px;margin-top: 18px;"><a class="small" href="register.php" style="color: rgb(152,152,152);margin-top: 8px;">Create an Account!</a></div>
 
                                         <script>
