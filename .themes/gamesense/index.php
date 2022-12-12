@@ -1,11 +1,10 @@
 <?php
 require_once "app/require.php";
 require_once "app/controllers/CheatController.php";
-require_once "app/controllers/ShoutBoxController.php";
+
 
 $user = new UserController();
 $cheat = new CheatController();
-$shoutbox = new ShoutBoxController();
 Session::init();
 
 if (!Session::isLogged()) {
@@ -19,12 +18,6 @@ Util::banCheck();
 Util::head($username);
 Util::navbar();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["sendmsg"])) {
-        $msg = trim($_POST["msg"]);
-        $shoutbox->postmsg($username, $uid, $msg);
-    }
-}
 ?>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -89,26 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
          </div>
       </div>
       <div class="col-lg-9 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
-            <div class="row text-muted">
-               <div class="col-lg-9 col-md-8 col-sm-12">
-                  <div class="scroll chatbox">
-                     <div id="shoutbox">
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <br>
-            <form method="POST" action="<?php Util::Display(
-          $_SERVER["PHP_SELF"]
-      ); ?>">
-               <input autocomplete="off" maxlength="255" type="text" name="msg" maxlength="255" placeholder="What`s on your mind?" required class="form-control form-control-sm">
-               <br>
-               <button type="submit" value="submit" name="sendmsg" class="btn btn-outline-primary btn-sm" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Send!</button>
-            </form>
-         </div>
-      </div>
             <!--Status-->
             <div class="col-lg-3 col-md-12">
          <div class="rounded p-3 mb-3">
@@ -184,15 +157,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
    </div>
 </main>
-<script>setInterval("reload();", 500);</script>
 <script>
-   function reload()
-   {
-       $(document).ready(function() {
-           $("#shoutbox").load("shoutbox.php");
-   });
-   
-   }
+
    $(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip();   
 		});
