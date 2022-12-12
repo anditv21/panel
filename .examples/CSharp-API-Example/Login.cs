@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
 
 namespace loader
 {
@@ -79,9 +80,6 @@ namespace loader
                 httpWebRequest.Method = "GET";
                 httpWebRequest.ContentType = "application/json";
                 JObject jobject = JObject.Parse(new StreamReader((httpWebRequest.GetResponse() as HttpWebResponse).GetResponseStream()).ReadToEnd());
-
-
-
                 if (jobject["status"].ToString() == "failed")
                 {
                     MessageBox.Show(jobject["error"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -89,6 +87,7 @@ namespace loader
                 }
                 else
                 {
+                    checkversion(jobject);
                     this.Hide();
                     var main = new Main();
                     main.Closed += (s, args) => this.Close();
@@ -101,6 +100,27 @@ namespace loader
                 MessageBox.Show(error.ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
+        }
+
+        public static void checkversion(JObject jobject)
+        {
+            string currentversion = "1";
+            if (jobject["cheatversion"].ToString() != currentversion)
+            {
+                MessageBox.Show("Update found" + Environment.NewLine + "Version: " + jobject["cheatversion"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Environment.Exit(1);
+            }
+
+        }
+
+        private void usernametextbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            usernametextbox.Text = string.Empty;
+        }
+
+        private void passwordtextbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            passwordtextbox.Text = string.Empty;
         }
     }
 }

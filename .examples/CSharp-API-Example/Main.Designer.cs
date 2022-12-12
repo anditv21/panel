@@ -46,11 +46,11 @@
             this.siticoneControlBox2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(43)))), ((int)(((byte)(52)))));
             this.siticoneControlBox2.HoveredState.Parent = this.siticoneControlBox2;
             this.siticoneControlBox2.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox2.Location = new System.Drawing.Point(1049, -2);
-            this.siticoneControlBox2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.siticoneControlBox2.Location = new System.Drawing.Point(1442, -3);
+            this.siticoneControlBox2.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox2.Name = "siticoneControlBox2";
             this.siticoneControlBox2.ShadowDecoration.Parent = this.siticoneControlBox2;
-            this.siticoneControlBox2.Size = new System.Drawing.Size(60, 49);
+            this.siticoneControlBox2.Size = new System.Drawing.Size(82, 74);
             this.siticoneControlBox2.TabIndex = 6;
             // 
             // siticoneControlBox1
@@ -62,11 +62,11 @@
             this.siticoneControlBox1.HoveredState.IconColor = System.Drawing.Color.White;
             this.siticoneControlBox1.HoveredState.Parent = this.siticoneControlBox1;
             this.siticoneControlBox1.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox1.Location = new System.Drawing.Point(1112, -2);
-            this.siticoneControlBox1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.siticoneControlBox1.Location = new System.Drawing.Point(1529, -3);
+            this.siticoneControlBox1.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox1.Name = "siticoneControlBox1";
             this.siticoneControlBox1.ShadowDecoration.Parent = this.siticoneControlBox1;
-            this.siticoneControlBox1.Size = new System.Drawing.Size(68, 49);
+            this.siticoneControlBox1.Size = new System.Drawing.Size(94, 74);
             this.siticoneControlBox1.TabIndex = 5;
             // 
             // Username
@@ -74,10 +74,10 @@
             this.Username.AutoSize = true;
             this.Username.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Username.ForeColor = System.Drawing.SystemColors.Control;
-            this.Username.Location = new System.Drawing.Point(580, 148);
-            this.Username.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Username.Location = new System.Drawing.Point(848, 222);
+            this.Username.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.Username.Name = "Username";
-            this.Username.Size = new System.Drawing.Size(86, 20);
+            this.Username.Size = new System.Drawing.Size(124, 29);
             this.Username.TabIndex = 7;
             this.Username.Text = "Username";
             // 
@@ -86,18 +86,19 @@
             this.UID.AutoSize = true;
             this.UID.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UID.ForeColor = System.Drawing.SystemColors.Control;
-            this.UID.Location = new System.Drawing.Point(561, 111);
-            this.UID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.UID.Location = new System.Drawing.Point(814, 166);
+            this.UID.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.UID.Name = "UID";
-            this.UID.Size = new System.Drawing.Size(38, 20);
+            this.UID.Size = new System.Drawing.Size(53, 29);
             this.UID.TabIndex = 8;
             this.UID.Text = "UID";
             // 
             // avatar
             // 
-            this.avatar.Location = new System.Drawing.Point(459, 235);
+            this.avatar.Location = new System.Drawing.Point(631, 352);
+            this.avatar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.avatar.Name = "avatar";
-            this.avatar.Size = new System.Drawing.Size(231, 220);
+            this.avatar.Size = new System.Drawing.Size(318, 330);
             this.avatar.TabIndex = 9;
             this.avatar.TabStop = false;
             // 
@@ -106,9 +107,10 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(500, 111);
+            this.label1.Location = new System.Drawing.Point(617, 166);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 20);
+            this.label1.Size = new System.Drawing.Size(59, 29);
             this.label1.TabIndex = 10;
             this.label1.Text = "UID:";
             // 
@@ -117,18 +119,19 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(482, 148);
+            this.label2.Location = new System.Drawing.Point(617, 222);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(91, 20);
+            this.label2.Size = new System.Drawing.Size(130, 29);
             this.label2.TabIndex = 11;
             this.label2.Text = "Username:";
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(43)))), ((int)(((byte)(52)))));
-            this.ClientSize = new System.Drawing.Size(1176, 626);
+            this.ClientSize = new System.Drawing.Size(1617, 939);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.avatar);
@@ -137,7 +140,7 @@
             this.Controls.Add(this.siticoneControlBox2);
             this.Controls.Add(this.siticoneControlBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Main";

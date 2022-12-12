@@ -43,11 +43,11 @@
             this.siticoneControlBox2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(43)))), ((int)(((byte)(52)))));
             this.siticoneControlBox2.HoveredState.Parent = this.siticoneControlBox2;
             this.siticoneControlBox2.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox2.Location = new System.Drawing.Point(803, -1);
-            this.siticoneControlBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.siticoneControlBox2.Location = new System.Drawing.Point(1472, -2);
+            this.siticoneControlBox2.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox2.Name = "siticoneControlBox2";
             this.siticoneControlBox2.ShadowDecoration.Parent = this.siticoneControlBox2;
-            this.siticoneControlBox2.Size = new System.Drawing.Size(45, 40);
+            this.siticoneControlBox2.Size = new System.Drawing.Size(82, 74);
             this.siticoneControlBox2.TabIndex = 4;
             // 
             // siticoneControlBox1
@@ -59,11 +59,11 @@
             this.siticoneControlBox1.HoveredState.IconColor = System.Drawing.Color.White;
             this.siticoneControlBox1.HoveredState.Parent = this.siticoneControlBox1;
             this.siticoneControlBox1.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox1.Location = new System.Drawing.Point(850, -1);
-            this.siticoneControlBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.siticoneControlBox1.Location = new System.Drawing.Point(1558, -2);
+            this.siticoneControlBox1.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox1.Name = "siticoneControlBox1";
             this.siticoneControlBox1.ShadowDecoration.Parent = this.siticoneControlBox1;
-            this.siticoneControlBox1.Size = new System.Drawing.Size(51, 40);
+            this.siticoneControlBox1.Size = new System.Drawing.Size(94, 74);
             this.siticoneControlBox1.TabIndex = 3;
             // 
             // usernametextbox
@@ -82,16 +82,17 @@
             this.usernametextbox.FocusedState.Parent = this.usernametextbox;
             this.usernametextbox.HoveredState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.usernametextbox.HoveredState.Parent = this.usernametextbox;
-            this.usernametextbox.Location = new System.Drawing.Point(349, 132);
-            this.usernametextbox.Margin = new System.Windows.Forms.Padding(6);
+            this.usernametextbox.Location = new System.Drawing.Point(640, 244);
+            this.usernametextbox.Margin = new System.Windows.Forms.Padding(11);
             this.usernametextbox.Name = "usernametextbox";
             this.usernametextbox.PasswordChar = '\0';
             this.usernametextbox.PlaceholderText = "";
             this.usernametextbox.SelectedText = "";
             this.usernametextbox.ShadowDecoration.Parent = this.usernametextbox;
-            this.usernametextbox.Size = new System.Drawing.Size(179, 42);
+            this.usernametextbox.Size = new System.Drawing.Size(328, 78);
             this.usernametextbox.TabIndex = 143;
             this.usernametextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.usernametextbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.usernametextbox_MouseClick);
             // 
             // passwordtextbox
             // 
@@ -109,17 +110,18 @@
             this.passwordtextbox.FocusedState.Parent = this.passwordtextbox;
             this.passwordtextbox.HoveredState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.passwordtextbox.HoveredState.Parent = this.passwordtextbox;
-            this.passwordtextbox.Location = new System.Drawing.Point(349, 221);
-            this.passwordtextbox.Margin = new System.Windows.Forms.Padding(6);
+            this.passwordtextbox.Location = new System.Drawing.Point(640, 408);
+            this.passwordtextbox.Margin = new System.Windows.Forms.Padding(11);
             this.passwordtextbox.Name = "passwordtextbox";
             this.passwordtextbox.PasswordChar = '\0';
             this.passwordtextbox.PlaceholderText = "";
             this.passwordtextbox.SelectedText = "";
             this.passwordtextbox.ShadowDecoration.Parent = this.passwordtextbox;
-            this.passwordtextbox.Size = new System.Drawing.Size(179, 42);
+            this.passwordtextbox.Size = new System.Drawing.Size(328, 78);
             this.passwordtextbox.TabIndex = 144;
             this.passwordtextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.passwordtextbox.UseSystemPasswordChar = true;
+            this.passwordtextbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.passwordtextbox_MouseClick);
             // 
             // iconButton1
             // 
@@ -131,10 +133,11 @@
             this.iconButton1.IconColor = System.Drawing.Color.White;
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(372, 286);
+            this.iconButton1.Location = new System.Drawing.Point(652, 528);
+            this.iconButton1.Margin = new System.Windows.Forms.Padding(6);
             this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Padding = new System.Windows.Forms.Padding(10, 10, 20, 0);
-            this.iconButton1.Size = new System.Drawing.Size(131, 64);
+            this.iconButton1.Padding = new System.Windows.Forms.Padding(18, 18, 37, 0);
+            this.iconButton1.Size = new System.Drawing.Size(290, 118);
             this.iconButton1.TabIndex = 145;
             this.iconButton1.Text = "Login";
             this.iconButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -143,16 +146,17 @@
             // 
             // Login
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(43)))), ((int)(((byte)(52)))));
-            this.ClientSize = new System.Drawing.Size(898, 548);
+            this.ClientSize = new System.Drawing.Size(1646, 1012);
             this.Controls.Add(this.iconButton1);
             this.Controls.Add(this.passwordtextbox);
             this.Controls.Add(this.usernametextbox);
             this.Controls.Add(this.siticoneControlBox2);
             this.Controls.Add(this.siticoneControlBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
