@@ -9,5 +9,9 @@ name = "php"
 enabled = true
 
 [[transformers]]
+name = "php-cs-fixer"
+enabled = true
+
+[[transformers]]
 name = "dotnet-format"
 enabled = true
