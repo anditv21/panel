@@ -89,16 +89,16 @@ class Users extends Database
     protected function subActiveCheck($username)
     {
         $date = new DateTime(); // Get current date
-    $currentDate = $date->format("Y-m-d"); // Format Year-Month-Day
+        $currentDate = $date->format("Y-m-d"); // Format Year-Month-Day
 
-    $this->prepare("SELECT `sub` FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `sub` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $subTime = $this->statement->fetch();
 
         // Pasted from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
-    $date1 = date_create($currentDate); // Convert String to date format
-    $date2 = date_create($subTime->sub); // Convert String to date format
-    $diff = date_diff($date1, $date2);
+        $date1 = date_create($currentDate); // Convert String to date format
+        $date2 = date_create($subTime->sub); // Convert String to date format
+        $diff = date_diff($date1, $date2);
         return intval($diff->format("%R%a"));
     }
 
@@ -218,9 +218,9 @@ class Users extends Database
 
             if ($sub <= 0) {
                 $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P90D")); // Adds 90 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
+                $date->add(new DateInterval("P90D")); // Adds 90 days
+                $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
+                $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
                     // Delete the sub code
@@ -238,8 +238,8 @@ class Users extends Database
                 $date = $this->statement->fetch();
                 $date1 = date_create($date->sub);
                 $date1->add(new DateInterval("P90D")); // Adds 90 days
-        $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
+                $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
+                $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                 $this->statement->execute([$subTime, $username]);
 
                 $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
@@ -257,9 +257,9 @@ class Users extends Database
 
             if ($sub <= 0) {
                 $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P3D")); // Adds 3 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
+                $date->add(new DateInterval("P3D")); // Adds 3 days
+                $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
+                $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
                     // Delete the sub code
@@ -276,8 +276,8 @@ class Users extends Database
                 $date = $this->statement->fetch();
                 $date1 = date_create($date->sub);
                 $date1->add(new DateInterval("P3D")); // Adds 3 days
-        $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
+                $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
+                $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                 $this->statement->execute([$subTime, $username]);
 
                 $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
@@ -290,9 +290,9 @@ class Users extends Database
 
             if ($sub <= 0) {
                 $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P30D")); // Adds 30 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
+                $date->add(new DateInterval("P30D")); // Adds 30 days
+                $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
+                $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
                 if ($this->statement->execute([$subTime, $username])) {
                     // Delete the sub code
@@ -314,8 +314,8 @@ class Users extends Database
                     $date = $this->statement->fetch();
                     $date1 = date_create($date->sub);
                     $date1->add(new DateInterval("P30D")); // Adds 30 days
-          $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-          $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
+                    $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
+                    $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
                     $this->statement->execute([$subTime, $username]);
 
                     $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");

@@ -53,13 +53,13 @@
                               <img class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
                               <?php else: ?>
                               <img class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar(
-       $uid
-   )); ?>" style="border-color: rgb(255,255,255)!important;">
+                                  $uid
+                              )); ?>" style="border-color: rgb(255,255,255)!important;">
                               <?php endif; ?>
                               </a>
                               <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
-                                 SUB_DIR .
-                                 "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
+                                                            SUB_DIR .
+                                                            "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
                            </div>
                         </li>
                      </ul>
@@ -77,14 +77,14 @@
                                  <div class="col me-2">
                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Cheat status</span></div>
                                     <?php if (
-                                       $cheat->getCheatData()->status ==
-                                       "Undetected"
-                                       ): ?>
+                                        $cheat->getCheatData()->status ==
+                                        "Undetected"
+                                    ): ?>
                                     <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-green);">Undetected</span></div>
                                     <?php elseif (
-                                       $cheat->getCheatData()->status ==
-                                       "Detected"
-                                       ): ?>
+                                        $cheat->getCheatData()->status ==
+                                        "Detected"
+                                    ): ?>
                                     <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-red);">Detected</span></div>
                                     <?php endif; ?>
                                  </div>
@@ -100,8 +100,8 @@
                                  <div class="col me-2">
                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">version</span></div>
                                     <div class="text-dark fw-bold h5 mb-0"><span><?php Util::display(
-                                           $cheat->getCheatData()->version
-                                       ); ?></span></div>
+                                        $cheat->getCheatData()->version
+                                    ); ?></span></div>
                                  </div>
                                  <div class="col-auto"><i class="fas fa-code-branch fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
                               </div>
@@ -115,14 +115,14 @@
                                  <div class="col me-2">
                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Maintenance</span></div>
                                     <?php if (
-                                       $cheat->getCheatData()
-                                         ->maintenance == "-"
-                                       ): ?>
+                                        $cheat->getCheatData()
+                                          ->maintenance == "-"
+                                    ): ?>
                                     <div class="text-dark fw-bold h5 mb-0"><span style="color:#fff;">No</span></div>
                                     <?php elseif (
-                                       $cheat->getCheatData()
-                                         ->maintenance == "UNDER"
-                                       ): ?>
+                                        $cheat->getCheatData()
+                                          ->maintenance == "UNDER"
+                                    ): ?>
                                     <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-yellow);">Yes</span></div>
                                     <?php endif; ?>
                                  </div>
@@ -139,9 +139,9 @@
                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">subscription</span></div>
                                     <div class="text-dark fw-bold h5 mb-0"><span style="color: rgb(255,255,255);">
                                        <?php if (
-                                          $cheat->getCheatData()
-                                            ->frozen != 0
-                                          ) {
+                                           $cheat->getCheatData()
+                                             ->frozen != 0
+                                       ) {
                                            Util::display("Frozen");
                                        } else {
                                            if ($sub > 0) {

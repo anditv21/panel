@@ -112,12 +112,12 @@ class UserController extends Users
 
         // Check if all errors are empty
         if (
-      empty($userError) &&
-      empty($passError) &&
-      empty($invCodeError) &&
-      empty($userExistsError) &&
-      empty($invCodeError)
-    ) {
+            empty($userError) &&
+            empty($passError) &&
+            empty($invCodeError) &&
+            empty($userExistsError) &&
+            empty($invCodeError)
+        ) {
             // Hashing the password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
