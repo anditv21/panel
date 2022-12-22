@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                               </a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
-                                      SUB_DIR .
-                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
+                                                                                                      SUB_DIR .
+                                                                                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
                                 </div>
                             </li>
                         </ul>
@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            <div class="card">
                               <div class="card-body">
                   <form action="<?php Util::display(
-                                          $_SERVER['PHP_SELF']
-                                      ); ?>" method="post">
+                                                                                                          $_SERVER['PHP_SELF']
+                                                                                                      ); ?>" method="post">
 
 <label for="u">Select a user:</label><br>
 <select  class="form-control form-control-sm"id="u" name="u">
@@ -169,8 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         $row->username
                                     ); ?></td>
         <td style="color: rgb(255,255,255);"><?php Util::display(
-                                        $row->uid
-                                    ); ?></td>
+            $row->uid
+        ); ?></td>
 
 
 
@@ -178,14 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <td style="color: rgb(255,255,255);">
                                 <?php if ($row->sub > 1000) {
-                                        Util::display('Lifetime');
+                                    Util::display('Lifetime');
+                                } else {
+                                    if ($row->sub >= 0) {
+                                        Util::display("$row->sub days");
                                     } else {
-                                        if ($row->sub >= 0) {
-                                            Util::display("$row->sub days");
-                                        } else {
-                                            Util::display('none');
-                                        }
-                                    } ?>
+                                        Util::display('none');
+                                    }
+                                } ?>
 </td>
 
 <td style="color: rgb(255,255,255);">
