@@ -1,6 +1,6 @@
 <footer class="fixed-bottom text-right pb-3 pr-5">
 	<small>
-		<span class="align-middle text-decoration-none">&nbsp&nbsp&nbsp View this project on <a href="https://github.com/anditv21/znixv2-panel-edit-edit" target="_blank">GitHub</a></span>
+		<span class="align-middle text-decoration-none">&nbsp&nbsp&nbsp View this project on <a href="https://github.com/anditv21/panel" target="_blank">GitHub</a></span>
 	</small>
 </footer>
 
