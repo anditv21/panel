@@ -12,3 +12,7 @@
 
 *.sql linguist-detectable=true
 *.sql linguist-language=sql
+
+src/assets/** linguist-vendored=true
+.themes/gamesense/assets/** linguist-vendored=true
+.themes/gamesense/bootstrap/** linguist-vendored=true
