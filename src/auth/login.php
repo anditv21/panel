@@ -47,7 +47,7 @@ Util::head('Login');
                         <div class="row" style="border-style: none;">
                             <div class="col-lg-6" style="width: 100%;border-style: none;border-color: rgba(133,135,150,0);background: #252935;">
                                 <form method="POST" action="<?php Util::Display($_SERVER["PHP_SELF"]); ?>">
-                                    <div class="p-5" style="background: #252935;border-style: none;text-align: center;"><img style="text-align: center;width: 118px;margin-bottom: 33px;" src="../assets/img/gey.gif">
+                                    <div class="p-5" style="background: #252935;border-style: none;text-align: center;"><img style="text-align: center;width: 118px;margin-bottom: 33px;border-radius:50%;" src="../assets/img/gey.gif">
 
                                         <div class="mb-3"><input class="form-control form-control-user" type="text" id="username" aria-describedby="username" autocomplete="off" placeholder="Username" name="username" style="border-radius: 5px;color: rgb(255,255,255);background: #121421;border-style: none;text-align: center;"></div>
                                         <div class="mb-3"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" style="border-radius: 5px;color: rgb(255,255,255);border-style: none;background: #121421;text-align: center;"></div>
