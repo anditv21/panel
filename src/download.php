@@ -9,7 +9,7 @@ $cheat = new CheatController();
 Session::init();
 
 if (!Session::isLogged()) {
-    Util::redirect('/login.php');
+    Util::redirect('/auth/login.php');
 }
 Util::banCheck();
 if ($user->getSubStatus() < 0) {

@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         "client_id" => client_id,
         "client_secret" => client_secret,
         "grant_type" => "authorization_code",
-        "redirect_uri" => SITE_URL . SUB_DIR . "/profile.php",
+        "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
         "scope" => "identify",
       ];
 
@@ -102,9 +102,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         $result = curl_exec($ch);
         $result = json_decode($result, true);
+        $avatar = $result["avatar"];
 
         $id = $result["id"];
-        $avatar = $result["avatar"];
+        
 
         $path = IMG_DIR . $uid;
 
@@ -119,7 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
         $img = $path . ".png";
         file_put_contents($img, file_get_contents($url));
-        chmod($path . ".png", 775);
+        chmod(IMG_DIR, 0775);
+        chmod($img, 0775);
         header("location: profile.php");
     }
 }
@@ -155,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     Session::get("username")
 ); ?></span>
                                 <?php if (Util::getavatar($uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                 <img class="rounded-circle img-profile" src="<?php echo Util::getavatar($uid); ?>" style="border-color: rgb(255,255,255)!important;">
@@ -176,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <div class="col-lg-4">
                             <div class="card mb-3" style="background: #252935;border-style: none;">
                                 <div class="card-body text-center shadow" style="background: #252935;border-style: none;">                                <?php if (Util::getavatar($uid) == false): ?>
-                                <img width="160" height="160" class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                <img width="160" height="160" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                     <?php

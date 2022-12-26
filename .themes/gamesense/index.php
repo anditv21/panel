@@ -148,7 +148,7 @@ Util::navbar();
                                     <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;"></div>
                <div class="col-12 text-center pt-1">
 
-                     <a style="background-color: #191919; color: white;" class="btn" href="/panel/download.php">Download Loader <i class="fas fa-download"></i></a>
+                     <a style="background-color: #191919; color: white;" class="btn" href="download.php">Download Loader <i class="fas fa-download"></i></a>
 
                </div>
                <?php endif; ?>

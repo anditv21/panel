@@ -44,7 +44,7 @@ if (
       "&redirect_uri=" .
       SITE_URL .
       SUB_DIR .
-      "user/profile.php&response_type=code&scope=identify"
+      "/user/profile.php&response_type=code&scope=identify"
     );
 }
 
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
       "client_id" => client_id,
       "client_secret" => client_secret,
       "grant_type" => "authorization_code",
-      "redirect_uri" => SITE_URL . SUB_DIR . "/profile.php",
+      "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
       "scope" => "identify",
     ];
 
@@ -115,7 +115,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
         $img = $path . ".png";
         file_put_contents($img, file_get_contents($url));
-        chmod($path . ".png", 775);
+        chmod(IMG_DIR, 0775);
+        chmod($img, 0775);
+        header("location: profile.php");
     }
 }
 ?>
@@ -240,7 +242,7 @@ if (isset($_FILES["file_up"]["tmp_name"])) {
                   <?php if (Util::getavatar($uid) == false): ?>
                     <a href=<?php Util::display(
     SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"
-); ?>><img width="120" height="120" class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
+); ?>><img width="120" height="120" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
                   <?php else: ?>
                   <a href=<?php Util::display(
     SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"

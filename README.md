@@ -138,7 +138,11 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 <details>
 
    <summary>Setup</summary>
-
+NOTE: Make sure php has full access to /usercontent/avatar
+otherwise no avatar can be downloaded from discord.
+<br>
+<br>
+<br>
 
 - Extract all files and upload them to your PHP host of choice
 - Copy and paste db.sql into SQL import tab on phpmyadmin
@@ -155,7 +159,7 @@ There are already <a href="https://github.com/anditv21/panel/issues/7#issuecomme
 
 - Rename https://github.com/anditv21/panel/blob/main/src/app/core/DiscordConfig to DiscordConfig.php
 - Open https://discord.com/developers/applications and create a new Discord application
-- Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/profile.php (A valid SSL certificate is required)
+- Go to the Profile page and copy its URL. E.g: https://anditv.it/panel/user/profile.php (A valid SSL certificate is required)
 - Go to the General Oauth2 Settings of your Discord application and click on "Add Redirect"
 - Paste your Profile page url and hit "Save Changes"
 
