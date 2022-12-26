@@ -82,6 +82,7 @@ Util::navbar();
          </div>
       </div>
       <div class="col-lg-9 col-md-12">
+      </div>
             <!--Status-->
             <div class="col-lg-3 col-md-12">
          <div class="rounded p-3 mb-3">
