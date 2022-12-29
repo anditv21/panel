@@ -144,6 +144,7 @@ otherwise no avatar can be downloaded from discord.</h3>
 <br>
 <br>
 <ol>
+   <li>Download the latest Release ZIP for your theme and the db.sql from <a href="https://github.com/anditv21/panel/releases/latest/">here.</a> </li>
    <li>Extract all of the files from the downloaded archive and upload them to your PHP host.</li>
    <li>Open the PHPMyAdmin interface for your host, and create a new database. Then, copy and paste the contents of the db.sql file into the SQL import tab on PHPMyAdmin. This will create the necessary tables and structures in the database.</li>
    <li>Open the Database.php file located at https://github.com/anditv21/panel/blob/main/src/app/core/Database and modify lines 5-8 to include your database credentials.</li>
