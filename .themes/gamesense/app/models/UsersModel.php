@@ -89,16 +89,16 @@ class Users extends Database
     protected function subActiveCheck($username)
     {
         $date = new DateTime(); // Get current date
-    $currentDate = $date->format("Y-m-d"); // Format Year-Month-Day
+        $currentDate = $date->format("Y-m-d"); // Format Year-Month-Day
 
-    $this->prepare("SELECT `sub` FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `sub` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $subTime = $this->statement->fetch();
 
         // Pasted from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
-    $date1 = date_create($currentDate); // Convert String to date format
-    $date2 = date_create($subTime->sub); // Convert String to date format
-    $diff = date_diff($date1, $date2);
+        $date1 = date_create($currentDate); // Convert String to date format
+        $date2 = date_create($subTime->sub); // Convert String to date format
+        $diff = date_diff($date1, $date2);
         return intval($diff->format("%R%a"));
     }
 
@@ -210,120 +210,58 @@ class Users extends Database
     // Activates subscription
     protected function subscription($subCode, $username)
     {
-        $word = "3m-";
-
         // Test if subCode contains the 3 months keyword
-        if (strpos($subCode, $word) !== false) {
-            $sub = $this->subActiveCheck($username);
-
-            if ($sub <= 0) {
-                $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P90D")); // Adds 90 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
-
-                if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                    $this->statement->execute([$subCode]);
-
-                    $this->loguser($username, "Redeemed: $subCode");
-                    return "Your subscription is now active!";
-                } else {
-                    return "Something went wrong";
-                }
-            } else {
-                $this->prepare("SELECT sub FROM users WHERE username = ?");
-                $this->statement->execute([$username]);
-                $date = $this->statement->fetch();
-                $date1 = date_create($date->sub);
-                $date1->add(new DateInterval("P90D")); // Adds 90 days
-        $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
-                $this->statement->execute([$subTime, $username]);
-
-                $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                $this->statement->execute([$subCode]);
-                $this->loguser($username, "Redeemed: $subCode");
-                return "Your subscription is now active!";
-            }
+        if (str_starts_with($subCode, "3m-") !== false) {
+            $this->activateSubscription($username, "90D");
+            return "Your subscription is now active!";
         }
 
-        $word2 = "Trail-";
+        // Test if subCode contains the trial keyword
+        if (str_starts_with($subCode, "Trail-") !== false) {
+            $this->activateSubscription($username, "3D");
+            return "Your subscription is now active!";
+        }
 
-        // Test if subCode contains the trail keyword
-        if (strpos($subCode, $word2) !== false) {
-            $sub = $this->subActiveCheck($username);
+        // Test if subCode contains the 1m keyword
+        if (str_starts_with($subCode, "1m-") !== false) {
+            $this->activateSubscription($username, "30D");
+            return "Your subscription is now active!";
+        }
 
-            if ($sub <= 0) {
-                $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P3D")); // Adds 3 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
 
-                if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                    $this->statement->execute([$subCode]);
-                    $this->loguser($username, "Redeemed: $subCode");
-                    return "Your subscription is now active!";
-                } else {
-                    return "Something went wrong";
-                }
+    }
+
+    protected function activateSubscription($username, $period) {
+        try {
+            // Check if the user already has an active subscription
+            $currentSubscription = $this->subActiveCheck($username);
+            if ($currentSubscription <= 0) {
+                // If the user doesn't have an active subscription, set the expiration date to the current date plus the specified period
+                $expirationDate = new DateTime();
+                $expirationDate->add(new DateInterval("P" . $period));
+                $formattedExpirationDate = $expirationDate->format("Y-m-d");
+                $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
+                $this->statement->execute([$formattedExpirationDate, $username]);
             } else {
+                // If the user already has an active subscription, add the specified period to their current expiration date
                 $this->prepare("SELECT sub FROM users WHERE username = ?");
                 $this->statement->execute([$username]);
-                $date = $this->statement->fetch();
-                $date1 = date_create($date->sub);
-                $date1->add(new DateInterval("P3D")); // Adds 3 days
-        $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
-                $this->statement->execute([$subTime, $username]);
-
-                $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                $this->statement->execute([$subCode]);
-                $this->loguser($username, "Redeemed: $subCode");
-                return "Your subscription is now active!";
+                $currentExpirationDate = $this->statement->fetch();
+                $date = date_create($currentExpirationDate->sub);
+                $date->add(new DateInterval("P" . $period));
+                $formattedExpirationDate = $date->format("Y-m-d");
+                $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
+                $this->statement->execute([$formattedExpirationDate, $username]);
             }
-        } else {
-            $sub = $this->subActiveCheck($username);
-
-            if ($sub <= 0) {
-                $date = new DateTime(); // Get current date
-        $date->add(new DateInterval("P30D")); // Adds 30 days
-        $subTime = $date->format("Y-m-d"); // Format Year-Month-Day
-        $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
-
-                if ($this->statement->execute([$subTime, $username])) {
-                    // Delete the sub code
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                    $this->statement->execute([$subCode]);
-                    $this->loguser($username, "Redeemed: $subCode");
-                    return "Your subscription is now active!";
-                } else {
-                    return "Something went wrong";
-                }
-            } else {
-                $word = "3m-";
-
-                // Test if subCode contains the 3 months keywoard
-                if (strpos($subCode, $word) !== false) {
-                } else {
-                    $this->prepare("SELECT sub FROM users WHERE username = ?");
-                    $this->statement->execute([$username]);
-                    $date = $this->statement->fetch();
-                    $date1 = date_create($date->sub);
-                    $date1->add(new DateInterval("P30D")); // Adds 30 days
-          $subTime = $date1->format("Y-m-d"); // Format Year-Month-Day
-          $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
-                    $this->statement->execute([$subTime, $username]);
-
-                    $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-                    $this->statement->execute([$subCode]);
-                }
-                $this->loguser($username, "Redeemed: $subCode");
-                return "Your subscription is now active!";
-            }
+    
+            // Delete the sub code
+            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
+            $this->statement->execute([$subCode]);
+            $this->loguser($username, "Redeemed: $subCode");
+        } catch (PDOException $e) {
+            // Log the error and return a generic message
+            error_log("Error activating subscription: " . $e->getMessage());
+            return "An error occurred while activating your subscription. Please try again later.";
         }
     }
 

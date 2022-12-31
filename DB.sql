@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2022 at 09:32 PM
+-- Generation Time: Dec 31, 2022 at 09:14 AM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
 -- PHP Version: 8.1.13
 
@@ -42,7 +42,7 @@ CREATE TABLE `cheat` (
 --
 
 INSERT INTO `cheat` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 1, 1659443779, 0);
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -82,11 +82,11 @@ CREATE TABLE `subscription` (
 --
 
 INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('V1oGGZsaGh', 'System', '2022-12-06 14:46:15'),
-('yaHDB9NqjD', 'System', '2022-12-06 14:45:44'),
-('zxBLQn3Ddi', 'System', '2022-12-06 14:45:43'),
-('uO1i8HmeMj', 'System', '2022-12-06 14:45:16'),
-('RU1eqwp7Cg', 'System', '2022-12-06 14:44:35');
+('1m-V1oGGZsaGh', 'System', '2022-12-06 14:46:15'),
+('1m-yaHDB9NqjD', 'System', '2022-12-06 14:45:44'),
+('1m-zxBLQn3Ddi', 'System', '2022-12-06 14:45:43'),
+('1m-uO1i8HmeMj', 'System', '2022-12-06 14:45:16'),
+('1m-RU1eqwp7Cg', 'System', '2022-12-06 14:44:35');
 
 -- --------------------------------------------------------
 
@@ -109,8 +109,9 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(2, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'November 30 th, 19:11'),
-(3, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'December 11 th, 21:55');
+(9, 'anditv21', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 23 rd, 22:24'),
+(21, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 31 st, 9:55'),
+(22, 'admin', 'Redeemed: ', 'Opera', 'Windows 10', '45.85.219.118', 'December 31 st, 10:04');
 
 -- --------------------------------------------------------
 
@@ -142,7 +143,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2154-03-03', 1, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-11 21:55:02', '2022-11-30 18:56:16', NULL, NULL);
+(1, 'admin', '$2y$10$91SR3pqpY0y6d6GYSd.yYedxo/FWiEARkNBXZbxmMTq3CNqM36LDi', 'hwid', 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-31 09:49:19', '2022-12-27 20:19:03', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -189,7 +190,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `users`
