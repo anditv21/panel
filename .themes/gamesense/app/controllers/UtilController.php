@@ -23,7 +23,7 @@ class Util
 
     public static function adminNavbar()
     {
-        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
+        include(SITE_ROOT . '/includes/adminNavbar.inc.php');
     }
 
     public static function footer()
@@ -89,20 +89,21 @@ class Util
     public static function getjoin()
     {
         $joindate = Session::get("createdAt");
-        $now = time();
-        $date = strtotime($joindate);
-        $datediff = $now - $date;
-
-        return round($datediff / (60 * 60 * 24));
+        $now = new DateTime();
+        $date = new DateTime($joindate);
+        $interval = $now->diff($date);
+        
+        return (int) $interval->format("%a");
     }
 
     public static function getjoinprofile($joindate)
     {
-        $now = time();
-        $date = strtotime($joindate);
-        $datediff = $now - $date;
-
-        return round($datediff / (60 * 60 * 24));
+        $now = new DateTime();
+        $date = DateTime::createFromFormat("Y-m-d H:i:s", $joindate);
+        $interval = $now->diff($date);
+        
+        return (int) $interval->format("%a");
+        
     }
 
     public static function getavatar($uid)
