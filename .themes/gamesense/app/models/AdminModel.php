@@ -221,7 +221,7 @@ class Admin extends Database
     protected function banned($uid)
     {
         if (Session::isAdmin()) {
-            
+
             // Check if user is banned
             $this->prepare('SELECT `banned` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
@@ -255,41 +255,35 @@ class Admin extends Database
     protected function administrator($uid)
     {
         if (Session::isAdmin()) {
+            // Check if user is an admin
             $this->prepare('SELECT `admin` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
-            $result = $this->statement->fetch();
+            $userData = $this->statement->fetch();
 
-            if ((int) $result->admin === 0) {
-                $this->prepare(
-                    'UPDATE `users` SET `admin` = 1 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-                $this->prepare(
-                    'UPDATE `users` SET `supp` = 1 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Added Admin perms to $result->username ($uid)", admin_logs);
-                $user->loguser($result->username, "Set to admin by $username");
+            // Set admin status to opposite of current status
+            $admin = $userData->admin ? 0 : 1;
+
+            // Update user's admin status
+            $this->prepare('UPDATE `users` SET `admin` = ? WHERE `uid` = ?');
+            $this->statement->execute([$admin, $uid]);
+
+            // Update user's supp status
+            $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
+            $this->statement->execute([$admin, $uid]);
+
+            // Get username for logging
+            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $userData = $this->statement->fetch();
+
+            $username = Session::get('username');
+            $userController = new UserController();
+            if ($admin) {
+                $userController->log($username, "Added Admin perms to $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Set to admin by $username");
             } else {
-                $this->prepare(
-                    'UPDATE `users` SET `admin` = 0 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-                $this->prepare(
-                    'UPDATE `users` SET `supp` = 0 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-
-                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-                $this->statement->execute([$uid]);
-                $result = $this->statement->fetch();
-
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Removed Admin perms from $result->username ($uid)", admin_logs);
-                $user->loguser($result->username, "Admin removed by $username");
+                $userController->log($username, "Removed Admin perms from $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Admin removed by $username");
             }
         }
     }
