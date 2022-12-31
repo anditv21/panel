@@ -97,7 +97,7 @@
                                    );
                                    $hashedpassword = password_hash(
                                        $unhashedpassword,
-                                       PASSWORD_DEFAULT
+                                       PASSWORD_ARGON2I
                                    );
 
                                    $text = 'New password is: ';
