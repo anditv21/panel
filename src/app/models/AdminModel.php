@@ -328,24 +328,24 @@ class Admin extends Database
     protected function cheatStatus()
     {
         if (Session::isAdmin()) {
+            // Get current cheat status
             $this->prepare('SELECT `status` FROM `cheat`');
             $this->statement->execute();
-            $result = $this->statement->fetch();
+            $cheatStatus = $this->statement->fetch();
 
-            if ((int) $result->status === 0) {
-                $this->prepare('UPDATE `cheat` SET `status` = 1');
-                $this->statement->execute();
+            // Set cheat status to opposite of current status
+            $status = $cheatStatus->status ? 0 : 1;
 
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Set the cheat status to DETECTED", system_logs);
+            // Update cheat status
+            $this->prepare('UPDATE `cheat` SET `status` = ?');
+            $this->statement->execute([$status]);
+
+            $username = Session::get('username');
+            $userController = new UserController();
+            if ($status) {
+                $userController->log($username, "Set the cheat status to DETECTED", system_logs);
             } else {
-                $this->prepare('UPDATE `cheat` SET `status` = 0');
-                $this->statement->execute();
-
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Set the cheat status to UN-DETECTED", system_logs);
+                $userController->log($username, "Set the cheat status to UN-DETECTED", system_logs);
             }
         }
     }
