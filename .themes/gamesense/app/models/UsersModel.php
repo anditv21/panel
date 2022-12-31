@@ -88,18 +88,18 @@ class Users extends Database
     // Check if sub is active
     protected function subActiveCheck($username)
     {
-        $date = new DateTime(); // Get current date
-        $currentDate = $date->format("Y-m-d"); // Format Year-Month-Day
 
-        $this->prepare("SELECT `sub` FROM `users` WHERE `username` = ?");
+        // Original from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
+        $currentDate = (new DateTime())->format('Y-m-d');
+        $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $subTime = $this->statement->fetch();
+        $date1 = new DateTime($currentDate);
+        $date2 = new DateTime($subTime->sub);
+        $diff = $date1->diff($date2);
+    
+        return (int) $diff->format('%R%a');
 
-        // Pasted from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
-        $date1 = date_create($currentDate); // Convert String to date format
-        $date2 = date_create($subTime->sub); // Convert String to date format
-        $diff = date_diff($date1, $date2);
-        return intval($diff->format("%R%a"));
     }
 
     protected function logIP($ip, $username)
@@ -231,7 +231,7 @@ class Users extends Database
 
     }
 
-    protected function activateSubscription($username, $period) {
+    function activateSubscription($username, $period) {
         try {
             // Check if the user already has an active subscription
             $currentSubscription = $this->subActiveCheck($username);
