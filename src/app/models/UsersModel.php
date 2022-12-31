@@ -131,24 +131,27 @@ class Users extends Database
 
     protected function logintoken($token)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `remembertoken` = ?");
+        $this->prepare('SELECT * FROM `users` WHERE `remembertoken` = ?');
         $this->statement->execute([$token]);
         $row = $this->statement->fetch();
-        $un = $row->username;
-
-        if ($this->statement->rowCount() == 1) {
-            $row = $this->statement->fetch();
-
-            $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
-            $this->statement->execute([$un]);
-            $row = $this->statement->fetch();
-            if ($row) {
-                return $row;
-            }
-        } else {
-            setcookie("login_cookie", "", time() - 1);
+        
+        if (!$row) {
+            setcookie('login_cookie', '', time() - 1);
             return false;
         }
+        
+        $un = $row->username;
+        
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$un]);
+        $row = $this->statement->fetch();
+        
+        if (!$row) {
+            return false;
+        }
+        
+        return $row;
+        
     }
 
     protected function updaterememberToken($token, $username)
