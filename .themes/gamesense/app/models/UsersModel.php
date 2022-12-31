@@ -453,24 +453,26 @@ class Users extends Database
 
     protected function loglogin()
     {
-        // fetch last login time
         $username = Session::get("username");
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
-        $this->statement->execute([$username]);
-        $result = $this->statement->fetch();
-        $oldlogin = $result->currentLogin;
+        $loginTime = date('Y-m-d H:i:s');
+        // Validate input values
+        try {
+            // Update the last login time
+            $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin` WHERE `username` = ?");
+            $this->statement->execute([$username]);
 
-        // save last login time
-        $this->prepare("UPDATE `users` SET `lastLogin` = ? WHERE `username` = ?");
-        $this->statement->execute([$oldlogin, $username]);
+            // Update the current login time
+            $this->prepare("UPDATE `users` SET `currentLogin` = ? WHERE `username` = ?");
+            $this->statement->execute([$loginTime, $username]);
 
+            $this->loguser($username, "Login");
+        } catch (PDOException $e) {
+            // Add error handling
+            error_log("Error updating login time: " . $e->getMessage());
+            return false;
+        }
 
-        // save new login time
-        $time = date('Y-m-d H:i:s');
-        $this->prepare("UPDATE `users` SET `currentLogin` = ? WHERE `username` = ?");
-        $this->statement->execute([$time, $username]);
-
-        $this->loguser($username, "Login");
+        return true;
     }
 
     protected function lastlogin($username)
