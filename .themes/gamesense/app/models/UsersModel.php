@@ -242,7 +242,7 @@ class Users extends Database
 
     }
 
-    function activateSubscription($username, $period) {
+    protected function activateSubscription($username, $period) {
         try {
             // Check if the user already has an active subscription
             $currentSubscription = $this->subActiveCheck($username);
@@ -359,28 +359,33 @@ class Users extends Database
 
     protected function timesincefrozen()
     {
-        /*
-        $this->prepare(
-            'UPDATE `users` SET `frozen` = 0 where `username` = ? '
-        );
-        $this->statement->execute([$row->username]);
-*/
-
-
-        $this->prepare('SELECT * FROM `cheat`');
-        $this->statement->execute();
-        $result = $this->statement->fetch();
-        $freezingtime = $result->freezingtime;
-        $freezingtime = gmdate('Y-m-d', $freezingtime);
-
-        $timenow = gmdate('Y-m-d', time());
-
-        $date1 = date_create($freezingtime); // Convert String to date format
-        $date2 = date_create($timenow); // Convert String to date format
-        $diff = date_diff($date1, $date2);
-        $diff = intval($diff->format('%R%a'));
-
-        return $diff;
+        try {
+            // Use prepared statements consistently
+            $stmt = $this->conn->prepare('SELECT * FROM `cheat`');
+            $stmt->execute();
+            $row = $stmt->fetch();
+        
+            if ($row) {
+                $freezingtime = $row->freezingtime;
+                $freezingtime = gmdate('Y-m-d', $freezingtime);
+        
+                $timenow = gmdate('Y-m-d', time());
+        
+                // Use the DateTime class to calculate the difference between the two dates
+                $date1 = new DateTime($freezingtime);
+                $date2 = new DateTime($timenow);
+                $daysDifference = $date1->diff($date2)->days;
+        
+                return $daysDifference;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Add error handling
+            error_log("Error calculating days difference: " . $e->getMessage());
+            return false;
+        }
+        
     }
 
     protected function sendlog($username, $action, $webhook)
