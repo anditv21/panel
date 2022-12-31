@@ -119,7 +119,7 @@ class UserController extends Users
             empty($invCodeError)
         ) {
             // Hashing the password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $hashedPassword = password_hash($password, PASSWORD_ARGON2I);
 
             $result = $this->register($username, $hashedPassword, $invCode);
 
