@@ -188,21 +188,34 @@ class Users extends Database
     // Upddate user password
     protected function updatePass($currentPassword, $hashedPassword, $username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
-        $this->statement->execute([$username]);
-        $row = $this->statement->fetch();
+        try {
+            $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+            $this->statement->execute([$username]);
+            $row = $this->statement->fetch();
+        
+            // Fetch current password from database
+            $currentHashedPassword = $row->password;
+        
+            if (password_verify($currentPassword, $currentHashedPassword)) {
+        
+                $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
+                $this->statement->execute([$hashedPassword, $username]);
+        
 
-        // Fetch current password from database
-        $currentHashedPassword = $row->password;
-
-        if (password_verify($currentPassword, $currentHashedPassword)) {
-            $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
-            $this->statement->execute([$hashedPassword, $username]);
-            $this->loguser($username, "Changed password");
-            return true;
-        } else {
+                if ($this->loguser($username, "Changed password")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Add error handling
+            error_log("Error changing password: " . $e->getMessage());
             return false;
         }
+        
     }
 
     // Activates subscription
