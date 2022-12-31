@@ -7,7 +7,7 @@ $cheat = new CheatController();
 Session::init();
 
 if (!Session::isLogged()) {
-    Util::redirect("auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -375,6 +375,11 @@ Util::display("Joined: $days days ago");
     <script src="../assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script>
+       $(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();   
+		});
+</script>
 </body>
 <?php Util::footer(); ?>
 </html>
