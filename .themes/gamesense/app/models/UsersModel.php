@@ -162,33 +162,27 @@ class Users extends Database
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
-        $this->prepare("SELECT * FROM `cheat`");
+        $this->prepare('SELECT * FROM `cheat`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        if ($result->invites == true) {
-            // Get inviter's username
-            $this->prepare("SELECT `createdBy` FROM `invites` WHERE `code` = ?");
+        
+        $inviter = 'System';
+        if ($result && $result->invites) {
+            $this->prepare('SELECT `createdBy` FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             $row = $this->statement->fetch();
-            $inviter = $row->createdBy;
-        } else {
-            $inviter = "System";
+            $inviter = $row ? $row->createdBy : 'System';
         }
-
-        // Sending the query - Register user
-        $this->prepare(
-            "INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)"
-        );
-
-        // If user registered
+        
+        $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
-            // Delete invite code // used
-            $this->prepare("DELETE FROM `invites` WHERE `code` = ?");
+            $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             return true;
-        } else {
-            return false;
         }
+        
+        return false;
+        
     }
 
     // Upddate user password
