@@ -354,24 +354,24 @@ class Admin extends Database
     protected function cheatMaint()
     {
         if (Session::isAdmin()) {
+            // Get current maintenance status
             $this->prepare('SELECT `maintenance` FROM `cheat`');
             $this->statement->execute();
-            $result = $this->statement->fetch();
+            $cheatMaintenance = $this->statement->fetch();
 
-            if ((int) $result->maintenance === 0) {
-                $this->prepare('UPDATE `cheat` SET `maintenance` = 1');
-                $this->statement->execute();
+            // Set maintenance status to opposite of current status
+            $maintenance = $cheatMaintenance->maintenance ? 0 : 1;
 
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Set the cheat status to under maintenance", system_logs);
+            // Update maintenance status
+            $this->prepare('UPDATE `cheat` SET `maintenance` = ?');
+            $this->statement->execute([$maintenance]);
+
+            $username = Session::get('username');
+            $userController = new UserController();
+            if ($maintenance) {
+                $userController->log($username, "Set the cheat status to under maintenance", system_logs);
             } else {
-                $this->prepare('UPDATE `cheat` SET `maintenance` = 0');
-                $this->statement->execute();
-
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Set the cheat status to no maintenance", system_logs);
+                $userController->log($username, "Set the cheat status to no maintenance", system_logs);
             }
         }
     }
