@@ -7,7 +7,7 @@
             <hr class="sidebar-divider my-0">
             <div id="centerside" style="margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">
                 <ul class="navbar-nav text-light" id="accordionSidebar" style="text-align: center;">
-                    <li class="nav-item"><a class="nav-link active" href="../index.php" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href=<?php Util::Display(SITE_URL.SUB_DIR . "/index.php"); ?> style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="<?php Util::Display(SITE_URL.SUB_DIR . "/user/profile.php"); ?>" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>Profile</span></a></li>
                     <li class="nav-item"><a class="nav-link active"  href="<?php Util::Display(SITE_URL.SUB_DIR . "/user/log.php"); ?>" style="text-align: center;"><i class="fas fa-long-arrow-alt-right"></i><span>User logs</span></a></li>
 
