@@ -36,9 +36,11 @@
    <summary>Click to view FAQ</summary>
 <p>
 <h3>Why do updates come so rarely?</h3>
-<p>Because I work on the panel only when I feel like it in my free time :)</p>
+<p>Because I work on the panel only when I feel like it in my free time. :)</p>
 <h3>Why are parts of the code so messy?</h3>
-<p>Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+<p>Parts of the code are from an old project and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+<h3>hOw dO I SeTuP ThE GaMeSeNsE ThEmE?</h3>
+<p>Just like the default theme :)</p>
 
 
 <br>
