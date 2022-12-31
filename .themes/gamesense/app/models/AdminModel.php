@@ -502,22 +502,23 @@ class Admin extends Database
             $this->prepare('SELECT `invites` FROM `cheat`');
             $this->statement->execute();
             $result = $this->statement->fetch();
-
+            
             if ((int) $result->invites === 0) {
                 $this->prepare('UPDATE `cheat` SET `invites` = 1');
                 $this->statement->execute();
-
+            
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Activated the Invite-System", system_logs);
             } else {
                 $this->prepare('UPDATE `cheat` SET `invites` = 0');
                 $this->statement->execute();
-
+            
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Deactivated the Invite-System", system_logs);
             }
+            
         }
     }
 }
