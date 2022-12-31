@@ -110,22 +110,23 @@ class Users extends Database
     // Login - Sends data to DB
     protected function login($username, $password)
     {
-        // fetch username
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        //fetch user by name
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $row = $this->statement->fetch();
-
-        // If username is correct
-        if ($row) {
-            $hashedPassword = $row->password;
-
-            // If password is correct
-            if (password_verify($password, $hashedPassword)) {
-                return $row;
-            } else {
-                return false;
-            }
+        
+        if (!$row) {
+            return false;
         }
+        
+        $hashedPassword = $row->password;
+        //if password is correct
+        if (password_verify($password, $hashedPassword)) {
+            return $row;
+        }
+        
+        return false;
+        
     }
 
     protected function logintoken($token)
