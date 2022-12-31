@@ -295,28 +295,31 @@ class Admin extends Database
     protected function supporter($uid)
     {
         if (Session::isAdmin()) {
+            // Check if user has supp permissions
             $this->prepare('SELECT `supp` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
-            $result = $this->statement->fetch();
+            $userData = $this->statement->fetch();
 
-            if ((int) $result->supp === 0) {
-                $this->prepare(
-                    'UPDATE `users` SET `supp` = 1 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Added Supp perms to $result->username ($uid)", admin_logs);
-                $user->loguser($result->username, "Set to Supp by $username");
+            // Set supp status to opposite of current status
+            $supp = $userData->supp ? 0 : 1;
+
+            // Update user's supp status
+            $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
+            $this->statement->execute([$supp, $uid]);
+
+            // Get username for logging
+            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $userData = $this->statement->fetch();
+
+            $username = Session::get('username');
+            $userController = new UserController();
+            if ($supp) {
+                $userController->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Set to Supp by $username");
             } else {
-                $this->prepare(
-                    'UPDATE `users` SET `supp` = 0 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Removed Supp perms from $result->username ($uid)", admin_logs);
-                $user->loguser($result->username, "Supp removed by $username");
+                $userController->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Supp removed by $username");
             }
         }
     }
