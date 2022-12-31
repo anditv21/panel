@@ -211,7 +211,7 @@ class Users extends Database
                 return false;
             }
         } catch (PDOException $e) {
-            // Add error handling
+
             error_log("Error changing password: " . $e->getMessage());
             return false;
         }
@@ -381,7 +381,7 @@ class Users extends Database
                 return false;
             }
         } catch (PDOException $e) {
-            // Add error handling
+            
             error_log("Error calculating days difference: " . $e->getMessage());
             return false;
         }
@@ -467,7 +467,7 @@ class Users extends Database
 
             $this->loguser($username, "Login");
         } catch (PDOException $e) {
-            // Add error handling
+            
             error_log("Error updating login time: " . $e->getMessage());
             return false;
         }

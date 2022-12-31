@@ -206,10 +206,6 @@ class Admin extends Database
             $this->prepare('UPDATE `users` SET `hwid` = NULL WHERE `uid` = ?');
             $this->statement->execute([$uid]);
 
-
-
-
-
             $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $result = $this->statement->fetch();
@@ -225,38 +221,32 @@ class Admin extends Database
     protected function banned($uid)
     {
         if (Session::isAdmin()) {
+            
+            // Check if user is banned
             $this->prepare('SELECT `banned` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
-            $result = $this->statement->fetch();
+            $userData = $this->statement->fetch();
 
-            if ((int) $result->banned === 0) {
-                $this->prepare(
-                    'UPDATE `users` SET `banned` = 1 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
+            // Set banned status to opposite of current status
+            $banned = $userData->banned ? 0 : 1;
 
-                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-                $this->statement->execute([$uid]);
-                $result = $this->statement->fetch();
+            // Update user's banned status
+            $this->prepare('UPDATE `users` SET `banned` = ? WHERE `uid` = ?');
+            $this->statement->execute([$banned, $uid]);
 
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Banned $result->username ($uid)", admin_logs);
-                ser->loguser($result->username, "Banned by $username");
+            // Get username for logging
+            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $userData = $this->statement->fetch();
+
+            $username = Session::get('username');
+            $userController = new UserController();
+            if ($banned) {
+                $userController->log($username, "Banned $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Banned by $username");
             } else {
-                $this->prepare(
-                    'UPDATE `users` SET `banned` = 0 WHERE `uid` = ?'
-                );
-                $this->statement->execute([$uid]);
-
-                $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-                $this->statement->execute([$uid]);
-                $result = $this->statement->fetch();
-
-                $username = Session::get('username');
-                $user = new UserController();
-                $user->log($username, "Unbanned $result->username ($uid)", admin_logs);
-                $user->loguser($result->username, "Unbanned by $username");
+                $userController->log($username, "Unbanned $userData->username ($uid)", admin_logs);
+                $userController->loguser($userData->username, "Unbanned by $username");
             }
         }
     }
