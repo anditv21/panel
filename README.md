@@ -31,6 +31,22 @@
 </p>
 </details>
 
+### FAQ
+<details>
+   <summary>Click to view FAQ</summary>
+<p>
+<h3>Why do updates come so rarely?</h3>
+<p>Because I work on the panel only when I feel like it in my free time :)</p>
+<h3>Why are parts of the code so messy?</h3>
+<p>Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+
+
+<br>
+<br>
+<br>
+<br>
+</p>
+</details>
 
 
 ### Features
