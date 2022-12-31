@@ -39,6 +39,8 @@
 <p>Because I work on the panel only when I feel like it in my free time. :)</p>
 <h3>Why are parts of the code so messy?</h3>
 <p>Parts of the code are from an old project and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+<h3>How do I update the panel?</h3>
+<p>Download the latest release. And drag all files and folders except "/app/core" (this would overwrite your config and db infos) to your server.</p>
 <h3>hOw dO I SeTuP ThE GaMeSeNsE ThEmE?</h3>
 <p>Just like the default theme :)</p>
 
