@@ -391,178 +391,64 @@ class Users extends Database
     protected function sendlog($username, $action, $webhook)
     {
         if ($webhook == auth_logs) {
-            $timestamp = date("c", strtotime("now"));
-
-            $json_data = json_encode(
-                [
-          "username" => "Web-Logs",
-          "tts" => false,
-          "embeds" => [
-            [
-              "type" => "rich",
-              "title" => "Auth-Log",
-              "description" => SITE_NAME,
-              "timestamp" => $timestamp,
-
-              "color" => hexdec("F03BEA"),
-
-
-              "fields" => [
-                [
-                  "name" => "User:",
-                  "value" => $username,
-                ],
-                [
-                  "name" => "Action:",
-                  "value" => $action,
-                ],
-              ],
-            ],
-          ],
-        ],
-                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            );
-
-            $ch = curl_init($webhook);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type: application/json"]);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-            curl_exec($ch);
-            curl_close($ch);
+            $title = "Auth-Log";
         } elseif ($webhook == user_logs) {
-            $timestamp = date("c", strtotime("now"));
-
-            $json_data = json_encode(
-                [
-            "username" => "User-Logs",
-            "tts" => false,
-            "embeds" => [
-              [
-                "type" => "rich",
-                "title" => "Auth-Log",
-                "description" => SITE_NAME,
-                "timestamp" => $timestamp,
-
-                "color" => hexdec("F03BEA"),
-
-
-                "fields" => [
-                  [
-                    "name" => "User:",
-                    "value" => $username,
-                  ],
-                  [
-                    "name" => "Action:",
-                    "value" => $action,
-                  ],
-                ],
-              ],
-            ],
-          ],
-                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            );
-
-            $ch = curl_init($webhook);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type: application/json"]);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-            curl_exec($ch);
-            curl_close($ch);
+            $title = "User-Log";
         } elseif ($webhook == system_logs) {
-            $timestamp = date("c", strtotime("now"));
-
-            $json_data = json_encode(
-                [
-            "username" => "Web-Logs",
-            "tts" => false,
-            "embeds" => [
-              [
-                "type" => "rich",
-                "title" => "System-Log",
-                "description" => SITE_NAME,
-                "timestamp" => $timestamp,
-
-                "color" => hexdec("F03BEA"),
-
-
-                "fields" => [
-                  [
-                    "name" => "User:",
-                    "value" => $username,
-                  ],
-                  [
-                    "name" => "Action:",
-                    "value" => $action,
-                  ],
-                ],
-              ],
-            ],
-          ],
-                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            );
-
-            $ch = curl_init($webhook);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type: application/json"]);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-            curl_exec($ch);
-            curl_close($ch);
-        } elseif ($webhook == admin_logs) {
-            $timestamp = date("c", strtotime("now"));
-
-            $json_data = json_encode(
-                [
-            "username" => "Web-Logs",
-            "tts" => false,
-            "embeds" => [
-              [
-                "type" => "rich",
-                "title" => "Admin-Log",
-                "description" => SITE_NAME,
-                "timestamp" => $timestamp,
-
-                "color" => hexdec("F03BEA"),
-
-
-                "fields" => [
-                  [
-                    "name" => "User:",
-                    "value" => $username,
-                  ],
-                  [
-                    "name" => "Action:",
-                    "value" => $action,
-                  ],
-                ],
-              ],
-            ],
-          ],
-                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            );
-
-            $ch = curl_init($webhook);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type: application/json"]);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-            curl_exec($ch);
-            curl_close($ch);
+            $title = "System-Log";
+        } else {
+            return false;
         }
+
+        $timestamp = date("c", strtotime("now"));
+        $jsonData = json_encode(
+            [
+                "username" => "{$title}-Logs",
+                "tts" => false,
+                "embeds" => [
+                    [
+                        "type" => "rich",
+                        "title" => $title,
+                        "description" => SITE_NAME,
+                        "timestamp" => $timestamp,
+                        "color" => hexdec("F03BEA"),
+                        "fields" => [
+                            [
+                                "name" => "User:",
+                                "value" => $username,
+                            ],
+                            [
+                                "name" => "Action:",
+                                "value" => $action,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+
+        $options = [
+            CURLOPT_URL => $webhook,
+            CURLOPT_HTTPHEADER => ["Content-type: application/json"],
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => $jsonData,
+            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FAILONERROR => 1,
+        ];
+
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+
+        try {
+            curl_exec($ch);
+        } catch (Exception $e) {
+            error_log("Error sending webhook: " . $e->getMessage());
+            return false;
+        }
+
     }
 
     protected function loglogin()
