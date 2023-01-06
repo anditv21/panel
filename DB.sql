@@ -143,7 +143,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-31 09:49:19', '2022-12-27 20:19:03', NULL, NULL);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-31 09:49:19', '2022-12-27 20:19:03', NULL, NULL);
 
 --
 -- Indexes for dumped tables
