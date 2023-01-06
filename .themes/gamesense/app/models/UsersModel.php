@@ -361,9 +361,9 @@ class Users extends Database
     {
         try {
             // Use prepared statements consistently
-            $stmt = $this->conn->prepare('SELECT * FROM `cheat`');
-            $stmt->execute();
-            $row = $stmt->fetch();
+            $this->prepare('SELECT * FROM `cheat`');
+            $this->statement->execute();
+            $row = $this->statement->fetch();
         
             if ($row) {
                 $freezingtime = $row->freezingtime;
