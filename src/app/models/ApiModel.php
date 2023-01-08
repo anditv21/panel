@@ -22,7 +22,9 @@ class API extends Database
             // If password is correct
             if (password_verify($password, $hashedPassword)) {
                 if ($row->hwid === null) {
-                    $this->prepare("UPDATE `users` SET `hwid` = ? WHERE `username` = ?");
+                    $this->prepare(
+                        "UPDATE `users` SET `hwid` = ? WHERE `username` = ?"
+                    );
                     $this->statement->execute([$hwid, $username]);
                 }
 
@@ -36,7 +38,9 @@ class API extends Database
                     $avatarurl = IMG_URL . $uid . ".gif?" . Util::randomCode(5);
                 } else {
                     $avatarurl =
-            SITE_URL . SUB_DIR . "/assets/img/avatars/Portrait_Placeholder.png";
+                        SITE_URL .
+                        SUB_DIR .
+                        "/assets/img/avatars/Portrait_Placeholder.png";
                 }
 
                 $this->prepare("SELECT * FROM `cheat`");
@@ -44,28 +48,28 @@ class API extends Database
                 $res = $this->statement->fetch();
 
                 $response = [
-          "status" => "success",
-          "uid" => $row->uid,
-          "username" => $row->username,
-          "hwid" => $row->hwid,
-          "admin" => $row->admin,
-          "supp" => $row->supp,
-          "sub" => $row->sub,
-          "banned" => $row->banned,
-          "invitedBy" => $row->invitedBy,
-          "createdAt" => $row->createdAt,
-          "avatarurl" => $avatarurl,
-          "frozen" => $res->frozen,
-          "cheatstatus" => $res->status,
-          "cheatversion" => $res->version,
-          "cheatmaintenance" => $res->aintenance,
-        ];
+                    "status" => "success",
+                    "uid" => $row->uid,
+                    "username" => $row->username,
+                    "hwid" => $row->hwid,
+                    "admin" => $row->admin,
+                    "supp" => $row->supp,
+                    "sub" => $row->sub,
+                    "banned" => $row->banned,
+                    "invitedBy" => $row->invitedBy,
+                    "createdAt" => $row->createdAt,
+                    "avatarurl" => $avatarurl,
+                    "frozen" => $res->frozen,
+                    "cheatstatus" => $res->status,
+                    "cheatversion" => $res->version,
+                    "cheatmaintenance" => $res->maintenance,
+                ];
             } else {
                 // Wrong pass, user exists
                 $response = [
-          "status" => "failed",
-          "error" => "Invalid password",
-        ];
+                    "status" => "failed",
+                    "error" => "Invalid password",
+                ];
             }
         } else {
             // Wrong username, user doesnt exists
@@ -86,24 +90,24 @@ class API extends Database
             $this->statement->execute();
             $banned = $this->statement->rowCount();
 
-            $this->prepare("SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()");
+            $this->prepare(
+                "SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()"
+            );
             $this->statement->execute();
             $sub = $this->statement->rowCount();
         } catch (Exception $e) {
             $response = [
-            "status" => "error",
-            "exception" => $e,
-          ];
+                "status" => "error",
+                "exception" => $e,
+            ];
         }
 
-
-
         $response = [
-      "status" => "success",
-      "usercount" => $usercount,
-      "bannedcount" => $banned,
-      "activeusers" => $sub,
-    ];
+            "status" => "success",
+            "usercount" => $usercount,
+            "bannedcount" => $banned,
+            "activeusers" => $sub,
+        ];
         return $response;
     }
 }
