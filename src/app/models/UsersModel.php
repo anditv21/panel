@@ -223,26 +223,26 @@ class Users extends Database
     {
         // Test if subCode contains the 3 months keyword
         if (str_starts_with($subCode, "3m-") !== false) {
-            $this->activateSubscription($username, "90D");
+            $this->activateSubscription($username, "90D", $subCode);
             return "Your subscription is now active!";
         }
 
         // Test if subCode contains the trial keyword
         if (str_starts_with($subCode, "Trail-") !== false) {
-            $this->activateSubscription($username, "3D");
+            $this->activateSubscription($username, "3D", $subCode);
             return "Your subscription is now active!";
         }
 
         // Test if subCode contains the 1m keyword
         if (str_starts_with($subCode, "1m-") !== false) {
-            $this->activateSubscription($username, "30D");
+            $this->activateSubscription($username, "30D", $subCode);
             return "Your subscription is now active!";
         }
 
 
     }
 
-    protected function activateSubscription($username, $period) {
+    protected function activateSubscription($username, $period, $subCode) {
         try {
             // Check if the user already has an active subscription
             $currentSubscription = $this->subActiveCheck($username);
