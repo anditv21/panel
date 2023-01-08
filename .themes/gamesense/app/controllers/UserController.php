@@ -30,6 +30,13 @@ class UserController extends Users
         $_SESSION = [];
         session_destroy();
     }
+
+    public function gethwid()
+    {
+        $username = Session::get("username");
+        return $this->getuserhwid($username);
+    }
+
     public function banreason($username)
     {
         return $this->getbanreason($username);

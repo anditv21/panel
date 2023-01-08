@@ -13,7 +13,11 @@ if (!Session::isLogged()) {
 $username = Session::get("username");
 $uid = Session::get("uid");
 
-$suc = @$_GET["suc"];
+if (isset($_GET["suc"])) {
+    $suc = @$_GET["suc"];
+} else {
+    $suc = "";
+}
 
 $sub = $user->getSubStatus();
 
@@ -32,9 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-
-
-
 // if post request
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -44,11 +45,11 @@ if (
 ) {
     header(
         "location: https://discord.com/api/oauth2/authorize?client_id=" .
-        client_id .
-        "&redirect_uri=" .
-        SITE_URL .
-        SUB_DIR .
-        "/user/profile.php&response_type=code&scope=identify"
+            client_id .
+            "&redirect_uri=" .
+            SITE_URL .
+            SUB_DIR .
+            "/user/profile.php&response_type=code&scope=identify"
     );
 }
 
@@ -61,13 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $discord_code = $_GET["code"];
 
         $payload = [
-        "code" => $discord_code,
-        "client_id" => client_id,
-        "client_secret" => client_secret,
-        "grant_type" => "authorization_code",
-        "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
-        "scope" => "identify",
-      ];
+            "code" => $discord_code,
+            "client_id" => client_id,
+            "client_secret" => client_secret,
+            "grant_type" => "authorization_code",
+            "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
+            "scope" => "identify",
+        ];
 
         #print_r($payload);
 
@@ -90,9 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $access_token = $result["access_token"];
         $discord_users_url = "https://discordapp.com/api/users/@me";
         $header = [
-        "Authorization: Bearer $access_token",
-        "Content-Type: application/x-www-form-urlencoded",
-      ];
+            "Authorization: Bearer $access_token",
+            "Content-Type: application/x-www-form-urlencoded",
+        ];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
@@ -105,7 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $avatar = $result["avatar"];
 
         $id = $result["id"];
-        
 
         $path = IMG_DIR . $uid;
 
@@ -154,19 +154,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             </li>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small" style="color: #ffffff !important;"><?php Util::display(
-    Session::get("username")
-); ?></span>
+                                    Session::get("username")
+                                ); ?></span>
                                 <?php if (Util::getavatar($uid) == false): ?>
                                 <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
-                                <img class="rounded-circle img-profile" src="<?php echo Util::getavatar($uid); ?>" style="border-color: rgb(255,255,255)!important;">
+                                <img class="rounded-circle img-profile" src="<?php echo Util::getavatar(
+                                    $uid
+                                ); ?>" style="border-color: rgb(255,255,255)!important;">
                                 <?php endif; ?>
 
                               </a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      SUB_DIR .
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
+                                        SUB_DIR .
+                                        "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
                                 </div>
                             </li>
                         </ul>
@@ -177,50 +179,65 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     <div class="row mb-3" data-aos="fade-down" data-aos-duration="600">
                         <div class="col-lg-4">
                             <div class="card mb-3" style="background: #252935;border-style: none;">
-                                <div class="card-body text-center shadow" style="background: #252935;border-style: none;">                                <?php if (Util::getavatar($uid) == false): ?>
+                                <div class="card-body text-center shadow" style="background: #252935;border-style: none;">                                <?php if (
+                                    Util::getavatar($uid) == false
+                                ): ?>
                                 <img width="160" height="160" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                     <?php
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    $ext = pathinfo(Util::getavatar($uid), PATHINFO_EXTENSION);
+                                    $ext = pathinfo(
+                                        Util::getavatar($uid),
+                                        PATHINFO_EXTENSION
+                                    );
                                     $name = $uid . "." . $ext;
                                     ?>
-                                <a href="<?php Util::display(Util::getavatar($uid));?>" download="<?php Util::display($name);  ?>">
-                                <img width="160" height="160" class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar($uid)); ?>" style="border-color: rgb(255,255,255)!important;"></a>
+                                <a href="<?php Util::display(
+                                    Util::getavatar($uid)
+                                ); ?>" download="<?php Util::display($name); ?>">
+                                <img width="160" height="160" class="rounded-circle img-profile" src="<?php Util::display(
+                                    Util::getavatar($uid)
+                                ); ?>" style="border-color: rgb(255,255,255)!important;"></a>
                                 <?php endif; ?> 
                                     <h3 class="text-dark mb-4" style="text-align: center;margin-top: 16px;margin-bottom: 18px;font-weight: bold;">
                                     
                                     <?php
                                     Util::display("UID: ");
-Util::display(Session::get("uid"));
-Util::display("<br>");
-Util::display("Username: ");
-Util::display(Session::get("username"));
-Util::display("<br>");
+                                    Util::display(Session::get("uid"));
+                                    Util::display("<br>");
+                                    Util::display("Username: ");
+                                    Util::display(Session::get("username"));
+                                    Util::display("<br>");
 
-Util::display("Subscription: ");
+                                    Util::display("Subscription: ");
 
-if ($cheat->getCheatData()->frozen != 0) {
-    Util::display("Frozen");
-} else {
-    if ($sub > 8000) {
-        Util::display("Lifetime");
-    } else {
-        if ($sub >= 0) {
-            Util::display("$sub days");
-        } else {
-            Util::display(
-                '<i class="fa fa-times"></i>'
-            );
-        }
-    }
-}
+                                    if ($cheat->getCheatData()->frozen != 0) {
+                                        Util::display("Frozen");
+                                    } else {
+                                        if ($sub > 8000) {
+                                            Util::display("Lifetime");
+                                        } else {
+                                            if ($sub >= 0) {
+                                                Util::display("$sub days");
+                                            } else {
+                                                Util::display(
+                                                    '<i class="fa fa-times"></i>'
+                                                );
+                                            }
+                                        }
+                                    }
 
-Util::display("<br>");
+                                    Util::display("<br>");
 
-$days = Util::getjoin();
-Util::display("Joined: $days days ago");
-?></h3>
+                                    $days = Util::getjoin();
+                                    Util::display("Joined: $days days ago");
+                                    Util::display("<br>");
+                                    $hwid = $user->gethwid();
+                                    if(!empty($hwid) && $sub > 0)
+                                    {
+                                        Util::display("HIWD: ". $hwid);
+                                    }                             
+                                    ?></h3>
 
                                     
                                 </div>
@@ -236,9 +253,7 @@ Util::display("Joined: $days days ago");
                               </center>
                               <br>
                            </form>
-                           <?php
-
-                           # most of the upload script from -> https://www.plus2net.com/php_tutorial/php_file_upload.php
+                           <?php # most of the upload script from -> https://www.plus2net.com/php_tutorial/php_file_upload.php
                            if (isset($_FILES["file_up"]["tmp_name"])) {
                                $file_upload_flag = "true";
                                $file_up_size = $_FILES["file_up"]["size"];
@@ -248,9 +263,11 @@ Util::display("Joined: $days days ago");
                                }
                                if (
                                    !(
-                                       $_FILES["file_up"]["type"] == "image/jpeg" or
-                                 $_FILES["file_up"]["type"] == "image/gif" or
-                                 $_FILES["file_up"]["type"] == "image/png"
+                                       $_FILES["file_up"]["type"] ==
+                                           "image/jpeg" or
+                                       $_FILES["file_up"]["type"] ==
+                                           "image/gif" or
+                                       $_FILES["file_up"]["type"] == "image/png"
                                    )
                                ) {
                                    echo '<script>alert("Your uploaded file must be of JPG PNG or GIF.")</script>';
@@ -304,8 +321,8 @@ Util::display("Joined: $days days ago");
                                         </div>
                                         <div class="card-body" style="border-style: none;background: #252935;padding-bottom: 0px;">
                                             <form method="POST" action="<?php Util::display(
-                               $_SERVER["PHP_SELF"]
-                           ); ?>">
+                                                $_SERVER["PHP_SELF"]
+                                            ); ?>">
                                                 <div class="row">
                                                     <div class="col">
                                                         <?php if (
@@ -317,15 +334,15 @@ Util::display("Joined: $days days ago");
                                                             isset($error)
                                                         ): ?>
                                                             <span style="color: rgb(255,255,255);"><?php Util::display(
-                                                            $error
-                                                        ); ?></span>
+                                                                $error
+                                                            ); ?></span>
                                                         <?php endif; ?>
                                                         <div class="mb-3"><span style="color: rgb(255,255,255);">Your code</span><input class="form-control" type="text" name="subCode" autocapitalize="off" autocomplete="off" placeholder="XXX-XXX-XXX-XXX" style="background: #121421;border-style: none;margin-top: 11px;"></div>
                                                     </div>
                                                 </div>
                                                 <?php if (
                                                     $cheat->getCheatData()
-                                                      ->frozen != 1
+                                                        ->frozen != 1
                                                 ): ?>
                                                     <div class="mb-3"><button name="activateSub" type="submit" value="submit" class="btn btn-success btn-sm" style="color: rgb(255,255,255);margin-top: 13px;">Redeem key</button></div>
                                             <?php else: ?>
@@ -344,14 +361,14 @@ Util::display("Joined: $days days ago");
                                 <div class="row">
                                     <div class="col-md-6" style="width: 100%;">
                                         <form method="POST" action="<?php Util::display(
-                                                    $_SERVER["PHP_SELF"]
-                                                ); ?>">
+                                            $_SERVER["PHP_SELF"]
+                                        ); ?>">
                                             <div class="mb-3">
                                                 <div class="col">
                                                     <?php if (isset($error)): ?>
                                                         <span style="color: rgb(255,255,255); margin-bottom: 20px;"><?php Util::display(
-                                            $error
-                                        ); ?></span>
+                                                            $error
+                                                        ); ?></span>
                                                     <?php endif; ?>
                                                     <div class="mb-3"><span style="color: rgb(255,255,255);">Current password</span><input class="form-control" name="currentPassword" type="password" id="username-1" placeholder="********" name="username" style="background: #121421;border-style: none;margin-top: 11px;"></div>
                                                     <div class="mb-3"><span style="color: rgb(255,255,255);">New password</span><input class="form-control" name="newPassword" type="password" id="username-3" placeholder="********" name="username" style="background: #121421;border-style: none;margin-top: 11px;"></div>

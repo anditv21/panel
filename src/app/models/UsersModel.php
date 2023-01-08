@@ -34,6 +34,16 @@ class Users extends Database
         }
     }
 
+
+    protected function getuserhwid($username)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+
+        return $result->hwid;
+    }
+
     protected function getnews()
     {
         $this->prepare("SELECT * FROM `cheat`");
