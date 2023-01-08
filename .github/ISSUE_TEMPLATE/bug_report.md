@@ -3,7 +3,7 @@ name: Bug report
 about: Create a bug report
 title: "[BUG]"
 labels: bug
-assignees: ''
+
 
 ---
 
@@ -22,6 +22,9 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
+
+**Error log**
+Please include the error message of the error log if possible.
 
 **Additional context**
 Add any other context about the problem here.
