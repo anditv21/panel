@@ -5,7 +5,7 @@
   <a href="https://github.com/anditv21/panel/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+request%5D">Feature request</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
-  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
+  <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">GS Theme original</a> |
 </p>
 <p align="center">
  Default login: <code>admin</code>:<code>admin</code>
