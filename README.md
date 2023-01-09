@@ -24,7 +24,8 @@
 <a href="https://i.ibb.co/7KjsQzc/image.png"><img src="https://i.ibb.co/7KjsQzc/image.png"><h1 align="center">:zap: User Management Panel</h1>
 <p align="center">
    |
-  <a href="https://github.com/anditv21/panel/issues/">Issues</a> |
+  <a href="https://github.com/anditv21/panel/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D">Bug report</a> |
+  <a href="https://github.com/anditv21/panel/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+request%5D">Feature request</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
   <a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">Theme</a> |
