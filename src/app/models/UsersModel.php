@@ -406,6 +406,9 @@ class Users extends Database
             $title = "User-Log";
         } elseif ($webhook == system_logs) {
             $title = "System-Log";
+        }
+        elseif ($webhook == admin_logs) {
+            $title = "Admin-Log";
         } else {
             return false;
         }
@@ -413,7 +416,7 @@ class Users extends Database
         $timestamp = date("c", strtotime("now"));
         $jsonData = json_encode(
             [
-                "username" => "{$title}-Logs",
+                "username" => "{$title}",
                 "tts" => false,
                 "embeds" => [
                     [
