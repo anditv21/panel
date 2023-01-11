@@ -43,11 +43,11 @@
             this.siticoneControlBox2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(43)))), ((int)(((byte)(52)))));
             this.siticoneControlBox2.HoveredState.Parent = this.siticoneControlBox2;
             this.siticoneControlBox2.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox2.Location = new System.Drawing.Point(1472, -2);
+            this.siticoneControlBox2.Location = new System.Drawing.Point(1398, 7);
             this.siticoneControlBox2.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox2.Name = "siticoneControlBox2";
             this.siticoneControlBox2.ShadowDecoration.Parent = this.siticoneControlBox2;
-            this.siticoneControlBox2.Size = new System.Drawing.Size(82, 74);
+            this.siticoneControlBox2.Size = new System.Drawing.Size(91, 82);
             this.siticoneControlBox2.TabIndex = 4;
             // 
             // siticoneControlBox1
@@ -59,11 +59,11 @@
             this.siticoneControlBox1.HoveredState.IconColor = System.Drawing.Color.White;
             this.siticoneControlBox1.HoveredState.Parent = this.siticoneControlBox1;
             this.siticoneControlBox1.IconColor = System.Drawing.Color.White;
-            this.siticoneControlBox1.Location = new System.Drawing.Point(1558, -2);
+            this.siticoneControlBox1.Location = new System.Drawing.Point(1503, 7);
             this.siticoneControlBox1.Margin = new System.Windows.Forms.Padding(7, 9, 7, 9);
             this.siticoneControlBox1.Name = "siticoneControlBox1";
             this.siticoneControlBox1.ShadowDecoration.Parent = this.siticoneControlBox1;
-            this.siticoneControlBox1.Size = new System.Drawing.Size(94, 74);
+            this.siticoneControlBox1.Size = new System.Drawing.Size(138, 82);
             this.siticoneControlBox1.TabIndex = 3;
             // 
             // usernametextbox
@@ -160,6 +160,7 @@
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Login_MouseDown);
             this.ResumeLayout(false);
 
         }
@@ -173,4 +174,3 @@
         private FontAwesome.Sharp.IconButton iconButton1;
     }
 }
-
