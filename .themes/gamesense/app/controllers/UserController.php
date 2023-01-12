@@ -21,11 +21,18 @@ class UserController extends Users
         Session::set("createdAt", $user->createdAt);
     }
 
+    public function gettokenarray()
+    {
+        $username = Session::get("username");
+        return $this->tokenarray($username);
+    }
+
     public function logoutUser()
     {
         $username = Session::get("username");
         $this->log($username, "Logged out", auth_logs);
         setcookie("login_cookie", "", time() - 1);
+        setcookie("login_cookie", "", time() + 31556926, '/');
         session_unset();
         $_SESSION = [];
         session_destroy();
@@ -188,9 +195,10 @@ class UserController extends Users
 
                 $token = bin2hex(random_bytes(16));
 
-                $this->updaterememberToken($token, $username);
+                $this->addrememberToken($token, $username);
 
                 setcookie("login_cookie", $token, time() + 31556926);
+                setcookie("login_cookie", $token, time() + 31556926, '/');
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin();
@@ -201,6 +209,12 @@ class UserController extends Users
         }
     }
 
+    public function deletetoken($token)
+    {
+        return $this->tokendelete($token);
+    }
+
+    
     public function tokenlogin($token)
     {
         $result = $this->logintoken($token);

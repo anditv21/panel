@@ -62,6 +62,24 @@ class Users extends Database
         return $result;
     }
 
+    protected function tokenarray($username)
+    {
+        $this->prepare('SELECT * FROM `login` where `username` = ?');
+        $this->statement->execute([$username]);
+
+        $result = $this->statement->fetchAll();
+        return $result;
+    }
+
+    protected function tokendelete($token)
+    {
+        $this->prepare('DELETE FROM `login` WHERE `remembertoken` = ?');
+        $this->statement->execute([$token]);
+        $username = Session::get("username");
+        $this->loguser($username, "Deleted token $token");
+        return true;
+    }
+
     protected function flushlogs()
     {
         $username = Session::get('username');
@@ -141,34 +159,60 @@ class Users extends Database
 
     protected function logintoken($token)
     {
-        $this->prepare('SELECT * FROM `users` WHERE `remembertoken` = ?');
+        $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
+        $this->statement->execute([$token]);
+        if (!$this->statement->rowCount() > 0) {
+            return false;
+        }
+
+
+        $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
         $this->statement->execute([$token]);
         $row = $this->statement->fetch();
-        
+        $username = $row->username;
+
         if (!$row) {
             setcookie('login_cookie', '', time() - 1);
+            setcookie("login_cookie", $token, time() + 31556926, '/');
             return false;
         }
-        
-        $un = $row->username;
-        
+
+
+
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-        $this->statement->execute([$un]);
-        $row = $this->statement->fetch();
-        
-        if (!$row) {
+        $this->statement->execute([$username]);
+        $newrow = $this->statement->fetch();
+
+        if (!$newrow) {
             return false;
         }
-        
-        return $row;
-        
+
+        $ip = $this->getip();
+        $browser = $this->get_user_Browser();
+        $os = $this->get_user_os();
+        date_default_timezone_set("Europe/Vienna");
+        $time = date("F d S, G:i");
+
+        $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
+        $this->statement->execute([$time, $ip, $browser, $os, $token]);
+
+        return $newrow;
     }
 
-    protected function updaterememberToken($token, $username)
+    protected function addrememberToken($token, $username)
     {
         $this->prepare("UPDATE users SET remembertoken = ? WHERE username = ?");
         $this->statement->execute([$token, $username]);
+        $ip = $this->getip();
+        $browser = $this->get_user_Browser();
+        $os = $this->get_user_os();
+        date_default_timezone_set("Europe/Vienna");
+        $time = date("F d S, G:i");
+
+        $this->prepare('INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES (?, ?, ?, ?, ?, ?)');
+        $this->statement->execute([$username, $token, $ip, $browser, $os, $time]);
     }
+
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
