@@ -17,8 +17,13 @@
 	
 	<meta property="twitter:description" content="<?=(SITE_DESC); ?>" />
 	<meta property="twitter:title" content="<?php echo($title); ?>" />
+	
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="<?= SUB_DIR ?>/bootstrap/css/bootstrap.min.css" />
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="<?= SUB_DIR ?>/assets/css/custom.css" />
 
 	<title><?= ($title . ' &ndash; ' . SITE_NAME); ?></title>
-
-	<script src="https://kit.fontawesome.com/1ec9c88c94.js" crossorigin="anonymous"></script>
 </head>

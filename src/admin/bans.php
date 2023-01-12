@@ -1,227 +1,159 @@
 <?php
-require_once '../app/require.php';
-require_once '../app/controllers/AdminController.php';
+   require_once "../app/require.php";
+   require_once "../app/controllers/AdminController.php";
 
-$user = new UserController();
-$admin = new AdminController();
+   $user = new UserController();
+   $admin = new AdminController();
 
-Session::init();
+   Session::init();
 
-$userList = $admin->getUserArray();
-$userList2 = $admin->getbannedArray();
-$username = Session::get('username');
-$uid = Session::get('uid');
+   $userList = $admin->getUserArray();
+   $userList2 = $admin->getbannedArray();
+   $username = Session::get("username");
+   $uid = Session::get("uid");
 
-$userList = $admin->getUserArray();
+   $userList = $admin->getUserArray();
 
-Util::suppCheck();
-Util::banCheck();
-Util::head('Admin Panel');
+   Util::suppCheck();
+   Util::banCheck();
+   Util::head("Admin Panel");
+   Util::navbar();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['u'])) {
-        Util::adminCheck();
-        $uid = $_POST['u'];
+   // if post request
+   if ($_SERVER["REQUEST_METHOD"] === "POST") {
+       if (isset($_POST["u"])) {
+           Util::adminCheck();
+           $uid = $_POST["u"];
 
-        $reason = $_POST['r'];
-        if ($reason === ' ' or $reason === '' or empty($reason)) {
-            $reason = 'none';
-        }
+           $reason = $_POST["r"];
+           if ($reason === " " or $reason === "" or empty($reason)) {
+               $reason = "none";
+           }
 
-        $admin->setBannreason($reason, $uid);
-        $admin->setBanned($uid);
+           $admin->setBannreason($reason, $uid);
+           $admin->setBanned($uid);
 
-        header('location: bans.php');
-    }
-}
-?>
-<!DOCTYPE html>
-<html>
-
-<head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-   <title>Bans - Brand</title>
-   <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-   <link rel="icon" type="image/png" href="../favicon.png">
-    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="../assets/css/untitled.css">
-</head>
-
-<body id="page-top">
-   <div id="wrapper">
-      <?php Util::adminNavbar(); ?>
-      <div class="d-flex flex-column" id="content-wrapper">
-         <div id="content" style="background: #121421;">
-         <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button class="btn d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars" style="color: rgb(255,255,255);"></i></button>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small" style="color: #ffffff !important;"><?php Util::display(
-    Session::get("username")
-); ?></span>
-                                <?php if (Util::getavatar($uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
-
-                                <?php else: ?>
-                                <img class="rounded-circle img-profile" src="<?php echo Util::getavatar($uid); ?>" style="border-color: rgb(255,255,255)!important;">
-                                <?php endif; ?>
-
-                              </a>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      SUB_DIR .
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <?php if (Session::isAdmin()): ?>
-            <div class="container-fluid">
-            <center>
-                  <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
-                     <div class="row">
-                        <div class="col-12 mb-4">
-                           <div class="divide2"></div>
-                           <div class="card">
-                              <div class="card-body">
-                  <form action="<?php Util::display(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          $_SERVER['PHP_SELF']
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ); ?>" method="post">
-
-<label for="u">Select a user:</label><br>
-<select  class="form-control form-control-sm"id="u" name="u">
-   <br>
-   <?php foreach ($userList as $row): ?>
-   <?php Util::display("<option value='$row->uid'>" .
-       $row->username .
-       ' ' .
-       "($row->uid)" .
-       '</option>'); ?>
-
-  
-    <?php endforeach; ?>
-
-
-
-
-
-</select>
-<br>
-<label for="fname">Ban reason:</label><br>
-<input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="r" name="r"  
->
-<br>
-<button class="btn btn-success btn-sm"  id="submit" type="submit" value="submit">Ban/Unban user</button>
-</form>
+           header("location: bans.php");
+       }
+   }
+   ?>
+<style>
+   .divide {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 30px;
+   background: #1e5799;
+   background: -moz-linear-gradient(left,  #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+   background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1e5799), color-stop(50%,#f300ff), color-stop(100%,#e0ff00));
+   background: -webkit-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
+   background: -o-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
+   background: -ms-linear-gradient(left,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
+   background: linear-gradient(to right,  #1e5799 0%,#f300ff 50%,#e0ff00 100%);
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#e0ff00',GradientType=1 );
+   height: 3px;
+   border-bottom: 1px solid #000;
+   }
+</style>
+<div class="divide"></div>
+<div class="container mt-2">
+<div class="row">
+<?php Util::adminNavbar(); ?>
+<div class="container-fluid">
+   <center>
+      <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
+         <div class="row">
+            <div class="col-12 mb-4">
+               <div class="card">
+                  <div class="card-body">
+                  <?php if (Session::isAdmin()): ?>
+                     <form action="<?php Util::display(
+       $_SERVER["PHP_SELF"]
+   ); ?>" method="post">
+                        <label for="u">Select a user:</label><br>
+                        <select  class="form-control form-control-sm"id="u" name="u">
+                        <br>
+                        <?php foreach ($userList as $row): ?>
+                        <?php Util::display(
+       "<option value='$row->uid'>" .
+                             $row->username .
+                             " " .
+                             "($row->uid)" .
+                             "</option>"
+   ); ?>
+                        <?php endforeach; ?>
+                        </select>
+                        <br>
+                        <label>Ban reason:</label><br>
+                        <input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="r" name="r">
+                        <br>
+                        <button class="btn btn-outline-primary btn-block"  id="submit" type="submit" value="submit">Ban/Unban user</button>
+                     </form>
+                     <?php endif; ?>
 
                   </div>
                </div>
-
-
+               <br>
+               </center>
+               <table class="rounded table">
+            <thead>
+               <tr>
+                  <th scope="col" >Picture</th>
+                  <th scope="col" class="text-center">UID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col" class="text-center">Banreason</th>
+               </tr>
+            </thead>
+            <tbody>
+               <!--Loop for number of rows-->
+               <?php foreach ($userList2 as $row): ?>
+               <?php if (!isset($_GET["max"]) || !isset($_GET["min"])) {
+       $_GET["min"] = 1;
+       $_GET["max"] = 10;
+   } ?>
+               <?php if ($row->uid <= $_GET["max"] && $row->uid >= $_GET["min"]): ?>
+               <br>
+               <tr>
+                     <td>                               
+                        <?php if (Util::getavatar($row->uid) == false): ?>
+                        <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
+                        <?php else: ?>
+                        <?php
+                           $ext = pathinfo(
+       Util::getavatar($row->$uid),
+       PATHINFO_EXTENSION
+   );
+                           $name = $row->$uid . "." . $ext;
+                           ?>
+                        <a href="<?php Util::display(
+                               Util::getavatar($row->$uid)
+                           ); ?>" download="<?php Util::display(
+                               $name
+                           ); ?>">
+                        <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(
+                               Util::getavatar($row->uid)
+                           ); ?>"></a>
+                        <?php endif; ?>
+                     </td>
+                  <th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
+                  <td class="text-center">
+                  <?php Util::display($row->username); ?>
+                  </td>
+                  <td class="text-center">
+                  <?php Util::display($row->banreason); ?>
+                  </td>
+               </tr>
+               <?php endif; ?>
+               <?php endforeach; ?>
+            </tbody>
+         </table>
             </div>
-
-
-</center>
-<?php endif ?>
-<h3 class="text-dark mb-4" data-aos="fade-down" data-aos-duration="800">Users</h3>
-                    <div class="card shadow" data-aos="fade-down" data-aos-duration="600" style="background: #252935;border-style: none;">
-                        <div class="card-header py-3" style="color: rgb(133, 135, 150);background: #252935;border-style: none;">
-                            <p class="text-primary m-0 fw-bold">User information</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                <table class="table my-0" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th style="color: rgb(255,255,255);">Picture</th>
-                                            <th style="color: rgb(255,255,255);">Username</th>
-                                            <th style="color: rgb(255,255,255);">UID</th>
-                                            <th style="color: rgb(255,255,255);">Sub</th>
-                                            <th style="color: rgb(255,255,255);">Reason</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach ($userList2 as $row): ?>
-                                       <tr>
-        
-                                       <td title="Click to download" data-toggle="tooltip" data-placement="top" style="color: rgb(255,255,255);">                                <?php if (Util::getavatar($row->uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45" style="border-color: rgb(255,255,255)!important;">
-
-                                <?php else: ?>
-                                    <?php
-                                    $ext = pathinfo(Util::getavatar($uid), PATHINFO_EXTENSION);
-                                    $name = $uid . "." . $ext;
-                                    ?>
-                                <a href="<?php Util::display(Util::getavatar($uid));?>" download="<?php Util::display($name);  ?>">
-                                <img class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(Util::getavatar($uid)); ?>" style="border-color: rgb(255,255,255)!important;"></a>
-
-
-                              
-                                <?php endif; ?></td>
-        <td style="color: rgb(255,255,255);"><?php Util::display(
-                                        $row->username
-                                    ); ?></td>
-        <td style="color: rgb(255,255,255);"><?php Util::display(
-            $row->uid
-        ); ?></td>
-
-
-
-
-
-                            <td style="color: rgb(255,255,255);">
-                                <?php if ($row->sub > 1000) {
-                                    Util::display('Lifetime');
-                                } else {
-                                    if ($row->sub >= 0) {
-                                        Util::display("$row->sub days");
-                                    } else {
-                                        Util::display('none');
-                                    }
-                                } ?>
-</td>
-
-<td style="color: rgb(255,255,255);">
-    <?php Util::display($row->banreason); ?>
-    
-</td>
-    </tr>
-<?php endforeach; ?>
-
-    
-
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr></tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="../assets/js/theme.js"></script>
-   <script>
-      $(document).ready(function() {
-         $('[data-toggle="tooltip"]').tooltip();
-      });
-   </script>
-   </div>
-</body>
+         </div>
+      </div>
+   </center>
+</div>
 <?php Util::footer(); ?>
-</html>
+<script>
+   $(document).ready(function(){
+     $('[data-toggle="tooltip"]').tooltip();   
+   });
+</script>

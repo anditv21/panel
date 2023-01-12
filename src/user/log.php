@@ -1,162 +1,127 @@
 <?php
 require_once "../app/require.php";
 require_once "../app/controllers/CheatController.php";
+
 $user = new UserController();
 $cheat = new CheatController();
 
 Session::init();
 
 if (!Session::isLogged()) {
-    Util::redirect("/auth/login.php");
+   Util::redirect("/auth/login.php");
 }
 
-$suc = @$_GET["suc"];
-$username = Session::get("username");
 $uid = Session::get("uid");
-
-Util::banCheck();
-
+$username = Session::get("username");
 $logarray = $user->getlogarray($username);
 
-
+Util::banCheck();
+Util::head($username);
+Util::navbar();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["flush"])) {
-        $error = $user->flush();
-    }
+   if (isset($_POST["flush"])) {
+      $error = $user->flush();
+   }
 
-    header('location: log.php');
+   header('location: log.php');
 }
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Profile - Brand</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-   <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-   <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-   <link rel="stylesheet" href="../assets/css/untitled.css">
-</head>
-
-<body id="page-top">
-    <div id="wrapper">
-        <?php Util::navbar(); ?>
-        <div class="d-flex flex-column" id="content-wrapper">
-            <div id="content" style="background: #121421;">
-            <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button class="btn d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars" style="color: rgb(255,255,255);"></i></button>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small" style="color: #ffffff !important;"><?php Util::display(
-    Session::get("username")
-); ?></span>
-                                <?php if (Util::getavatar($uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
-
-                                <?php else: ?>
-                                <img class="rounded-circle img-profile" src="<?php echo Util::getavatar(
-                                    $uid
-                                ); ?>" style="border-color: rgb(255,255,255)!important;">
-                                <?php endif; ?>
-
-                              </a>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in" style="background: #252935;border-style: none;margin-top: 11px;box-shadow: 0px 0px 3px 2px rgba(0,0,0,0.16)!important;"><a class="dropdown-item" href="profile.php" style="color: rgb(255,255,255);"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Profile</a><a class="dropdown-item" id="logout" href=<?php echo SITE_URL .
-                                                                      SUB_DIR .
-                                                                      "/auth/logout.php"; ?> style="color: rgb(255,255,255);"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400" style="color: rgb(255,255,255)!important;"></i>&nbsp;Logout</a></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-
-      <form method="POST">
-      &nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: You are about to delete all logs!');" name="flush" type="submit">Flush all logs</button>
-                            </form>
-                      
-                            <br>
-                <div class="container-fluid">
-
-                    <div class="row mb-3" data-aos="fade-down" data-aos-duration="600">
-                        <div class="col-lg-4">
-                            <div class="card mb-3" style="background: #252935;border-style: none;">
-                                <div class="card-body text-center shadow" style="background: #252935;border-style: none;"> 
-                                
-                                
-                                <table class="table my-0" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                        <th >Time</th>
-                                            <th >Action</th>
-                                            <th >OS</th>
-                                            <th >IP</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php foreach ($logarray as $row): ?>
-
-                                            <tr>
-                                            <td ><?php Util::display($row->time); ?></td>
-                                               <td >
-                                               <?php Util::display($row->action); ?>
-                                               </td>
-
-                                                <td >
-                                                <?php Util::display($row->os); ?>
-                                                </td>
-                                                <td >
-                                                <?php Util::display("<p class='spoiler'>". $row->ip. "</p>"); ?>
-                                                </td>
-
-                                            </tr>
-                                          
-
-                                        <?php endforeach; ?>
-
-
-
-                                    </tbody>
-
-                                </table>
-
-</div>               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    </div>
-    <style>
-   .spoiler:hover {
-   color: white;
-   }
-   .spoiler {
-   color: black;
-   background-color: black;
-   }
-   p
-   {
-   max-width: fit-content;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<style>
+   .divide {
+      padding: 0;
+      margin: 0;
+      margin-bottom: 30px;
+      background: #1e5799;
+      background: -moz-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+      background: -webkit-gradient(linear, left top, right top, color-stop(0%, #1e5799), color-stop(50%, #f300ff), color-stop(100%, #e0ff00));
+      background: -webkit-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+      background: -o-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+      background: -ms-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+      background: linear-gradient(to right, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#e0ff00', GradientType=1);
+      height: 3px;
+      border-bottom: 1px solid #000;
    }
 </style>
-    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="../assets/js/theme.js"></script>
-    <script>
-       $(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip();   
-		});
+<div class="divide"></div>
+<main class="container mt-2">
+   <div class="row">
+      <div class="col-12 mt-3 mb-2">
+         <?php if (isset($error)) : ?>
+            <div class="alert alert-primary" role="alert">
+               <?php Util::display($error); ?>
+            </div>
+         <?php endif; ?>
+      </div>
+      <div class="card">
+         <div class="card-body">
+            <form method="POST">
+               <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: You are about to delete all logs!');" name="flush" type="submit">Flush all logs</button>
+            </form>
+         </div>
+      </div>
+      <br>
+
+
+      <table class="rounded table">
+         <thead>
+            <tr>
+               <th scope="col" class="text-center">Time</th>
+               <th scope="col" class="text-center">Action</th>
+               <th scope="col" class="text-center">OS</th>
+               <th scope="col">IP</th>
+            </tr>
+         </thead>
+         <tbody>
+            <?php foreach ($logarray as $row) : ?>
+               <tr style="text-align: center;">
+
+                  <td><?php Util::display(
+                           $row->time
+                        ); ?>
+                  </td>
+                  <td><?php Util::display(
+                           $row->action
+                        ); ?>
+                  </td>
+                  <td><?php Util::display(
+                           $row->os
+                        ); ?>
+                  </td>
+                  <td><?php Util::display("<br><p class='spoiler'>" .
+                           $row->ip . "</p>"); ?>
+                  </td>
+
+
+
+
+               </tr>
+            <?php endforeach; ?>
+         </tbody>
+      </table>
+   </div>
+</main>
+<style>
+   .spoiler:hover {
+      color: white;
+   }
+
+   .spoiler {
+      color: black;
+      background-color: black;
+   }
+
+   p {
+      max-width: fit-content;
+   }
+</style>
+<script>
+   $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+   });
 </script>
-</body>
 <?php Util::footer(); ?>
-</html>
