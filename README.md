@@ -5,7 +5,7 @@
   <a href="https://github.com/anditv21/panel/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+request%5D">Feature request</a> |
   <a href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
   <a href="https://github.com/anditv21/panel/tree/main/.themes/gamesense/">Gamesense Theme</a> |
-  <a href="https://github.com/anditv21/panel/tree/main/.examples/">Loader Examples</a> |
+  <a href="https://github.com/anditv21/panel/issues/7#issuecomment-1262149890/">Loader Examples</a> |
 </p>
 <p align="center">
  Default login: <code>admin</code>:<code>admin</code>
@@ -27,7 +27,10 @@
 ### FAQ
 <details>
    <summary>Click to view FAQ</summary>
-<p>
+<h3>What exactly does the panel do?</h3>
+<p>Basically it is a system to license software. <br>
+Originally it was developed by znix to license cheating software for e.g. CSGO.</p>
+
 <h3>Why do updates come so rarely?</h3>
 <p>Because I work on the panel only when I feel like it in my free time. :)</p>
 <h3>Why are parts of the code so messy?</h3>
