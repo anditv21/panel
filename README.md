@@ -53,7 +53,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <p>Basically it is a system to license software. <br>
 
-Originally it was developed by znix to license cheating software for e.g. CSGO.</p>
+Originally it was developed by <a href="https://github.com/znixbtw/">@znix</a> to license cheating software for e.g. CSGO.</p>
 
   
 
