@@ -152,7 +152,7 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6
 
 <summary>Click to see a preview</summary>
 
-<img  src="https://i.ibb.co/txhMf6J/image.png">
+<img  src="https://i.ibb.co/GHbF6Ly/opera-Bei-I6vs-O9-Z.png">
 
 </details>
 
