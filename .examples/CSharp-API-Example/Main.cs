@@ -88,9 +88,9 @@ namespace loader
             }
         }
 
-        private void pictureBox3_Click(object sender, EventArgs e)
+        private void pictureBox3_Click_1(object sender, EventArgs e)
         {
-            Environment.Exit(0);    
+            Environment.Exit(0);
         }
     }
 }
