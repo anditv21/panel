@@ -2,6 +2,7 @@
 name: Bug report
 about: Create a bug report
 title: "[BUG]"
+theme: "gamesense/modern"
 labels: bug
 
 
