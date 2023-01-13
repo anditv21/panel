@@ -5,8 +5,7 @@
 | <a  href="https://github.com/anditv21/panel/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D">Bug report</a> |
 <a  href="https://github.com/anditv21/panel/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+request%5D">Feature request</a> |
 <a  href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
-<a  href="https://github.com/anditv21/panel/tree/main/.themes/modern/">Modern Theme</a> |
-<a  href="https://github.com/anditv21/panel/issues/7#issuecomment-1262149890/">Loader Examples</a> |
+<a  href="https://github.com/anditv21/panel/tree/main/.examples/">Loader/API Examples</a> |
 
 </p>
 
@@ -36,7 +35,7 @@ Default login: <code>admin</code>:<code>admin</code>
 <a  href="https://i.ibb.co/1Tx5BK7/image.png"><img  src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 
 <a  href="https://i.ibb.co/QcdVwvZ/image.png"><img  src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
-
+<a  href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
 </details>
@@ -231,7 +230,7 @@ Note: User pass and hwid has to be sent in base64 format.
 
 </ul>
 
-There are already <a  href="https://github.com/anditv21/panel/issues/7#issuecomment-1262149890">API examples</a> for some popular languages
+There are already <a  href="https://github.com/anditv21/panel/tree/main/.examples/">API examples</a> for some popular languages
 
 </details>
 
