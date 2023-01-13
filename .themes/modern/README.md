@@ -1,5 +1,5 @@
 
-#### note: this is not the main theme and therefore might be updated delayed
+#### note: Since this thme is not very popular it will get less frequent and delayed updates in the future.
 
 #### modern theme
 👤 **sxck1337**
