@@ -57,7 +57,61 @@ namespace loader
         }
 
 
-        private void iconButton1_Click(object sender, EventArgs e)
+        public static void checkversion(JObject apiresult)
+        {
+            string currentversion = "1";
+            if (apiresult["cheatversion"].ToString() != currentversion)
+            {
+                MessageBox.Show("Update found" + Environment.NewLine + "Version: " + apiresult["cheatversion"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Environment.Exit(1);
+            }
+
+        }
+
+        public static bool checkhwid(string hwid)
+        {
+            if(get_machine_guid().ToString() == hwid || string.IsNullOrEmpty(hwid))
+            {
+                return true;
+            }
+            else if(get_machine_guid().ToString() != hwid)
+            {
+                MessageBox.Show("Error: HWID doesn´t match.", "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
+        private void usernametextbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            usernametextbox.Text = string.Empty;
+        }
+
+        private void passwordtextbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            passwordtextbox.Text = string.Empty;
+        }
+
+        private void Login_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
         {
             string username;
             string password;
@@ -106,7 +160,7 @@ namespace loader
                 else
                 {
                     checkversion(apiresult);
-                    if(!checkhwid(apiresult["hwid"].ToString()))
+                    if (!checkhwid(apiresult["hwid"].ToString()))
                     {
                         Environment.Exit(1);
                     }
@@ -121,54 +175,6 @@ namespace loader
             {
                 MessageBox.Show(error.ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
-            }
-        }
-
-        public static void checkversion(JObject apiresult)
-        {
-            string currentversion = "1";
-            if (apiresult["cheatversion"].ToString() != currentversion)
-            {
-                MessageBox.Show("Update found" + Environment.NewLine + "Version: " + apiresult["cheatversion"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Environment.Exit(1);
-            }
-
-        }
-
-        public static bool checkhwid(string hwid)
-        {
-            if(get_machine_guid().ToString() == hwid || string.IsNullOrEmpty(hwid))
-            {
-                return true;
-            }
-            else if(get_machine_guid().ToString() != hwid)
-            {
-                MessageBox.Show("Error: HWID doesn´t match.", "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-
-        private void usernametextbox_MouseClick(object sender, MouseEventArgs e)
-        {
-            usernametextbox.Text = string.Empty;
-        }
-
-        private void passwordtextbox_MouseClick(object sender, MouseEventArgs e)
-        {
-            passwordtextbox.Text = string.Empty;
-        }
-
-        private void Login_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
     }

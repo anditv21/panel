@@ -87,5 +87,10 @@ namespace loader
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);    
+        }
     }
 }
