@@ -3,7 +3,6 @@
 
 <p align="center">
 | <a  href="https://github.com/anditv21/panel/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D">Bug report</a> |
-<a  href="https://github.com/anditv21/panel/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature+request%5D">Feature request</a> |
 <a  href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
 <a  href="https://github.com/anditv21/panel/tree/main/.examples/">Loader/API Examples</a> |
 
