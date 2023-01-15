@@ -7,6 +7,12 @@ import datetime
 import time
 from getpass import getpass
 
+# Constants
+DOMAIN = 'anditv.it' 
+SUB_DIR = "/panel/"
+API_KEY = 'yes' # api key from config file on panel
+VERSION = '1'
+
 def main():
     username = input(f'[Login] Username >> ')
     password = getpass(f'[Login] Password >> ') 
@@ -79,7 +85,7 @@ def send_login_request(username, password, hwid):
 
 
     # Send the login request
-    apiresult = requests.get(f'https://{DOMAIN}/api.php?user={username}&pass={password}&hwid={hwid}&key={API_KEY}')
+    apiresult = requests.get(f'https://{DOMAIN}/{SUB_DIR}api.php?user={username}&pass={password}&hwid={hwid}&key={API_KEY}')
     return apiresult.text
 
 def check_subscription_expired(subscription_date):
@@ -95,11 +101,7 @@ def checksub(sub):
         return value
     
     
-    
-# Constants
-DOMAIN = 'anditv.it/panel' 
-API_KEY = 'yes' # api key from config file on panel
-VERSION = '1'
+
 
 # Get the hardware id
 hwid = get_hardware_id()
