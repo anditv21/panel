@@ -55,14 +55,7 @@ def main():
         time.sleep(500)
         sys.exit()  
         
-                
-def get_config():
-    # Read the configuration file
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-        DOMAIN = config["DOMAIN"]
-        API_KEY = config["API_KEY"]
-    return config
+               
 
 def get_hardware_id():
     try:
