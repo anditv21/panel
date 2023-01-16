@@ -61,7 +61,7 @@ namespace loader
             string sub = result["sub"].ToString();
             subtext.Text = $"You have {checksub(sub).ToString()} day/s left.";
 
-            Inviter.Text = $"Inviter: {result["invitedBy"].ToString()}"; 
+            Inviter.Text = $"Inviter: {result["invitedBy"].ToString()}";
         }
 
         public int checksub(string sub)
@@ -75,7 +75,7 @@ namespace loader
                 int value = (DateTime.Parse(sub, CultureInfo.InvariantCulture) - DateTime.Now).Days;
                 return value;
             }
-                
+
 
         }
 

@@ -70,11 +70,11 @@ namespace loader
 
         public static bool checkhwid(string hwid)
         {
-            if(get_machine_guid().ToString() == hwid || string.IsNullOrEmpty(hwid))
+            if (get_machine_guid().ToString() == hwid || string.IsNullOrEmpty(hwid))
             {
                 return true;
             }
-            else if(get_machine_guid().ToString() != hwid)
+            else if (get_machine_guid().ToString() != hwid)
             {
                 MessageBox.Show("Error: HWID doesn´t match.", "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
