@@ -201,8 +201,6 @@ class Users extends Database
 
     protected function addrememberToken($token, $username)
     {
-        $this->prepare("UPDATE users SET remembertoken = ? WHERE username = ?");
-        $this->statement->execute([$token, $username]);
         $ip = $this->getip();
         $browser = $this->get_user_Browser();
         $os = $this->get_user_os();

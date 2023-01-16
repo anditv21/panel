@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 31, 2022 at 09:14 AM
+-- Generation Time: Jan 16, 2023 at 09:25 PM
 -- Server version: 10.3.36-MariaDB-0+deb10u2
--- PHP Version: 8.1.13
+-- PHP Version: 8.1.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -68,6 +68,28 @@ INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `username` varchar(255) NOT NULL,
+  `remembertoken` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `browser` varchar(255) NOT NULL,
+  `os` varchar(255) NOT NULL,
+  `time` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
+('admin', '85e1099fe04c88fffbd9c0796243f456', '127.0.0.1', 'Opera', 'Windows 10', 'January 16 th, 22:24');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `subscription`
 --
 
@@ -109,9 +131,10 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(9, 'anditv21', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 23 rd, 22:24'),
+(9, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 23 rd, 22:24'),
 (21, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 31 st, 9:55'),
-(22, 'admin', 'Redeemed: ', 'Opera', 'Windows 10', '45.85.219.118', 'December 31 st, 10:04');
+(22, 'admin', 'Redeemed: ', 'Opera', 'Windows 10', '45.85.219.118', 'December 31 st, 10:04'),
+(23, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'January 16 th, 22:24');
 
 -- --------------------------------------------------------
 
@@ -134,7 +157,6 @@ CREATE TABLE `users` (
   `lastIP` varchar(255) DEFAULT NULL,
   `currentLogin` datetime DEFAULT NULL,
   `lastLogin` datetime DEFAULT NULL,
-  `remembertoken` varchar(50) DEFAULT NULL,
   `banreason` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -142,8 +164,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `remembertoken`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'hwid', 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', NULL, '2022-12-31 09:49:19', '2022-12-27 20:19:03', NULL, NULL);
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`) VALUES
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-01-16 22:24:57', '2022-12-31 09:49:19', NULL);
 
 --
 -- Indexes for dumped tables
@@ -190,7 +212,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `users`
