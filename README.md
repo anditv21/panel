@@ -70,20 +70,7 @@ Originally it was developed by <a href="https://github.com/znixbtw/">@znix</a> t
 <h3>hOw dO I SeTuP ThE mOdErN ThEmE?</h3>
 
 <p>Just like the default theme :)</p>
-
-  
-  
-
 <br>
-
-<br>
-
-<br>
-
-<br>
-
-</p>
-
 </details>
 
   
