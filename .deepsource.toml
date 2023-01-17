@@ -5,6 +5,3 @@ name = "csharp"
 
 [[analyzers]]
 name = "php"
-
-[[transformers]]
-name = "dotnet-format"
