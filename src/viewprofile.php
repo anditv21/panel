@@ -11,15 +11,19 @@
        Util::redirect("/auth/login.php");
    }
 
-   if ($_SERVER["REQUEST_METHOD"] === "GET") {
-       if (isset($_GET["uid"])) {
-           $getuid = $_GET["uid"];
+   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
+      if (isset($_GET["uid"])) {
+         $uid = Util::securevar($_GET["uid"]);
+
+       if (!empty($uid)) {
+           $getuid = Util::securevar($_GET["uid"]);
            $userbyid = $user->getuserbyuid($getuid);
            $username = $userbyid->username;
        } else {
-           Util::display("<script>alert('No/invalid UID was given');</script>");
-           Util::display("<script>window.history.back();</script>");
+           echo "<script>alert('No/invalid UID was given');</script>";
+           echo "<script>window.history.back();</script>";
        }
+      }
    }
 
    $uid = Session::get("uid");

@@ -24,24 +24,40 @@ $sub = $user->getSubStatus();
 Util::banCheck();
 Util::head($username);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["updatePassword"])) {
-        $error = $user->updateUserPass($_POST);
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
+	if (isset($_POST["activateSub"])) {
+    $activesub = Util::securevar($_POST["activateSub"]);
+}
+if (isset($_POST["updatePassword"])) {
+    $password = Util::securevar($_POST["updatePassword"]);
+}
+
+    $pw =  Util::securevar($_POST["updatePassword"]);
+    if (isset($pw)) {
+        $error = $user->updateUserPass($pw);
     }
-    if (isset($_POST["activateSub"])) {
-        $error = $user->activateSub($_POST);
-        header("location: profile.php?suc=1");
-    } else {
-        header("location: profile.php?suc=2");
+
+    $sub = Util::securevar($_POST["activateSub"]);
+    if (isset($sub)) {
+        $error = $user->activateSub($sub);
     }
+}
+
+
+
+if (isset($_POST["activateSub"])) {
+    $activesub = Util::securevar($_POST["activateSub"]);
+}
+if (isset($_POST["updatePassword"])) {
+    $password = Util::securevar($_POST["updatePassword"]);
 }
 
 // if post request
 if (
-    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" &&
     !isset($_FILES["file_up"]["tmp_name"]) &&
-    !isset($_POST["activateSub"]) &&
-    !isset($_POST["updatePassword"])
+    !isset($activesub) &&
+    !isset($password)
 ) {
     header(
         "location: https://discord.com/api/oauth2/authorize?client_id=" .
@@ -53,76 +69,81 @@ if (
     );
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (isset($_GET["code"]) && empty($_GET["code"])) {
-        echo "Error: Please try again!";
-    }
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
+    if (isset($_GET['code'])) {
+        $code = Util::securevar($_GET['code']);
 
-    if (isset($_GET["code"])) {
-        $discord_code = $_GET["code"];
-
-        $payload = [
-            "code" => $discord_code,
-            "client_id" => client_id,
-            "client_secret" => client_secret,
-            "grant_type" => "authorization_code",
-            "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
-            "scope" => "identify",
-        ];
-
-        #print_r($payload);
-
-        $payload_string = http_build_query($payload);
-        $discord_token_url = "https://discordapp.com/api/oauth2/token";
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $discord_token_url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-
-        if (!$result) {
-            echo curl_error($ch);
+        $code = Util::securevar($_GET["code"]);
+        if (isset($code) && empty($code)) {
+            echo "Error: Please try again!";
         }
 
-        $result = json_decode($result, true);
+        if (isset($code)) {
+            $discord_code = $code;
 
-        $access_token = $result["access_token"];
-        $discord_users_url = "https://discordapp.com/api/users/@me";
-        $header = [
-            "Authorization: Bearer $access_token",
-            "Content-Type: application/x-www-form-urlencoded",
-        ];
+            $payload = [
+                "code" => $discord_code,
+                "client_id" => client_id,
+                "client_secret" => client_secret,
+                "grant_type" => "authorization_code",
+                "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
+                "scope" => "identify",
+            ];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($ch, CURLOPT_URL, $discord_users_url);
-        curl_setopt($ch, CURLOPT_POST, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            #print_r($payload);
 
-        $result = curl_exec($ch);
-        $result = json_decode($result, true);
-        $avatar = $result["avatar"];
+            $payload_string = http_build_query($payload);
+            $discord_token_url = "https://discordapp.com/api/oauth2/token";
 
-        $id = $result["id"];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $discord_token_url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
 
-        $path = IMG_DIR . $uid;
+            if (!$result) {
+                echo curl_error($ch);
+            }
 
-        if (@getimagesize($path . ".png")) {
-            unlink($path . ".png");
-        } elseif (@getimagesize($path . ".jpg")) {
-            unlink($path . ".jpg");
-        } elseif (@getimagesize($path . ".gif")) {
-            unlink($path . ".gif");
+            $result = json_decode($result, true);
+
+            $access_token = $result["access_token"];
+            $discord_users_url = "https://discordapp.com/api/users/@me";
+            $header = [
+                "Authorization: Bearer $access_token",
+                "Content-Type: application/x-www-form-urlencoded",
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($ch, CURLOPT_URL, $discord_users_url);
+            curl_setopt($ch, CURLOPT_POST, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $result = curl_exec($ch);
+            $result = json_decode($result, true);
+
+            $id = $result["id"];
+            $avatar = $result["avatar"];
+
+            $path = IMG_DIR . $uid;
+
+            if (@getimagesize($path . ".png")) {
+                unlink($path . ".png");
+            } elseif (@getimagesize($path . ".jpg")) {
+                unlink($path . ".jpg");
+            } elseif (@getimagesize($path . ".gif")) {
+                unlink($path . ".gif");
+            }
+
+            $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
+            $img = $path . ".png";
+            file_put_contents($img, file_get_contents($url));
+            chmod(IMG_DIR, 0775);
+            chmod($img, 0775);
+            header("location: profile.php");
         }
-
-        $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
-        $img = $path . ".png";
-        file_put_contents($img, file_get_contents($url));
-        chmod(IMG_DIR, 0775);
-        chmod($img, 0775);
-        header("location: profile.php");
     }
 }
 ?>
@@ -320,9 +341,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                             <p class="text-primary m-0 fw-bold" style="/*color: var(--bs-yellow)!important;*/">Redeem subscription</p>
                                         </div>
                                         <div class="card-body" style="border-style: none;background: #252935;padding-bottom: 0px;">
-                                            <form method="POST" action="<?php Util::display(
-                                                $_SERVER["PHP_SELF"]
-                                            ); ?>">
+                                            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                                                 <div class="row">
                                                     <div class="col">
                                                         <?php if (
@@ -361,8 +380,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 <div class="row">
                                     <div class="col-md-6" style="width: 100%;">
                                         <form method="POST" action="<?php Util::display(
-                                            $_SERVER["PHP_SELF"]
-                                        ); ?>">
+                                            Util::securevar($_SERVER["PHP_SELF"])); ?>">
                                             <div class="mb-3">
                                                 <div class="col">
                                                     <?php if (isset($error)): ?>

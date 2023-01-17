@@ -20,42 +20,64 @@ Util::banCheck();
 Util::head('Admin Panel');
 
 // if post request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['cheatStatus'])) {
-        Util::adminCheck();
-        $admin->setCheatStatus();
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
+    if (isset($_POST["cheatStatus"])) {
+       $cheatstatus = Util::securevar($_POST["cheatStatus"]);
     }
-
-    if (isset($_POST['cheatMaint'])) {
-        Util::adminCheck();
-        $admin->setCheatMaint();
+    if (isset($_POST["cheatMaint"])) {
+       $cheatMaint = Util::securevar($_POST["cheatMaint"]);
     }
-
-    if (isset($_POST['cheatVersion'])) {
-        Util::adminCheck();
-        $ver = floatval($_POST['version']);
-        $admin->setCheatVersion($ver);
+    if (isset($_POST["cheatVersion"])) {
+       $cheeatVersion = Util::securevar($_POST["cheatVersion"]);
     }
-
-    if (isset($_POST['sendmsg'])) {
-        Util::adminCheck();
-        $news = $_POST['msg'];
-        $admin->setnews($news);
+    if (isset($_POST["invite"])) {
+       $invite = Util::securevar($_POST["invite"]);
     }
-
     if (isset($_POST['cheatfreeze'])) {
-        Util::adminCheck();
-        $admin->setCheatfreeze();
+       $cheatfreeze = Util::securevar($_POST['cheatfreeze']);
     }
-
-    if (isset($_POST['invite'])) {
-        Util::adminCheck();
-        $admin->setinvite();
+ 
+ 
+ 
+    if (isset($cheatstatus)) {
+       $admin->setCheatStatus();
     }
-
-    header('location: index.php');
-}
-?>
+ 
+    if (isset($cheatMaint)) {
+       $admin->setCheatMaint();
+    }
+ 
+    if (isset($cheeatVersion)) {
+       $ver = floatval(Util::securevar($_POST["version"]));
+       $admin->setCheatVersion($ver);
+    }
+ 
+    if (isset($ivnite)) {
+       Util::adminCheck();
+       $admin->setinvite();
+    }
+ 
+    header("location: index.php");
+ }
+ 
+ if (isset($_POST['setnews'])) {
+    $news = $_POST['setnews'];
+ }
+ 
+ if (isset($news)) {
+    Util::adminCheck();
+    $news = Util::securevar($_POST["msg"]);
+    $admin->setnews($news);
+ }
+ 
+ 
+ if (isset($cheatfreeze)) {
+    Util::adminCheck();
+    $admin->setCheatfreeze();
+ }
+ 
+ 
+ ?>
 
 <!DOCTYPE html>
 <html>
@@ -280,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <h6 class="text-primary fw-bold m-0" style="color: rgb(255,255,255)!important;">Set values</h6>
                                 </div>
                                 <form method="POST" action="<?php Util::display(
-                                                $_SERVER['PHP_SELF']
+                                                Util::securevar($_SERVER['PHP_SELF'])
                                             ); ?>">
                                     <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
                                         <li class="list-group-item" style="background: rgb(37,41,53);">
@@ -305,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <?php endif; ?>
                             <form action="<?php Util::display(
-                                    $_SERVER['PHP_SELF']
+                                    Util::securevar($_SERVER['PHP_SELF'])
                                 ); ?>" method="post">
                                 <ul class="list-group list-group-flush" style="background: rgb(37,41,53);">
                                     <li class="list-group-item" style="background: rgb(37,41,53);">

@@ -19,11 +19,13 @@ Util::banCheck();
 Util::head($username);
 Util::navbar();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST["flush"])) {
-      $error = $user->flush();
+      $flush = Util::securevar($_POST["flush"]);
+      if (isset($flush)) {
+         $error = $user->flush();
+      }
    }
-
    header('location: log.php');
 }
 ?>

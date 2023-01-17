@@ -36,6 +36,19 @@ class Util
         echo $string;
     }
 
+    public static function securevar($var)
+    {
+        if(!empty($var))
+        {
+            return htmlspecialchars(stripslashes(trim($var)));
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+
     // Returns random string
     public static function randomCode($int)
     {
@@ -57,7 +70,7 @@ class Util
         // If user is banned
         if (Session::isBanned()) {
             // Prevents infinite redirect loop
-            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
+            if (basename(self::securevar($_SERVER['PHP_SELF'])) != 'banned.php') {
                 header('location: banned.php');
             }
         }

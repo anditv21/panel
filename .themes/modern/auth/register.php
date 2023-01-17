@@ -11,9 +11,11 @@ if (Session::isLogged()) {
     Util::redirect('/index.php');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $error = $user->registerUser($_POST);
+	if (isset($_POST)) {
+		$data = Util::securevar($_POST);
+		$error = $user->registerUser($data);
+	}
 }
-
 
 Util::head('Register');
 
@@ -51,7 +53,7 @@ Util::head('Register');
                     <div class="card-body p-0">
                         <div class="row" style="border-style: none;">
                             <div class="col-lg-6" style="width: 100%;border-style: none;border-color: rgba(133,135,150,0);background: #252935;">
-                                <form method="POST" action="<?php Util::display($_SERVER["PHP_SELF"]); ?>">
+                            <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                                     <div class="p-5" style="background: #252935;border-style: none;text-align: center;"><img style="text-align: center;width: 118px;margin-bottom: 33px;border-radius:50%;" src="../assets/img/gey.gif">
                                         <div class="text-center"></div>
                                         <form class="user">

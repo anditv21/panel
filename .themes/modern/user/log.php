@@ -10,7 +10,9 @@ if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
 
-$suc = @$_GET["suc"];
+if (isset($_GET['suc'])) {
+    $suc = Util::securevar($_GET['suc']);
+}
 $username = Session::get("username");
 $uid = Session::get("uid");
 
@@ -20,9 +22,12 @@ $logarray = $user->getlogarray($username);
 
 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     if (isset($_POST["flush"])) {
-        $error = $user->flush();
+        $flush = Util::securevar($_POST["flush"]);
+        if (isset($flush)) {
+           $error = $user->flush();
+        }
     }
 
     header('location: log.php');
