@@ -11,6 +11,6 @@ updates:
       interval: "weekly"
       
   - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: ".examples/Python-API-Example" # Location of package manifests
     schedule:
       interval: "weekly"
