@@ -11,6 +11,8 @@ labels: bug
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+E.g: The '...' label shows nothing.
+
 **To Reproduce**
 Steps to reproduce the bug:
 1. Go to '...'
