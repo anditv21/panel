@@ -27,8 +27,8 @@
        if (isset($_POST["setBanned"])) {
            $ban = Util::securevar($_POST["setBanned"]);
        }
-       if (isset($_POST["setaAmin"])) {
-           $admin = Util::securevar($_POST["setaAmin"]);
+       if (isset($_POST["setAdmin"])) {
+           $admin = Util::securevar($_POST["setAdmin"]);
        }
    
        if (isset($hwid)) {
