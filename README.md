@@ -256,48 +256,24 @@ There are already <a  href="https://github.com/anditv21/panel/tree/main/.example
 
 <summary>Setup</summary>
 
-<h3>NOTE: Make sure php has full access to /usercontent/avatar
-
-otherwise no avatar can be downloaded from discord.</h3>
-
-<br>
-
-<br>
-
-<br>
 
 <ol>
-
-<li>Download the latest Release ZIP for your theme and the db.sql from <a  href="https://github.com/anditv21/panel/releases/latest/">here.</a> </li>
-
-<li>Extract all of the files from the downloaded archive and upload them to your PHP host.</li>
-
-<li>Open the PHPMyAdmin interface for your host, and create a new database. Then, copy and paste the contents of the db.sql file into the SQL import tab on PHPMyAdmin. This will create the necessary tables and structures in the database.</li>
-
-<li>Open the Database.php file located at https://github.com/anditv21/panel/blob/main/src/app/core/Database and modify lines 5-8 to include your database credentials.</li>
-
-<li>Upload the x.exe file (also known as the Loader) in the main directory of the panel.</li>
-
-<li>Use the default credentials to log in to the panel, and then change the default password to a secure one.</li>
-
-<li>Open the Config.php file located at https://github.com/anditv21/panel/blob/main/src/app/core/Config.php and modify line 8 to set the name of your website and set a description for your website on line 11.</li>
-
-<li>In the Config.php file, modify line 30 to set a secure API key. This key will be used to authenticate requests to the panel's API.</li>
-
-<li>Open the DiscordConfig.php file located at https://github.com/anditv21/panel/blob/main/src/app/core/DiscordConfig and rename it to DiscordConfig.php.</li>
-
-<li>Go to https://discord.com/developers/applications and create a new Discord application. This will allow you to integrate your panel with Discord.</li>
-
-<li>On the profile page of the panel, copy the URL. For example: https://anditv.it/panel/user/profile.php.</li>
-
-<li>In the general OAuth2 settings of your Discord application, click on "Add Redirect" and paste the URL copied before. Hit "Save Changes".</li>
-
-<li>Finally, open the DiscordConfig.php file and fill in your Discord logging webhook URL(s) This will allow the panel to send messages to Discord when certain events occur.</li>
-
+  <li>Download the latest Release ZIP and the db.sql file from <a href="https://github.com/anditv21/panel/releases/latest/">here.</a></li>
+  <li>Extract the files and upload them to your PHP host.</li>
+  <li>Create a new database in PHPMyAdmin, import the contents of the db.sql file to create necessary tables and structures.</li>
+  <li>Rename Database file to Database.php.<li>
+  <li>Edit the Database.php file to include your database credentials.</li>
+  <li>Upload the x.exe file in the panel's main directory.</li>
+  <li>Log in to the panel using default credentials, then change the password to a secure one.</li>
+  <li>Edit the Config.php file to set the name and description of your website, and set a secure API key for authenticating requests.</li>
+  <li>Rename the DiscordConfig file to DiscordConfig.php.</li>
+  <li>Create a new Discord application to integrate with the panel.</li>
+  <li>Copy the panel's profile URL and add it as a redirect URL in the Discord application.</li>
+  <li>Fill in your Discord logging webhook URL(s) in the DiscordConfig.php file to allow the panel to send messages to Discord.</li>
 </ol>
 
   
-
+<p>NOTE: Make sure php has full access to /usercontent/avatar otherwise no avatar can be downloaded from discord.</p>
 </details>
 
 </a>
