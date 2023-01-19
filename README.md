@@ -260,8 +260,8 @@ There are already <a  href="https://github.com/anditv21/panel/tree/main/.example
 <ol>
   <li>Download the latest Release ZIP and the db.sql file from <a href="https://github.com/anditv21/panel/releases/latest/">here.</a></li>
   <li>Extract the files and upload them to your PHP host.</li>
-  <li>Create a new database in PHPMyAdmin, import the contents of the db.sql file to create necessary tables and structures.</li>
-  <li>Rename Database file to Database.php.<li>
+  <li>Create a new database in PHPMyAdmin, import the contents of the db.sql.</li>
+  <li>Rename Database file to Database.php.</li>
   <li>Edit the Database.php file to include your database credentials.</li>
   <li>Upload the x.exe file in the panel's main directory.</li>
   <li>Log in to the panel using default credentials, then change the password to a secure one.</li>
