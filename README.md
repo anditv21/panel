@@ -230,9 +230,8 @@ There are already <a  href="https://github.com/anditv21/panel/tree/main/.example
 
 <ul>
 
-<li><a href="https://github.com/znixbtw/php-panel-v2/">Original panel</a> from <a href="https://github.com/znixbtw/">@znixbtw</a></li>
-<li><a href="https://github.com/Phantom-1337/gamesensethemeforznixpanel">gamesese/skeet thme</a> from <a href="https://github.com/Phantom-1337/">@Phantom-1337</a></li>
-<li>Modern theme from <a href="https://github.com/sxck1337/">@sxck1337</a></li>
+<li><a href="https://github.com/znixbtw/">@znixbtw</a> for his awesome <a href="https://github.com/znixbtw/php-panel-v2/">original panel.</a></li>
+<li><a href="https://github.com/Phantom-1337/">@Phantom-1337</a> and <a href="https://github.com/sxck1337/">@sxck1337</a> for their cool themes.</li>
 
 
   
