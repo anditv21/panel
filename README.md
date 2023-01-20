@@ -29,11 +29,11 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <p align="center">
 
-<a  href="https://i.ibb.co/RyvRyDB/image.png"><img  src="https://i.ibb.co/RyvRyDB/image.png" /></a>
+<a  href="https://i.ibb.co/RyvRyDB/image.png"><img src="https://i.ibb.co/RyvRyDB/image.png" /></a>
 
-<a  href="https://i.ibb.co/1Tx5BK7/image.png"><img  src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
+<a  href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 
-<a  href="https://i.ibb.co/QcdVwvZ/image.png"><img  src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
+<a  href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
 <a  href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
@@ -230,7 +230,7 @@ There are already <a  href="https://github.com/anditv21/panel/tree/main/.example
 
 <ul>
 
-<li><a href="https://github.com/znixbtw/">@znixbtw</a> for his awesome <a href="https://github.com/znixbtw/php-panel-v2/">original panel.</a></li>
+<li><a href="https://github.com/znixbtw/">@znixbtw</a> for his awesome original <a href="https://github.com/znixbtw/php-panel-v2/">panel</a>.</li>
 <li><a href="https://github.com/Phantom-1337/">@Phantom-1337</a> and <a href="https://github.com/sxck1337/">@sxck1337</a> for their cool themes.</li>
 
 
