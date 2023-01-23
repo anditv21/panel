@@ -593,7 +593,6 @@ class Users extends Database
         "/msie/i" => "Internet Explorer",
         "/firefox/i" => "Firefox",
         "/Mozilla/i" => "Mozila",
-        "/Mozilla/5.0/i" => "Mozila",
         "/safari/i" => "Safari",
         "/chrome/i" => "Chrome",
         "/edge/i" => "Edge",
