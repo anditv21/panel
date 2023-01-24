@@ -206,7 +206,40 @@ Note: User pass and hwid has to be sent in base64 format.
 
 <ul>
 
-<li>Sends user data in JSON format on call</li>
+<li>Send user data in JSON format on call</li>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>user</td>
+      <td>string</td>
+      <td>Required. Username</td>
+    </tr>
+    <tr>
+      <td>pass</td>
+      <td>string</td>
+      <td>Required. Password</td>
+    </tr>
+    <tr>
+      <td>hwid</td>
+      <td>string</td>
+      <td>Required. Hwid</td>
+    </tr>
+    <tr>
+      <td>key</td>
+      <td>string</td>
+      <td>Required. Key</td>
+    </tr>
+  </tbody>
+</table>
+<b><code>GET /api.php</code></b>
+
 
 <ul><li>Usage: <code>api.php?user={username}&pass={password}&hwid={hwid}&key={key}</code></li>
 
@@ -216,7 +249,7 @@ Note: User pass and hwid has to be sent in base64 format.
 
 </ul>
 
-There are already <a  href="https://github.com/anditv21/panel/tree/main/.examples/">API examples</a> for some popular languages
+<i>There are already <a  href="https://github.com/anditv21/panel/tree/main/.examples/">API examples</a> for some popular languages.</i>
 
 </details>
 
