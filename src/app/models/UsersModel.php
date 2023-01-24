@@ -547,20 +547,27 @@ class Users extends Database
     }
 
 
-    public function getip()
+    public function getip(): string
     {
-        $clientIp = filter_var($_SERVER["HTTP_CLIENT_IP"] ?? '', FILTER_VALIDATE_IP);
-        $forwardedIp = filter_var($_SERVER["HTTP_X_FORWARDED_FOR"] ?? '', FILTER_VALIDATE_IP);
-        $remoteIp = filter_var($_SERVER["REMOTE_ADDR"], FILTER_VALIDATE_IP);
+        $headers = [
+            'HTTP_CLIENT_IP', 
+            'HTTP_X_FORWARDED_FOR', 
+            'HTTP_X_FORWARDED', 
+            'HTTP_X_CLUSTER_CLIENT_IP', 
+            'HTTP_FORWARDED_FOR', 
+            'REMOTE_ADDR',
+            'HTTP_X_REAL_IP'
+        ];
     
-        if ($clientIp) {
-            $ip = $clientIp;
-        } elseif ($forwardedIp) {
-            $ip = $forwardedIp;
-        } else {
-            $ip = $remoteIp;
+        foreach ($headers as $header) {
+            if (array_key_exists($header, $_SERVER)) {
+                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
+                if ($ip !== false) {
+                    return $ip;
+                }
+            }
         }
-        return $ip;
+        return '';
     }
 
     public function isfrozen($username)
