@@ -8,9 +8,9 @@ updates:
   - package-ecosystem: "nuget" # See documentation for possible values
     directory: ".examples/CSharp-API-Example" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
       
   - package-ecosystem: "pip" # See documentation for possible values
     directory: ".examples/Python-API-Example" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
