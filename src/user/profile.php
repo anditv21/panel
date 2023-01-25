@@ -11,24 +11,16 @@ if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
 
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-	if (isset($_POST["activateSub"])) {
-    $activesub = Util::securevar($_POST["activateSub"]);
-}
-if (isset($_POST["updatePassword"])) {
-    $password = Util::securevar($_POST["updatePassword"]);
-}
-
-    $pw =  Util::securevar($_POST["updatePassword"]);
-    if (isset($pw)) {
-        $error = $user->updateUserPass($pw);
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {  
+    if (isset($_POST["updatePassword"])) {
+      $error = $user->updateUserPass(Util::securevar($_POST['updatePassword']));
     }
-
-    $sub = Util::securevar($_POST["activateSub"]);
-    if (isset($sub)) {
-        $error = $user->activateSub($sub);
+  
+    if (isset($_POST["activateSub"])) {
+      $error = $user->activateSub(Util::securevar($_POST['subCode']));
+      $error = Util::securevar($_POST['subCode']);
     }
-}
+  }
 
 $uid = Session::get("uid");
 $username = Session::get("username");
