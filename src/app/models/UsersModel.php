@@ -122,6 +122,10 @@ class Users extends Database
         $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $subTime = $this->statement->fetch();
+        if ($subTime->sub === null) {
+            return 0;
+        }
+        
         $date1 = new DateTime($currentDate);
         $date2 = new DateTime($subTime->sub);
         $diff = $date1->diff($date2);
