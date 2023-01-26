@@ -27,7 +27,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $ban = Util::securevar($_POST["setBanned"]);
    }
    if (isset($_POST["setAdmin"])) {
-      $admin = Util::securevar($_POST["setAdmin"]);
+      $adminuser = Util::securevar($_POST["setAdmin"]);
    }
 
    if (isset($hwid)) {
@@ -51,9 +51,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    }
 
 
-   if (isset($admin)) {
+   if (isset($adminuser)) {
       Util::adminCheck();
-      $rowUID = $admin;
+      $rowUID = $adminuser;
       $admin->setAdmin($rowUID);
    }
 

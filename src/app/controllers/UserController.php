@@ -229,11 +229,11 @@ class UserController extends Users
         }
     }
 
-    public function activateSub($data)
+    public function activateSub($code)
     {
         // Bind data
         $username = Session::get("username");
-        $subCode = $data["subCode"];
+        $subCode = $code;
 
         if (empty($subCode)) {
             return "Please enter a code.";

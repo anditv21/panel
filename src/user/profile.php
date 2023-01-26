@@ -33,12 +33,7 @@ Util::head($username);
 Util::navbar();
 
 // if post request
-if (
-    Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" &&
-    !isset($_FILES["file_up"]["tmp_name"]) &&
-    !isset($activesub) &&
-    !isset($password)
-) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"])  && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"])) {
     header(
         "location: https://discord.com/api/oauth2/authorize?client_id=" .
             client_id .

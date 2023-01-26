@@ -33,16 +33,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $error = $user->activateSub(Util::securevar($_POST['subCode']));
       $error = Util::securevar($_POST['subCode']);
     }
+
+
+    header("location: profile.php");
   }
-
-
-
-if (isset($_POST["activateSub"])) {
-    $activesub = Util::securevar($_POST["activateSub"]);
-}
-if (isset($_POST["updatePassword"])) {
-    $password = Util::securevar($_POST["updatePassword"]);
-}
 
 // if post request
 if (
