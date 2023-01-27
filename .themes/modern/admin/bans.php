@@ -111,8 +111,7 @@
                                        </select>
                                        <br>
                                        <label for="fname">Ban reason:</label><br>
-                                       <input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="r" name="r"  
-                                          >
+                                       <input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="r" name="r">
                                        <br>
                                        <button class="btn btn-success btn-sm"  id="submit" type="submit" value="submit">Ban/Unban user</button>
                                     </form>
@@ -161,7 +160,7 @@
                   <?php if ($row->sub > 1000) {
                      Util::display('Lifetime');
                      } else {
-                     if ($row->sub >= 0) {
+                     if ($row->sub > 0) {
                          Util::display("$row->sub days");
                      } else {
                          Util::display('none');
