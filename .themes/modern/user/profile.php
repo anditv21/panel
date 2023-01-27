@@ -26,7 +26,7 @@ Util::head($username);
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {  
     if (isset($_POST["updatePassword"])) {
-      $error = $user->updateUserPass(Util::securevar($_POST['updatePassword']));
+      $error = $user->updateUserPass(Util::securevar($_POST));
     }
   
     if (isset($_POST["activateSub"])) {

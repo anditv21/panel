@@ -256,39 +256,40 @@ class UserController extends Users
         $currentPassword = $data["currentPassword"];
         $newPassword = $data["newPassword"];
         $confirmPassword = $data["confirmPassword"];
-
-        // Empty error vars
-        $passError = "";
-
+    
+        // Empty error array
+        $errors = array();
+    
         // Validate password
         if (empty($currentPassword)) {
-            return $passError = "Please enter a password.";
+            $errors[] = "Please enter a current password.";
         }
-
+    
         if (empty($newPassword)) {
-            return $passError = "Please enter a password.";
+            $errors[] = "Please enter a new password.";
         } elseif (strlen($newPassword) < 4) {
-            return $passError = "Password is too short.";
+            $errors[] = "New password is too short.";
         }
-
+    
         if (empty($confirmPassword)) {
-            return $passError = "Please enter a password.";
+            $errors[] = "Please enter a confirm password.";
         } elseif ($confirmPassword != $newPassword) {
-            return $passError = "Passwords do not match, please try again.";
+            $errors[] = "Confirm password does not match new password, please try again.";
         }
-
-        // Check if all errors are empty
-        if (empty($passError)) {
+    
+        // Check if there are any errors
+        if (empty($errors)) {
             // Hashing the password
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $hashedPassword = password_hash($newPassword, PASSWORD_ARGON2I);
             $result = $this->updatePass($currentPassword, $hashedPassword, $username);
-
+    
             if ($result) {
                 Util::redirect("/auth/logout.php");
             } else {
-                return "Your current does not match.";
+                $errors[] = "Your current password does not match.";
             }
         }
+        return $errors;
     }
 
     public function getUserCount()

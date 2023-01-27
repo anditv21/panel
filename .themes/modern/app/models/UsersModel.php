@@ -256,13 +256,8 @@ class Users extends Database
         
                 $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
                 $this->statement->execute([$hashedPassword, $username]);
-        
-
-                if ($this->loguser($username, "Changed password")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                $this->loguser($username, "Changed password");
+                return true;
             } else {
                 return false;
             }

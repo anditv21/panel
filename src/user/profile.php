@@ -13,7 +13,7 @@ if (!Session::isLogged()) {
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {  
     if (isset($_POST["updatePassword"])) {
-      $error = $user->updateUserPass(Util::securevar($_POST['updatePassword']));
+      $error = $user->updateUserPass(Util::securevar($_POST));
     }
   
     if (isset($_POST["activateSub"])) {
@@ -148,7 +148,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
         <div class="col-12 mt-3 mb-2">
             <?php if (isset($error)) : ?>
                 <div class="alert alert-primary" role="alert">
-                    <?php Util::display($error); ?>
+                    <?php Util::display($error[0]); ?>
                 </div>
             <?php endif; ?>
         </div>
@@ -329,7 +329,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
                             <div class="card-body">
                                 <h4 class="card-title text-center">Activate Sub</h4>
                                 <form method="POST" action="<?php Util::display(
-                                                                $_SERVER["PHP_SELF"]
+                                                                Util::securevar($_SERVER["PHP_SELF"])
                                                             ); ?>">
                                     <?php if ($cheat->getCheatData()->frozen != 0) : ?>
 
