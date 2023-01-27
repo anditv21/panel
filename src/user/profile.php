@@ -20,6 +20,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $error = $user->activateSub(Util::securevar($_POST['subCode']));
       $error = Util::securevar($_POST['subCode']);
     }
+
+    header("location: profile.php");    
   }
 
 $uid = Session::get("uid");
