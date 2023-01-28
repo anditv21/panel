@@ -213,28 +213,33 @@ Note: User pass and hwid has to be sent in base64 format.
       <th>Parameter</th>
       <th>Type</th>
       <th>Description</th>
+      <th>Required</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>user</td>
       <td>string</td>
-      <td>Required. Username</td>
+      <td>Username</td>
+      <td>True</td>
     </tr>
     <tr>
       <td>pass</td>
       <td>string</td>
-      <td>Required. Password</td>
+      <td>Password (base64encoded)</td>
+      <td>True</td>
     </tr>
     <tr>
       <td>hwid</td>
       <td>string</td>
-      <td>Required. Hwid</td>
+      <td>Hwid (base64encoded)</td>
+      <td>True</td>
     </tr>
     <tr>
       <td>key</td>
       <td>string</td>
-      <td>Required. Key</td>
+      <td>Key from config file</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
