@@ -13,6 +13,9 @@
 *.sql linguist-detectable=true
 *.sql linguist-language=sql
 
+*.py linguist-detectable=true
+*.py linguist-language=python
+
 src/assets/** linguist-vendored=true
 .themes/modern/assets/** linguist-vendored=true
 .themes/modern/bootstrap/** linguist-vendored=true
