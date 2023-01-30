@@ -33,7 +33,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $cheatfreeze = Util::securevar($_POST['cheatfreeze']);
    }
 
+   if (isset($_POST['setnews'])) {
+      $news = $_POST['setnews'];
+   }
 
+   Util::adminCheck();
 
    if (isset($cheatstatus)) {
       $admin->setCheatStatus();
@@ -48,28 +52,20 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $admin->setCheatVersion($ver);
    }
 
-   if (isset($ivnite)) {
-      Util::adminCheck();
+   if (isset($invite)) {
       $admin->setinvite();
    }
 
+   if (isset($news)) {
+      $news = Util::securevar($_POST["msg"]);
+      $admin->setnews($news);
+   }
+
+   if (isset($cheatfreeze)) {
+      $admin->setCheatfreeze();
+   }
+
    header("location: cheat.php");
-}
-
-if (isset($_POST['setnews'])) {
-   $news = $_POST['setnews'];
-}
-
-if (isset($news)) {
-   Util::adminCheck();
-   $news = Util::securevar($_POST["msg"]);
-   $admin->setnews($news);
-}
-
-
-if (isset($cheatfreeze)) {
-   Util::adminCheck();
-   $admin->setCheatfreeze();
 }
 
 
@@ -202,7 +198,7 @@ if (isset($cheatfreeze)) {
       </div>
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
-            <form method="POST" action="<? phpUtil::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <button name="cheatStatus" type="submit" class="btn btn-outline-primary btn-sm">
                   SET detected+-
                </button>
