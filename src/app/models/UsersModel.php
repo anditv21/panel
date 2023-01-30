@@ -14,34 +14,25 @@ class Users extends Database
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
 
-        if ($this->statement->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->statement->rowCount() > 0;
     }
+
 
     // Check if invite code is valid
     protected function invCodeCheck($invCode)
     {
         $this->prepare("SELECT * FROM `invites` WHERE `code` = ?");
         $this->statement->execute([$invCode]);
-
-        if ($this->statement->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->statement->rowCount() > 0;
     }
 
 
-    protected function getuserhwid($username)
+    protected function getUserHwid(string $username): string
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT hwid FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
-        $result = $this->statement->fetch();
-
-        return $result->hwid;
+    
+        return (string) $this->statement->fetchColumn();
     }
 
     protected function getnews()
@@ -105,102 +96,88 @@ class Users extends Database
     {
         $this->prepare("SELECT * FROM `subscription` WHERE `code` = ?");
         $this->statement->execute([$subCode]);
-
-        if ($this->statement->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->statement->rowCount() > 0;
     }
 
     // Check if sub is active
+    // Original from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
     protected function subActiveCheck($username)
     {
-
-        // Original from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
-        $currentDate = (new DateTime())->format('Y-m-d');
-        $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
-        $this->statement->execute([$username]);
-        $subTime = $this->statement->fetch();
-        if ($subTime->sub === null) {
-            return 0;
-        }
+            $currentDate = (new DateTime())->format('Y-m-d');
+            $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$username]);
         
-        $date1 = new DateTime($currentDate);
-        $date2 = new DateTime($subTime->sub);
-        $diff = $date1->diff($date2);
-    
-        return (int) $diff->format('%R%a');
-
+            if (!$subTime = $this->statement->fetch()) {
+                return 0;
+            }
+        
+            $date1 = new DateTime($currentDate);
+            $date2 = new DateTime($subTime->sub);
+            return (int) $date1->diff($date2)->format('%R%a');
     }
+
+    
 
     protected function logIP($ip, $username)
     {
         $this->prepare("UPDATE `users` SET `lastIP` = ? WHERE `username` = ?");
         $this->statement->execute([$ip, $username]);
     }
+
     // Login - Sends data to DB
     protected function login($username, $password)
     {
-        //fetch user by name
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $row = $this->statement->fetch();
-        
-        if (!$row) {
-            return false;
+
+        if (!$row) {            
+            return false; // If no user is found, return false. 
         }
-        
-        $hashedPassword = $row->password;
-        //if password is correct
-        if (password_verify($password, $hashedPassword)) {
-            return $row;
+
+        // Verify the hashed password against the provided password. 
+        if (password_verify($password, $row->password)) { 
+            return $row; // Return the row if the passwords match. 
         }
-        
-        return false;
-        
+
+        return false; // Return false if the passwords don't match. 
+
     }
 
     protected function logintoken($token)
     {
         $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
         $this->statement->execute([$token]);
-        if (!$this->statement->rowCount() > 0) {
-            return false;
-        }
 
+        if ($this->statement->rowCount() > 0) {
+            $row = $this->statement->fetch();
+            $username = $row->username;
 
-        $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
-        $this->statement->execute([$token]);
-        $row = $this->statement->fetch();
-        $username = $row->username;
+            if ($row) {
+                setcookie('login_cookie', '', time() - 1);
+                setcookie("login_cookie", $token, time() + 31556926, '/');
 
-        if (!$row) {
-            setcookie('login_cookie', '', time() - 1);
-            setcookie("login_cookie", $token, time() + 31556926, '/');
-            return false;
-        }
+                $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+                $this->statement->execute([$username]);
+                $newrow = $this->statement->fetch();
 
+                if ($newrow) {
+                    $ip = $this->getip();
+                    $browser = $this->get_user_Browser();
+                    $os = $this->get_user_os();
 
+                    date_default_timezone_set("Europe/Vienna");
+                    $time = date("F d S, G:i");
+                    $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
+                    $this->statement->execute([$time, $ip, $browser, $os,$token]);
 
-        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-        $this->statement->execute([$username]);
-        $newrow = $this->statement->fetch();
+                    return true; // Return true if authentication succeeds. 
 
-        if (!$newrow) {
-            return false;
-        }
+                } else { return false; } 
 
-        $ip = $this->getip();
-        $browser = $this->get_user_Browser();
-        $os = $this->get_user_os();
-        date_default_timezone_set("Europe/Vienna");
-        $time = date("F d S, G:i");
+            } else { return false; }
 
-        $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
-        $this->statement->execute([$time, $ip, $browser, $os, $token]);
-
-        return $newrow;
+        } else { return false; }
     }
 
     protected function addrememberToken($token, $username)
@@ -221,25 +198,35 @@ class Users extends Database
         $this->prepare('SELECT * FROM `cheat`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        
         $inviter = 'System';
+
+
         if ($result && $result->invites) {
+
             $this->prepare('SELECT `createdBy` FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             $row = $this->statement->fetch();
-            $inviter = $row ? $row->createdBy : 'System';
+
+            if ($row) {
+                $inviter = $row->createdBy; 
+            }  
         }
-        
+
+        // Prepare an insert statement to add the user to the users table. 
         $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
+
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
+
+
             $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
-            $this->statement->execute([$invCode]);
-            return true;
-        }
-        
-        return false;
-        
-    }
+            return ($this->statement->execute([$invCode]));  
+
+        } else {
+
+            return false;  
+
+        }        
+    }    
 
     // Upddate user password
     protected function updatePass($currentPassword, $hashedPassword, $username)
@@ -247,27 +234,28 @@ class Users extends Database
         try {
             $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
             $this->statement->execute([$username]);
+
             $row = $this->statement->fetch();
-        
-            // Fetch current password from database
             $currentHashedPassword = $row->password;
-        
+
             if (password_verify($currentPassword, $currentHashedPassword)) {
-        
+
                 $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
                 $this->statement->execute([$hashedPassword, $username]);
                 $this->loguser($username, "Changed password");
+
                 return true;
             } else {
                 return false;
             }
+
         } catch (PDOException $e) {
 
             error_log("Error changing password: " . $e->getMessage());
+
             return false;
-        }
-        
-    }
+        }        
+    }  
 
     // Activates subscription
     protected function subscription($subCode, $username)
@@ -289,7 +277,6 @@ class Users extends Database
             $this->activateSubscription($username, "30D", $subCode);
             return "Your subscription is now active!";
         }
-
 
     }
 
@@ -330,9 +317,9 @@ class Users extends Database
     // Get number of users
     protected function userCount()
     {
-        $this->prepare("SELECT * FROM `users`");
+        $this->prepare("SELECT COUNT(*) FROM `users`");
         $this->statement->execute();
-        $result = $this->statement->rowCount();
+        $result = $this->statement->fetchColumn();
         return $result;
     }
 
@@ -357,9 +344,7 @@ class Users extends Database
     // Get name of latest registered user
     protected function newUser()
     {
-        $this->prepare(
-            "SELECT `username` FROM `users` WHERE `uid` = (SELECT MAX(`uid`) FROM `users`)"
-        );
+        $this->prepare("SELECT `username` FROM `users` WHERE `uid` = (SELECT MAX(`uid`) FROM `users`)");
         $this->statement->execute();
         $result = $this->statement->fetch();
         return $result->username;
@@ -379,17 +364,14 @@ class Users extends Database
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         $uid = $result->uid;
-
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid . ".png";
-        } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg";
-        } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif";
-        } else {
-            return false;
+    
+        foreach (['png', 'jpg', 'gif'] as $extension) {
+            if (@getimagesize(IMG_DIR . $uid . "." . $extension)) {
+                return IMG_URL . $uid . "." . $extension;
+            } 
         }
+    
+        return false;
     }
 
     public function getbyuid($uid)
@@ -411,33 +393,29 @@ class Users extends Database
     protected function timesincefrozen()
     {
         try {
-            // Use prepared statements consistently
-            $this->prepare('SELECT * FROM `cheat`');
+            $this->prepare('SELECT freezingtime FROM `cheat`');
             $this->statement->execute();
-            $row = $this->statement->fetch();
-        
-            if ($row) {
-                $freezingtime = $row->freezingtime;
-                $freezingtime = gmdate('Y-m-d', $freezingtime);
-        
-                $timenow = gmdate('Y-m-d', time());
-        
-                // Use the DateTime class to calculate the difference between the two dates
-                $date1 = new DateTime($freezingtime);
-                $date2 = new DateTime($timenow);
-                $daysDifference = $date1->diff($date2)->days;
-        
-                return $daysDifference;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            
-            error_log("Error calculating days difference: " . $e->getMessage());
-            return false;
-        }
-        
-    }
+            $freezingtime = $this->statement->fetchColumn();
+
+            if ($freezingtime) { 
+
+                // Use the DateTime class to calculate the difference between the two dates 
+                $date1 = new DateTime(gmdate('Y-m-d', $freezingtime)); 
+                $date2 = new DateTime(gmdate('Y-m-d', time())); 
+
+                return $date1->diff($date2)->days; 
+
+            } else { 
+                return false; 
+            } 
+
+        } catch (PDOException $e) { 
+
+            error_log("Error calculating days difference: " . $e->getMessage()); 
+            return false; 
+
+        }  
+    }  
 
     protected function sendlog($username, $action, $webhook)
     {
@@ -509,25 +487,21 @@ class Users extends Database
     {
         $username = Session::get("username");
         $loginTime = date('Y-m-d H:i:s');
-        // Validate input values
-        try {
-            // Update the last login time
-            $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin` WHERE `username` = ?");
-            $this->statement->execute([$username]);
 
-            // Update the current login time
-            $this->prepare("UPDATE `users` SET `currentLogin` = ? WHERE `username` = ?");
+        try {
+            // Update the last login time and current login time in one query
+            $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin`, `currentLogin` = ? WHERE `username` = ?");
             $this->statement->execute([$loginTime, $username]);
 
             $this->loguser($username, "Login");
         } catch (PDOException $e) {
-            
+
             error_log("Error updating login time: " . $e->getMessage());
             return false;
         }
 
         return true;
-    }
+    } 
 
     protected function lastlogin($username)
     {
@@ -592,32 +566,39 @@ class Users extends Database
 
     protected function get_user_Browser()
     {
-        global $user_agent;
-        $user_agent = $_SERVER["HTTP_USER_AGENT"];
-        $browser = "Unknown Browser";
-        $browser_array = [
-        "/msie/i" => "Internet Explorer",
-        "/firefox/i" => "Firefox",
-        "/Mozilla/i" => "Mozila",
-        "/safari/i" => "Safari",
-        "/chrome/i" => "Chrome",
-        "/edge/i" => "Edge",
-        "/opera/i" => "Opera",
-        "/OPR/i" => "Opera",
-        "/netscape/i" => "Netscape",
-        "/maxthon/i" => "Maxthon",
-        "/konqueror/i" => "Konqueror",
-        "/Bot/i" => "Spam/Unknown",
-        "/Valve Steam GameOverlay/i" => "Steam",
-        "/mobile/i" => "Mobile",
-      ];
-        foreach ($browser_array as $regex => $value) {
-            if (preg_match($regex, $user_agent)) {
-                $browser = $value;
-            }
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $browsers = [
+            '/msie/i' => 'Internet Explorer',
+            '/firefox/i' => 'Firefox',
+            '/Mozilla/i' => 'Mozila',
+            '/safari/i' => 'Safari',
+            '/chrome/i' => 'Chrome',
+            '/edge/i' => 'Edge',
+            '/opera/i' => 'Opera',
+            '/OPR/i' => 'Opera',
+            '/netscape/i' => 'Netscape',
+            '/maxthon/i' => 'Maxthon',
+            '/konqueror/i' => 'Konqueror', 
+            '/Bot/i' => 'Spam/Unknown', 
+            '/Valve Steam GameOverlay/i' => 'Steam', 
+            '/mobile/i' => 'Mobile', 
+
+        ];
+
+        foreach ($browsers as $regexp=>$name) { 
+
+          if (preg_match($regexp, $userAgent)) { 
+
+              return $name; 
+
+          }
+
         }
-        return $browser;
-    }
+
+        return "Unknown Browser";
+
+    }  
+
 
     protected function get_user_os()
     {

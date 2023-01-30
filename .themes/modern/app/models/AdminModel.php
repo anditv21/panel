@@ -24,18 +24,19 @@ class Admin extends Database
             return $result;
         }
     }
+
     protected function bannedArray()
     {
         if (Session::isAdmin() or Session::isSupp()) {
-            $this->prepare(
-                'SELECT * FROM `users` where banned = 1 ORDER BY uid ASC'
-            );
+            $query = 'SELECT * FROM `users` where banned = 1 ORDER BY uid ASC';
+
+            $this->prepare($query);
             $this->statement->execute();
 
-            $result = $this->statement->fetchAll();
-            return $result;
+            return $this->statement->fetchAll();
         }
     }
+
     protected function updatenews($news)
     {
         if (Session::isAdmin()) {
@@ -43,20 +44,22 @@ class Admin extends Database
             $this->statement->execute([$news]);
         }
     }
+
     protected function pwreset($hashedPassword, $username)
     {
         if (Session::isAdmin()) {
-            $this->prepare(
-                'UPDATE `users` SET `password` = ? WHERE `username` = ?'
-            );
+            $this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
             $this->statement->execute([$hashedPassword, $username]);
 
-            $old = $username;
-            $username = Session::get('username');
+            $oldUsername = $username;
+            $currentUsername = Session::get('username');
             $user = new UserController();
-            $user->log($username, "Reset the password for $old", user_logs);
-            $suser = Session::get('username');
-            $user->loguser($username, "HWID resetted by $suser");
+
+
+            $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
+
+            $user->loguser($currentUsername, "HWID resetted by $currentUsername");
+
             return true;
         }
     }
@@ -165,9 +168,7 @@ class Admin extends Database
     protected function invCodeGen($code, $createdBy)
     {
         if (Session::isAdmin() or Session::isSupp()) {
-            $this->prepare(
-                'INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)'
-            );
+            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
             $user->log($createdBy, "Generated an invitation", admin_logs);
@@ -190,9 +191,7 @@ class Admin extends Database
     protected function subCodeGen($code, $createdBy)
     {
         if (Session::isAdmin()) {
-            $this->prepare(
-                'INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)'
-            );
+            $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
             $user->log($createdBy, "Generated an subscription code", admin_logs);
@@ -202,127 +201,115 @@ class Admin extends Database
     // Resets HWID
     protected function HWID($uid)
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if (Session::isAdmin() || Session::isSupp()) {
             $this->prepare('UPDATE `users` SET `hwid` = NULL WHERE `uid` = ?');
             $this->statement->execute([$uid]);
-
+    
             $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $result = $this->statement->fetch();
-
-            $username = Session::get('username');
+    
+            $adminUsername = Session::get('username');
             $user = new UserController();
-            $user->log($username, "Reset the hwid of $result->username ($uid)", admin_logs);
-            $user->loguser($result->username, "$username resetted your HWID");
-        }
-    }
+            $user->log($adminUsername, "Reset the hwid of $result->username ($uid)", admin_logs);
+            $user->loguser($result->username, "$adminUsername resetted your HWID");
+        } 
+    } 
 
     // Set user ban / unban
     protected function banned($uid)
     {
         if (Session::isAdmin()) {
-
+    
             // Check if user is banned
-            $this->prepare('SELECT `banned` FROM `users` WHERE `uid` = ?');
+            $this->prepare('SELECT `banned`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
-
+    
             // Set banned status to opposite of current status
             $banned = $userData->banned ? 0 : 1;
-
+    
             // Update user's banned status
             $this->prepare('UPDATE `users` SET `banned` = ? WHERE `uid` = ?');
             $this->statement->execute([$banned, $uid]);
-
+    
             // Get username for logging
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
-
             $username = Session::get('username');
-            $userController = new UserController();
+            $user = new UserController();
+
             if ($banned) {
-                $userController->log($username, "Banned $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Banned by $username");
+                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);  
+                $user->loguser($userData->username, "Banned by $username");  
             } else {
-                $userController->log($username, "Unbanned $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Unbanned by $username");
+                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);  
+                $user->loguser($userData->username, "Unbanned by $username");
             }
-        }
+    
+        }  
     }
 
     // Set user admin / non admin
     protected function administrator($uid)
     {
         if (Session::isAdmin()) {
+
             // Check if user is an admin
             $this->prepare('SELECT `admin` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
 
             // Set admin status to opposite of current status
-            $admin = $userData->admin ? 0 : 1;
+            $admin = !$userData->admin;
 
-            // Update user's admin status
-            $this->prepare('UPDATE `users` SET `admin` = ? WHERE `uid` = ?');
-            $this->statement->execute([$admin, $uid]);
+            $this->prepare('UPDATE `users` SET `admin` = ?, `supp` = ? WHERE `uid` = ?');
+            $this->statement->execute([$admin, $admin, $uid]);
 
-            // Update user's supp status
-            $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
-            $this->statement->execute([$admin, $uid]);
-
-            // Get username for logging
             $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
 
-            $username = Session::get('username');
-            $userController = new UserController();
-            if ($admin) {
-                $userController->log($username, "Added Admin perms to $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Set to admin by $username");
-            } else {
-                $userController->log($username, "Removed Admin perms from $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Admin removed by $username");
+			$username = Session::get('username'); 			
+            $user = new UserController();			 	 	 	  	  	  
+            if ($admin) { 	  	  	  	  	  
+                $user->log($username, "Added Admin perms to {$userData['username']} ($uid)", admin_logs);  
+                $user->logUser($userData['username'], "Set to admin by {$username}"); 
+            } else { 	  	  	  	  	  
+                $user->log($username, "Removed Admin perms from {$userData['username']} ($uid)", admin_logs); 
+                $user->logUser($userData['username'], "Admin removed by {$username}"); 
             }
         }
     }
-
-
 
 
     // Set user supp / non supp
     protected function supporter($uid)
     {
         if (Session::isAdmin()) {
-            // Check if user has supp permissions
-            $this->prepare('SELECT `supp` FROM `users` WHERE `uid` = ?');
+            // Get user data and username for logging
+            $this->prepare('SELECT `supp`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
-
+    
             // Set supp status to opposite of current status
             $supp = $userData->supp ? 0 : 1;
-
-            // Update user's supp status
+    
+            // Update user's supp status and log changes 
             $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$supp, $uid]);
-
-            // Get username for logging
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
-
+    
             $username = Session::get('username');
-            $userController = new UserController();
+            $user = new UserController();
+    
             if ($supp) {
-                $userController->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Set to Supp by $username");
-            } else {
-                $userController->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs);
-                $userController->loguser($userData->username, "Supp removed by $username");
-            }
-        }
-    }
+                $user->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs); 
+                $user->loguser($userData->username, "Set to Supp by $username"); 
+            } else { 
+                $user->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs); 
+                $user->loguser($userData->username, "Supp removed by $username"); 
+            } 
+    
+        } 												  
+    }  
 
     //
     protected function cheatStatus()
@@ -341,11 +328,11 @@ class Admin extends Database
             $this->statement->execute([$status]);
 
             $username = Session::get('username');
-            $userController = new UserController();
+            $user = new UserController();
             if ($status) {
-                $userController->log($username, "Set the cheat status to DETECTED", system_logs);
+                $user->log($username, "Set the cheat status to DETECTED", system_logs);
             } else {
-                $userController->log($username, "Set the cheat status to UN-DETECTED", system_logs);
+                $user->log($username, "Set the cheat status to UN-DETECTED", system_logs);
             }
         }
     }
@@ -367,11 +354,11 @@ class Admin extends Database
             $this->statement->execute([$maintenance]);
 
             $username = Session::get('username');
-            $userController = new UserController();
+            $user = new UserController();
             if ($maintenance) {
-                $userController->log($username, "Set the cheat status to under maintenance", system_logs);
+                $user->log($username, "Set the cheat status to under maintenance", system_logs);
             } else {
-                $userController->log($username, "Set the cheat status to no maintenance", system_logs);
+                $user->log($username, "Set the cheat status to no maintenance", system_logs);
             }
         }
     }
@@ -469,10 +456,6 @@ class Admin extends Database
                         $currentsub->add(new DateInterval($days));
                         $subTime = $currentsub->format('Y-m-d'); // Format Year-Month-Day
 
-
-
-
-
                         $this->prepare(
                             'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
                         );
@@ -502,23 +485,22 @@ class Admin extends Database
             $this->prepare('SELECT `invites` FROM `cheat`');
             $this->statement->execute();
             $result = $this->statement->fetch();
-            
+
             if ((int) $result->invites === 0) {
                 $this->prepare('UPDATE `cheat` SET `invites` = 1');
                 $this->statement->execute();
-            
+
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Activated the Invite-System", system_logs);
             } else {
                 $this->prepare('UPDATE `cheat` SET `invites` = 0');
                 $this->statement->execute();
-            
+
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Deactivated the Invite-System", system_logs);
             }
-            
         }
     }
 }
