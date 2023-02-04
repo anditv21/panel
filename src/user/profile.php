@@ -315,13 +315,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
                                                                 ); ?></p>
 
                                 </div>
-                                <?php $hwid = $user->gethwid();
-                                if (!empty($hwid) && $sub > 0) :
-                                ?>
-                                    <div class="col-12 clearfix">
-                                        <small class="float-right mb-0"><i class="fas fa-microchip"></i><?php Util::display(" HWID: " . $hwid); ?></small>
-                                    </div>
-                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

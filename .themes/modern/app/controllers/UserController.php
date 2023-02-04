@@ -43,12 +43,6 @@ class UserController extends Users
     }
 
 
-    public function gethwid()
-    {
-        $username = Session::get("username");
-        return $this->getuserhwid($username);
-    }
-
     public function banreason($username)
     {
         return $this->getbanreason($username);

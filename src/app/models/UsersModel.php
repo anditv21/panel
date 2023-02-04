@@ -26,15 +26,6 @@ class Users extends Database
         return $this->statement->rowCount() > 0;
     }
 
-
-    protected function getUserHwid(string $username): string
-    {
-        $this->prepare("SELECT hwid FROM `users` WHERE `username` = ?");
-        $this->statement->execute([$username]);
-    
-        return (string) $this->statement->fetchColumn();
-    }
-
     protected function getnews()
     {
         $this->prepare("SELECT * FROM `cheat`");

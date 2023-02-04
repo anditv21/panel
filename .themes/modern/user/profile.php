@@ -238,12 +238,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
 
                                     $days = Util::getjoin();
                                     Util::display("Joined: $days days ago");
-                                    Util::display("<br>");
-                                    $hwid = $user->gethwid();
-                                    if(!empty($hwid) && $sub > 0)
-                                    {
-                                        Util::display("HIWD: ". $hwid);
-                                    }                             
+                                    Util::display("<br>");                        
                                     ?></h3>
 
                                     
