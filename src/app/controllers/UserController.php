@@ -27,16 +27,21 @@ class UserController extends Users
         return $this->tokenarray($username);
     }
 
-    public function logoutUser()
+    public function logoutUser($log = true)
     {
         $username = Session::get("username");
-        $this->log($username, "Logged out", auth_logs);
-        setcookie("login_cookie", "", time() - 1);
-        setcookie("login_cookie", "", time() + 31556926, '/');
+        if ($log) {
+            $this->log($username, "Logged out", auth_logs);
+        }
+
+        setcookie("login_cookie", "", time() - 3600, '/');
         session_unset();
         $_SESSION = [];
+        $_SESSION = array();
         session_destroy();
+        Util::redirect("/auth/login.php");
     }
+
 
     public function gethwid()
     {
@@ -197,7 +202,6 @@ class UserController extends Users
 
                 $this->addrememberToken($token, $username);
 
-                setcookie("login_cookie", $token, time() + 31556926);
                 setcookie("login_cookie", $token, time() + 31556926, '/');
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
@@ -223,9 +227,14 @@ class UserController extends Users
             // Session start
             $this->createUserSession($result);
             $username = Session::get("username");
-            $this->log($username, "Logged in via token", auth_logs);
+            $this->log($username, "Logged in via cookie", auth_logs);
             $this->loglogin();
             Util::redirect("/index.php");
+        }
+        else
+        {
+            $this->logoutUser(false);
+            return "Login with stored token failed.";
         }
     }
 

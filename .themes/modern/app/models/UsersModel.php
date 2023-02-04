@@ -154,7 +154,6 @@ class Users extends Database
             $username = $row->username;
 
             if ($row) {
-                setcookie('login_cookie', '', time() - 1);
                 setcookie("login_cookie", $token, time() + 31556926, '/');
 
                 $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
@@ -171,7 +170,7 @@ class Users extends Database
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os,$token]);
 
-                    return true; // Return true if authentication succeeds. 
+                    return $newrow; // Return username if authentication succeeds. 
 
                 } else { return false; } 
 
