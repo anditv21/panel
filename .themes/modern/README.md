@@ -1,5 +1,5 @@
 
-#### note: Since this theme is not very popular, it will only get important updates or less frequent updates in the future.
+#### note: Due to low usage of this theme, it will only get important updates or less frequent updates in the future.
 
 #### modern theme
 👤 **sxck1337**
