@@ -54,14 +54,21 @@ Default login: <code>admin</code>:<code>admin</code>
 Originally it was developed by <a href="https://github.com/znixbtw/">@znix</a> to license cheating software for e.g. CSGO.</p>
 
   
+<h3>Why do updates come so rarely and sometimes lead to bugs?</h3>
 
-<h3>Why do updates come so rarely?</h3>
+<p>
+Currently <a href="https://github.com/anditv21/">I`m</a> working on the panel alone in my free time.
 
-<p>Because I work on the panel only when I feel like it in my free time. :)</p>
+I try to test most before the release.
+<br>
+However, due to the many features of the panel and several ranks and themes, I do not always succeed.
+<br>
+If you found a bug, feel free to report it <a href="https://github.com/anditv21/panel/issues/">here</a> or via discord.
+</p>
 
 <h3>Why are parts of the code so messy?</h3>
 
-<p>Parts of the code are from an old project and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+<p>Parts of the code are from old or private project and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
 
 <h3>How do I update the panel?</h3>
 
@@ -232,7 +239,7 @@ Note: User pass and hwid has to be sent in base64 format.
     <tr>
       <td>hwid</td>
       <td>string</td>
-      <td>Hwid (base64encoded)</td>
+      <td>HWID (base64encoded)</td>
       <td>True</td>
     </tr>
     <tr>
