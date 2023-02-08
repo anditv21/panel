@@ -29,7 +29,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <p align="center">
 
-<a  href="https://i.ibb.co/RyvRyDB/image.png"><img src="https://i.ibb.co/RyvRyDB/image.png" /></a>
+<a  href="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png"><img src="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png" /></a>
 
 <a  href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 
