@@ -35,93 +35,102 @@ Util::head($username);
 Util::navbar();
 
 // if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"])  && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"])) {
-    header(
-        "location: https://discord.com/api/oauth2/authorize?client_id=" .
-            client_id .
-            "&redirect_uri=" .
-            SITE_URL .
-            SUB_DIR .
-            "/user/profile.php&response_type=code&scope=identify"
-    );
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"]) && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"])) {
+    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
+    exit();
 }
 
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) == "GET") {
-    if (isset($_GET['code'])) {
-        $code = Util::securevar($_GET['code']);
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
-        $code = Util::securevar($_GET["code"]);
-        if (isset($code) && empty($code)) {
-            echo "Error: Please try again!";
+
+    $code = Util::securevar($_GET['code']);
+    if (isset($code)) {
+    if (!empty($code)) {
+
+        $discord_code = $code;
+
+        $payload = [
+            "code" => $discord_code,
+            "client_id" => client_id,
+            "client_secret" => client_secret,
+            "grant_type" => "authorization_code",
+            "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
+            "scope" => "identify",
+        ];
+    
+        $payload_string = http_build_query($payload);
+        $discord_token_url = "https://discordapp.com/api/oauth2/token";
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $discord_token_url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        $result = curl_exec($ch);
+    
+        if ($result === false) {
+            echo "Error: " . curl_error($ch);
+            curl_close($ch);
+            exit();
         }
-
-        if (isset($code)) {
-            $discord_code = $code;
-
-            $payload = [
-                "code" => $discord_code,
-                "client_id" => client_id,
-                "client_secret" => client_secret,
-                "grant_type" => "authorization_code",
-                "redirect_uri" => SITE_URL . SUB_DIR . "/user/profile.php",
-                "scope" => "identify",
-            ];
-
-            #print_r($payload);
-
-            $payload_string = http_build_query($payload);
-            $discord_token_url = "https://discordapp.com/api/oauth2/token";
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $discord_token_url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-
-            if (!$result) {
-                echo curl_error($ch);
-            }
-
-            $result = json_decode($result, true);
-
-            $access_token = $result["access_token"];
-            $discord_users_url = "https://discordapp.com/api/users/@me";
-            $header = [
-                "Authorization: Bearer $access_token",
-                "Content-Type: application/x-www-form-urlencoded",
-            ];
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-            curl_setopt($ch, CURLOPT_URL, $discord_users_url);
-            curl_setopt($ch, CURLOPT_POST, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $result = curl_exec($ch);
-            $result = json_decode($result, true);
-
-            $id = $result["id"];
-            $avatar = $result["avatar"];
-
-            $path = IMG_DIR . $uid;
-
-            if (@getimagesize($path . ".png")) {
-                unlink($path . ".png");
-            } elseif (@getimagesize($path . ".jpg")) {
-                unlink($path . ".jpg");
-            } elseif (@getimagesize($path . ".gif")) {
-                unlink($path . ".gif");
-            }
-
-            $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
-            $img = $path . ".png";
-            file_put_contents($img, file_get_contents($url));
-            chmod(IMG_DIR, 0775);
-            chmod($img, 0775);
-            header("location: profile.php");
+    
+        $result = json_decode($result, true);
+    
+        if (!isset($result["access_token"])) {
+            echo "Error: Failed to get access token from Discord.";
+            exit();
         }
+    
+        $access_token = $result["access_token"];
+        $discord_users_url = "https://discordapp.com/api/users/@me";
+        $header = [
+            "Authorization: Bearer $access_token",
+            "Content-Type: application/x-www-form-urlencoded",
+        ];
+    
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_URL, $discord_users_url);
+        curl_setopt($ch, CURLOPT_POST, false);
+    
+        $result = curl_exec($ch);
+    
+        if ($result === false) {
+            echo "Error: " . curl_error($ch);
+            curl_close($ch);
+            exit();
+        }
+    
+        $result = json_decode($result, true);
+    
+        if (!isset($result["id"])) {
+            echo "Error: Failed to get user ID from Discord.";
+            exit();
+        }
+    
+        $id = $result["id"];
+        $avatar = $result["avatar"];
+    
+        $path = IMG_DIR . $uid;
+    
+        if (@getimagesize($path . ".png")) {
+            unlink($path . ".png");
+        } elseif (@getimagesize($path . ".jpg")) {
+            unlink($path . ".jpg");
+        } elseif (@getimagesize($path . ".gif")) {
+            unlink($path . ".gif");
+        }
+    
+        $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
+        $img = $path . ".png";
+        file_put_contents($img, file_get_contents($url));
+        chmod(IMG_DIR, 0775);
+        chmod($img, 0775);
+        
+    
+        header("location: profile.php");
     }
+}
 }
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
