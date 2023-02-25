@@ -301,7 +301,7 @@ Note: User pass and hwid has to be sent in base64 format.
 <details>
 <summary>Setup</summary>
 
-
+<h1>Please check <b>setup.php</b> after you are done with the setup or before you contact me/create an issue.</h1>
 <ol>
   <li>Download the latest Release ZIP and the db.sql file from <a href="https://github.com/anditv21/panel/releases/latest/">here.</a></li>
   <li>Extract the files and upload them to your PHP host.</li>
@@ -323,8 +323,8 @@ Note: User pass and hwid has to be sent in base64 format.
 
 <details>
   <summary>Setup-Video</summary>
+<h1>Please check <b>setup.php</b> after you are done with the setup or before you contact me/create an issue.</h1>
   <a href="https://youtu.be/dnluF-0eRp0" target="_blanlk">Watch the Setup Tutorial on YouTube</a>
-  <p>NOTE: Make sure php has full access to /usercontent/avatar otherwise no avatar can be downloaded from discord.</p>
 </details>
 
 
