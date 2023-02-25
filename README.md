@@ -1,18 +1,7 @@
 
 <h1 align="center">:zap: User Management Panel</h1>
 
-<p align="center">
-| <a  href="https://github.com/anditv21/panel/issues/"> Bug report/Suggestions</a> |
-<a  href="https://github.com/znixbtw/php-panel-v2/">Original Panel</a> |
-<a  href="https://github.com/anditv21/panel/tree/main/.examples/">Loader/API Examples</a> |
 
-</p>
-
-<p align="center">
-Default login: <code>admin</code>:<code>admin</code>
-</p>
-
-  
   
 
 <h3 align="center">Overview</h3>
@@ -22,67 +11,38 @@ Default login: <code>admin</code>:<code>admin</code>
 <img  src="https://i.imgur.com/VB2ial8.png" />
 
 </p>
+<p align="center">
+Default login: <code>admin</code>:<code>admin</code>
+</p>
 
-<details align="center">
+  
 
-<summary>Preview</summary>
+
+<h3>Setup/Common Issues/FAQ/ Loaders & API-Examples</h3>
+<p>Read the Wiki <a href="https://github.com/anditv21/panel/wiki"><b>here.</b></a></p>
+
+
+
+  
+### Preview
+<details>
+
+<summary>Click here to see Preview</summary>
 
 <p align="center">
 
-<a  href="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png"><img src="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png" /></a>
+<a href="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png"><img src="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png" /></a>
 
-<a  href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
+<a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 
-<a  href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
-<a  href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
+<a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
+<a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
 </details>
 
-  
-
-### FAQ
-
-<details>
-
-<summary>Click to view FAQ</summary>
-
-<h3>What exactly does the panel do?</h3>
-
-<p>Basically it is a system to license software. <br>
-
-Originally it was developed by <a href="https://github.com/znixbtw/">@znix</a> to license cheating software for e.g. CSGO.</p>
 
   
-<h3>Why do updates come so rarely and sometimes lead to bugs?</h3>
-
-<p>
-Currently <a href="https://github.com/anditv21/">I`m</a> working on the panel alone in my free time.
-
-I try to test most before the release.
-<br>
-However, due to the many features of the panel and several ranks and themes, I do not always succeed.
-<br>
-If you found a bug, feel free to report it <a href="https://github.com/anditv21/panel/issues/">here</a> or via discord.
-</p>
-
-<h3>Why are parts of the code so messy?</h3>
-
-<p>Parts of the code are from old & private projects and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
-
-<h3>How do I update the panel?</h3>
-
-<p>Download the latest release. And drag all files and folders except "/app/core" (this would overwrite your config) to your server.</p>
-
-<h3>hOw dO I SeTuP ThE mOdErN ThEmE?</h3>
-
-<p>Just like the default theme :)</p>
-<br>
-</details>
-
-  
-  
-
 ### Features
 
 ###### AUTH
@@ -200,77 +160,12 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6
 
 </details>
 
+ 
   
-  
-
-###### API
-
-<details>
-
-<summary>API</summary>
-
-Note: User pass and hwid has to be sent in base64 format.
-
-<ul>
-
-<li>Send user data in JSON format on call</li>
-<table>
-  <thead>
-    <tr>
-      <th>Parameter</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Required</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>user</td>
-      <td>string</td>
-      <td>Username</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <td>pass</td>
-      <td>string</td>
-      <td>Password (base64encoded)</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <td>hwid</td>
-      <td>string</td>
-      <td>HWID (base64encoded)</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <td>key</td>
-      <td>string</td>
-      <td>Key from config file</td>
-      <td>True</td>
-    </tr>
-  </tbody>
-</table>
-<b><code>GET /api.php</code></b>
-
-
-<ul><li>Usage: <code>api.php?user={username}&pass={password}&hwid={hwid}&key={key}</code></li>
-
-<li>Example: <code>api.php?user=admin&pass=YWRtaW4=&hwid=aHdpZA==&key=yes</code></li></ul>
-
-  
-
-</ul>
-
-<i>There are already <a  href="https://github.com/anditv21/panel/tree/main/.examples/">API examples</a> for some popular languages.</i>
-
-</details>
-
-  
-  
-###### Credits
+### Credits
   <details>
 
-<summary>Credits</summary>
+<summary>Click to see Credits</summary>
 
 
 <ul>
@@ -288,47 +183,3 @@ Note: User pass and hwid has to be sent in base64 format.
 </details>
 
 
----
-
-  
-  
-
-## Setup
-
-
-
-  
-<details>
-<summary>Setup</summary>
-
-<h1>Please check <b>setup.php</b> after you are done with the setup or before you contact me/create an issue.</h1>
-<ol>
-  <li>Download the latest Release ZIP and the db.sql file from <a href="https://github.com/anditv21/panel/releases/latest/">here.</a></li>
-  <li>Extract the files and upload them to your PHP host.</li>
-  <li>Create a new database in PHPMyAdmin, import the contents of the db.sql.</li>
-  <li>Rename Database file to Database.php.</li>
-  <li>Edit the Database.php file to include your database credentials.</li>
-  <li>Upload the x.exe file in the panel's main directory.</li>
-  <li>Log in to the panel using default credentials, then change the password to a secure one.</li>
-  <li>Edit the Config.php file to set the name and description of your website, and set a secure API key for authenticating requests.</li>
-  <li>Rename the DiscordConfig file to DiscordConfig.php.</li>
-  <li>Create a new Discord application to integrate with the panel.</li>
-  <li>Copy the panel's profile URL and add it as a redirect URL in the Discord application.</li>
-  <li>Fill in your Discord logging webhook URL(s) in the DiscordConfig.php file to allow the panel to send messages to Discord.</li>
-</ol>
-
-  
-<p>NOTE: Make sure php has full access to /usercontent/avatar otherwise no avatar can be downloaded from discord.</p>
-</details>
-
-<details>
-  <summary>Setup-Video</summary>
-<h1>Please check <b>setup.php</b> after you are done with the setup or before you contact me/create an issue.</h1>
-  <a href="https://youtu.be/dnluF-0eRp0" target="_blanlk">Watch the Setup Tutorial on YouTube</a>
-</details>
-
-
-
-
-
-</details>
