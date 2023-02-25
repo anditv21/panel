@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2023 at 09:25 PM
--- Server version: 10.3.36-MariaDB-0+deb10u2
--- PHP Version: 8.1.14
+-- Generation Time: Feb 25, 2023 at 06:09 AM
+-- Server version: 10.3.38-MariaDB-0+deb10u1
+-- PHP Version: 8.1.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,7 @@ CREATE TABLE `cheat` (
   `frozen` int(1) NOT NULL DEFAULT 0,
   `freezingtime` int(13) NOT NULL,
   `invites` int(1) NOT NULL DEFAULT 1
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `cheat`
@@ -54,7 +54,7 @@ CREATE TABLE `invites` (
   `code` varchar(255) NOT NULL,
   `createdBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `invites`
@@ -78,13 +78,14 @@ CREATE TABLE `login` (
   `browser` varchar(255) NOT NULL,
   `os` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
 --
 
 INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
+('admin', '851b1db7999e707014884859cb59425b', '127.0.0.1', 'Mozilla', 'Windows 10', 'February 25 th, 6:24'),
 ('admin', '85e1099fe04c88fffbd9c0796243f456', '127.0.0.1', 'Opera', 'Windows 10', 'January 16 th, 22:24');
 
 -- --------------------------------------------------------
@@ -97,7 +98,7 @@ CREATE TABLE `subscription` (
   `code` varchar(255) NOT NULL,
   `createdBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `subscription`
@@ -124,7 +125,7 @@ CREATE TABLE `userlogs` (
   `os` varchar(255) NOT NULL,
   `ip` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `userlogs`
@@ -133,8 +134,8 @@ CREATE TABLE `userlogs` (
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
 (9, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 23 rd, 22:24'),
 (21, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 31 st, 9:55'),
-(22, 'admin', 'Redeemed: ', 'Opera', 'Windows 10', '45.85.219.118', 'December 31 st, 10:04'),
-(23, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'January 16 th, 22:24');
+(23, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'January 16 th, 22:24'),
+(24, 'admin', 'Login', 'Mozilla', 'Windows 10', '127.0.0.1', 'February 25 th, 6:24');
 
 -- --------------------------------------------------------
 
@@ -158,14 +159,14 @@ CREATE TABLE `users` (
   `currentLogin` datetime DEFAULT NULL,
   `lastLogin` datetime DEFAULT NULL,
   `banreason` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-01-16 22:24:57', '2022-12-31 09:49:19', NULL);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-02-25 06:24:59', '2023-01-16 22:24:57', NULL);
 
 --
 -- Indexes for dumped tables
@@ -182,6 +183,12 @@ ALTER TABLE `cheat`
 --
 ALTER TABLE `invites`
   ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexes for table `login`
+--
+ALTER TABLE `login`
+  ADD UNIQUE KEY `remembertoken` (`remembertoken`);
 
 --
 -- Indexes for table `subscription`
@@ -212,7 +219,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `users`
