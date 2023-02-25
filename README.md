@@ -68,11 +68,11 @@ If you found a bug, feel free to report it <a href="https://github.com/anditv21/
 
 <h3>Why are parts of the code so messy?</h3>
 
-<p>Parts of the code are from old or private project and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
+<p>Parts of the code are from old & private projects and have not been improved yet. <br> Feel free to create a pull request with improvements. ¯\_(ツ)_/¯ </p>
 
 <h3>How do I update the panel?</h3>
 
-<p>Download the latest release. And drag all files and folders except "/app/core" (this would overwrite your config and db infos) to your server.</p>
+<p>Download the latest release. And drag all files and folders except "/app/core" (this would overwrite your config) to your server.</p>
 
 <h3>hOw dO I SeTuP ThE mOdErN ThEmE?</h3>
 
