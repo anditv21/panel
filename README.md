@@ -295,10 +295,10 @@ Note: User pass and hwid has to be sent in base64 format.
 
 ## Setup
 
-<details>
+
 
   
-
+<details>
 <summary>Setup</summary>
 
 
@@ -321,8 +321,14 @@ Note: User pass and hwid has to be sent in base64 format.
 <p>NOTE: Make sure php has full access to /usercontent/avatar otherwise no avatar can be downloaded from discord.</p>
 </details>
 
-</a>
+<details>
+  <summary>Setup-Video</summary>
+  <a href="https://youtu.be/dnluF-0eRp0" target="_blanlk">Watch the Setup Tutorial on YouTube</a>
+  <p>NOTE: Make sure php has full access to /usercontent/avatar otherwise no avatar can be downloaded from discord.</p>
+</details>
 
-</p>
+
+
+
 
 </details>
