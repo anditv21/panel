@@ -1,5 +1,5 @@
 <?php
-echo '<style>body {background-color: #141617;}</style>';
+echo '<title>Panel-Setup Help</title><style>body {background-color: #141617;}</style>';
 
 // Check if Database.php and DiscordConfig.php exist
 if (file_exists('app/core/Database.php') && file_exists('app/core/DiscordConfig.php')) {
@@ -75,5 +75,5 @@ if (is_writable($avatarDir) && is_readable($avatarDir)) {
   echo "<p style='color: white;'>❌ PHP does not have read and write access to /$avatarDir</p>";
 }
 
-
+echo "<br><h3 style='color: white;'><b>You still have problems? Maybe the <a href='https://github.com/anditv21/panel/wiki/Common-issues' target='_blank'>wiki</a> will help you</b></h3>";
 ?>
