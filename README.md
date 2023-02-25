@@ -18,7 +18,7 @@ Default login: <code>admin</code>:<code>admin</code>
   
 
 
-<h3>Setup/Common Issues/FAQ/ Loaders & API-Examples</h3>
+<h3>Setup/Issues/FAQ/Loaders & API-Examples</h3>
 <p>Read the Wiki <a href="https://github.com/anditv21/panel/wiki"><b>here.</b></a></p>
 
 
