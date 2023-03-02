@@ -1,9 +1,9 @@
 <?php
 
-// Extends to NO classes
-// Only Public methods
 
-class Util
+// Only Public methods
+require_once SITE_ROOT . "/app/models/UtilModel.php";
+class Util extends UtilMod
 {
     public static function redirect($location)
     {
@@ -82,11 +82,12 @@ class Util
     // ban check
     public static function banCheck()
     {
+        $util = new UtilMod();
+        $res = $util->checkban(Session::get("username"));
         // If user is banned
-        if (Session::isBanned()) {
-            // Prevents infinite redirect loop
-            if (basename(self::securevar($_SERVER['PHP_SELF'])) != 'banned.php') {
-                header('location: banned.php');
+        if ($res  == true) {
+            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
+                Util::redirect('/banned.php');
             }
         }
     }
