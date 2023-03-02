@@ -35,7 +35,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
 
-<a href="https://i.ibb.co/QcdVwvZ/image.png"><img src="https://i.ibb.co/QcdVwvZ/image.png" /></a>
+<a href="https://i.ibb.co/tZfSt9z/image.png"><img src="https://i.ibb.co/tZfSt9z/image.png" /></a>
 <a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
