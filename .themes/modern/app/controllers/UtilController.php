@@ -38,29 +38,26 @@ class Util extends UtilMod
 
     public static function securevar($var)
     {
-        if(!empty($var))
-        {
-            if (is_array($var)) {
-                $new_array = array();
-                foreach ($var as $key => $value) {
-                    if (is_string($value)) {
-                        $new_array[$key] = htmlspecialchars(stripslashes(trim($value)));
-                    } else if (is_array($value)) {
-                        $new_array[$key] = self::securevar($value);
-                    } else {
-                        $new_array[$key] = $value;
-                    }
-                }
-                return $new_array;
-            } else {
-                return htmlspecialchars(stripslashes(trim($var)));
-            }
+        if (empty($var)) {
+            return $var;
         }
-        else
-        {
-            return "";
+        if (is_array($var)) {
+            $new_array = array();
+            foreach ($var as $key => $value) {
+                if (is_string($value)) {
+                    $new_array[$key] = htmlspecialchars(stripslashes(trim($value)));
+                } else if (is_array($value)) {
+                    $new_array[$key] = self::securevar($value);
+                } else {
+                    $new_array[$key] = $value;
+                }
+            }
+            return $new_array;
+        } else {
+            return htmlspecialchars(stripslashes(trim($var)));
         }
     }
+    
     
 
 
