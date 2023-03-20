@@ -48,6 +48,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
    <link rel="stylesheet" href="../assets/css/untitled.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -124,7 +127,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                                        <td style="color: rgb(255,255,255);"><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->remembertoken); ?>" name="deltoken" onclick="confirm('Are you sure you want to delete this token?')">Delete</button>
                                           <br>
                                           <?php if ($row->remembertoken == Util::securevar($_COOKIE["login_cookie"])) : ?>
-                                             <p>You are currently using this token to login</p>
+                                            <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
                                           <?php endif; ?>
                                        </td>
                                     </form>
@@ -161,6 +164,11 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
    <script src="../assets/js/theme.js"></script>
    <script src="https://unpkg.com/@popperjs/core@2"></script>
+   <script>
+       $(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();   
+		});
+    </script>
 </body>
 <?php Util::footer(); ?>
 
