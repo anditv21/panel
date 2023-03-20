@@ -177,7 +177,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                         <div class="form-group">
                             <input type="password" class="form-control form-control-sm" placeholder="Confirm password" name="confirmPassword" required>
                         </div>
-                        <button class="btn btn-outline-primary btn-block" name="updatePassword" type="submit" value="submit">Update</button>
+                        <button class="btn btn-outline-primary btn-block" name="updatePassword" type="submit" value="submit">Update  <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15"></button>
                     </form>
                 </div>
             </div>

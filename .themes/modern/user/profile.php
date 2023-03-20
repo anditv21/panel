@@ -150,6 +150,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
    <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
    <link rel="stylesheet" href="../assets/css/untitled.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -378,7 +381,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                                     <div class="mb-3"><span style="color: rgb(255,255,255);">Confirm password</span><input class="form-control" name="confirmPassword" type="password" id="username-2" placeholder="********" name="username" style="background: #121421;border-style: none;margin-top: 11px;"></div>
                                                 </div>
                                             </div>
-                                            <div class="mb-3"><button class="btn btn-success btn-sm" name="updatePassword" type="submit" value="submit" style="color: rgb(255,255,255);margin-top: 25px;">Save Password</button></div>
+                                            <div class="mb-3"><button class="btn btn-success btn-sm" name="updatePassword" type="submit" value="submit" style="color: rgb(255,255,255);margin-top: 25px;">Save Password <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15"></button></div>
                                         </form>
                                     </div>
                                 </div>
