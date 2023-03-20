@@ -247,6 +247,19 @@ class Users extends Database
         }        
     }  
 
+    protected function flushtokens($username)
+    {
+        $this->prepare("SELECT `remembertoken` FROM `login` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $tokens = $this->statement->fetchAll(PDO::FETCH_COLUMN, 0);
+    
+        // Delete all remember tokens for the user
+        $this->prepare("DELETE FROM `login` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+    
+        return $tokens;
+    }
+    
     // Activates subscription
     protected function subscription($subCode, $username)
     {

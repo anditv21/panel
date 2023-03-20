@@ -287,6 +287,7 @@ class UserController extends Users
             $result = $this->updatePass($currentPassword, $hashedPassword, $username);
     
             if ($result) {
+                $this->flushtokens($username);
                 Util::redirect("/auth/logout.php");
             } else {
                 $errors[] = "Your current password does not match.";
