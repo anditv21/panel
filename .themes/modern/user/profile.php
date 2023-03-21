@@ -47,7 +47,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["fi
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
 
-    $code = Util::securevar($_GET['code']);
+    if(isset($_GET['code'])){$code = Util::securevar($_GET['code']);}
     if (isset($code)) {
     if (!empty($code)) {
 
