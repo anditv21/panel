@@ -1,6 +1,15 @@
 <?php
 echo '<title>Panel-Setup Help</title><style>body {background-color: #141617;}</style>';
 
+// Check PHP version
+if (version_compare(phpversion(), '8.0.0', '<')) {
+  echo "<p style='color: white;'>❌ Please change your PHP version to 8.0 or higher</p>";
+}
+else
+{
+  echo "<p style='color: white;'>✅ Using PHP 8.0 or higher</p>";
+}
+
 // Check if Database.php and DiscordConfig.php exist
 if (file_exists('app/core/Database.php') && file_exists('app/core/DiscordConfig.php')) {
   echo "<p style='color: white;'>✅ Files have been renamed</p>";
