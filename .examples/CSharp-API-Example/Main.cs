@@ -32,36 +32,45 @@ namespace loader
 
         public void loadcontent(JObject result)
         {
-            welcome.Text = $"Welcome back {result["username"].ToString()} ({result["uid"].ToString()})";
+
+            string sub = result["sub"].ToString();
+            int subdays = checksub(sub);
+            subtext.Text = $"You have {subdays} day/s left.";
+
+            if(subdays < 1)
+            {
+                MessageBox.Show("Error: You don`t have a sub", "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+
+
+            welcome.Text = $"Welcome back {result["username"]} ({result["uid"]})";
             avatar.ImageLocation = result["avatarurl"].ToString();
 
 
             if (result["cheatstatus"].ToString() == "0")
             {
                 statustext.Text = "Undetected";
-                statustext.ForeColor = System.Drawing.Color.Green;
+                statustext.ForeColor = Color.Green;
             }
             else if (result["cheatstatus"].ToString() == "1")
             {
                 statustext.Text = "Detected";
-                statustext.ForeColor = System.Drawing.Color.Red;
+                statustext.ForeColor = Color.Red;
             }
             else if (result["cheatmaintenance"].ToString() == "1")
             {
                 statustext.Text = "Maintenance";
-                statustext.ForeColor = System.Drawing.Color.Yellow;
+                statustext.ForeColor = Color.Yellow;
             }
 
             else if (result["frozen"].ToString() == "1")
             {
                 statustext.Text = "Subs are frozen.";
-                statustext.ForeColor = System.Drawing.Color.Yellow;
+                statustext.ForeColor = Color.Yellow;
             }
 
-            string sub = result["sub"].ToString();
-            subtext.Text = $"You have {checksub(sub).ToString()} day/s left.";
-
-            Inviter.Text = $"Inviter: {result["invitedBy"].ToString()}";
+            Inviter.Text = $"Inviter: {result["invitedBy"]}";
         }
 
         public int checksub(string sub)
@@ -75,8 +84,6 @@ namespace loader
                 int value = (DateTime.Parse(sub, CultureInfo.InvariantCulture) - DateTime.Now).Days;
                 return value;
             }
-
-
         }
 
         private void Main_MouseDown(object sender, MouseEventArgs e)
