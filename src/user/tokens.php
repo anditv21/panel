@@ -63,11 +63,11 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             <thead>
                 <tr>
                     <th scope="col">IP</th>
-                    <th scope="col" class="text-center">Token</th>
-                    <th scope="col" class="text-center">Last used</th>
-                    <th scope="col" class="text-center">Browser</th>
-                    <th scope="col" class="text-center">OS</th>
-                    <th scope="col" class="text-center">Actions</th>
+                    <th scope="col">Token</th>
+                    <th scope="col">Last used</th>
+                    <th scope="col">Browser</th>
+                    <th scope="col">OS</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
