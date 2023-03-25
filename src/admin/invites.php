@@ -33,6 +33,30 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
 	header("location: invites.php");
 }
+if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+	if (isset($_POST['delInv'])) {
+		$delinv = Util::securevar($_POST['delInv']);
+	}
+
+	if (isset($delinv)) {
+		Util::suppCheck();
+		$admin->delInvCode($delinv);
+	}
+
+	header("location: invites.php");
+}
+if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+	if (isset($_POST['flushInvs'])) {
+		$delinv = Util::securevar($_POST['flushInvs']);
+	}
+
+	if (isset($delinv)) {
+		Util::adminCheck();
+		$admin->flushInvCode();
+	}
+
+	header("location: invites.php");
+}
 ?>
 
 <style>
@@ -69,7 +93,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 					<button name="genInv" type="submit" class="btn btn-outline-primary btn-sm">
 						Gen Inv
 					</button>
-
+					<button name="flushInvs" type="submit" class="btn btn-outline-primary btn-sm">
+						Flush invites
+					</button>
 				</form>
 
 			</div>
@@ -82,6 +108,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 					<tr>
 						<th scope="col">Code</th>
 						<th scope="col">Created By</th>
+						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -90,6 +117,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 						<tr>
 							<td><?php Util::display($row->code); ?></td>
 							<td><?php Util::display($row->createdBy); ?></td>
+							<form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+							<td><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->code); ?>" name="delInv">Delete</button></td>
+							</form>
 						</tr>
 					<?php endforeach; ?>
 

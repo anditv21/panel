@@ -29,6 +29,13 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	if (isset($_POST["genSub3"])) {
 		$gen3 = Util::securevar($_POST["genSub3"]);
 	}
+	if (isset($_POST["delSub"])) {
+		$delsub = Util::securevar($_POST["delSub"]);
+	}
+	if (isset($_POST["flushSub"])) {
+		$flushsub = Util::securevar($_POST["flushSub"]);
+	}
+
 
 
 	if (isset($gen1)) {
@@ -40,6 +47,16 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	}
 	if (isset($gen3)) {
 		$admin->getSubCodeGentrail($username);
+	}
+
+	if (isset($delsub))
+	{
+		$admin->delsubcode($delsub);
+	}
+
+	if (isset($flushsub))
+	{
+		$admin->flushsubcodes();
 	}
 
 	header("location: sub.php");
@@ -86,6 +103,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 					<button name="genSub3" type="submit" class="btn btn-outline-primary btn-sm">
 						Gen Subscription code (3d/Trail)
 					</button>
+					<button name="flushSub" type="submit" class="btn btn-outline-primary btn-sm">
+						Flush sub codes
+					</button>
 
 				</form>
 
@@ -107,6 +127,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 						<tr>
 							<td><?php Util::display($row->code); ?></td>
 							<td><?php Util::display($row->createdBy); ?></td>
+							<form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+							<td><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->code); ?>" name="delSub">Delete</button></td>
+							</form>
 						</tr>
 					<?php endforeach; ?>
 

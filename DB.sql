@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 25, 2023 at 06:09 AM
+-- Generation Time: Mar 25, 2023 at 09:18 PM
 -- Server version: 10.3.38-MariaDB-0+deb10u1
 -- PHP Version: 8.1.16
 
@@ -61,9 +61,7 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
-('7xWvD19OJoKUii8RbJ23', 'admin', '2022-10-01 17:33:54'),
-('2y56jmudDZKJowBWeZZ9', 'admin', '2022-10-01 18:50:15'),
-('ljJOJPArVSvCNw3KPUKl', 'admin', '2022-10-01 18:51:15');
+('OnG7P0XG5cNpHBSGgu7x', 'admin', '2023-03-25 21:05:22');
 
 -- --------------------------------------------------------
 
@@ -85,8 +83,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
-('admin', '851b1db7999e707014884859cb59425b', '127.0.0.1', 'Mozilla', 'Windows 10', 'February 25 th, 6:24'),
-('admin', '85e1099fe04c88fffbd9c0796243f456', '127.0.0.1', 'Opera', 'Windows 10', 'January 16 th, 22:24');
+('admin', '289228adb027722d5bad6992d05427e3', '127.0.0.1', 'Chrome', 'Windows 10', 'March 25 th, 21:44');
 
 -- --------------------------------------------------------
 
@@ -105,11 +102,9 @@ CREATE TABLE `subscription` (
 --
 
 INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('1m-V1oGGZsaGh', 'System', '2022-12-06 14:46:15'),
-('1m-yaHDB9NqjD', 'System', '2022-12-06 14:45:44'),
-('1m-zxBLQn3Ddi', 'System', '2022-12-06 14:45:43'),
-('1m-uO1i8HmeMj', 'System', '2022-12-06 14:45:16'),
-('1m-RU1eqwp7Cg', 'System', '2022-12-06 14:44:35');
+('1m-Ob72RqEIw64KwaXY9QVy', 'admin', '2023-03-25 21:14:31'),
+('3m-wF01oPMkW8MwY0kMxLOb', 'admin', '2023-03-25 21:14:32'),
+('Trail-LAjTXJeRC2jvwQxE0FVG', 'admin', '2023-03-25 21:14:32');
 
 -- --------------------------------------------------------
 
@@ -132,10 +127,7 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(9, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 23 rd, 22:24'),
-(21, 'admin', 'Flushed all logs', 'Opera', 'Windows 10', '127.0.0.1', 'December 31 st, 9:55'),
-(23, 'admin', 'Login', 'Opera', 'Windows 10', '127.0.0.1', 'January 16 th, 22:24'),
-(24, 'admin', 'Login', 'Mozilla', 'Windows 10', '127.0.0.1', 'February 25 th, 6:24');
+(33, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'March 25 th, 21:45');
 
 -- --------------------------------------------------------
 
@@ -166,7 +158,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-02-25 06:24:59', '2023-01-16 22:24:57', NULL);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '45.85.219.118', '2023-03-25 21:44:45', '2023-03-25 20:57:22', NULL);
 
 --
 -- Indexes for dumped tables
@@ -219,7 +211,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`

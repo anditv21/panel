@@ -46,6 +46,7 @@ class AdminController extends Admin
     {
         return $this->subCodeArray();
     }
+
     //
     public function resetpw($hashedPassword, $username)
     {
@@ -58,6 +59,26 @@ class AdminController extends Admin
         $code = Util::randomCode(20);
         return $this->invCodeGen($code, $username);
     }
+    
+    public function delInvCode($delinv)
+    {
+        return $this->deleteinvcode($delinv);
+    }
+
+    public function flushInvCode()
+    {
+        return $this->flushinvs();
+    }
+
+    public function delsubcode($delsub)
+    {
+        return $this->deletesub($delsub);
+    }
+    public function flushsubcodes()
+    {
+        return $this->flushsubs();
+    }
+
 
     //
     public function getSubCodeGen($username)

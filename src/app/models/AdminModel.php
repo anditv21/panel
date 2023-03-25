@@ -175,6 +175,49 @@ class Admin extends Database
         }
     }
 
+    protected function deleteinvcode($code)
+    {
+        if (Session::isAdmin() or Session::isSupp()) {
+            $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
+            $this->statement->execute([$code]);
+            $user = new UserController();
+            $user->log(Session::get("username"), "Deleted invitation with code $code", admin_logs);
+        }
+    }
+
+    protected function deletesub($code)
+    {
+        if (Session::isAdmin() or Session::isSupp()) {
+            $this->prepare('DELETE FROM `subscription` WHERE `code` = ?');
+            $this->statement->execute([$code]);
+            $user = new UserController();
+            $user->log(Session::get("username"), "Deleted subscription with code $code", admin_logs);
+        }
+    }
+
+    protected function flushsubs()
+    {
+        if (Session::isAdmin()) {
+            $this->prepare('DELETE FROM `subscription`');
+            $this->statement->execute();
+            $user = new UserController();
+            $user->log(Session::get("username"), "Flushed all subscriptions", admin_logs);
+        }
+    }
+
+
+    protected function flushinvs()
+    {
+        if (Session::isAdmin()) {
+            $this->prepare('DELETE FROM `invites`');
+            $this->statement->execute();
+            $user = new UserController();
+            $user->log(Session::get("username"), "Flushed all invitation codes", admin_logs);
+        }
+    }
+    
+
+
     // Get array of all subscription codes
     protected function subCodeArray()
     {
