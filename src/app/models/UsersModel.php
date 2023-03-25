@@ -582,36 +582,28 @@ class Users extends Database
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $browsers = [
-            '/msie/i' => 'Internet Explorer',
-            '/firefox/i' => 'Firefox',
-            '/Mozilla/i' => 'Mozila',
-            '/safari/i' => 'Safari',
             '/chrome/i' => 'Chrome',
+            '/firefox/i' => 'Firefox',
+            '/safari/i' => 'Safari',
             '/edge/i' => 'Edge',
-            '/opera/i' => 'Opera',
-            '/OPR/i' => 'Opera',
-            '/netscape/i' => 'Netscape',
+            '/opera|OPR/i' => 'Opera',
+            '/msie/i' => 'Internet Explorer',
             '/maxthon/i' => 'Maxthon',
             '/konqueror/i' => 'Konqueror', 
-            '/Bot/i' => 'Spam/Unknown', 
             '/Valve Steam GameOverlay/i' => 'Steam', 
             '/mobile/i' => 'Mobile', 
-
+            '/Bot/i' => 'Spam/Unknown', 
         ];
-
+    
         foreach ($browsers as $regexp=>$name) { 
-
           if (preg_match($regexp, $userAgent)) { 
-
               return $name; 
-
           }
-
         }
-
+    
         return "Unknown Browser";
-
-    }  
+    }
+    
 
 
     protected function get_user_os()
