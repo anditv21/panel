@@ -12,6 +12,8 @@ $username = Session::get("username");
 
 $invList = $admin->getInvCodeArray();
 
+Util::banCheck();
+Util::checktoken();
 Util::suppCheck();
 Util::head('Admin Panel');
 Util::navbar();

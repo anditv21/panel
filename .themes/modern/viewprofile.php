@@ -16,7 +16,7 @@ if (isset($_GET['suc'])) {
 
 $username = Session::get("username");
 $uid = Session::get("uid");
-
+Util::checktoken();
 Util::banCheck();
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {

@@ -259,6 +259,17 @@ class Users extends Database
     
         return $tokens;
     }
+
+    protected function delother($token)
+    {
+        $username = Session::get("username");
+        
+        // Delete all remember tokens except the one that matches the given token
+        $this->prepare("DELETE FROM `login` WHERE `username` = ? AND `remembertoken` != ?");
+        $this->statement->execute([$username, $token]);
+    }
+    
+    
     
     // Activates subscription
     protected function subscription($subCode, $username)

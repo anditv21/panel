@@ -12,6 +12,8 @@ $username = Session::get("username");
 
 $subList = $admin->getSubCodeArray();
 
+Util::banCheck();
+Util::checktoken();
 Util::adminCheck();
 Util::head('Admin Panel');
 Util::navbar();

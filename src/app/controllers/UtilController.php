@@ -59,7 +59,17 @@ class Util extends UtilMod
         }
     }
     
-
+    public static function checktoken()
+    {
+        if (isset($_COOKIE['login_cookie'])) {
+            $token = Util::securevar($_COOKIE['login_cookie']);
+        
+            $util = new UtilMod();
+            $result = $util->validateRememberToken($token);
+            return $result;
+        }
+    }
+    
 
     // Returns random string
     public static function randomCode($int)

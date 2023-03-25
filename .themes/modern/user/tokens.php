@@ -18,6 +18,7 @@ $uid = Session::get("uid");
 
 $tokenarray = $user->gettokenarray($username);
 
+Util::checktoken();
 Util::banCheck();
 Util::head($username);
 
@@ -35,6 +36,16 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       }
    }
 }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_COOKIE['login_cookie'])) {
+   $token = Util::securevar($_COOKIE['login_cookie']);
+   $error = $user->deleteother($token);
+   if (!$error) {
+      header('location: tokens.php');
+      exit();
+   }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -94,6 +105,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   </div>
                   <div class="card-body">
                      <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                     <form method="POST">
+                     <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: Do you really want to log out of all other devices?');" name="flush" type="submit">Flush all logs</button>
+                            </form>
                         <table class="table my-0" id="dataTable">
                            <thead>
                               <tr>

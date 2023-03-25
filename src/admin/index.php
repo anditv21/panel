@@ -10,6 +10,8 @@ Session::init();
 
 $username = Session::get("username");
 
+Util::banCheck();
+Util::checktoken();
 Util::suppCheck();
 Util::head('Admin Panel');
 Util::navbar();

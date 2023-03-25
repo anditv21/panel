@@ -13,6 +13,7 @@ if (!Session::isLogged()) {
 }
 
 Util::banCheck();
+Util::checktoken();
 
 if ($user->getSubStatus() < 0) {
     Util::redirect('/');

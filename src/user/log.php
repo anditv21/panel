@@ -16,6 +16,7 @@ $username = Session::get("username");
 $logarray = $user->getlogarray($username);
 
 Util::banCheck();
+Util::checktoken();
 Util::head($username);
 Util::navbar();
 

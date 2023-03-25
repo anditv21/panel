@@ -17,6 +17,7 @@
    $sub = $user->getSubStatus();
 
    Util::banCheck();
+   Util::checktoken();
    Util::head($username);
    ?>
 <!DOCTYPE html>

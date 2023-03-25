@@ -31,6 +31,7 @@ $userfrozen = $user->getfrozen();
 $sub = $user->getSubStatus();
 
 Util::banCheck();
+Util::checktoken();
 Util::head($username);
 Util::navbar();
 

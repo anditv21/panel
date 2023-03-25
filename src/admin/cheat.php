@@ -12,6 +12,8 @@ Session::init();
 $username = Session::get("username");
 
 Util::adminCheck();
+Util::banCheck();
+Util::checktoken();
 Util::head("Admin Panel");
 Util::navbar();
 

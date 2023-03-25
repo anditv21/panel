@@ -10,6 +10,7 @@
    if (!Session::isLogged()) {
        Util::redirect('/auth/login.php');
    }
+   Util::checktoken();
    ?>
 <head>
    <meta charset="utf-8">

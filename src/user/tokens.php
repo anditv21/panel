@@ -16,6 +16,7 @@ $uid = Session::get("uid");
 $tokenarray = $user->gettokenarray();
 
 Util::banCheck();
+Util::checktoken();
 Util::head($username);
 Util::navbar();
 
@@ -31,9 +32,18 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             $user->deletetoken($token);
         }
     }
-
     header("location: tokens.php");
 }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_COOKIE['login_cookie'])) {
+    $token = Util::securevar($_COOKIE['login_cookie']);
+    $error = $user->deleteother($token);
+    if (!$error) {
+       header('location: tokens.php');
+       exit();
+    }
+ }
+ 
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -59,6 +69,13 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 <main class="container mt-2">
     <div class="row">
         <br>
+        <div class="card">
+         <div class="card-body">
+            <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+               <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: Do you really want to log out of all other devices?');" name="flush" type="submit">Log out of all other devices</button>
+            </form>
+         </div>
+      </div>
         <table class="rounded table">
             <thead>
                 <tr>

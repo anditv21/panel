@@ -16,6 +16,7 @@ if (isset($_GET['suc'])) {
 $username = Session::get("username");
 $uid = Session::get("uid");
 
+Util::checktoken();
 Util::banCheck();
 
 $logarray = $user->getlogarray($username);

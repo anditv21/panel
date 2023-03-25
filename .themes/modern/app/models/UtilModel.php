@@ -14,4 +14,25 @@ class UtilMod extends Database
         $userData = $this->statement->fetch();
         return $userData->banned;
     }
+
+    protected function validateRememberToken($token)
+    {
+        $this->prepare('SELECT remembertoken FROM login WHERE remembertoken = ?');
+        $this->statement->execute([$token]);
+        $result = $this->statement->fetch();
+    
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            setcookie("login_cookie", "", time() - 3600, '/');
+            session_unset();
+            $_SESSION = [];
+            $_SESSION = array();
+            session_destroy();
+            Util::redirect("/auth/login.php");
+        }
+    }    
 }

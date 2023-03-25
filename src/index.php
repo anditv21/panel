@@ -15,6 +15,7 @@ $username = Session::get("username");
 $sub = $user->getSubStatus();
 $uid = Session::get("uid");
 Util::banCheck();
+Util::checktoken();
 Util::head($username);
 Util::navbar();
 

@@ -212,6 +212,11 @@ class UserController extends Users
         return $this->tokendelete($token);
     }
 
+    public function deleteother($token)
+    {
+        return $this->delother($token);
+    }
+
     
     public function tokenlogin($token)
     {

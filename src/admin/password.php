@@ -13,6 +13,8 @@
    
    $userList = $admin->getUserArray();
    
+   Util::banCheck();
+   Util::checktoken();
    Util::adminCheck();
    Util::banCheck();
    Util::head("Admin Panel");

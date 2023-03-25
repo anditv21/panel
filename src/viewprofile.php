@@ -10,6 +10,18 @@
    if (!Session::isLogged()) {
        Util::redirect("/auth/login.php");
    }
+   $uid = Session::get("uid");
+   $username = Session::get("username");
+   $admin = Session::get("admin");
+
+   $sub = $user->getSubStatus($username);
+   $userfrozen = $user->getfrozen();
+
+   Util::banCheck();
+   Util::checktoken();
+   Util::head($username);
+   Util::navbar();
+
 
    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
       if (isset($_GET["uid"])) {
@@ -25,17 +37,6 @@
        }
       }
    }
-
-   $uid = Session::get("uid");
-   $username = Session::get("username");
-   $admin = Session::get("admin");
-
-   $sub = $user->getSubStatus($username);
-   $userfrozen = $user->getfrozen();
-
-   Util::banCheck();
-   Util::head($username);
-   Util::navbar();
    ?>
 <style>
    .divide {

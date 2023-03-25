@@ -20,7 +20,7 @@ if (isset($_GET["suc"])) {
 }
 
 $sub = $user->getSubStatus();
-
+Util::checktoken();
 Util::banCheck();
 Util::head($username);
 

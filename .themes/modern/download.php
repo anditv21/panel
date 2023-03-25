@@ -15,6 +15,7 @@ Util::banCheck();
 if ($user->getSubStatus() < 0) {
     Util::redirect('/');
 }
+Util::checktoken();
 
 $cheat = Util::randomCode(5);
 

@@ -17,6 +17,7 @@ $uid = Session::get('uid');
 $sub = $user->getSubStatus();
 Util::suppCheck();
 Util::banCheck();
+Util::checktoken();
 Util::head('Admin Panel');
 
 // if post request

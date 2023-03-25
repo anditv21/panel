@@ -16,6 +16,7 @@
    
    Util::suppCheck();
    Util::banCheck();
+   Util::checktoken();
    Util::head('Admin Panel');
    
    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {

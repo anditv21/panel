@@ -15,6 +15,7 @@
    
    Util::adminCheck();
    Util::banCheck();
+   Util::checktoken();
    Util::head('Admin Panel');
    ?>
 <!DOCTYPE html>
