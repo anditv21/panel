@@ -73,7 +73,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6
+Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6 / https://bit.ly/3JMb4g6
 
 <li>Change password</li>
 
@@ -83,7 +83,10 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6
 
 <li>Download loader (Needs a sub)</li>
 
+<li>Manage login tokens/cookies</li>
+
 <li>Set a Profile Picture</li>
+
 
 <ul>
 
