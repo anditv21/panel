@@ -303,7 +303,7 @@ class Admin extends Database
             $userData = $this->statement->fetch();
 
             // Set admin status to opposite of current status
-            $admin = !$userData->admin;
+            $admin = (int)!$userData->admin;
 
             $this->prepare('UPDATE `users` SET `admin` = ?, `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$admin, $admin, $uid]);
@@ -314,16 +314,16 @@ class Admin extends Database
 
 			$username = Session::get('username'); 			
             $user = new UserController();			 	 	 	  	  	  
-            if ($admin) { 	  	  	  	  	  
-                $user->log($username, "Added Admin perms to {$userData['username']} ($uid)", admin_logs);  
-                $user->logUser($userData['username'], "Set to admin by {$username}"); 
-            } else { 	  	  	  	  	  
-                $user->log($username, "Removed Admin perms from {$userData['username']} ($uid)", admin_logs); 
-                $user->logUser($userData['username'], "Admin removed by {$username}"); 
+            if ($admin) {
+                $user->log($username, "Added Admin perms to {$userData->username} ($uid)", admin_logs);
+                $user->logUser($userData->username, "Set to admin by {$username}");
+            } else {
+                $user->log($username, "Removed Admin perms from {$userData->username} ($uid)", admin_logs);
+                $user->logUser($userData->username, "Admin removed by {$username}");
             }
+            
         }
     }
-
 
     // Set user supp / non supp
     protected function supporter($uid)
