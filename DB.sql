@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 25, 2023 at 09:18 PM
+-- Generation Time: Apr 02, 2023 at 05:29 PM
 -- Server version: 10.3.38-MariaDB-0+deb10u1
 -- PHP Version: 8.1.16
 
@@ -56,13 +56,6 @@ CREATE TABLE `invites` (
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `invites`
---
-
-INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
-('OnG7P0XG5cNpHBSGgu7x', 'admin', '2023-03-25 21:05:22');
-
 -- --------------------------------------------------------
 
 --
@@ -83,7 +76,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
-('admin', '289228adb027722d5bad6992d05427e3', '127.0.0.1', 'Chrome', 'Windows 10', 'March 25 th, 21:44');
+('admin', '289228adb027722d5bad6992d05427e3', '127.0.0.1', 'Chrome', 'Windows 10', 'April 02 nd, 18:33');
 
 -- --------------------------------------------------------
 
@@ -96,15 +89,6 @@ CREATE TABLE `subscription` (
   `createdBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `subscription`
---
-
-INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('1m-Ob72RqEIw64KwaXY9QVy', 'admin', '2023-03-25 21:14:31'),
-('3m-wF01oPMkW8MwY0kMxLOb', 'admin', '2023-03-25 21:14:32'),
-('Trail-LAjTXJeRC2jvwQxE0FVG', 'admin', '2023-03-25 21:14:32');
 
 -- --------------------------------------------------------
 
@@ -127,7 +111,13 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(33, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'March 25 th, 21:45');
+(33, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'March 25 th, 21:45'),
+(34, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'March 28 th, 21:33'),
+(35, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'April 02 nd, 18:33'),
+(36, 'admin', 'admin resetted your HWID', 'Chrome', 'Windows 10', '127.0.0.1', 'April 02 nd, 18:48'),
+(37, 'admin', 'admin resetted your HWID', 'Chrome', 'Windows 10', '127.0.0.1', 'April 02 nd, 18:49'),
+(38, 'admin', 'admin resetted your HWID', 'Chrome', 'Windows 10', '127.0.0.1', 'April 02 nd, 18:49'),
+(39, 'admin', 'admin resetted your HWID', 'Chrome', 'Windows 10', '127.0.0.1', 'April 02 nd, 18:49');
 
 -- --------------------------------------------------------
 
@@ -150,15 +140,17 @@ CREATE TABLE `users` (
   `lastIP` varchar(255) DEFAULT NULL,
   `currentLogin` datetime DEFAULT NULL,
   `lastLogin` datetime DEFAULT NULL,
-  `banreason` varchar(255) DEFAULT NULL
+  `banreason` varchar(255) DEFAULT NULL,
+  `resetcount` int(10) DEFAULT 0,
+  `lastreset` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', '45.85.219.118', '2023-03-25 21:44:45', '2023-03-25 20:57:22', NULL);
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`) VALUES
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-01-30', 0, 0, '', '2022-07-05 22:04:37', NULL, '2023-04-02 18:33:57', '2023-03-28 21:33:08', NULL, 2, '2023-04-02');
 
 --
 -- Indexes for dumped tables
@@ -211,7 +203,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `users`

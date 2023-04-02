@@ -73,6 +73,14 @@ class Users extends Database
         return true;
     }
 
+    protected function gethwidcount($uid)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `uid` = ?");
+        $this->statement->execute([$uid]);
+        $result = $this->statement->fetch();
+        return $result->resetcount;
+    }
+
     protected function getbanreason($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");

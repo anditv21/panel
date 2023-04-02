@@ -245,8 +245,8 @@ class Admin extends Database
     protected function HWID($uid)
     {
         if (Session::isAdmin() || Session::isSupp()) {
-            $this->prepare('UPDATE `users` SET `hwid` = NULL WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
+            $this->prepare('UPDATE `users` SET `hwid` = NULL, `resetcount` = `resetcount` + 1, `lastreset` = ? WHERE `uid` = ?');
+            $this->statement->execute([date('Y-m-d'), $uid]);
     
             $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
@@ -256,8 +256,9 @@ class Admin extends Database
             $user = new UserController();
             $user->log($adminUsername, "Reset the hwid of $result->username ($uid)", admin_logs);
             $user->loguser($result->username, "$adminUsername resetted your HWID");
-        } 
-    } 
+        }
+    }
+    
 
     // Set user ban / unban
     protected function banned($uid)

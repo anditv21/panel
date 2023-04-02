@@ -65,6 +65,11 @@ class UserController extends Users
         return $result;
     }
 
+    public function getresetcount($uid)
+    {
+        return $this->gethwidcount($uid);
+    }
+
 
     public function registerUser($data)
     {

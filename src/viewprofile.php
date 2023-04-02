@@ -1,32 +1,32 @@
 <?php
    require_once "app/require.php";
    require_once "app/controllers/CheatController.php";
-
+   
    $user = new UserController();
    $cheat = new CheatController();
-
+   
    Session::init();
-
+   
    if (!Session::isLogged()) {
        Util::redirect("/auth/login.php");
    }
    $uid = Session::get("uid");
    $username = Session::get("username");
    $admin = Session::get("admin");
-
+   
    $sub = $user->getSubStatus($username);
    $userfrozen = $user->getfrozen();
-
+   
    Util::banCheck();
    Util::checktoken();
    Util::head($username);
    Util::navbar();
-
-
+   
+   
    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
       if (isset($_GET["uid"])) {
          $uid = Util::securevar($_GET["uid"]);
-
+   
        if (!empty($uid)) {
            $getuid = Util::securevar($_GET["uid"]);
            $userbyid = $user->getuserbyuid($getuid);
@@ -69,26 +69,26 @@
          <div class="card">
             <div class="card-body">
                <h4 class="card-title text-center">Profile of <?php Util::Display(
-       $userbyid->username
-   ); ?></h4>
+                  $userbyid->username
+                  ); ?></h4>
                <center>
                   <?php if (Util::getavatar($userbyid->uid) == false): ?>
                   <img width="120" height="120" class="border rounded-circle img-profile" src="assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
                   <?php else: ?>
                   <?php
                      $ext = pathinfo(
-       Util::getavatar($userbyid->uid),
-       PATHINFO_EXTENSION
-   );
+                     Util::getavatar($userbyid->uid),
+                     PATHINFO_EXTENSION
+                     );
                      $name = $userbyid->uid . "." . $ext;
                      ?>
                   <a href="<?php Util::display(
-                         Util::getavatar($userbyid->uid)
+                     Util::getavatar($userbyid->uid)
                      ); ?>" download="<?php Util::display(
-                         $name
+                     $name
                      ); ?>">
                   <img width="120" height="120" class="rounded-circle img-profile" src="<?php Util::display(
-                         Util::getavatar($userbyid->uid)
+                     Util::getavatar($userbyid->uid)
                      ); ?>" style="border-color: rgb(255,255,255)!important;"></a>
                   <?php endif; ?> 
                </center>
@@ -101,49 +101,53 @@
                <div class="card">
                   <div class="card-body">
                      <div class="h5 border-bottom border-secondary pb-1"><?php Util::display(
-                         $userbyid->username
-                     ); ?></div>
+                        $userbyid->username
+                        ); ?></div>
                      <div class="row">
                         <div class="col-12 clearfix">
                            <i class="fas fa-id-card"></i> UID: 
                            <p class="float-right mb-0"><?php Util::display(
-                         $userbyid->uid
-                     ); ?></p>
+                              $userbyid->uid
+                              ); ?></p>
                         </div>
                         <div class="col-12 clearfix">
                            <i class="fas fa-calendar-alt"></i> Sub:
                            <p class="float-right mb-0">
-                           <?php
-                              $time =  $user->gettime();
-                               if ($cheat->getCheatData()->frozen == 1 && $userfrozen == 1) {
-                                   $sub = $sub + $time;
-                                   if ($sub < 1000) {
-                                       Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-                                   } elseif ($sub < 1) {
-                                       Util::display('<i class="fa fa-times"></i>');
-                                   } else {
-                                       Util::display("Lifetime");
-                                   }
-                               } else {
-                                   if ($sub > 8000) {
-                                       Util::display("Lifetime");
-                                   } else {
-                                       if ($sub >= 0) {
-                                           Util::display("$sub days");
-                                       } else {
-                                           Util::display(
-                                               '<i class="fa fa-times"></i>'
-                                           );
-                                       }
-                                   }
-                               } ?>
+                              <?php
+                                 $time =  $user->gettime();
+                                  if ($cheat->getCheatData()->frozen == 1 && $userfrozen == 1) {
+                                      $sub = $sub + $time;
+                                      if ($sub < 1000) {
+                                          Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+                                      } elseif ($sub < 1) {
+                                          Util::display('<i class="fa fa-times"></i>');
+                                      } else {
+                                          Util::display("Lifetime");
+                                      }
+                                  } else {
+                                      if ($sub > 8000) {
+                                          Util::display("Lifetime");
+                                      } else {
+                                          if ($sub >= 0) {
+                                              Util::display("$sub days");
+                                          } else {
+                                              Util::display(
+                                                  '<i class="fa fa-times"></i>'
+                                              );
+                                          }
+                                      }
+                                  } ?>
                            </p>
                         </div>
                         <div class="col-12 clearfix">
                            <i class="fas fa-clock"></i> Joined: 
                            <p class="float-right mb-0"><?php Util::display(
-                                   Util::getjoinprofile($userbyid->createdAt) . " days ago"
-                               ); ?></p>
+                              Util::getjoinprofile($userbyid->createdAt) . " days ago"
+                              ); ?></p>
+                        </div>
+                        <div class="col-12 clearfix">
+                           <i class="fas fa-microchip"></i> HWID Resets: 
+                           <p class="float-right mb-0"><?php Util::display($user->getresetcount($uid)); ?></p>
                         </div>
                      </div>
                   </div>
@@ -155,7 +159,7 @@
 </main>
 <?php Util::footer(); ?>
 <script>
-		$(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip();   
-		});
+   $(document).ready(function(){
+   $('[data-toggle="tooltip"]').tooltip();   
+   });
 </script>
