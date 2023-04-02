@@ -86,7 +86,7 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6 / https://bit.ly/3JM
 <li>Manage login tokens/cookies</li>
 
 <li>Set a Profile Picture</li>
-
+<li>Public user profile (https://bit.ly/3M6BKuQ)</li>
 
 <ul>
 
