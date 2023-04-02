@@ -27,14 +27,19 @@
       if (isset($_GET["uid"])) {
          $uid = Util::securevar($_GET["uid"]);
    
-       if (!empty($uid)) {
-           $getuid = Util::securevar($_GET["uid"]);
-           $userbyid = $user->getuserbyuid($getuid);
-           $username = $userbyid->username;
-       } else {
-           echo "<script>alert('No/invalid UID was given');</script>";
-           echo "<script>window.history.back();</script>";
-       }
+         if (!empty($uid)) {
+            $getuid = Util::securevar($_GET["uid"]);
+            $userbyid = $user->getuserbyuid($getuid);
+            if (!empty($userbyid->username)) {
+              $username = $userbyid->username;
+            } else {
+              echo "<script>alert('Username not found for the given UID');</script>";
+              echo "<script>window.history.back();</script>";
+            }
+          } else {
+            echo "<script>alert('Please provide a valid UID');</script>";
+            echo "<script>window.history.back();</script>";
+          }          
       }
    }
    ?>
