@@ -157,6 +157,7 @@ class Util extends UtilMod
             return false;
         }
     }
+
     public static function getavatardl($uid)
     {
         $path = IMG_DIR . $uid;
@@ -170,4 +171,15 @@ class Util extends UtilMod
             return false;
         }
     }
+
+    public static function daysago($dateString) {
+        if (!$dateString) {
+          return 'Not available';
+        }
+        $date = strtotime($dateString);
+        $now = time();
+        $diff = $date - $now;
+        return floor($diff / (60 * 60 * 24)) . ' days ago';
+      }
+      
 }

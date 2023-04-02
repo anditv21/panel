@@ -81,6 +81,14 @@ class Users extends Database
         return $result->resetcount;
     }
 
+    protected function getlastreset($uid)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `uid` = ?");
+        $this->statement->execute([$uid]);
+        $result = $this->statement->fetch();
+        return $result->lastreset;
+    }
+
     protected function getbanreason($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");

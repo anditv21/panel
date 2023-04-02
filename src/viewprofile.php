@@ -154,6 +154,10 @@
                            <i class="fas fa-microchip"></i> HWID Resets: 
                            <p class="float-right mb-0"><?php Util::display($user->getresetcount($uid)); ?></p>
                         </div>
+                        <div class="col-12 clearfix">
+                           <i class="fas fa-history"></i> Last Reset: 
+                           <p class="float-right mb-0"><?php Util::display(Util::daysago($user->getresetdate($uid))); ?></p>
+                        </div>
                      </div>
                   </div>
                </div>

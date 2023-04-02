@@ -69,6 +69,11 @@ class UserController extends Users
     {
         return $this->gethwidcount($uid);
     }
+    public function getresetdate($uid)
+    {
+        return $this->getlastreset($uid);
+    }
+
 
 
     public function registerUser($data)
