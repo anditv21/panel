@@ -58,7 +58,7 @@ class Admin extends Database
 
             $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
 
-            $user->loguser($currentUsername, "HWID resetted by $currentUsername");
+            $user->loguser($currentUsername, "Password resetted by $currentUsername", false);
 
             return true;
         }
@@ -135,7 +135,7 @@ class Admin extends Database
                     $user = new UserController();
                     $username = Session::get('username');
                     $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
-                    $user->loguser($name, "$username gifted you a $time day/s sub");
+                    $user->loguser($name, "$username gifted you a $time day/s sub", false);
                 }
             }
         }
@@ -255,7 +255,7 @@ class Admin extends Database
             $adminUsername = Session::get('username');
             $user = new UserController();
             $user->log($adminUsername, "Reset the hwid of $result->username ($uid)", admin_logs);
-            $user->loguser($result->username, "$adminUsername resetted your HWID");
+            $user->loguser($result->username, "$adminUsername resetted your HWID", false);
         }
     }
     
@@ -283,10 +283,10 @@ class Admin extends Database
 
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);  
-                $user->loguser($userData->username, "Banned by $username");  
+                $user->loguser($userData->username, "Banned by $username", false);  
             } else {
                 $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);  
-                $user->loguser($userData->username, "Unbanned by $username");
+                $user->loguser($userData->username, "Unbanned by $username", false);
             }
     
         }  
@@ -316,10 +316,10 @@ class Admin extends Database
             $user = new UserController();			 	 	 	  	  	  
             if ($admin) {
                 $user->log($username, "Added Admin perms to {$userData->username} ($uid)", admin_logs);
-                $user->logUser($userData->username, "Set to admin by {$username}");
+                $user->logUser($userData->username, "Set to admin by {$username}", false);
             } else {
                 $user->log($username, "Removed Admin perms from {$userData->username} ($uid)", admin_logs);
-                $user->logUser($userData->username, "Admin removed by {$username}");
+                $user->logUser($userData->username, "Admin removed by {$username}", false);
             }
             
         }
@@ -346,10 +346,10 @@ class Admin extends Database
     
             if ($supp) {
                 $user->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs); 
-                $user->loguser($userData->username, "Set to Supp by $username"); 
+                $user->loguser($userData->username, "Set to Supp by $username", false); 
             } else { 
                 $user->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs); 
-                $user->loguser($userData->username, "Supp removed by $username"); 
+                $user->loguser($userData->username, "Supp removed by $username", false); 
             } 
     
         } 												  
@@ -505,7 +505,7 @@ class Admin extends Database
                         );
                         $this->statement->execute([$subTime, $row->username]);
                         $user = new UserController();
-                        $user->loguser($row->username, "Sub unfreezed by ". Session::get('username'));
+                        $user->loguser($row->username, "Sub unfreezed by ". Session::get('username'), false);
                     }
                 }
 

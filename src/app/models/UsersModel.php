@@ -580,18 +580,22 @@ class Users extends Database
         $result = $this->statement->fetch();
         return $result->frozen;
     }
-
-    public function loguser($username, $action)
+    public function loguser($username, $action, $logip = true)
     {
-        $ip = $this->getip();
+        if ($logip) {
+            $ip = $this->getip();
+        } else {
+            $ip = 'Staff/System';
+        }
+    
         $browser = $this->get_user_Browser();
         $os = $this->get_user_os();
-
-
         $Time = date("F d S, G:i");
-        $this->prepare('INSERT INTO `userlogs` (`username` , `action` , `browser`, `os` , `ip`, `time`) VALUES (?,?,?,?,?,?)');
-        $this->statement->execute([$username, $action , $browser , $os, $ip , $Time]);
+    
+        $this->prepare('INSERT INTO `userlogs` (`username`, `action`, `browser`, `os`, `ip`, `time`) VALUES (?, ?, ?, ?, ?, ?)');
+        $this->statement->execute([$username, $action, $browser, $os, $ip, $Time]);
     }
+    
 
 
     protected function get_user_Browser()
