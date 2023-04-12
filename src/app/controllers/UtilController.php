@@ -178,8 +178,16 @@ class Util extends UtilMod
         }
         $date = strtotime($dateString);
         $now = time();
-        $diff = $date - $now;
-        return floor($diff / (60 * 60 * 24)) . ' days ago';
-      }
+        $diff = $now - $date;
+        $days = floor($diff / (60 * 60 * 24));
+        if ($days == 0) {
+            return 'Today';
+        } else if ($days == 1) {
+            return 'Yesterday';
+        } else {
+            return $days . ' days ago';
+        }
+    }
+    
       
 }
