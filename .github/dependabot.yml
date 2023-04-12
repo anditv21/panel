@@ -5,12 +5,15 @@
 
 version: 2
 updates:
-  - package-ecosystem: "nuget" # See documentation for possible values
-    directory: ".examples/CSharp-API-Example" # Location of package manifests
+  - package-ecosystem: "nuget"
+    directory: ".examples/CSharp-API-Example"
     schedule:
       interval: "daily"
-      
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: ".examples/Python-API-Example" # Location of package manifests
+  - package-ecosystem: "nuget"
+    directory: ".examples/CSharp-API-Example-none-guna"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pip"
+    directory: ".examples/Python-API-Example"
     schedule:
       interval: "daily"
