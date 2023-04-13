@@ -19,29 +19,7 @@
    Util::banCheck();
    Util::head("Admin Panel");
    Util::navbar();
-   
-   // if post request
-   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-      if (isset($_POST["u"])) {
-         $user = Util::securevar($_POST["u"]);
-      }
-      if (isset($_POST["r"])) {
-         $reason = Util::securevar($_POST["r"]);
-      }
-   
-      if (isset($user)) {
-         Util::adminCheck();
-         $uid = $user;
-         if ($reason === " " or $reason === "" or empty($reason)) {
-            $reason = "none";
-         }
-   
-         $admin->setBannreason($reason, $uid);
-         $admin->setBanned($uid);
-   
-         header("location: bans.php");
-      }
-   }
+
    ?>
 <style>
    .divide {
