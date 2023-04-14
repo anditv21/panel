@@ -9,7 +9,7 @@ $API = new ApiController();
 
 // Check data
 
-if ($_GET['stats']) {
+if (isset($_GET['stats'])) {
     $response = $API->getStatsAPI();
     echo(json_encode($response));
     return true;
@@ -18,10 +18,10 @@ if ($_GET['stats']) {
 if (empty($_GET['user']) || empty($_GET['pass']) || empty($_GET['hwid']) || empty($_GET['key'])) {
     $response = array('status' => 'failed', 'error' => 'Missing arguments');
 } else {
-    $username = $_GET['user'];
-    $passwordHash = $_GET['pass'];
-    $hwidHash = $_GET['hwid'];
-    $key = $_GET['key'];
+    $username = Util::securevar($_GET['user']);
+    $passwordHash = Util::securevar($_GET['pass']);
+    $hwidHash = Util::securevar($_GET['hwid']);
+    $key = Util::securevar($_GET['key']);
 
     if (API_KEY === $key) {
 
