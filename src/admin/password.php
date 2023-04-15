@@ -96,14 +96,14 @@
                <?php if (isset($text)) {
                   Util::display($text);
                   } ?>
-               <?php if (isset($unhashedpassword)); ?>
-               <p title="Click to copy" data-toggle="tooltip" data-placement="top" onclick="setClipboard('<?php if (isset($unhashedpassword)) {
-                  Util::Display($unhashedpassword);
-                  } ?>'" class='spoiler' title='Click to copy password' data-toggle='tooltip' data-placement='top'><?php if (
-                  isset($unhashedpassword)
-                  ) {
-                  Util::display($unhashedpassword);
-                  } ?>
+
+            <?php if (isset($unhashedpassword)): ?>
+               <div>
+                  <p title="Click to copy" data-toggle="tooltip" data-placement="top" onclick="setClipboard('<?php echo htmlspecialchars($unhashedpassword, ENT_QUOTES); ?>')" class='spoiler' title='Click to copy password' data-toggle='tooltip' data-placement='top'>
+                        <?php Util::display(Util::securevar($unhashedpassword)); ?>
+                  </p>
+               </div>
+            <?php endif; ?>
             </div>
          </div>
       </div>
