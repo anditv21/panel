@@ -1,6 +1,8 @@
 const readline = require("readline");
 const base64 = require("base-64");
 const https = require("https");
+const { execSync } = require('child_process');
+
 
 DOMAIN = "anditv.it";
 API_KEY = "yes";
@@ -8,21 +10,24 @@ SUB_DIR = "/panel/";
 VERSION = 1;
 
 function getHardwareId() {
-  try {
-    const { execSync } = require("child_process");
-    const output = execSync("wmic csproduct get uuid").toString();
-    const hwid = output.split("\r\n")[1].trim();
-    return hwid;
-  } catch (e) {
-    // Log the error and return null
-    return null;
-  }
-}
+    try {
+        const command = 'reg query HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid';
+        const output = execSync(command, {
+            encoding: 'utf8'
+        });
 
-function checkSubscriptionExpired(subscriptionDate) {
-  const currDate = new Date();
-  const subDate = new Date(subscriptionDate);
-  return currDate >= subDate;
+        // Parse output to extract GUID value
+        const regex = /REG_SZ\s+(.*)\s*/;
+        const match = output.match(regex);
+        if (!match || !match[1]) {
+            throw new Error(`Not found: ${command}`);
+        }
+
+        return match[1];
+    } catch (e) {
+        console.error(`Error getting machine GUID: ${e}`);
+        return null;
+    }
 }
 
 function checksub(sub) {
@@ -36,14 +41,21 @@ function checksub(sub) {
   }
 }
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
-rl.question("[Login] Username >> ", (username) => {
-  rl.question("[Login] Password >> ", (password) => {
-    const hwid = getHardwareId();
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: new Writable({
+      write() {}
+    })
+  });
+  
+  process.stdout.write("[Login] Username >> ");
+  rl.question("", (username) => {
+    rl.stdoutMuted = true; // Set the stdoutMuted property to true to hide user input
+    process.stdout.write("[Login] Password >> ");
+    rl.question("", (password) => {
+      rl.stdoutMuted = false; // Set the stdoutMuted property back to false
+      const hwid = getHardwareId();
 
     // Encode the password in base64
     const base64_password = base64.encode(password);
