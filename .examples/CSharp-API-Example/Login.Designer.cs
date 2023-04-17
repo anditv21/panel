@@ -71,7 +71,7 @@
             this.passwordtextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.passwordtextbox.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(195)))), ((int)(((byte)(18)))));
             this.passwordtextbox.Location = new System.Drawing.Point(45, 150);
-            this.passwordtextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.passwordtextbox.Margin = new System.Windows.Forms.Padding(4);
             this.passwordtextbox.Name = "passwordtextbox";
             this.passwordtextbox.PasswordChar = '*';
             this.passwordtextbox.PlaceholderText = "";
@@ -107,7 +107,7 @@
             this.usernametextbox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.usernametextbox.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(195)))), ((int)(((byte)(18)))));
             this.usernametextbox.Location = new System.Drawing.Point(45, 89);
-            this.usernametextbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.usernametextbox.Margin = new System.Windows.Forms.Padding(4);
             this.usernametextbox.Name = "usernametextbox";
             this.usernametextbox.PasswordChar = '\0';
             this.usernametextbox.PlaceholderText = "";
@@ -129,7 +129,7 @@
             this.loginbtn.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.loginbtn.ForeColor = System.Drawing.Color.White;
             this.loginbtn.Location = new System.Drawing.Point(45, 189);
-            this.loginbtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loginbtn.Margin = new System.Windows.Forms.Padding(2);
             this.loginbtn.Name = "loginbtn";
             this.loginbtn.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(255)))), ((int)(((byte)(22)))));
             this.loginbtn.Size = new System.Drawing.Size(268, 40);
@@ -142,7 +142,7 @@
             this.pictureBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.pictureBox3.Image = global::loader.Properties.Resources.x;
             this.pictureBox3.Location = new System.Drawing.Point(288, 0);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(75, 51);
             this.pictureBox3.TabIndex = 5;
@@ -154,7 +154,7 @@
             this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.pictureBox2.Image = global::loader.Properties.Resources.logo;
             this.pictureBox2.Location = new System.Drawing.Point(154, 4);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(46, 44);
             this.pictureBox2.TabIndex = 4;
@@ -177,10 +177,11 @@
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Location = new System.Drawing.Point(1, 1);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(359, 48);
             this.panel1.TabIndex = 152;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // Login
             // 
@@ -197,7 +198,7 @@
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(3)))), ((int)(((byte)(100)))), ((int)(((byte)(14)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
