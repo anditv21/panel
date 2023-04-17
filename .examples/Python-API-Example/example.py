@@ -5,6 +5,7 @@ import requests
 import json
 import datetime
 import time
+import winreg
 from getpass import getpass
 
 # Constants
@@ -16,12 +17,12 @@ VERSION = '1'
 def main():
     username = input(f'[Login] Username >> ')
     password = getpass(f'[Login] Password >> ') 
-    apiresult = json.loads(str(send_login_request(username, password, hwid)))
+    apiresult = json.loads(str(send_login_request(username, password, get_machine_guid())))
     
     
     if (apiresult["status"] == "failed"):
         print("Username or password incorrect.")
-        time.sleep(500)
+        time.sleep(5)
         sys.exit()
         
         
@@ -29,7 +30,7 @@ def main():
     if(str(apiresult["cheatversion"]) != VERSION):
         print("You are using a outdated version.")
         print(apiresult["cheatversion"]) 
-        time.sleep(500)
+        time.sleep(5)
         sys.exit()
             
         
@@ -43,22 +44,24 @@ def main():
         
     # ban check
     if(apiresult["banned"] == "1"):
-        print("You have been banned.")
-        time.sleep(500)
+        print("Account is bannedad.")
+        time.sleep(5)
         sys.exit()
+    else:
+        print("Account is not banned.")    
         
     
     print(f"You have {checksub(apiresult['sub'])} day/s sub left.")           
     
     
         # hwid check
-    if(get_hardware_id() == apiresult["hwid"]):
+    if(get_machine_guid() == apiresult["hwid"]):
         print("HIWD does match.")
     elif(apiresult["hwid"] == None or ""):
         print("HIWD does match.")
     else:
         print("HWID does not match.")      
-        time.sleep(500)
+        time.sleep(5)
         sys.exit()  
         
                
@@ -103,13 +106,23 @@ def checksub(sub):
     
 
 
-# Get the hardware id
-hwid = get_hardware_id()
-if hwid is None:
-    # Log the error and exit
-    print("HWID not found.")
-    time.sleep(500)
-    sys.exit()
+    
+def get_machine_guid():
+    try:
+        location = r"SOFTWARE\Microsoft\Cryptography"
+        name = "MachineGuid"
+
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, location, 0, winreg.KEY_READ | winreg.KEY_WOW64_64KEY) as key:
+            try:
+                machine_guid = winreg.QueryValueEx(key, name)[0]
+            except OSError:
+                raise Exception(f"Not found: {location}\\{name}")
+
+        return machine_guid
+    except Exception as e:
+        print(f"Error getting machine GUID: {e}")
+        return None
+
 
 if __name__ == "__main__":
     main()
