@@ -90,11 +90,18 @@ class Util extends UtilMod
     {
         $util = new UtilMod();
         $res = $util->checkban(Session::get("username"));
+
         // If user is banned
-        if ($res  == true) {
+        if ($res == true) {
             if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
+                Session::set("banned", (int) 1);
+                error_log(Session::get("banned"));
                 Util::redirect('/banned.php');
+                exit(); // to prevent infinite loop
             }
+        } else {
+            // If user is not banned, reset the banned session variable
+            Session::set("banned", (int) 0);
         }
     }
 

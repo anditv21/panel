@@ -40,9 +40,6 @@ class Session
     public static function isBanned()
     {
         return isset($_SESSION['login']) &&
-            $_SESSION['banned'] === 1 &&
-            $_SESSION['admin'] === 0
-            ? true
-            : false;
+            $_SESSION['banned'] === 1 ? true : false;
     }
 }
