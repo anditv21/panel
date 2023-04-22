@@ -86,25 +86,6 @@ class Util extends UtilMod
         return $randomString;
     }
 
-    // ban check
-    public static function banCheck()
-    {
-        $util = new UtilMod();
-        $res = $util->checkban(Session::get("username"));
-
-        // If user is banned
-        if ($res == true) {
-            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
-                Session::set("banned", (int) 1);
-                error_log(Session::get("banned"));
-                Util::redirect('/banned.php');
-                exit(); // to prevent infinite loop
-            }
-        } else {
-            // If user is not banned, reset the banned session variable
-            Session::set("banned", (int) 0);
-        }
-    }
     
     public function getSubStatus()
     {
@@ -116,16 +97,58 @@ class Util extends UtilMod
     // admin check
     public static function adminCheck()
     {
-        if (!Session::isAdmin()) {
+        $util = new UtilMod();
+        $res = $util->checkadmin(Session::get("username"));
+        if ($res != true) {
+            if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+            Session::set("admin", (int) 0);
             Util::redirect('/index.php');
+            exit(); // to prevent infinite loop
+            }
+        }
+        else
+        {
+            Session::set("admin", (int) 1);
+            return true;
         }
     }
 
     // supp check
     public static function suppCheck()
     {
-        if (!Session::isSupp()) {
+        $util = new UtilMod();
+        $res = $util->checksupp(Session::get("username"));
+        if ($res != true) {
+            if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+            Session::set("supp", (int) 0);
             Util::redirect('/index.php');
+            exit(); // to prevent infinite loop
+            }
+        }
+        else
+        {
+            Session::set("supp", (int) 1);
+            return true;
+        }
+    }
+
+    
+    // ban check
+    public static function banCheck()
+    {
+        $util = new UtilMod();
+        $res = $util->checkban(Session::get("username"));
+
+        // If user is banned
+        if ($res == true) {
+            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
+                Session::set("banned", (int) 1);
+                Util::redirect('/banned.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("banned", (int) 0);
+            return false;
         }
     }
 
