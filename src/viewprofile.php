@@ -19,7 +19,7 @@
    
    Util::banCheck();
    Util::checktoken();
-   Util::head($username);
+   Util::head("Profile");
    Util::navbar();
    
    
