@@ -6,6 +6,17 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 
 class Util extends UtilMod
 {
+
+    public function setPageTitle($title) {
+        if (!empty(Session::get("username"))) {
+            $title = Util::securevar(Session::get("username")) . ' &ndash; ' . $title;
+            Util::display("<title>$title</title>");
+        } else {
+            $title =  $title . ' &ndash; ' . SITE_NAME;
+            Util::display("<title>$title</title>");
+        }
+    }
+    
     public static function redirect($location)
     {
         header('location:' . SUB_DIR . $location);
@@ -14,7 +25,10 @@ class Util extends UtilMod
 
     public static function head($title)
     {
+        $util = new Util;
+        $util->setPageTitle($title);
         include SITE_ROOT . '/includes/head.inc.php';
+
     }
 
     public static function navbar()

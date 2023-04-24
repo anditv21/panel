@@ -17,7 +17,7 @@ $username = Session::get("username");
 
 Util::banCheck();
 Util::checktoken();
-Util::head($username);
+Util::head("Banned");
 Util::navbar();
 ?>
 <style>

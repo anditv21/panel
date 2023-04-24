@@ -17,7 +17,7 @@ $logarray = $user->getlogarray($username);
 
 Util::banCheck();
 Util::checktoken();
-Util::head($username);
+Util::head("Logs");
 Util::navbar();
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
