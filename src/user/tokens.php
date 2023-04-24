@@ -17,7 +17,7 @@ $tokenarray = $user->gettokenarray();
 
 Util::banCheck();
 Util::checktoken();
-Util::head($username);
+Util::head("Tokens");
 Util::navbar();
 
 
