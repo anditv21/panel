@@ -45,15 +45,17 @@ Util::navbar();
    <div class="row">
       <!--Welome message-->
       <div class="col-12 mt-3 mb-2">
-         <div class="alert alert-primary" role="alert">
-            Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?>. </b></a>
-            <?php
-            $date_obj = new DateTime($user->getlastlogin());
-            $formatted_date = $date_obj->format('F j, Y, g:i a');
-            Util::display("Last login: {$formatted_date} from <em class='spoiler'>{$user->getlastip()}</em>");
-            ?>
-         </div>
+      <div class="alert alert-primary" role="alert">
+         Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
+         <?php
+         $date_obj = new DateTime($user->getlastlogin());
+         $formatted_date = $date_obj->format('F j, Y, g:i a');
+         Util::display("Last login: {$formatted_date} from ");
+         ?>
+         <em onclick="copyToClipboard('<?php Util::display($user->getlastip()); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($user->getlastip()); ?></em>
       </div>
+   </div>
+
       <!--Sub frozen warning -->
       <?php
       $time = $user->gettime();
@@ -160,6 +162,16 @@ Util::navbar();
    $(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip();   
 		});
+
+
+      function copyToClipboard(text) {
+         const textarea = document.createElement('textarea');
+         textarea.value = text;
+         document.body.appendChild(textarea);
+         textarea.select();
+         document.execCommand('copy');
+         document.body.removeChild(textarea);
+}
 </script>
 <style>
    .spoiler:hover {

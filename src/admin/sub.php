@@ -49,13 +49,11 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 		$admin->getSubCodeGentrail($username);
 	}
 
-	if (isset($delsub))
-	{
+	if (isset($delsub)) {
 		$admin->delsubcode($delsub);
 	}
 
-	if (isset($flushsub))
-	{
+	if (isset($flushsub)) {
 		$admin->flushsubcodes();
 	}
 
@@ -81,7 +79,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 		border-bottom: 1px solid #000;
 	}
 </style>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <div class="divide"></div>
 
 <div class="container mt-2">
@@ -119,16 +119,29 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 					<tr>
 						<th scope="col">Code</th>
 						<th scope="col">Created By</th>
+						<th scope="col">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 
 					<?php foreach ($subList as $row) : ?>
 						<tr>
-							<td><?php Util::display($row->code); ?></td>
-							<td><?php Util::display($row->createdBy); ?></td>
+							<td>
+								<p onclick="copyToClipboard('<?php Util::display($row->code); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>
+									<?php Util::display($row->code); ?>
+								</p>
+							</td>
+							<td>
+								<p onclick="copyToClipboard('<?php Util::display($row->createdBy); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top'>
+									<?php Util::display($row->createdBy); ?>
+								</p>
+							</td>
+
 							<form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-							<td><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->code); ?>" name="delSub">Delete</button></td>
+								<td>
+									<button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->code); ?>" name="delSub">Delete</button>
+									<button class="btn btn-outline-primary btn-sm" onclick="copyToClipboard('<?php Util::display($row->code); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top'>Copy code</button>
+								</td>
 							</form>
 						</tr>
 					<?php endforeach; ?>
@@ -141,5 +154,32 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	</div>
 
 </div>
+<style>
+	.spoiler:hover {
+		color: white;
+	}
 
+	.spoiler {
+		color: black;
+		background-color: black;
+	}
+
+	p {
+		max-width: fit-content;
+	}
+</style>
+<script>
+	$(document).ready(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+
+	function copyToClipboard(text) {
+		const textarea = document.createElement('textarea');
+		textarea.value = text;
+		document.body.appendChild(textarea);
+		textarea.select();
+		document.execCommand('copy');
+		document.body.removeChild(textarea);
+	}
+</script>
 <?php Util::footer(); ?>

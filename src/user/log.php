@@ -95,9 +95,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                            $row->os
                         ); ?>
                   </td>
-                  <td><?php Util::display("<br><p class='spoiler'>" .
-                           $row->ip . "</p>"); ?>
-                  </td>
+                  <td><?php Util::display("<br><p onclick=\"copyToClipboard('".$user->getlastip()."')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
+</td>
 
 
 
@@ -126,5 +125,14 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
    });
+
+   function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+}
 </script>
 <?php Util::footer(); ?>

@@ -39,11 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
     $token = Util::securevar($_COOKIE['login_cookie']);
     $error = $user->deleteother($token);
     if (!$error) {
-       header('location: tokens.php');
-       exit();
+        header('location: tokens.php');
+        exit();
     }
- }
- 
+}
+
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -70,12 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
     <div class="row">
         <br>
         <div class="card">
-         <div class="card-body">
-            <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-               <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: Do you really want to log out of all other devices?');" name="flush" type="submit">Log out of all other devices</button>
-            </form>
-         </div>
-      </div>
+            <div class="card-body">
+                <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                    <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: Do you really want to log out of all other devices?');" name="flush" type="submit">Log out of all other devices</button>
+                </form>
+            </div>
+        </div>
         <table class="rounded table">
             <thead>
                 <tr>
@@ -91,10 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
                 <?php foreach ($tokenarray as $row) : ?>
                     <tr style="text-align: center;">
                         <td>
-                            <p class="spoiler"><?php Util::display($row->ip); ?></p>
+                            <p onclick="copyToClipboard('<?php Util::display($row->ip); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->ip); ?></p>
                         </td>
                         <td>
-                            <p class="spoiler"><?php Util::display($row->remembertoken); ?></p>
+                            <p onclick="copyToClipboard('<?php Util::display($row->remembertoken); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->remembertoken); ?></p>
                         </td>
                         <td>
                             <p><?php Util::display($row->time); ?></p>
@@ -105,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
                         <td>
                             <p><?php Util::display($row->os); ?></p>
                         </td>
+
                         <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                             <td><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->remembertoken); ?>" name="deltoken" onclick="confirm('Are you sure you want to delete this token?')">Delete</button>
                                 <br>
@@ -137,5 +138,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
     $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
 </script>
 <?php Util::footer(); ?>
