@@ -159,4 +159,10 @@ class AdminController extends Admin
     {
         return $this->cheatinvite();
     }
+
+    //
+    public function flushchat()
+    {
+        return $this->chatflush();
+    }
 }

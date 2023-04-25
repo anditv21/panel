@@ -34,6 +34,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST['cheatfreeze'])) {
       $cheatfreeze = Util::securevar($_POST['cheatfreeze']);
    }
+   if (isset($_POST['flushchat'])) {
+      $flushchat = Util::securevar($_POST['flushchat']);
+   }
 
    if (isset($_POST['setnews'])) {
       $news = $_POST['setnews'];
@@ -65,6 +68,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
    if (isset($cheatfreeze)) {
       $admin->setCheatfreeze();
+   }
+
+   if (isset($flushchat)) {
+      $admin->flushchat();
    }
 
    header("location: cheat.php");
@@ -213,6 +220,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <button name="cheatfreeze" type="submit" class="btn btn-outline-primary btn-sm">
                   SET subscriptions+- (BETA)
                </button>
+               <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" " type=" submit" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
             </form>
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <div class="form-row mt-1">

@@ -547,4 +547,15 @@ class Admin extends Database
             }
         }
     }
+
+    protected function chatflush()
+    {
+        $this->prepare('DELETE FROM `shoutbox`');
+        $this->statement->execute();
+        
+        $msg = "ShoutBox flushed by an admin.";
+        $time = date("M j, g:i a");
+        $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
+        $this->statement->execute([1, $msg, $time]);
+    }
 }

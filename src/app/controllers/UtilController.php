@@ -7,7 +7,8 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 class Util extends UtilMod
 {
 
-    public function setPageTitle($title) {
+    public function setPageTitle($title)
+    {
         if (!empty(Session::get("username"))) {
             $title = Util::securevar(Session::get("username")) . ' &ndash; ' . $title;
             Util::display("<title>$title</title>");
@@ -16,7 +17,7 @@ class Util extends UtilMod
             Util::display("<title>$title</title>");
         }
     }
-    
+
     public static function redirect($location)
     {
         header('location:' . SUB_DIR . $location);
@@ -28,7 +29,6 @@ class Util extends UtilMod
         $util = new Util;
         $util->setPageTitle($title);
         include SITE_ROOT . '/includes/head.inc.php';
-
     }
 
     public static function navbar()
@@ -72,18 +72,18 @@ class Util extends UtilMod
             return htmlspecialchars(stripslashes(trim($var)));
         }
     }
-    
+
     public static function checktoken()
     {
         if (isset($_COOKIE['login_cookie'])) {
             $token = Util::securevar($_COOKIE['login_cookie']);
-        
+
             $util = new UtilMod();
             $result = $util->validateRememberToken($token);
             return $result;
         }
     }
-    
+
 
     // Returns random string
     public static function randomCode($int)
@@ -100,7 +100,7 @@ class Util extends UtilMod
         return $randomString;
     }
 
-    
+
     public function getSubStatus()
     {
         // Bind data
@@ -115,13 +115,11 @@ class Util extends UtilMod
         $res = $util->checkadmin(Session::get("username"));
         if ($res != true) {
             if (basename($_SERVER['PHP_SELF']) != 'index.php') {
-            Session::set("admin", (int) 0);
-            Util::redirect('/index.php');
-            exit(); // to prevent infinite loop
+                Session::set("admin", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
             }
-        }
-        else
-        {
+        } else {
             Session::set("admin", (int) 1);
             return true;
         }
@@ -134,19 +132,17 @@ class Util extends UtilMod
         $res = $util->checksupp(Session::get("username"));
         if ($res != true) {
             if (basename($_SERVER['PHP_SELF']) != 'index.php') {
-            Session::set("supp", (int) 0);
-            Util::redirect('/index.php');
-            exit(); // to prevent infinite loop
+                Session::set("supp", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
             }
-        }
-        else
-        {
+        } else {
             Session::set("supp", (int) 1);
             return true;
         }
     }
 
-    
+
     // ban check
     public static function banCheck()
     {
@@ -172,7 +168,7 @@ class Util extends UtilMod
         $now = new DateTime();
         $date = new DateTime($joindate);
         $interval = $now->diff($date);
-        
+
         return (int) $interval->format("%a");
     }
 
@@ -181,20 +177,19 @@ class Util extends UtilMod
         $now = new DateTime();
         $date = DateTime::createFromFormat("Y-m-d H:i:s", $joindate);
         $interval = $now->diff($date);
-        
+
         return (int) $interval->format("%a");
-        
     }
 
     public static function getavatar($uid)
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png?" . Util::randomCode(5);
+            return IMG_URL . $uid . ".png?" . Util::randomCode(5);
         } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg?". Util::randomCode(5);
+            return IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
         } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif?". Util::randomCode(5);
+            return IMG_URL . $uid . ".gif?" . Util::randomCode(5);
         } else {
             return false;
         }
@@ -204,7 +199,7 @@ class Util extends UtilMod
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png" ;
+            return IMG_URL . $uid . ".png";
         } elseif (@getimagesize($path . ".jpg")) {
             return IMG_URL . $uid . ".jpg";
         } elseif (@getimagesize($path . ".gif")) {
@@ -214,9 +209,24 @@ class Util extends UtilMod
         }
     }
 
-    public static function daysago($dateString) {
+    public static function getextention($uid)
+    {
+        $path = IMG_DIR . $uid;
+        if (@getimagesize($path . ".png")) {
+            return ".png";
+        } elseif (@getimagesize($path . ".jpg")) {
+            return  ".jpg";
+        } elseif (@getimagesize($path . ".gif")) {
+            return  ".gif";
+        } else {
+            return false;
+        }
+    }
+
+    public static function daysago($dateString)
+    {
         if (!$dateString) {
-          return 'Not available';
+            return 'Not available';
         }
         $date = strtotime($dateString);
         $now = time();
@@ -230,6 +240,4 @@ class Util extends UtilMod
             return $days . ' days ago';
         }
     }
-    
-      
 }
