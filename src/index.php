@@ -46,16 +46,12 @@ Util::navbar();
       <!--Welome message-->
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
-            Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display(
-    $username
-); ?>. </b></a><?php Util::display(
-    "Last login: " .
-    $user->getlastlogin() .
-    " from " .
-    "<em class='spoiler'>" .
-    $user->getlastip() .
-    "</em>"
-); ?>
+            Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?>. </b></a>
+            <?php
+            $date_obj = new DateTime($user->getlastlogin());
+            $formatted_date = $date_obj->format('F j, Y, g:i a');
+            Util::display("Last login: {$formatted_date} from <em class='spoiler'>{$user->getlastip()}</em>");
+            ?>
          </div>
       </div>
       <!--Sub frozen warning -->
