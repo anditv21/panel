@@ -1,10 +1,10 @@
 <?php
 require_once '../app/require.php';
-require_once '../app/controllers/CheatController.php';
+require_once '../app/controllers/SystemController.php';
 require_once '../app/controllers/AdminController.php';
 
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 $admin = new AdminController();
 
 Session::init();
@@ -22,35 +22,35 @@ Util::head('Admin Panel');
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-    if (isset($_POST["cheatStatus"])) {
-       $cheatstatus = Util::securevar($_POST["cheatStatus"]);
+    if (isset($_POST["SystemStatus"])) {
+       $Systemstatus = Util::securevar($_POST["SystemStatus"]);
     }
-    if (isset($_POST["cheatMaint"])) {
-       $cheatMaint = Util::securevar($_POST["cheatMaint"]);
+    if (isset($_POST["SystemMaint"])) {
+       $SystemMaint = Util::securevar($_POST["SystemMaint"]);
     }
-    if (isset($_POST["cheatVersion"])) {
-       $cheeatVersion = Util::securevar($_POST["cheatVersion"]);
+    if (isset($_POST["SystemVersion"])) {
+       $SystemVersion = Util::securevar($_POST["SystemVersion"]);
     }
     if (isset($_POST["invite"])) {
        $invite = Util::securevar($_POST["invite"]);
     }
-    if (isset($_POST['cheatfreeze'])) {
-       $cheatfreeze = Util::securevar($_POST['cheatfreeze']);
+    if (isset($_POST['Systemfreeze'])) {
+       $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
     }
  
  
  
-    if (isset($cheatstatus)) {
-       $admin->setCheatStatus();
+    if (isset($Systemstatus)) {
+       $admin->setSystemStatus();
     }
  
-    if (isset($cheatMaint)) {
-       $admin->setCheatMaint();
+    if (isset($SystemMaint)) {
+       $admin->setSystemMaint();
     }
  
-    if (isset($cheeatVersion)) {
+    if (isset($SystemVersion)) {
        $ver = floatval(Util::securevar($_POST["version"]));
-       $admin->setCheatVersion($ver);
+       $admin->setSystemVersion($ver);
     }
  
     if (isset($ivnite)) {
@@ -72,9 +72,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
  }
  
  
- if (isset($cheatfreeze)) {
+ if (isset($Systemfreeze)) {
     Util::adminCheck();
-    $admin->setCheatfreeze();
+    $admin->setSystemfreeze();
  }
  
  
@@ -135,14 +135,14 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col me-2">
-                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Cheat status</span></div>
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">System status</span></div>
                                             <?php if (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->status == 'Undetected'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-green);">Undetected</span></div>
                                             <?php elseif (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->status == 'Detected'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-red);">Detected</span></div>
@@ -160,7 +160,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                         <div class="col me-2">
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">version</span></div>
                                             <div class="text-dark fw-bold h5 mb-0"><span><?php Util::display(
-                                                $cheat->getCheatData()->version
+                                                $System->getSystemData()->version
                                             ); ?></span></div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-hashtag fa-2x text-gray-300" style="color: rgb(200,200,200)!important;"></i></div>
@@ -175,12 +175,12 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                         <div class="col me-2">
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">Maintenance</span></div>
                                             <?php if (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->maintenance == '-'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color:#fff;">No</span></div>
                                             <?php elseif (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->maintenance == 'UNDER'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color: var(--bs-yellow);">Yes</span></div>
@@ -260,7 +260,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                         <div class="col me-2">
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">frozen</span></div>
                                             <div class="text-dark fw-bold h5 mb-0"><span><?php
-                                            if ($cheat->getCheatData()->frozen == 1) {
+                                            if ($System->getSystemData()->frozen == 1) {
                                                 Util::display("True");
                                             } else {
                                                 Util::display("False");
@@ -278,12 +278,12 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                         <div class="col me-2">
                                             <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span style="color: rgb(255,255,255);">invites</span></div>
                                             <?php if (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->invites == '0'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color:#ff0000;">Disabled</span></div>
                                             <?php elseif (
-                                                $cheat->getCheatData()
+                                                $System->getSystemData()
                                                     ->invites == '1'
                                             ): ?>
                                                 <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Enabled</span></div>
@@ -314,9 +314,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                                 </div>
                                             </div>
                                             <div class="row align-items-center no-gutters">
-                                                <div class="col me-2" style="color: rgb(255,255,255);height: 68px;"><button type="submit" value="submit" class="btn btn-success" name="cheatVersion" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Update</button>
-                                                <button class="btn btn-success" type="submit" value="submit" name="cheatStatus" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Detected</button><button class="btn btn-success" name="cheatMaint" type="submit" value="submit" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Maintenace</button>
-                                                <button class="btn btn-success" name="cheatfreeze" type="submit" value="submit" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Freeze</button>
+                                                <div class="col me-2" style="color: rgb(255,255,255);height: 68px;"><button type="submit" value="submit" class="btn btn-success" name="SystemVersion" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;">Update</button>
+                                                <button class="btn btn-success" type="submit" value="submit" name="SystemStatus" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Detected</button><button class="btn btn-success" name="SystemMaint" type="submit" value="submit" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Maintenace</button>
+                                                <button class="btn btn-success" name="Systemfreeze" type="submit" value="submit" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Freeze</button>
                                                 <button class="btn btn-success" name="invite" type="submit" value="submit" style="font-size: 12px;color: rgb(255,255,255);margin-top: 7px;margin-left: 10px;">Invite System</button>
                                             </div>
                                             </div>

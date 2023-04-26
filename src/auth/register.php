@@ -1,9 +1,9 @@
 <?php
 include '../app/require.php';
-require_once '../app/controllers/CheatController.php';
+require_once '../app/controllers/SystemController.php';
 
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 
 Session::init();
 
@@ -77,7 +77,7 @@ Util::navbar();
 						<div class="form-group">
 							<input type="password" class="form-control form-control-sm" placeholder="Confirm password" name="confirmPassword" minlength="4" required>
 						</div>
-						<?php if ($cheat->getCheatData()->invites == 1) : ?>
+						<?php if ($System->getSystemData()->invites == 1) : ?>
 							<div class="form-group">
 								<input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="invite Code" name="invCode" required>
 							</div>

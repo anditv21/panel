@@ -8,7 +8,7 @@ define('SITE_URL', 'https://'.$_SERVER['SERVER_NAME']); // DO NOT CHANGE
 define('SITE_NAME', 'anditv21`s Panel edit');
 
 // Website Description
-define('SITE_DESC', 'Private Cheat | Invite Only');
+define('SITE_DESC', 'Private Software | Invite Only');
 
 /**
  * Folder name should be defined starting with the "/" (slash)

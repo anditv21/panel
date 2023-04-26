@@ -1,8 +1,8 @@
 <?php
 require_once "../app/require.php";
-require_once "../app/controllers/CheatController.php";
+require_once "../app/controllers/SystemController.php";
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 
 Session::init();
 

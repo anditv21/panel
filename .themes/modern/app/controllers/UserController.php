@@ -119,7 +119,7 @@ class UserController extends Users
             return $passError = "Passwords do not match, please try again.";
         }
 
-        if ($this->cheatData()->invites == true) {
+        if ($this->SystemData()->invites == true) {
             // Validate invCode
             if (empty($invCode)) {
                 return $invCodeError = "Please enter an invite code.";

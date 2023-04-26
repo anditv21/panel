@@ -1,9 +1,7 @@
 <?php
 require_once "../app/require.php";
-require_once "../app/controllers/CheatController.php";
-
 $user = new UserController();
-$cheat = new CheatController();
+
 
 Session::init();
 
@@ -134,27 +132,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
         max-width: fit-content;
     }
 
-       /* ===== Scrollbar CSS ===== */
-   /* Firefox */
-   * {
-      scrollbar-width: auto;
-      scrollbar-color: #6cc312 #222222;
-   }
+    /* ===== Scrollbar CSS ===== */
+    /* Firefox */
+    * {
+        scrollbar-width: auto;
+        scrollbar-color: #6cc312 #222222;
+    }
 
-   /* Chrome, Edge, and Safari */
-   *::-webkit-scrollbar {
-      width: 16px;
-   }
+    /* Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 16px;
+    }
 
-   *::-webkit-scrollbar-track {
-      background: #222222;
-   }
+    *::-webkit-scrollbar-track {
+        background: #222222;
+    }
 
-   *::-webkit-scrollbar-thumb {
-      background-color: #6cc312;
-      border-radius: 10px;
-      border: 3px solid #222222;
-   }
+    *::-webkit-scrollbar-thumb {
+        background-color: #6cc312;
+        border-radius: 10px;
+        border: 3px solid #222222;
+    }
 </style>
 <script>
     $(document).ready(function() {

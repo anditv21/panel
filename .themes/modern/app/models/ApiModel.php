@@ -43,7 +43,7 @@ class API extends Database
                         "/assets/img/avatars/Portrait_Placeholder.png";
                 }
 
-                $this->prepare("SELECT * FROM `cheat`");
+                $this->prepare("SELECT * FROM `System`");
                 $this->statement->execute();
                 $res = $this->statement->fetch();
 
@@ -60,9 +60,9 @@ class API extends Database
                     "createdAt" => $row->createdAt,
                     "avatarurl" => $avatarurl,
                     "frozen" => $res->frozen,
-                    "cheatstatus" => $res->status,
-                    "cheatversion" => $res->version,
-                    "cheatmaintenance" => $res->maintenance,
+                    "Systemstatus" => $res->status,
+                    "Systemversion" => $res->version,
+                    "Systemmaintenance" => $res->maintenance,
                 ];
             } else {
                 // Wrong pass, user exists

@@ -28,7 +28,7 @@ class Users extends Database
 
     protected function getnews()
     {
-        $this->prepare("SELECT * FROM `cheat`");
+        $this->prepare("SELECT * FROM `system`");
         $this->statement->execute();
         $result = $this->statement->fetch();
 
@@ -201,7 +201,7 @@ class Users extends Database
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
-        $this->prepare('SELECT * FROM `cheat`');
+        $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
         $inviter = 'System';
@@ -380,9 +380,9 @@ class Users extends Database
         return $result->username;
     }
 
-    public function cheatData()
+    public function SystemData()
     {
-        $this->prepare("SELECT * FROM `cheat`");
+        $this->prepare("SELECT * FROM `system`");
         $this->statement->execute();
         $result = $this->statement->fetch();
         return $result;
@@ -423,7 +423,7 @@ class Users extends Database
     protected function timesincefrozen()
     {
         try {
-            $this->prepare('SELECT freezingtime FROM `cheat`');
+            $this->prepare('SELECT freezingtime FROM `system`');
             $this->statement->execute();
             $freezingtime = $this->statement->fetchColumn();
 

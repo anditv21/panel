@@ -1,10 +1,10 @@
 <?php
 require_once "app/require.php";
-require_once "app/controllers/CheatController.php";
+require_once "app/controllers/SystemController.php";
 
 
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
@@ -66,7 +66,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       <!--Sub frozen warning -->
       <?php
       $time = $user->gettime();
-      if ($cheat->getCheatData()->frozen == 1) : ?>
+      if ($System->getSystemData()->frozen == 1) : ?>
          <div class="col-12 mt-3 mb-2">
             <div class="alert alert-primary" role="alert">
                <b style="color: #6cc312;"><?php Util::display(
@@ -124,20 +124,20 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $cheat->getCheatData()->status
+                                                   $System->getSystemData()->status
                                                 ); ?></p>
                </div>
-               <!--Cheat version-->
+               <!--System version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $cheat->getCheatData()->version
+                                                   $System->getSystemData()->version
                                                 ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub:
                   <p class="float-right mb-0">
-                     <?php if ($cheat->getCheatData()->frozen != 0) {
+                     <?php if ($System->getSystemData()->frozen != 0) {
                         $sub = $sub + $time;
                         if ($sub < 1000) {
                            Util::display(
