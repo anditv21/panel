@@ -171,9 +171,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                            </td>
                         </center>
                         <th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
-                        <td onclick="setClipboard('<?php Util::display(
-                                                      $row->lastIP
-                                                   ); ?>')" style="color: rgb(255,255,255);">
+                        <td onclick="setClipboard('<?php Util::display($row->lastIP); ?>')" style="color: rgb(255,255,255);">
                            <?php Util::display(
                               "<br><p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
                                  $row->lastIP .
@@ -242,9 +240,31 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    p {
       max-width: fit-content;
    }
+
+   /* ===== Scrollbar CSS ===== */
+   /* Firefox */
+   * {
+      scrollbar-width: auto;
+      scrollbar-color: #6cc312 #222222;
+   }
+
+   /* Chrome, Edge, and Safari */
+   *::-webkit-scrollbar {
+      width: 16px;
+   }
+
+   *::-webkit-scrollbar-track {
+      background: #222222;
+   }
+
+   *::-webkit-scrollbar-thumb {
+      background-color: #6cc312;
+      border-radius: 10px;
+      border: 3px solid #222222;
+   }
 </style>
 <script>
-   function setClipboard(value) {
+      function setClipboard(value) {
       var tempInput = document.createElement("input");
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
       tempInput.value = value;

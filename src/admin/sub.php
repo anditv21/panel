@@ -167,6 +167,28 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	p {
 		max-width: fit-content;
 	}
+
+	/* ===== Scrollbar CSS ===== */
+	/* Firefox */
+	* {
+		scrollbar-width: auto;
+		scrollbar-color: #6cc312 #222222;
+	}
+
+	/* Chrome, Edge, and Safari */
+	*::-webkit-scrollbar {
+		width: 16px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: #222222;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: #6cc312;
+		border-radius: 10px;
+		border: 3px solid #222222;
+	}
 </style>
 <script>
 	$(document).ready(function() {
