@@ -5,7 +5,7 @@
 
 require_once SITE_ROOT . "/app/models/UsersModel.php";
 require_once "SessionController.php";
-
+date_default_timezone_set('Europe/Vienna');
 class UserController extends Users
 {
     public function createUserSession($user)
@@ -375,5 +375,20 @@ class UserController extends Users
     {
         $username = Session::Get("username");
         return $this->isfrozen($username);
+    }
+
+    public function sendmsg($msg)
+    {
+        $username = Session::get("username");
+        return $this->msgsend($username, $msg);
+    }
+    public function getmsgs()
+    {
+        return $this->getshoutbox();
+    }
+    
+    public function getuser($identifier)
+    {
+        return $this->getuserdata($identifier);
     }
 }

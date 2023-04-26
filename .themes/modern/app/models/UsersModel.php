@@ -595,6 +595,48 @@ class Users extends Database
         $this->prepare('INSERT INTO `userlogs` (`username`, `action`, `browser`, `os`, `ip`, `time`) VALUES (?, ?, ?, ?, ?, ?)');
         $this->statement->execute([$username, $action, $browser, $os, $ip, $Time]);
     }
+
+    protected function msgsend($username, $msg)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` =?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+    
+        $time = date("M j, g:i a");
+        $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
+        $this->statement->execute([$result->uid, $msg, $time]);
+    }
+    
+    
+    protected function getshoutbox()
+    {
+        $this->prepare("SELECT * FROM `shoutbox` ORDER BY `id` DESC LIMIT 25");
+        $this->statement->execute();
+        $messages = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    
+        foreach ($messages as &$message) {
+            $this->prepare("SELECT `username` FROM `users` WHERE `uid` = ?");
+            $this->statement->execute([$message['uid']]);
+            $result = $this->statement->fetch();
+            $message['username'] = $result->username;
+        }
+    
+        return $messages;
+    }
+
+    protected function getuserdata($identifier)
+    {
+        if (is_numeric($identifier)) {
+            $sql = "SELECT * FROM `users` WHERE `uid` = ?";
+        } else {
+            $sql = "SELECT * FROM `users` WHERE `username` = ?";
+        }
+        
+        $this->prepare($sql);
+        $this->statement->execute([$identifier]);
+        $user = $this->statement->fetch();
+        return $user;
+    }
     
 
 
