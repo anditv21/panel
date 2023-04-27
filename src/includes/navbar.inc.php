@@ -5,7 +5,7 @@
 
 		<div class="container">
 
-			<a class="navbar-brand" href="<?php echo SITE_URL . SUB_DIR ?>" style="font-family: 'Raleway', sans--serif;"><?php echo SITE_NAME ?></a>
+			<a class="navbar-brand" href="<?php Util::display(Util::securevar(SITE_URL . SUB_DIR)) ?>" style="font-family: 'Raleway', sans--serif;"><?php Util::display(Util::securevar(SITE_NAME)) ?></a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -29,7 +29,7 @@
 						</li>
 						<?php endif; ?>
 						<!-- Check if admin --> 
-						<?php if (Util::adminCheck() == true or Util::suppCheck() == true) : ?>
+						<?php if (Session::isAdmin() == true or Session::isSupp() == true) : ?>
 							
 							<li class="nav-item">
 								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>

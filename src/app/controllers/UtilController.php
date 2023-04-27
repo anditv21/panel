@@ -153,11 +153,13 @@ class Util extends UtilMod
         if ($res == true) {
             if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
                 Session::set("banned", (int) 1);
+                error_log("bancheck true");
                 Util::redirect('/banned.php');
                 exit(); // to prevent infinite loop
             }
         } else {
             Session::set("banned", (int) 0);
+            error_log("bancheck false");
             return false;
         }
     }
