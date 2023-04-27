@@ -88,38 +88,48 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
          </div>
       </div>
       <br>
-
-      <div class="col-lg-9 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
-            <div class="row text-muted">
-               <div class="col-lg-9 col-md-8 col-sm-12">
-                  <div id="shoutbox"><?php include 'shoutbox.php' ?></div>
-                  <br>
-                  <form action="" method="post">
-                     <div class="form-group">
-                        <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
-                     </div>
-                     <button type="submit" class="btn btn-outline-primary">Send</button>
+      <?php if ($System->getSystemData()->shoutbox != 0) : ?>
+         <div class="col-lg-9 col-md-12">
+            <div class="rounded p-3 mb-3">
+               <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
+               <div class="row text-muted">
+                  <div class="col-lg-9 col-md-8 col-sm-12">
+                     <div id="shoutbox"><?php include 'shoutbox.php' ?></div>
                      <br>
-                     <br>
-                     <div class="legend">
-                        <span class="own-username">You</span> &ndash; Your own messages<br>
-                        <span class="admin-username">Admin</span> &ndash; Messages from administrators<br>
-                        <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
-                     </div>
-                  </form>
+                     <form action="" method="post">
+                        <div class="form-group">
+                           <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Send</button>
+                        <br>
+                        <br>
+                        <div class="legend">
+                           <span class="own-username">You</span> &ndash; Your own messages<br>
+                           <span class="admin-username">Admin</span> &ndash; Messages from administrators<br>
+                           <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
+                        </div>
+                     </form>
 
+                  </div>
                </div>
             </div>
          </div>
-      </div>
+         <script>
+            function reload() {
+               $(document).ready(function() {
+                  $("#shoutbox").load("shoutbox.php");
+               });
+            }
+
+            setInterval("reload();", 500);
+         </script>
+      <?php endif; ?>
       <!--Status-->
       <div class="col-lg-3 col-md-12">
          <div class="rounded p-3 mb-3">
             <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Status</div>
             <div class="row text-muted">
-               
+
                <!--Detected // Undetected-->
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status:
@@ -206,14 +216,6 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       document.execCommand('copy');
       document.body.removeChild(textarea);
    }
-
-   function reload() {
-      $(document).ready(function() {
-         $("#shoutbox").load("shoutbox.php");
-      });
-   }
-
-   setInterval("reload();", 500);
 </script>
 <style>
    .spoiler:hover {
@@ -280,25 +282,25 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    }
 
    /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: auto;
-    scrollbar-color: #6cc312 #222222;
-  }
+   /* Firefox */
+   * {
+      scrollbar-width: auto;
+      scrollbar-color: #6cc312 #222222;
+   }
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 16px;
-  }
+   /* Chrome, Edge, and Safari */
+   *::-webkit-scrollbar {
+      width: 16px;
+   }
 
-  *::-webkit-scrollbar-track {
-    background: #222222;
-  }
+   *::-webkit-scrollbar-track {
+      background: #222222;
+   }
 
-  *::-webkit-scrollbar-thumb {
-    background-color: #6cc312;
-    border-radius: 10px;
-    border: 3px solid #222222;
-  }
+   *::-webkit-scrollbar-thumb {
+      background-color: #6cc312;
+      border-radius: 10px;
+      border: 3px solid #222222;
+   }
 </style>
 <?php Util::footer(); ?>

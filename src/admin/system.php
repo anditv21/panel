@@ -37,7 +37,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST['flushchat'])) {
       $flushchat = Util::securevar($_POST['flushchat']);
    }
-
+   if (isset($_POST['shoutbox'])) {
+      $shoutbox = Util::securevar($_POST['shoutbox']);
+   }
    if (isset($_POST['setnews'])) {
       $news = $_POST['setnews'];
    }
@@ -72,6 +74,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
    if (isset($flushchat)) {
       $admin->flushchat();
+   }
+
+   if (isset($shoutbox)) {
+      $admin->setshoutbox();
    }
 
    header("location: system.php");
@@ -112,7 +118,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                      <?php if (
                         $System->getSystemData()->status == "Undetected"
                      ) : ?>
-                        <div class="text-dark fw-bold h5 mb-0"><span style="color: green;">Undetected</span></div>
+                        <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Undetected</span></div>
                      <?php elseif (
                         $System->getSystemData()->status == "Detected"
                      ) : ?>
@@ -205,6 +211,25 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </div>
          </div>
       </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
+                  <h3><i class="fas fa-comments"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        if ($System->getSystemData()->shoutbox == 1) {
+                           Util::display("Enabled");
+                        } else {
+                           Util::display("Disabled");
+                        } ?></h4>
+                  <span class="small text-muted text-uppercase">shoutbox-status</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
@@ -218,7 +243,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   SET invites+-
                </button>
                <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm">
-                  SET subscriptions+- (BETA)
+                  FREEZE subscriptions+- (BETA)
+               </button>
+               <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm">
+                  SET shoutbox+- (BETA)
                </button>
                <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" " type=" submit" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
             </form>

@@ -165,4 +165,10 @@ class AdminController extends Admin
     {
         return $this->chatflush();
     }
+
+    //
+    public function setshoutbox()
+    {
+        return $this->shoutbox();
+    }
 }

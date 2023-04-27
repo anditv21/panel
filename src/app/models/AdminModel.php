@@ -558,4 +558,29 @@ class Admin extends Database
         $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
         $this->statement->execute([1, $msg, $time]);
     }
+
+    protected function shoutbox()
+    {
+        if (Session::isAdmin()) {
+            $this->prepare('SELECT `shoutbox` FROM `system`');
+            $this->statement->execute();
+            $result = $this->statement->fetch();
+
+            if ((int) $result->shoutbox === 0) {
+                $this->prepare('UPDATE `system` SET `shoutbox` = 1');
+                $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Activated the ShoutBox", system_logs);
+            } else {
+                $this->prepare('UPDATE `system` SET `shoutbox` = 0');
+                $this->statement->execute();
+
+                $username = Session::get('username');
+                $user = new UserController();
+                $user->log($username, "Deactivated the ShoutBox", system_logs);
+            }
+        }
+    }
 }
