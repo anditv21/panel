@@ -29,3 +29,4 @@ include '../app/require.php';
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= SUB_DIR ?>/assets/css/custom.css" />
 </head>
+</html>

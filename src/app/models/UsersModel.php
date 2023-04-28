@@ -28,7 +28,7 @@ class Users extends Database
 
     protected function getnews()
     {
-        $this->prepare("SELECT * FROM `cheat`");
+        $this->prepare("SELECT * FROM `system`");
         $this->statement->execute();
         $result = $this->statement->fetch();
 
@@ -201,7 +201,7 @@ class Users extends Database
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
-        $this->prepare('SELECT * FROM `cheat`');
+        $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
         $inviter = 'System';
@@ -380,9 +380,17 @@ class Users extends Database
         return $result->username;
     }
 
-    public function cheatData()
+    protected function invs($username)
     {
-        $this->prepare("SELECT * FROM `cheat`");
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->invites;
+    }
+
+    public function SystemData()
+    {
+        $this->prepare("SELECT * FROM `system`");
         $this->statement->execute();
         $result = $this->statement->fetch();
         return $result;
@@ -423,7 +431,7 @@ class Users extends Database
     protected function timesincefrozen()
     {
         try {
-            $this->prepare('SELECT freezingtime FROM `cheat`');
+            $this->prepare('SELECT freezingtime FROM `system`');
             $this->statement->execute();
             $freezingtime = $this->statement->fetchColumn();
 
@@ -549,6 +557,35 @@ class Users extends Database
         return $result->lastIP;
     }
 
+    protected function invgen($username)
+    {
+        $user = new UserController();
+        $this->prepare('SELECT `invites` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $invites = $this->statement->fetchColumn();
+        if ($invites < 1) {
+            return false;
+        }
+        
+        $code = Util::randomCode(15); 
+        $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+        $this->statement->execute([$code, $username]);
+        $this->loguser($username, "Generated an inv: " . $code); 
+        $user->log($username, "Generated an invitation", "admin_logs"); 
+        $this->prepare('UPDATE `users` SET `invites` = `invites` - 1 WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        
+        return $code;
+    }
+
+    protected function invCodeArray($username)
+    {
+            $this->prepare('SELECT * FROM `invites` WHERE `createdBy` = ?');
+            $this->statement->execute([$username]);
+            $result = $this->statement->fetchAll();
+            return $result;     
+    }
+
 
     public function getip(): string
     {
@@ -594,6 +631,48 @@ class Users extends Database
     
         $this->prepare('INSERT INTO `userlogs` (`username`, `action`, `browser`, `os`, `ip`, `time`) VALUES (?, ?, ?, ?, ?, ?)');
         $this->statement->execute([$username, $action, $browser, $os, $ip, $Time]);
+    }
+
+    protected function msgsend($username, $msg)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` =?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+    
+        $time = date("M j, g:i a");
+        $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
+        $this->statement->execute([$result->uid, $msg, $time]);
+    }
+    
+    
+    protected function getshoutbox()
+    {
+        $this->prepare("SELECT * FROM `shoutbox` ORDER BY `id` DESC LIMIT 25");
+        $this->statement->execute();
+        $messages = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    
+        foreach ($messages as &$message) {
+            $this->prepare("SELECT `username` FROM `users` WHERE `uid` = ?");
+            $this->statement->execute([$message['uid']]);
+            $result = $this->statement->fetch();
+            $message['username'] = $result->username;
+        }
+    
+        return $messages;
+    }
+
+    protected function getuserdata($identifier)
+    {
+        if (is_numeric($identifier)) {
+            $sql = "SELECT * FROM `users` WHERE `uid` = ?";
+        } else {
+            $sql = "SELECT * FROM `users` WHERE `username` = ?";
+        }
+        
+        $this->prepare($sql);
+        $this->statement->execute([$identifier]);
+        $user = $this->statement->fetch();
+        return $user;
     }
     
 

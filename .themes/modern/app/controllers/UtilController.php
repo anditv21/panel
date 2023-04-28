@@ -1,10 +1,23 @@
 <?php
 
-
 // Only Public methods
+
 require_once SITE_ROOT . "/app/models/UtilModel.php";
+
 class Util extends UtilMod
 {
+
+    public function setPageTitle($title)
+    {
+        if (!empty(Session::get("username"))) {
+            $title = Util::securevar(Session::get("username")) . ' &ndash; ' . $title;
+            Util::display("<title>$title</title>");
+        } else {
+            $title =  $title . ' &ndash; ' . SITE_NAME;
+            Util::display("<title>$title</title>");
+        }
+    }
+
     public static function redirect($location)
     {
         header('location:' . SUB_DIR . $location);
@@ -13,6 +26,8 @@ class Util extends UtilMod
 
     public static function head($title)
     {
+        $util = new Util;
+        $util->setPageTitle($title);
         include SITE_ROOT . '/includes/head.inc.php';
     }
 
@@ -23,7 +38,7 @@ class Util extends UtilMod
 
     public static function adminNavbar()
     {
-        include(SITE_ROOT . '/includes/adminNavbar.inc.php');
+        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
     }
 
     public static function footer()
@@ -57,18 +72,18 @@ class Util extends UtilMod
             return htmlspecialchars(stripslashes(trim($var)));
         }
     }
-    
-    
+
     public static function checktoken()
     {
         if (isset($_COOKIE['login_cookie'])) {
             $token = Util::securevar($_COOKIE['login_cookie']);
-        
+
             $util = new UtilMod();
             $result = $util->validateRememberToken($token);
             return $result;
         }
     }
+
 
     // Returns random string
     public static function randomCode($int)
@@ -85,25 +100,6 @@ class Util extends UtilMod
         return $randomString;
     }
 
-    // ban check
-    public static function banCheck()
-    {
-        $util = new UtilMod();
-        $res = $util->checkban(Session::get("username"));
-
-        // If user is banned
-        if ($res == true) {
-            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
-                Session::set("banned", (int) 1);
-                error_log(Session::get("banned"));
-                Util::redirect('/banned.php');
-                exit(); // to prevent infinite loop
-            }
-        } else {
-            // If user is not banned, reset the banned session variable
-            Session::set("banned", (int) 0);
-        }
-    }
 
     public function getSubStatus()
     {
@@ -115,16 +111,54 @@ class Util extends UtilMod
     // admin check
     public static function adminCheck()
     {
-        if (!Session::isAdmin()) {
-            Util::redirect('/index.php');
+        $util = new UtilMod();
+        $res = $util->checkadmin(Session::get("username"));
+        if ($res != true) {
+            if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+                Session::set("admin", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("admin", (int) 1);
+            return true;
         }
     }
 
     // supp check
     public static function suppCheck()
     {
-        if (!Session::isSupp()) {
-            Util::redirect('/index.php');
+        $util = new UtilMod();
+        $res = $util->checksupp(Session::get("username"));
+        if ($res != true) {
+            if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+                Session::set("supp", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("supp", (int) 1);
+            return true;
+        }
+    }
+
+
+    // ban check
+    public static function banCheck()
+    {
+        $util = new UtilMod();
+        $res = $util->checkban(Session::get("username"));
+
+        // If user is banned
+        if ($res == true) {
+            if (basename($_SERVER['PHP_SELF']) != 'banned.php') {
+                Session::set("banned", (int) 1);
+                Util::redirect('/banned.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("banned", (int) 0);
+            return false;
         }
     }
 
@@ -134,7 +168,7 @@ class Util extends UtilMod
         $now = new DateTime();
         $date = new DateTime($joindate);
         $interval = $now->diff($date);
-        
+
         return (int) $interval->format("%a");
     }
 
@@ -143,35 +177,67 @@ class Util extends UtilMod
         $now = new DateTime();
         $date = DateTime::createFromFormat("Y-m-d H:i:s", $joindate);
         $interval = $now->diff($date);
-        
+
         return (int) $interval->format("%a");
-        
     }
 
     public static function getavatar($uid)
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png?" . Util::randomCode(5);
+            return IMG_URL . $uid . ".png?" . Util::randomCode(5);
         } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg?". Util::randomCode(5);
+            return IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
         } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif?". Util::randomCode(5);
+            return IMG_URL . $uid . ".gif?" . Util::randomCode(5);
         } else {
             return false;
         }
     }
+
     public static function getavatardl($uid)
     {
         $path = IMG_DIR . $uid;
         if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid. ".png" ;
+            return IMG_URL . $uid . ".png";
         } elseif (@getimagesize($path . ".jpg")) {
             return IMG_URL . $uid . ".jpg";
         } elseif (@getimagesize($path . ".gif")) {
             return IMG_URL . $uid . ".gif";
         } else {
             return false;
+        }
+    }
+
+    public static function getextention($uid)
+    {
+        $path = IMG_DIR . $uid;
+        if (@getimagesize($path . ".png")) {
+            return ".png";
+        } elseif (@getimagesize($path . ".jpg")) {
+            return  ".jpg";
+        } elseif (@getimagesize($path . ".gif")) {
+            return  ".gif";
+        } else {
+            return false;
+        }
+    }
+
+    public static function daysago($dateString)
+    {
+        if (!$dateString) {
+            return 'Not available';
+        }
+        $date = strtotime($dateString);
+        $now = time();
+        $diff = $now - $date;
+        $days = floor($diff / (60 * 60 * 24));
+        if ($days == 0) {
+            return 'Today';
+        } else if ($days == 1) {
+            return 'Yesterday';
+        } else {
+            return $days . ' days ago';
         }
     }
 }

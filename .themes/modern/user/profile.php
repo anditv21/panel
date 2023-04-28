@@ -1,8 +1,8 @@
 <?php
 require_once "../app/require.php";
-require_once "../app/controllers/CheatController.php";
+require_once "../app/controllers/SystemController.php";
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 
 Session::init();
 
@@ -225,7 +225,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
                                     Util::display("Subscription: ");
 
-                                    if ($cheat->getCheatData()->frozen != 0) {
+                                    if ($System->getSystemData()->frozen != 0) {
                                         Util::display("Frozen");
                                     } else {
                                         if ($sub > 8000) {
@@ -348,7 +348,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                                     </div>
                                                 </div>
                                                 <?php if (
-                                                    $cheat->getCheatData()
+                                                    $System->getSystemData()
                                                         ->frozen != 1
                                                 ): ?>
                                                     <div class="mb-3"><button name="activateSub" type="submit" value="submit" class="btn btn-success btn-sm" style="color: rgb(255,255,255);margin-top: 13px;">Redeem key</button></div>

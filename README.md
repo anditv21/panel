@@ -73,7 +73,9 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6 / https://bit.ly/3JMb4g6
+Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g6
+
+<li>ShoutBox</li>
 
 <li>Change password</li>
 
@@ -157,7 +159,20 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/3D1cXE6 / https://bit.ly/3JM
 
 <li>Reset HWID</li>
 
-<li>Set cheat detected/undetected/version/maintenance/non-maintenance (Admin only)</li>
+<li>Set cheat detected/undetected (Admin only)</li>
+<li>Set version/maintenance/non-maintenance </li>
+
+<li>ShoutBox</li>
+<ul>
+<li>Enable/Disable ShoutBox</li>
+<li>Flush ShoutBox</li>
+</ul>
+
+<li>User Invites</li>
+<ul>
+<li>Gift useres invites</li>
+<li>Invite wave (5 Invites)</li>
+</ul>
 
   
 

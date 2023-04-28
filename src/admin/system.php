@@ -1,10 +1,10 @@
 <?php
 require_once "../app/require.php";
 require_once "../app/controllers/AdminController.php";
-require_once "../app/controllers/CheatController.php";
+require_once "../app/controllers/SystemController.php";
 
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 $admin = new AdminController();
 
 Session::init();
@@ -19,39 +19,47 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["cheatStatus"])) {
-      $cheatstatus = Util::securevar($_POST["cheatStatus"]);
+   if (isset($_POST["SystemStatus"])) {
+      $Systemstatus = Util::securevar($_POST["SystemStatus"]);
    }
-   if (isset($_POST["cheatMaint"])) {
-      $cheatMaint = Util::securevar($_POST["cheatMaint"]);
+   if (isset($_POST["SystemMaint"])) {
+      $SystemMaint = Util::securevar($_POST["SystemMaint"]);
    }
-   if (isset($_POST["cheatVersion"])) {
-      $cheeatVersion = Util::securevar($_POST["cheatVersion"]);
+   if (isset($_POST["SystemVersion"])) {
+      $SystemVersion = Util::securevar($_POST["SystemVersion"]);
    }
    if (isset($_POST["invite"])) {
       $invite = Util::securevar($_POST["invite"]);
    }
-   if (isset($_POST['cheatfreeze'])) {
-      $cheatfreeze = Util::securevar($_POST['cheatfreeze']);
+   if (isset($_POST['Systemfreeze'])) {
+      $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
    }
-
+   if (isset($_POST['flushchat'])) {
+      $flushchat = Util::securevar($_POST['flushchat']);
+   }
+   if (isset($_POST['shoutbox'])) {
+      $shoutbox = Util::securevar($_POST['shoutbox']);
+   }
    if (isset($_POST['setnews'])) {
-      $news = $_POST['setnews'];
+      $news = Util::securevar($_POST['setnews']);
+   }
+   if (isset($_POST['invwave'])) {
+      $invwave = Util::securevar($_POST['invwave']);
    }
 
    Util::adminCheck();
 
-   if (isset($cheatstatus)) {
-      $admin->setCheatStatus();
+   if (isset($Systemstatus)) {
+      $admin->setSystemStatus();
    }
 
-   if (isset($cheatMaint)) {
-      $admin->setCheatMaint();
+   if (isset($SystemMaint)) {
+      $admin->setSystemMaint();
    }
 
-   if (isset($cheeatVersion)) {
+   if (isset($SystemVersion)) {
       $ver = floatval(Util::securevar($_POST["version"]));
-      $admin->setCheatVersion($ver);
+      $admin->setSystemVersion($ver);
    }
 
    if (isset($invite)) {
@@ -63,11 +71,22 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $admin->setnews($news);
    }
 
-   if (isset($cheatfreeze)) {
-      $admin->setCheatfreeze();
+   if (isset($Systemfreeze)) {
+      $admin->setSystemfreeze();
    }
 
-   header("location: cheat.php");
+   if (isset($flushchat)) {
+      $admin->flushchat();
+   }
+
+   if (isset($shoutbox)) {
+      $admin->setshoutbox();
+   }
+
+   if (isset($invwave)) {
+      $admin->invwave();
+   }
+   header("location: system.php");
 }
 
 
@@ -103,13 +122,13 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $cheat->getCheatData()->status == "Undetected"
+                        $System->getSystemData()->status == "Online"
                      ) : ?>
-                        <div class="text-dark fw-bold h5 mb-0"><span style="color: green;">Undetected</span></div>
+                        <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Online</span></div>
                      <?php elseif (
-                        $cheat->getCheatData()->status == "Detected"
+                        $System->getSystemData()->status == "Offline"
                      ) : ?>
-                        <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Detected</span></div>
+                        <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Offline</span></div>
                      <?php endif; ?>
                   </h4>
                   <span class="small text-muted text-uppercase">status</span>
@@ -125,7 +144,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   <h3><i class="fas fa-code-branch fa-2x"></i></h3>
                </div>
                <div class="col-6">
-                  <h4><?php Util::display($cheat->getCheatData()->version); ?></h4>
+                  <h4><?php Util::display($System->getSystemData()->version); ?></h4>
                   <span class="small text-muted text-uppercase">version</span>
                </div>
             </div>
@@ -141,11 +160,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $cheat->getCheatData()->maintenance == "-"
+                        $System->getSystemData()->maintenance == "-"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: white;">No</span></div>
                      <?php elseif (
-                        $cheat->getCheatData()->maintenance == "UNDER"
+                        $System->getSystemData()->maintenance == "UNDER"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: yellow;">Yes</span></div>
                      <?php endif; ?>
@@ -165,11 +184,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $cheat->getCheatData()->invites == "0"
+                        $System->getSystemData()->invites == "0"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color:#ff0000;">Disabled</span></div>
                      <?php elseif (
-                        $cheat->getCheatData()->invites == "1"
+                        $System->getSystemData()->invites == "1"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Enabled</span></div>
                      <?php endif; ?>
@@ -188,7 +207,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                </div>
                <div class="col-6">
                   <h4><?php
-                        if ($cheat->getCheatData()->frozen == 1) {
+                        if ($System->getSystemData()->frozen == 1) {
                            Util::display("Frozen");
                         } else {
                            Util::display("Normal");
@@ -198,21 +217,48 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </div>
          </div>
       </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
+                  <h3><i class="fas fa-comments"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        if ($System->getSystemData()->shoutbox == 1) {
+                           Util::display("Enabled");
+                        } else {
+                           Util::display("Disabled");
+                        } ?></h4>
+                  <span class="small text-muted text-uppercase">shoutbox-status</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-               <button name="cheatStatus" type="submit" class="btn btn-outline-primary btn-sm">
-                  SET detected+-
+               <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm">
+                  SET status+-
                </button>
-               <button name="cheatMaint" type="submit" class="btn btn-outline-primary btn-sm">
+               <button name="SystemMaint" type="submit" class="btn btn-outline-primary btn-sm">
                   SET maintenance+-
                </button>
                <button name="invite" type="submit" class="btn btn-outline-primary btn-sm">
                   SET invites+-
                </button>
-               <button name="cheatfreeze" type="submit" class="btn btn-outline-primary btn-sm">
-                  SET subscriptions+- (BETA)
+               <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm">
+                  FREEZE subscriptions+- (BETA)
                </button>
+               <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm">
+                  SET shoutbox+- (BETA)
+               </button>
+               <br>
+               <br>
+               <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
+               <button type="submit" name="invwave" onclick="return confirm('Are you sure you want to gift everyone 5 additional invites?')" class="btn btn-outline-primary btn-sm">Invite wave</button>
+
             </form>
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <div class="form-row mt-1">
@@ -220,7 +266,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                      <input type="text" class="form-control form-control-sm" placeholder="Version" name="version" required>
                   </div>
                   <div class="col">
-                     <button class="btn btn-outline-primary btn-sm" name="cheatVersion" type="submit" value="submit">Update</button>
+                     <button class="btn btn-outline-primary btn-sm" name="SystemVersion" type="submit" value="submit">Update</button>
                   </div>
                </div>
             </form>

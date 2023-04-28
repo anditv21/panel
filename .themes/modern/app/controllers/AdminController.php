@@ -131,32 +131,38 @@ class AdminController extends Admin
     }
 
     //
-    public function setCheatStatus()
+    public function setSystemStatus()
     {
-        return $this->cheatStatus();
+        return $this->SystemStatus();
     }
 
     //
-    public function setCheatMaint()
+    public function setSystemMaint()
     {
-        return $this->cheatMaint();
+        return $this->SystemMaint();
     }
 
     //
-    public function setCheatVersion($data)
+    public function setSystemVersion($data)
     {
-        return $this->cheatVersion($data);
+        return $this->SystemVersion($data);
     }
 
     //
-    public function setCheatfreeze()
+    public function setSystemfreeze()
     {
-        return $this->cheatfreeze();
+        return $this->Systemfreeze();
     }
 
     //
     public function setinvite()
     {
-        return $this->cheatinvite();
+        return $this->Systeminvite();
+    }
+
+    //
+    public function flushchat()
+    {
+        return $this->chatflush();
     }
 }

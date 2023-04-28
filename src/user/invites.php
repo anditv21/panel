@@ -1,63 +1,34 @@
 <?php
 
 require_once '../app/require.php';
-require_once '../app/controllers/AdminController.php';
+require_once '../app/controllers/UserController.php';
 
 $user = new UserController();
-$admin = new AdminController();
 
 Session::init();
 
 $username = Session::get("username");
 
-$subList = $admin->getSubCodeArray();
+$invList = $user->getInvCodeArray();
 
 Util::banCheck();
 Util::checktoken();
-Util::adminCheck();
-Util::head('Admin Panel');
+Util::head('Invites');
 Util::navbar();
+
+
 
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST["genSub"])) {
-		$gen1 =  Util::securevar($_POST["genSub"]);
-	}
-	if (isset($_POST["genSub2"])) {
-		$gen2 = Util::securevar($_POST["genSub2"]);
-	}
-	if (isset($_POST["genSub3"])) {
-		$gen3 = Util::securevar($_POST["genSub3"]);
-	}
-	if (isset($_POST["delSub"])) {
-		$delsub = Util::securevar($_POST["delSub"]);
-	}
-	if (isset($_POST["flushSub"])) {
-		$flushsub = Util::securevar($_POST["flushSub"]);
+	if (isset($_POST['genInv'])) {
+		$geninv = Util::securevar($_POST['genInv']);
 	}
 
-
-
-	if (isset($gen1)) {
-		$admin->getSubCodeGen($username);
+	if (isset($geninv)) {
+		$user->geninv($username);
 	}
 
-	if (isset($gen2)) {
-		$admin->getSubCodeGen3M($username);
-	}
-	if (isset($gen3)) {
-		$admin->getSubCodeGentrail($username);
-	}
-
-	if (isset($delsub)) {
-		$admin->delsubcode($delsub);
-	}
-
-	if (isset($flushsub)) {
-		$admin->flushsubcodes();
-	}
-
-	header("location: sub.php");
+	header("location: invites.php");
 }
 ?>
 
@@ -86,29 +57,14 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
 <div class="container mt-2">
 	<div class="row">
-
-		<?php Util::adminNavbar(); ?>
-
 		<div class="col-12 mt-3">
-			<div class="rounded p-3 mb-3">
-
-				<form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-
-					<button name="genSub" type="submit" class="btn btn-outline-primary btn-sm">
-						Gen Subscription code
+			<div class="rounded p-3 mb-3">				
+				<form method="POST" action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>">
+				<p><?php Util::display("You have " . $user->getinvs() . " invites left") ?></p>
+					<button name="genInv" type="submit" class="btn btn-outline-primary btn-sm">
+						Gen Inv
 					</button>
-					<button name="genSub2" type="submit" class="btn btn-outline-primary btn-sm">
-						Gen Subscription code (90d/3m)
-					</button>
-					<button name="genSub3" type="submit" class="btn btn-outline-primary btn-sm">
-						Gen Subscription code (3d/Trail)
-					</button>
-					<button name="flushSub" type="submit" class="btn btn-outline-primary btn-sm">
-						Flush sub codes
-					</button>
-
 				</form>
-
 			</div>
 		</div>
 
@@ -118,28 +74,22 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 				<thead>
 					<tr>
 						<th scope="col">Code</th>
-						<th scope="col">Created By</th>
-						<th scope="col">Actions</th>
+						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 
-					<?php foreach ($subList as $row) : ?>
+
+					<?php foreach ($invList as $row) : ?>
 						<tr>
 							<td>
 								<p onclick="copyToClipboard('<?php Util::display($row->code); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>
 									<?php Util::display($row->code); ?>
 								</p>
 							</td>
-							<td>
-								<p onclick="copyToClipboard('<?php Util::display($row->createdBy); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top'>
-									<?php Util::display($row->createdBy); ?>
-								</p>
-							</td>
 
 							<form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
 								<td>
-									<button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->code); ?>" name="delSub">Delete</button>
 									<button class="btn btn-outline-primary btn-sm" onclick="copyToClipboard('<?php Util::display($row->code); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top'>Copy code</button>
 								</td>
 							</form>
@@ -154,6 +104,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	</div>
 
 </div>
+
 <style>
 	.spoiler:hover {
 		color: white;

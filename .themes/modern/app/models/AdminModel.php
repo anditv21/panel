@@ -2,7 +2,7 @@
 
 // Extends to class Database
 // Only Protected methods
-// Only interats with 'Users/Cheat/Invites' tables
+// Only interats with 'Users/System/Invites' tables
 
 // ** Every block should be wrapped in Session::isAdmin(); check **
 
@@ -40,7 +40,7 @@ class Admin extends Database
     protected function updatenews($news)
     {
         if (Session::isAdmin()) {
-            $this->prepare('UPDATE `cheat` SET `news` = ? ');
+            $this->prepare('UPDATE `system` SET `news` = ? ');
             $this->statement->execute([$news]);
         }
     }
@@ -356,84 +356,84 @@ class Admin extends Database
     }  
 
     //
-    protected function cheatStatus()
+    protected function SystemStatus()
     {
         if (Session::isAdmin()) {
-            // Get current cheat status
-            $this->prepare('SELECT `status` FROM `cheat`');
+            // Get current System status
+            $this->prepare('SELECT `status` FROM `system`');
             $this->statement->execute();
-            $cheatStatus = $this->statement->fetch();
+            $SystemStatus = $this->statement->fetch();
 
-            // Set cheat status to opposite of current status
-            $status = $cheatStatus->status ? 0 : 1;
+            // Set System status to opposite of current status
+            $status = $SystemStatus->status ? 0 : 1;
 
-            // Update cheat status
-            $this->prepare('UPDATE `cheat` SET `status` = ?');
+            // Update System status
+            $this->prepare('UPDATE `system` SET `status` = ?');
             $this->statement->execute([$status]);
 
             $username = Session::get('username');
             $user = new UserController();
             if ($status) {
-                $user->log($username, "Set the cheat status to DETECTED", system_logs);
+                $user->log($username, "Set the System status to DETECTED", system_logs);
             } else {
-                $user->log($username, "Set the cheat status to UN-DETECTED", system_logs);
+                $user->log($username, "Set the System status to UN-DETECTED", system_logs);
             }
         }
     }
 
     //
-    protected function cheatMaint()
+    protected function SystemMaint()
     {
         if (Session::isAdmin()) {
             // Get current maintenance status
-            $this->prepare('SELECT `maintenance` FROM `cheat`');
+            $this->prepare('SELECT `maintenance` FROM `system`');
             $this->statement->execute();
-            $cheatMaintenance = $this->statement->fetch();
+            $SystemMaintenance = $this->statement->fetch();
 
             // Set maintenance status to opposite of current status
-            $maintenance = $cheatMaintenance->maintenance ? 0 : 1;
+            $maintenance = $SystemMaintenance->maintenance ? 0 : 1;
 
             // Update maintenance status
-            $this->prepare('UPDATE `cheat` SET `maintenance` = ?');
+            $this->prepare('UPDATE `system` SET `maintenance` = ?');
             $this->statement->execute([$maintenance]);
 
             $username = Session::get('username');
             $user = new UserController();
             if ($maintenance) {
-                $user->log($username, "Set the cheat status to under maintenance", system_logs);
+                $user->log($username, "Set the System status to under maintenance", system_logs);
             } else {
-                $user->log($username, "Set the cheat status to no maintenance", system_logs);
+                $user->log($username, "Set the System status to no maintenance", system_logs);
             }
         }
     }
 
     //
-    protected function cheatVersion($ver)
+    protected function SystemVersion($ver)
     {
         if (Session::isAdmin()) {
-            $this->prepare('UPDATE `cheat` SET `version` = ?');
+            $this->prepare('UPDATE `system` SET `version` = ?');
             $this->statement->execute([$ver]);
 
             $username = Session::get('username');
             $user = new UserController();
-            $user->log($username, "Updated the cheat version to $ver", system_logs);
+            $user->log($username, "Updated the System version to $ver", system_logs);
         }
     }
 
     //
-    protected function cheatfreeze()
+    protected function Systemfreeze()
     {
         if (Session::isAdmin()) {
-            $this->prepare('SELECT `frozen` FROM `cheat`');
+            $this->prepare('SELECT `frozen` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
 
             if ((int) $result->frozen === 0) {
-                $this->prepare('UPDATE `cheat` SET `frozen` = 1');
+                $this->prepare('UPDATE `system` SET `frozen` = 1');
                 $this->statement->execute();
 
                 $this->prepare(
-                    'UPDATE `cheat` SET `freezingtime` = UNIX_TIMESTAMP()'
+                    'UPDATE `system` SET `freezingtime` = UNIX_TIMESTAMP()'
                 );
                 $this->statement->execute();
 
@@ -474,7 +474,7 @@ class Admin extends Database
                         );
                         $this->statement->execute([$row->username]);
 
-                        $this->prepare('SELECT * FROM `cheat`');
+                        $this->prepare('SELECT * FROM `system`');
                         $this->statement->execute();
                         $result = $this->statement->fetch();
                         $freezingtime = $result->freezingtime;
@@ -509,10 +509,10 @@ class Admin extends Database
                     }
                 }
 
-                $this->prepare('UPDATE `cheat` SET `frozen` = 0');
+                $this->prepare('UPDATE `system` SET `frozen` = 0');
                 $this->statement->execute();
 
-                $this->prepare('UPDATE `cheat` SET `freezingtime` = 0');
+                $this->prepare('UPDATE `system` SET `freezingtime` = 0');
                 $this->statement->execute();
 
                 $username = Session::get('username');
@@ -523,22 +523,22 @@ class Admin extends Database
     }
 
     //
-    protected function cheatinvite()
+    protected function Systeminvite()
     {
         if (Session::isAdmin()) {
-            $this->prepare('SELECT `invites` FROM `cheat`');
+            $this->prepare('SELECT `invites` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
 
             if ((int) $result->invites === 0) {
-                $this->prepare('UPDATE `cheat` SET `invites` = 1');
+                $this->prepare('UPDATE `system` SET `invites` = 1');
                 $this->statement->execute();
 
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Activated the Invite-System", system_logs);
             } else {
-                $this->prepare('UPDATE `cheat` SET `invites` = 0');
+                $this->prepare('UPDATE `system` SET `invites` = 0');
                 $this->statement->execute();
 
                 $username = Session::get('username');
@@ -546,5 +546,16 @@ class Admin extends Database
                 $user->log($username, "Deactivated the Invite-System", system_logs);
             }
         }
+    }
+
+    protected function chatflush()
+    {
+        $this->prepare('DELETE FROM `shoutbox`');
+        $this->statement->execute();
+        
+        $msg = "ShoutBox flushed by an admin.";
+        $time = date("M j, g:i a");
+        $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
+        $this->statement->execute([1, $msg, $time]);
     }
 }

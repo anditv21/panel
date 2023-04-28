@@ -1,9 +1,7 @@
 <?php
 require_once "../app/require.php";
-require_once "../app/controllers/CheatController.php";
-
 $user = new UserController();
-$cheat = new CheatController();
+
 
 Session::init();
 
@@ -95,8 +93,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                            $row->os
                         ); ?>
                   </td>
-                  <td><?php Util::display("<br><p class='spoiler'>" .
-                           $row->ip . "</p>"); ?>
+                  <td><?php Util::display("<br><p onclick=\"copyToClipboard('" . $user->getlastip() . "')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
                   </td>
 
 
@@ -121,10 +118,41 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    p {
       max-width: fit-content;
    }
+
+   /* ===== Scrollbar CSS ===== */
+   /* Firefox */
+   * {
+      scrollbar-width: auto;
+      scrollbar-color: #6cc312 #222222;
+   }
+
+   /* Chrome, Edge, and Safari */
+   *::-webkit-scrollbar {
+      width: 16px;
+   }
+
+   *::-webkit-scrollbar-track {
+      background: #222222;
+   }
+
+   *::-webkit-scrollbar-thumb {
+      background-color: #6cc312;
+      border-radius: 10px;
+      border: 3px solid #222222;
+   }
 </style>
 <script>
    $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
    });
+
+   function copyToClipboard(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+   }
 </script>
 <?php Util::footer(); ?>

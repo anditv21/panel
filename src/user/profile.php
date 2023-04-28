@@ -1,9 +1,9 @@
 <?php
 require_once "../app/require.php";
-require_once "../app/controllers/CheatController.php";
+require_once "../app/controllers/SystemController.php";
 
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 
 Session::init();
 
@@ -287,7 +287,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                         <?php
                                         $time = $user->gettime();
                                         if (
-                                            $cheat->getCheatData()->frozen == 1 &&
+                                            $System->getSystemData()->frozen == 1 &&
                                             $userfrozen == 1
                                         ) {
                                             $sub = $sub + $time;
@@ -336,7 +336,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                 <form method="POST" action="<?php Util::display(
                                                                 Util::securevar($_SERVER["PHP_SELF"])
                                                             ); ?>">
-                                    <?php if ($cheat->getCheatData()->frozen != 0) : ?>
+                                    <?php if ($System->getSystemData()->frozen != 0) : ?>
 
                                         <div class="form-group">
                                             <input disabled="disabled" autocomplete="off" class="form-control form-control-sm" placeholder="Subscription Code" name="subCode" required>

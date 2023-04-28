@@ -5,7 +5,7 @@
 
 require_once SITE_ROOT . "/app/models/UsersModel.php";
 require_once "SessionController.php";
-
+date_default_timezone_set('Europe/Vienna');
 class UserController extends Users
 {
     public function createUserSession($user)
@@ -119,7 +119,7 @@ class UserController extends Users
             return $passError = "Passwords do not match, please try again.";
         }
 
-        if ($this->cheatData()->invites == true) {
+        if ($this->SystemData()->invites == true) {
             // Validate invCode
             if (empty($invCode)) {
                 return $invCodeError = "Please enter an invite code.";
@@ -375,5 +375,37 @@ class UserController extends Users
     {
         $username = Session::Get("username");
         return $this->isfrozen($username);
+    }
+
+    public function sendmsg($msg)
+    {
+        $username = Session::get("username");
+        return $this->msgsend($username, $msg);
+    }
+    public function getmsgs()
+    {
+        return $this->getshoutbox();
+    }
+    
+    public function getuser($identifier)
+    {
+        return $this->getuserdata($identifier);
+    }
+
+    public function geninv($username)
+    {
+        return $this->invgen($username);
+    }
+
+    public function getInvCodeArray()
+    {
+        $username = Session::get("username");
+        return $this->invCodeArray($username);
+    }
+
+    public function getinvs()
+    {
+        $username = Session::Get("username");
+        return $this->invs($username);
     }
 }

@@ -1,9 +1,9 @@
 <?php
    require_once "app/require.php";
-   require_once "app/controllers/CheatController.php";
+   require_once "app/controllers/SystemController.php";
    
    $user = new UserController();
-   $cheat = new CheatController();
+   $System = new SystemController();
    
    Session::init();
    
@@ -120,7 +120,7 @@
                            <p class="float-right mb-0">
                               <?php
                                  $time =  $user->gettime();
-                                  if ($cheat->getCheatData()->frozen == 1 && $userfrozen == 1) {
+                                  if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                       $sub = $sub + $time;
                                       if ($sub < 1000) {
                                           Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");

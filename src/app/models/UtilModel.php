@@ -33,7 +33,7 @@ class UtilMod extends Database
 
     protected function validateRememberToken($token)
     {
-        $this->prepare('SELECT remembertoken FROM login WHERE remembertoken = ?');
+        $this->prepare('SELECT * FROM login WHERE remembertoken = ?');
         $this->statement->execute([$token]);
         $result = $this->statement->fetch();
     

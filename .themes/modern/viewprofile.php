@@ -1,8 +1,8 @@
 <?php
 require_once "app/require.php";
-require_once "app/controllers/CheatController.php";
+require_once "app/controllers/SystemController.php";
 $user = new UserController();
-$cheat = new CheatController();
+$System = new SystemController();
 
 Session::init();
 
@@ -130,7 +130,7 @@ $sub = $user->getSubStatus($username);
 
                                         Util::display("Subscription: ");
 
-                                        if ($cheat->getCheatData()->frozen != 0) {
+                                        if ($System->getSystemData()->frozen != 0) {
                                             Util::display("Frozen <i class='fas fa-snowflake fa-sm' ></i>");
                                         } else {
                                             if ($sub > 8000) {
