@@ -94,7 +94,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
                <div class="row text-muted">
                   <div class="col-lg-9 col-md-8 col-sm-12">
-                     <div id="shoutbox"><?php include 'shoutbox.php' ?></div>
+                     <div id="shoutbox"><?php require_once('user/shoutbox.php'); ?></div>
                      <br>
                      <form action="" method="post">
                         <div class="form-group">
