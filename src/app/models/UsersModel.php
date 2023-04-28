@@ -380,6 +380,14 @@ class Users extends Database
         return $result->username;
     }
 
+    protected function invs($username)
+    {
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->invites;
+    }
+
     public function SystemData()
     {
         $this->prepare("SELECT * FROM `system`");
@@ -547,6 +555,35 @@ class Users extends Database
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         return $result->lastIP;
+    }
+
+    protected function invgen($username)
+    {
+        $user = new UserController();
+        $this->prepare('SELECT `invites` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $invites = $this->statement->fetchColumn();
+        if ($invites < 1) {
+            return false;
+        }
+        
+        $code = Util::randomCode(15); 
+        $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+        $this->statement->execute([$code, $username]);
+        $this->loguser($username, "Generated an inv: " . $code); 
+        $user->log($username, "Generated an invitation", "admin_logs"); 
+        $this->prepare('UPDATE `users` SET `invites` = `invites` - 1 WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        
+        return $code;
+    }
+
+    protected function invCodeArray($username)
+    {
+            $this->prepare('SELECT * FROM `invites` WHERE `createdBy` = ?');
+            $this->statement->execute([$username]);
+            $result = $this->statement->fetchAll();
+            return $result;     
     }
 
 

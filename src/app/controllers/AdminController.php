@@ -171,4 +171,9 @@ class AdminController extends Admin
     {
         return $this->shoutbox();
     }
+
+    public function giftinvites($username, $invites)
+    {
+        return $this->invgift($username, $invites);
+    }
 }

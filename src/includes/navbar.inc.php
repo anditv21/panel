@@ -27,6 +27,9 @@
 						<li class="nav-item">
 							<a class="nav-link" href="<?= SUB_DIR ?>/user/tokens.php">Login Tokens <i class="fas fa-shield-alt"></i></a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="<?= SUB_DIR ?>/user/invites.php">User Invites <i class="fas fa-envelope"></i></a>
+						</li>
 						<?php endif; ?>
 						<!-- Check if admin --> 
 						<?php if (Session::isAdmin() == true or Session::isSupp() == true) : ?>

@@ -11,6 +11,7 @@
 			<a href='invites.php' class="btn btn-outline-primary btn-sm">Invite codes</a>
 			<a href='sub.php' class="btn btn-outline-primary btn-sm">Sub codes</a>
 			<a href='gift.php' class="btn btn-outline-primary btn-sm">Gift Sub</a>
+			<a href='userinvites.php' class="btn btn-outline-primary btn-sm">User Invites</a>
 			<a href='system.php' class="btn btn-outline-primary btn-sm">System</a>
 		</div>
 	</div>

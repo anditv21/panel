@@ -583,4 +583,10 @@ class Admin extends Database
             }
         }
     }
+
+    protected function invgift($username, $invites)
+    {
+        $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
+        $this->statement->execute([$invites, $username]);
+    }
 }

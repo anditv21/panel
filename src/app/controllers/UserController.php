@@ -391,4 +391,21 @@ class UserController extends Users
     {
         return $this->getuserdata($identifier);
     }
+
+    public function geninv($username)
+    {
+        return $this->invgen($username);
+    }
+
+    public function getInvCodeArray()
+    {
+        $username = Session::get("username");
+        return $this->invCodeArray($username);
+    }
+
+    public function getinvs()
+    {
+        $username = Session::Get("username");
+        return $this->invs($username);
+    }
 }
