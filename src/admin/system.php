@@ -41,7 +41,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $shoutbox = Util::securevar($_POST['shoutbox']);
    }
    if (isset($_POST['setnews'])) {
-      $news = $_POST['setnews'];
+      $news = Util::securevar($_POST['setnews']);
+   }
+   if (isset($_POST['invwave'])) {
+      $invwave = Util::securevar($_POST['invwave']);
    }
 
    Util::adminCheck();
@@ -80,6 +83,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       $admin->setshoutbox();
    }
 
+   if (isset($invwave)) {
+      $admin->invwave();
+   }
    header("location: system.php");
 }
 
@@ -248,7 +254,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm">
                   SET shoutbox+- (BETA)
                </button>
-               <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" " type=" submit" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
+               <br>
+               <br>
+               <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
+               <button type="submit" name="invwave" onclick="return confirm('Are you sure you want to gift everyone 5 additional invites?')" class="btn btn-outline-primary btn-sm">Invite wave</button>
+
             </form>
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <div class="form-row mt-1">

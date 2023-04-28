@@ -176,4 +176,9 @@ class AdminController extends Admin
     {
         return $this->invgift($username, $invites);
     }
+
+    public function invwave()
+    {
+        return $this->giftallinvs();
+    }
 }

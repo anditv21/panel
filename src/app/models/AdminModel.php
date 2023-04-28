@@ -588,5 +588,25 @@ class Admin extends Database
     {
         $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
         $this->statement->execute([$invites, $username]);
+        $adminusername = Session::get('username');
+        $user = new UserController();
+        $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
     }
+
+    protected function giftallinvs()
+    {
+        $this->prepare('SELECT `username`, `invites` FROM `users`');
+        $this->statement->execute();
+        $users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+        $user = new UserController();
+        $adminusername = Session::get('username');
+        foreach ($users as $userData) {
+            $username = $userData['username'];
+            $invites = $userData['invites'] + 5;
+            $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
+            $this->statement->execute([$invites, $username]);           
+        }
+        $user->log($adminusername, "Gifted 5 invites to everyone", system_logs);
+    }
+    
 }
