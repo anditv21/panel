@@ -374,9 +374,9 @@ class Admin extends Database
             $username = Session::get('username');
             $user = new UserController();
             if ($status) {
-                $user->log($username, "Set the System status to DETECTED", system_logs);
+                $user->log($username, "Set the System status to offline", system_logs);
             } else {
-                $user->log($username, "Set the System status to UN-DETECTED", system_logs);
+                $user->log($username, "Set the System status to online", system_logs);
             }
         }
     }

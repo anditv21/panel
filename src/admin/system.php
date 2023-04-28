@@ -122,13 +122,13 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $System->getSystemData()->status == "Undetected"
+                        $System->getSystemData()->status == "Online"
                      ) : ?>
-                        <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Undetected</span></div>
+                        <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Online</span></div>
                      <?php elseif (
-                        $System->getSystemData()->status == "Detected"
+                        $System->getSystemData()->status == "Offline"
                      ) : ?>
-                        <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Detected</span></div>
+                        <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Offline</span></div>
                      <?php endif; ?>
                   </h4>
                   <span class="small text-muted text-uppercase">status</span>
@@ -240,7 +240,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm">
-                  SET detected+-
+                  SET status+-
                </button>
                <button name="SystemMaint" type="submit" class="btn btn-outline-primary btn-sm">
                   SET maintenance+-

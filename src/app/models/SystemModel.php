@@ -17,7 +17,7 @@ class System extends Database
 
         // Status
         $result->status =
-            (int) $result->status === 0 ? 'Undetected' : 'Detected';
+            (int) $result->status === 0 ? 'Online' : 'Offline';
 
         // Maintenance
         $result->maintenance = (int) $result->maintenance === 0 ? '-' : 'UNDER';

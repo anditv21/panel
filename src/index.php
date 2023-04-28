@@ -130,7 +130,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Status</div>
             <div class="row text-muted">
 
-               <!--Detected // Undetected-->
+               <!--Offline // Online-->
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status:
                   <p class="float-right mb-0"><?php Util::display(
