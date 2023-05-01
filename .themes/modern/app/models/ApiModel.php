@@ -43,7 +43,7 @@ class API extends Database
                         "/assets/img/avatars/Portrait_Placeholder.png";
                 }
 
-                $this->prepare("SELECT * FROM `System`");
+                $this->prepare("SELECT * FROM `system`");
                 $this->statement->execute();
                 $res = $this->statement->fetch();
 

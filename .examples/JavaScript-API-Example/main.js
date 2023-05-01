@@ -3,31 +3,30 @@ const base64 = require("base-64");
 const https = require("https");
 const { execSync } = require('child_process');
 
-
 DOMAIN = "anditv.it";
 API_KEY = "yes";
 SUB_DIR = "/panel/";
 VERSION = 1;
 
 function getHardwareId() {
-    try {
-        const command = 'reg query HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid';
-        const output = execSync(command, {
-            encoding: 'utf8'
-        });
+  try {
+    const command = 'reg query HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid';
+    const output = execSync(command, {
+      encoding: 'utf8'
+    });
 
-        // Parse output to extract GUID value
-        const regex = /REG_SZ\s+(.*)\s*/;
-        const match = output.match(regex);
-        if (!match || !match[1]) {
-            throw new Error(`Not found: ${command}`);
-        }
-
-        return match[1];
-    } catch (e) {
-        console.error(`Error getting machine GUID: ${e}`);
-        return null;
+    // Parse output to extract GUID value
+    const regex = /REG_SZ\s+(.*)\s*/;
+    const match = output.match(regex);
+    if (!match || !match[1]) {
+      throw new Error(`Not found: ${command}`);
     }
+
+    return match[1];
+  } catch (e) {
+    console.error(`Error getting machine GUID: ${e}`);
+    return null;
+  }
 }
 
 function checksub(sub) {
@@ -43,19 +42,25 @@ function checksub(sub) {
 
 
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: new Writable({
-      write() {}
-    })
-  });
-  
-  process.stdout.write("[Login] Username >> ");
-  rl.question("", (username) => {
-    rl.stdoutMuted = true; // Set the stdoutMuted property to true to hide user input
-    process.stdout.write("[Login] Password >> ");
-    rl.question("", (password) => {
-      rl.stdoutMuted = false; // Set the stdoutMuted property back to false
-      const hwid = getHardwareId();
+  input: process.stdin,
+  output: process.stdout
+});
+
+process.stdout.write("[Login] Username >> ");
+rl.on('line', (username) => {
+  rl.stdoutMuted = true;
+  rl.prompt();
+  rl._writeToOutput = function _writeToOutput(stringToWrite) {
+    if (rl.stdoutMuted)
+      rl.output.write("*");
+    else
+      rl.output.write(stringToWrite);
+  };
+  rl.on('line', (password) => {
+    rl.stdoutMuted = false;
+    console.clear();
+
+    const hwid = getHardwareId();
 
     // Encode the password in base64
     const base64_password = base64.encode(password);
@@ -85,20 +90,20 @@ const rl = readline.createInterface({
           }
 
           // version check
-          if (jsonResponse.cheatversion !== VERSION) {
+          if (jsonResponse.Systemversion !== VERSION) {
             console.log("You are using a outdated version.");
-            console.log(apiresult.cheatversion);
+            console.log(jsonResponse.Systemversion);
             setTimeout(() => {
               process.exit();
             }, 500);
           }
 
-          // print cheat status
-          if (jsonResponse.cheatstatus === "0") {
-            console.log("Status: Undetected");
-          } else if (jsonResponse.cheatstatus === "1") {
-            console.log("Status: Detected");
-          } else if (jsonResponse.cheatmaintenance === "1") {
+          // print System status
+          if (jsonResponse.Systemstatus === "0") {
+            console.log("Status: Online");
+          } else if (jsonResponse.Systemstatus === "1") {
+            console.log("Status: Offline");
+          } else if (jsonResponse.Systemmaintenance === "1") {
             console.log("Status: Maintenance");
           }
 
@@ -108,6 +113,10 @@ const rl = readline.createInterface({
             setTimeout(() => {
               process.exit();
             }, 500);
+          }
+          else
+          {
+            console.log("You are not banned.");
           }
           console.log(`You have ${checksub(jsonResponse.sub)} day/s sub left.`);
 

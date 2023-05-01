@@ -27,19 +27,19 @@ def main():
         
         
     # version check
-    if(str(apiresult["cheatversion"]) != VERSION):
+    if(str(apiresult["Systemversion"]) != VERSION):
         print("You are using a outdated version.")
-        print(apiresult["cheatversion"]) 
+        print(apiresult["Systemversion"]) 
         time.sleep(5)
         sys.exit()
             
         
-    # print cheat status
-    if(apiresult["cheatstatus"] == "0"):
-        print("Status: Undetected")
-    elif(apiresult["cheatstatus"] == "1"):
-        print("Status: Detected")
-    elif(apiresult["cheatmaintenance"] == "1"):
+    # print System status
+    if(apiresult["Systemstatus"] == "0"):
+        print("Status: Online")
+    elif(apiresult["Systemstatus"] == "1"):
+        print("Status: Offline")
+    elif(apiresult["Systemmaintenance"] == "1"):
         print("Status: Maintenance")    
         
     # ban check

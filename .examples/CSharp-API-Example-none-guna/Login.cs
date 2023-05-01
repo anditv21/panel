@@ -60,9 +60,9 @@ namespace loader
         public static void checkversion(JObject apiresult)
         {
             string currentversion = "1";
-            if (apiresult["cheatversion"].ToString() != currentversion)
+            if (apiresult["Systemversion"].ToString() != currentversion)
             {
-                MessageBox.Show("Update found" + Environment.NewLine + "Version: " + apiresult["cheatversion"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Update found" + Environment.NewLine + "Version: " + apiresult["Systemversion"].ToString(), "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Environment.Exit(1);
             }
 

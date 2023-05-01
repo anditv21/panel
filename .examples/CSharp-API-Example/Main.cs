@@ -48,17 +48,17 @@ namespace loader
             avatar.ImageLocation = result["avatarurl"].ToString();
 
 
-            if (result["cheatstatus"].ToString() == "0")
+            if (result["Systemstatus"].ToString() == "0")
             {
-                statustext.Text = "Undetected";
+                statustext.Text = "Online";
                 statustext.ForeColor = Color.Green;
             }
-            else if (result["cheatstatus"].ToString() == "1")
+            else if (result["Systemstatus"].ToString() == "1")
             {
-                statustext.Text = "Detected";
+                statustext.Text = "Offline";
                 statustext.ForeColor = Color.Red;
             }
-            else if (result["cheatmaintenance"].ToString() == "1")
+            else if (result["Systemmaintenance"].ToString() == "1")
             {
                 statustext.Text = "Maintenance";
                 statustext.ForeColor = Color.Yellow;

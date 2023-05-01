@@ -1,19 +1,16 @@
 {
-  "name": "js",
+  "name": "javascript-api-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "JavaScript API-Example",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "anditv21",
+  "license": "MIT",
   "dependencies": {
     "base-64": "^1.0.0",
-    "fs": "^0.0.1-security",
-    "https": "^1.0.0",
-    "node-hwid": "^0.1.0",
-    "request": "^2.88.2"
+    "child_process": "^1.0.2",
+    "readline": "^1.3.0"
   }
 }
