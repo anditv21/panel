@@ -2,10 +2,10 @@
 
 class Database {
 
-	private $dbHost = "";
-	private $dbUser = "";
-	private $dbPass = "";
-	private $dbName = "";
+	private $dbHost = '';
+	private $dbUser = '';
+	private $dbPass = '';
+	private $dbName = '';
 
 	protected $statement;
 	protected $error;
