@@ -9,28 +9,35 @@ else
 {
   echo "<p style='color: white;'>✅ Using PHP 8.0 or higher</p>";
 }
-
 // Check if Database.php and DiscordConfig.php exist
 if (file_exists('app/core/Database.php') && file_exists('app/core/DiscordConfig.php')) {
   echo "<p style='color: white;'>✅ Files have been renamed</p>";
 } else {
   echo "<p style='color: white;'>❌ Rename ";
-  if (!file_exists('app/core/Database.php')) {
-    echo "app/core/Database to Database.php";
-  }
-  if (!file_exists('app/core/DiscordConfig.php')) {
-    echo "app/core/DiscordConfig to DiscordConfig.php";
+  if (!file_exists('app/core/Database.php') && !file_exists('app/core/DiscordConfig.php')) {
+    echo "app/core/Database to Database.php and app/core/DiscordConfig to DiscordConfig.php";
+  } else {
+    if (!file_exists('app/core/Database.php')) {
+      echo "app/core/Database to Database.php";
+    }
+    if (!file_exists('app/core/DiscordConfig.php')) {
+      echo "app/core/DiscordConfig to DiscordConfig.php";
+    }
   }
   echo "</p>";
 }
 
+
 // Check if dc app details are set
-require_once('app/core/DiscordConfig.php');
-if (defined('client_id') && defined('client_secret') && client_id != '1234' && client_secret != 'yoursecret') {
-  echo "<p style='color: white;'>✅ Discord Application details are set</p>";
-} else {
-  echo "<p style='color: white;'>❌ Set Discord Application details in app/core/DiscordConfig.php</p>";
-}
+if (file_exists('app/core/DiscordConfig.php')) {
+  require_once('app/core/DiscordConfig.php');
+  if (defined('client_id') && defined('client_secret') && client_id != '1234' && client_secret != 'yoursecret') {
+    echo "<p style='color: white;'>✅ Discord Application details are set</p>";
+  } else {
+    echo "<p style='color: white;'>❌ Set Discord Application details in app/core/DiscordConfig.php</p>";
+  }
+} 
+
 
 // Check if database credentials are set
 if (file_exists('app/core/Database.php')) {
@@ -83,6 +90,5 @@ if (is_writable($avatarDir) && is_readable($avatarDir)) {
 } else {
   echo "<p style='color: white;'>❌ PHP does not have read and write access to /$avatarDir</p>";
 }
-
-echo "<br><h3 style='color: white;'><b>You still have problems? Maybe the <a href='https://github.com/anditv21/panel/wiki/Common-issues' target='_blank'>wiki</a> will help you</b></h3>";
+echo "<br><h3 style='color: white;'><b>You still having problems? Then maybe the <a href='https://github.com/anditv21/panel/wiki/Common-issues' target='_blank'>wiki</a> will help you</b></h3>";
 ?>
