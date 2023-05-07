@@ -1,7 +1,11 @@
 <?php
-include '../app/require.php';
-?>
+try {
+    require_once '../app/require.php';
+} catch (Exception $e) {
 
+}
+
+?>
 <!doctype html>
 <html lang="en">
 
