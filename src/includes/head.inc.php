@@ -1,6 +1,3 @@
-<?php
-include '../app/require.php';
-?>
 
 <!doctype html>
 <html lang="en">
@@ -14,13 +11,13 @@ include '../app/require.php';
     
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="<?= (SITE_NAME); ?>" />
-    <meta property="og:title" content="<?= Util::display($title); ?>" />
+    <meta property="og:title" content="<?= htmlspecialchars(stripslashes(trim($title))); ?>" />
     <meta property="og:url" content="<?= (SITE_URL); ?>" />
     <meta property="og:description" content="<?= (SITE_DESC); ?>" />
     <meta property="og:image" content="" />
     
     <meta property="twitter:description" content="<?=(SITE_DESC); ?>" />
-    <meta property="twitter:title" content="<?= Util::display($title); ?>" />
+    <meta property="twitter:title" content="<?= htmlspecialchars(stripslashes(trim($title))); ?>" />
     
     <!-- Fontawesome CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">

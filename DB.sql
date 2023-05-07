@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 27, 2023 at 11:40 AM
+-- Generation Time: May 08, 2023 at 07:33 AM
 -- Server version: 10.3.38-MariaDB-0+deb10u1
--- PHP Version: 8.1.18
+-- PHP Version: 8.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,7 +38,8 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
-('GOmEikR6umSKVOinpaog', 'admin', '2023-04-26 17:54:53');
+('sgyLMy9z7MUNVpK', 'test', '2023-05-07 11:11:46'),
+('FOOCMOM1CT5SFgG', 'admin', '2023-05-07 11:10:55');
 
 -- --------------------------------------------------------
 
@@ -54,14 +55,6 @@ CREATE TABLE `login` (
   `os` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `login`
---
-
-INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
-('admin', 'c1a517d41715b56b167c427c3e66d376', '127.0.0.1', 'Chrome', 'Windows 10', 'April 27 th, 13:13'),
-('admin', 'ca6d3e19cc3007b5f334e482cb82ebaa', '127.0.0.1', 'Chrome', 'Windows 10', 'April 26 th, 21:57');
 
 -- --------------------------------------------------------
 
@@ -149,14 +142,11 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(91, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'April 26 th, 20:02'),
-(92, 'admin', 'Deleted token c5d4873af74e5a9b4dfce396fe96bcfa', 'Chrome', 'Windows 10', '127.0.0.1', 'April 26 th, 20:02'),
-(93, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'April 26 th, 20:02'),
-(94, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'April 26 th, 21:56'),
-(95, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'April 26 th, 21:57'),
-(96, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'April 27 th, 13:13'),
-(97, 'admin', 'Sub freezed by admin', 'Chrome', 'Windows 10', '127.0.0.1', 'April 27 th, 13:26'),
-(98, 'admin', 'Sub unfreezed by admin', 'Chrome', 'Windows 10', 'Staff/System', 'April 27 th, 13:26');
+(119, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:10'),
+(120, 'admin', 'Generated an inv: FOOCMOM1CT5SFgG', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:10'),
+(121, 'test', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:11'),
+(122, 'test', 'Generated an inv: sgyLMy9z7MUNVpK', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:11'),
+(123, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:41');
 
 -- --------------------------------------------------------
 
@@ -181,15 +171,17 @@ CREATE TABLE `users` (
   `lastLogin` datetime DEFAULT NULL,
   `banreason` varchar(255) DEFAULT NULL,
   `resetcount` int(10) DEFAULT 0,
-  `lastreset` text DEFAULT NULL
+  `lastreset` text DEFAULT NULL,
+  `invites` int(11) NOT NULL DEFAULT 0,
+  `invitescount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-04-27 13:13:32', '2023-04-26 21:57:13', 'none', 11, '2023-04-26');
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`) VALUES
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-05-07 13:41:06', '2023-05-07 12:56:43', 'none', 11, '2023-04-26', 6, 0);
 
 --
 -- Indexes for dumped tables
@@ -256,13 +248,13 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
