@@ -73,9 +73,8 @@ Util::navbar();
 						<div class="form-group">
 							<input type="password" class="form-control form-control-sm" placeholder="Password" name="password" required>
 						</div>
-
-						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Login</button>
-
+						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Login</button>						
+						<center><div id="caps-lock-message" style="display: none; color: red;"><br>Caps Lock is On</div></center>
 					</form>
 
 				</div>
@@ -85,5 +84,5 @@ Util::navbar();
 	</div>
 
 </main>
-
+<script src="../assets/js/main.js"></script>
 <?php Util::footer(); ?>

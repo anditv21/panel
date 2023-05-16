@@ -77,6 +77,8 @@ Util::navbar();
 						<div class="form-group">
 							<input type="password" class="form-control form-control-sm" placeholder="Confirm password" name="confirmPassword" minlength="4" required>
 						</div>
+
+
 						<?php if ($System->getSystemData()->invites == 1) : ?>
 							<div class="form-group">
 								<input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="invite Code" name="invCode" required>
@@ -84,7 +86,7 @@ Util::navbar();
 						<?php endif; ?>
 
 						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Register</button>
-
+						<center><div id="caps-lock-message" style="display: none; color: red;"><br>Caps Lock is On</div></center>
 					</form>
 
 				</div>
@@ -95,5 +97,5 @@ Util::navbar();
 
 </main>
 
-<script src="<?php SITE_ROOT ?>/assets/js/matchPass.js"></script>
+<script src="../assets/js/main.js"></script>
 <?php Util::footer(); ?>
