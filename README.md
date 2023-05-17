@@ -159,7 +159,7 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 
 <li>Reset HWID</li>
 
-<li>Set cheat detected/undetected (Admin only)</li>
+<li>Set cheat ofline/online (Admin only)</li>
 <li>Set version/maintenance/non-maintenance </li>
 
 <li>ShoutBox</li>
