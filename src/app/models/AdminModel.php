@@ -407,6 +407,31 @@ class Admin extends Database
         }
     }
 
+    protected function DiscordLink()
+    {
+        if (Session::isAdmin()) {
+            // Get current discordlinking status
+            $this->prepare('SELECT `discordlinking` FROM `system`');
+            $this->statement->execute();
+            $status = $this->statement->fetch();
+
+            // Set discordlinking status to opposite of current status
+            $discordlinking = $status->discordlinking ? 0 : 1;
+
+            // Update discordlinking status
+            $this->prepare('UPDATE `system` SET `discordlinking` = ?');
+            $this->statement->execute([$discordlinking]);
+
+            $username = Session::get('username');
+            $user = new UserController();
+            if ($discordlinking) {
+                $user->log($username, "Enabled discord linking", system_logs);
+            } else {
+                $user->log($username, "Disabled discord linking", system_logs);
+            }
+        }
+    }
+
     //
     protected function SystemVersion($ver)
     {

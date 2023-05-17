@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 08, 2023 at 07:33 AM
+-- Generation Time: May 17, 2023 at 07:51 PM
 -- Server version: 10.3.38-MariaDB-0+deb10u1
--- PHP Version: 8.2.5
+-- PHP Version: 8.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -111,15 +111,16 @@ CREATE TABLE `system` (
   `frozen` int(1) NOT NULL DEFAULT 0,
   `freezingtime` int(13) NOT NULL,
   `invites` int(1) NOT NULL DEFAULT 1,
-  `shoutbox` int(11) NOT NULL DEFAULT 1
+  `shoutbox` int(11) NOT NULL DEFAULT 1,
+  `discordlinking` int(1) NOT NULL DEFAULT 1
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `system`
 --
 
-INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 1);
+INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`) VALUES
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -142,11 +143,9 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(119, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:10'),
-(120, 'admin', 'Generated an inv: FOOCMOM1CT5SFgG', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:10'),
-(121, 'test', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:11'),
-(122, 'test', 'Generated an inv: sgyLMy9z7MUNVpK', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:11'),
-(123, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 07 th, 13:41');
+(126, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'May 09 th, 23:02'),
+(127, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 17 th, 21:20'),
+(128, 'admin', 'Login', 'Firefox', 'Windows 10', '127.0.0.1', 'May 17 th, 21:46');
 
 -- --------------------------------------------------------
 
@@ -181,7 +180,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-05-07 13:41:06', '2023-05-07 12:56:43', 'none', 11, '2023-04-26', 6, 0);
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-05-17 21:46:41', '2023-05-17 21:20:45', 'none', 11, '2023-04-26', 6, 0);
 
 --
 -- Indexes for dumped tables
@@ -248,13 +247,13 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -46,6 +46,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST['invwave'])) {
       $invwave = Util::securevar($_POST['invwave']);
    }
+   if (isset($_POST['discordlinking'])) {
+      $discordlinking = Util::securevar($_POST['discordlinking']);
+   }
 
    Util::adminCheck();
 
@@ -85,6 +88,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
    if (isset($invwave)) {
       $admin->invwave();
+   }
+   if (isset($discordlinking)) {
+      $admin->setDiscordLink();
    }
    header("location: system.php");
 }
@@ -236,6 +242,25 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </div>
          </div>
       </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
+                  <h3><i class="fab fa-discord"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        if ($System->getSystemData()->discordlinking == 1) {
+                           Util::display("Enabled");
+                        } else {
+                           Util::display("Disabled");
+                        } ?></h4>
+                  <span class="small text-muted text-uppercase">discord-linking</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
@@ -253,6 +278,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                </button>
                <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm">
                   SET shoutbox+- (BETA)
+               </button>
+               <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm">
+                  SET Discord Account Linking +- 
                </button>
                <br>
                <br>

@@ -142,6 +142,11 @@ class AdminController extends Admin
         return $this->SystemMaint();
     }
 
+    public function setDiscordLink()
+    {
+        return $this->DiscordLink();
+    }
+
     //
     public function setSystemVersion($data)
     {

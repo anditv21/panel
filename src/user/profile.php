@@ -243,6 +243,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                             echo '<script>alert("Failed to upload file.")</script>';
                         }
                     } ?>
+                    <?php if ($System->getSystemData()->discordlinking == 1) : ?>
                     <form method="POST" enctype="multipart/form-data">
                         <center>
                             <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Get from Discord (BETA)</button>
@@ -250,6 +251,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                         </center>
                         <br>
                     </form>
+                    <?php endif; ?>
                     <center>
                         <?php if (Util::getavatar($uid) == false) : ?>
                             <a href=<?php Util::display(
