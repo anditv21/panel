@@ -264,23 +264,28 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-               <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm">
+            <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the status?');">
                   SET status+-
                </button>
-               <button name="SystemMaint" type="submit" class="btn btn-outline-primary btn-sm">
+
+               <button name="SystemMaint" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the maintenance mode?');">
                   SET maintenance+-
                </button>
-               <button name="invite" type="submit" class="btn btn-outline-primary btn-sm">
+
+               <button name="invite" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the invites mode?');">
                   SET invites+-
                </button>
-               <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm">
+
+               <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to freeze/unfreeze ALL subscriptions?');">
                   FREEZE subscriptions+- (BETA)
                </button>
-               <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm">
+
+               <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the shoutbox status?');">
                   SET shoutbox+- (BETA)
                </button>
-               <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm">
-                  SET Discord Account Linking +- 
+
+               <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Account Linking status?');">
+                  SET Discord Account Linking+-
                </button>
                <br>
                <br>
