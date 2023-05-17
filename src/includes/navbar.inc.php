@@ -17,7 +17,7 @@
 
 					<!-- Check if logged in --> 
 					<?php if (Session::isLogged() == true) : ?>
-						<?php if (Util::banCheck() == false) : ?>
+						<?php if (Util::banCheck(false) == false) : ?>
 						<li class="nav-item">
 							<a class="nav-link" href="<?= SUB_DIR ?>/user/profile.php">Profile <i class="fas fa-user"></i></a>
 						</li>
@@ -32,7 +32,7 @@
 						</li>
 						<?php endif; ?>
 						<!-- Check if admin --> 
-						<?php if (Session::isAdmin() == true or Session::isSupp() == true) : ?>
+						<?php if (Util::adminCheck(false) == true or Util::suppCheck(false) == true) : ?>
 							
 							<li class="nav-item">
 								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>
