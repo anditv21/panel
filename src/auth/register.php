@@ -86,7 +86,11 @@ Util::navbar();
 						<?php endif; ?>
 
 						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Register</button>
-						<center><div id="caps-lock-message" style="display: none; color: red;"><br>Caps Lock is On</div></center>
+						<center><div id="caps-lock-message" style="display: none; color: red;"><br>Caps Lock is On<br></div></center>
+						<br>
+						<div class="text-center">
+							<a class="small" href="login.php" style="color: rgb(152,152,152);">Already have an account?</a>
+						</div>
 					</form>
 
 				</div>

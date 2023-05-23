@@ -73,8 +73,15 @@ Util::navbar();
 						<div class="form-group">
 							<input type="password" class="form-control form-control-sm" placeholder="Password" name="password" required>
 						</div>
-						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Login</button>						
-						<center><div id="caps-lock-message" style="display: none; color: red;"><br>Caps Lock is On</div></center>
+						<button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Login</button>
+						<br>
+						<center>
+							<div id="caps-lock-message" style="display: none; color: red;">Caps Lock is On<br><br></div>
+						</center>
+						<div class="text-center">
+							<a class="small" href="register.php" style="color: rgb(152,152,152);">Don't have an account?</a>
+						</div>
+
 					</form>
 
 				</div>
