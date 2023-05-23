@@ -29,3 +29,24 @@ var passwordInputs = document.querySelectorAll('input[type="password"]');
 passwordInputs.forEach(function(input) {
   input.addEventListener('input', throttledUpdateCapsLockMessage);
 });
+
+function throttle(func, delay) {
+  let timeoutId;
+  let lastExecTime = 0;
+
+  return function(...args) {
+    const currentTime = Date.now();
+    const timeSinceLastExec = currentTime - lastExecTime;
+
+    if (!timeoutId && timeSinceLastExec >= delay) {
+      func.apply(this, args);
+      lastExecTime = currentTime;
+    } else if (!timeoutId) {
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+        lastExecTime = Date.now();
+        timeoutId = null;
+      }, delay - timeSinceLastExec);
+    }
+  };
+}
