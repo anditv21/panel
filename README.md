@@ -31,11 +31,11 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <p align="center">
 
-<a href="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png"><img src="https://i.ibb.co/Zz1NTMV/brave-9-AOvzt-C5-LG.png" /></a>
+<a href="https://i.ibb.co/8jz5Fwv/image.png"><img src="https://i.ibb.co/8jz5Fwv/image.png" /></a>
 
-<a href="https://i.ibb.co/1Tx5BK7/image.png"><img src="https://i.ibb.co/1Tx5BK7/image.png" /></a>
+<a href="https://i.ibb.co/LJTfrSw/image.png"><img src="https://i.ibb.co/LJTfrSw/image.png" /></a>
 
-<a href="https://i.ibb.co/tZfSt9z/image.png"><img src="https://i.ibb.co/tZfSt9z/image.png" /></a>
+<a href="https://i.ibb.co/chkvZgT/image.png"><img src="https://i.ibb.co/chkvZgT/image.png" /></a>
 <a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
@@ -53,9 +53,9 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-<li>Login (Multiple device remember Login) (Screenshot: https://bit.ly/3GUeex5)</li>
+<li>Login (Multiple device remember Login) (Screenshot: https://tinyurl.com/mwd6uhz)</li>
 
-<li>Register (Invite only / can be deactivated) (Screenshot: https://bit.ly/3ZrXndf)</li>
+<li>Register (Invite only / can be deactivated) (Screenshot: https://tinyurl.com/yc3j4z99)</li>
 
 <li>Banned Page (Screenshot: https://bit.ly/3vYaHse)</li>
 
