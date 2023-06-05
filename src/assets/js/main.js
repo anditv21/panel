@@ -50,3 +50,31 @@ function throttle(func, delay) {
     }
   };
 }
+
+function copyToClipboard(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
+function bulkDownload(tableElement) {
+  let txtContent = "";
+  const rows = Array.from(tableElement.getElementsByTagName("tr"));
+
+  rows.forEach((row) => {
+    const codeCell = row.querySelector("p");
+    if (codeCell) {
+      const code = codeCell.innerText.trim();
+      txtContent += code + "\n";
+    }
+  });
+
+  const blob = new Blob([txtContent], { type: "text/plain" });
+  const anchor = document.createElement("a");
+  anchor.href = URL.createObjectURL(blob);
+  anchor.download = "codes.txt";
+  anchor.click();
+}

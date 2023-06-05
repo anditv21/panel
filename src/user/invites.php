@@ -7,6 +7,10 @@ $user = new UserController();
 
 Session::init();
 
+if (!Session::isLogged()) {
+	Util::redirect("/auth/login.php");
+}
+
 $username = Session::get("username");
 
 $invList = $user->getInvCodeArray();
@@ -27,6 +31,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	if (isset($geninv)) {
 		$user->geninv($username);
 	}
+
 
 	header("location: invites.php");
 }
@@ -52,24 +57,26 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
 <div class="divide"></div>
 
 <div class="container mt-2">
 	<div class="row">
 		<div class="col-12 mt-3">
-			<div class="rounded p-3 mb-3">				
+			<div class="rounded p-3 mb-3">
 				<form method="POST" action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>">
-				<p><?php Util::display("You have " . $user->getinvs() . " invites left") ?></p>
+					<p><?php Util::display("You have " . $user->getinvs() . " invites left") ?></p>
 					<button name="genInv" type="submit" class="btn btn-outline-primary btn-sm">
 						Gen Inv
+					</button>
+					<button class="btn btn-outline-primary btn-sm" onclick="bulkDownload(document.getElementById('invTable'))">
+						Bulk Download Invites
 					</button>
 				</form>
 			</div>
 		</div>
 
 		<div class="col-12 mb-2">
-			<table class="rounded table">
+			<table id="invTable" class="rounded table">
 
 				<thead>
 					<tr>
@@ -145,14 +152,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	$(document).ready(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
-
-	function copyToClipboard(text) {
-		const textarea = document.createElement('textarea');
-		textarea.value = text;
-		document.body.appendChild(textarea);
-		textarea.select();
-		document.execCommand('copy');
-		document.body.removeChild(textarea);
-	}
 </script>
+<script src="../assets/js/main.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
 <?php Util::footer(); ?>

@@ -98,13 +98,16 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 					<button name="flushInvs" type="submit" class="btn btn-outline-primary btn-sm">
 						Flush invites
 					</button>
+					<button class="btn btn-outline-primary btn-sm" onclick="bulkDownload(document.getElementById('invTable'))">
+						Bulk Download Invites
+					</button>
 				</form>
 
 			</div>
 		</div>
 
 		<div class="col-12 mb-2">
-			<table class="rounded table">
+			<table id="invTable" class="rounded table">
 
 				<thead>
 					<tr>
@@ -187,14 +190,6 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	$(document).ready(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
-
-	function copyToClipboard(text) {
-		const textarea = document.createElement('textarea');
-		textarea.value = text;
-		document.body.appendChild(textarea);
-		textarea.select();
-		document.execCommand('copy');
-		document.body.removeChild(textarea);
-	}
 </script>
+<script src="../assets/js/main.js"></script>
 <?php Util::footer(); ?>
