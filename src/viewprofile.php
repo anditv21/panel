@@ -13,6 +13,7 @@ if (!Session::isLogged()) {
 $uid = Session::get("uid");
 $username = Session::get("username");
 $admin = Session::get("admin");
+$supp = Session::get("supp");
 
 $sub = $user->getSubStatus($username);
 $userfrozen = $user->getfrozen();
@@ -107,7 +108,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                   <div class="card-body">
                      <div class="h5 border-bottom border-secondary pb-1"><?php Util::display($userbyid->username); ?></div>
                      <div class="row">
-                        <?php if ($admin) : ?>
+                        <?php if ($admin or $supp) : ?>
                            <div class="col-12 clearfix">
                               <i class="fas fa-id-card"></i> UID:
                               <p class="float-right mb-0"><?php Util::display($userbyid->uid); ?></p>
