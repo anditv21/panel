@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.4deb2+deb11u1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 17, 2023 at 07:51 PM
--- Server version: 10.3.38-MariaDB-0+deb10u1
--- PHP Version: 8.2.6
+-- Host: localhost:3306
+-- Generation Time: Jul 18, 2023 at 07:40 PM
+-- Server version: 10.5.19-MariaDB-0+deb11u2
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,8 +38,7 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
-('sgyLMy9z7MUNVpK', 'test', '2023-05-07 11:11:46'),
-('FOOCMOM1CT5SFgG', 'admin', '2023-05-07 11:10:55');
+('ucT4mRGCjfPhmy5', 'admin', '2023-07-01 14:05:14');
 
 -- --------------------------------------------------------
 
@@ -55,6 +54,15 @@ CREATE TABLE `login` (
   `os` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
+('admin', '2e469c195021b8fb65204101a714ae71', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 15:54'),
+('admin', '46dfcbb81ed8190d9d54e6abbb6062eb', '127.0.0.1', 'Chrome', 'Windows 10', 'July 18 th, 21:17'),
+('admin2', '52fa63920d65096d32977c704f797e44', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 16:06');
 
 -- --------------------------------------------------------
 
@@ -74,7 +82,8 @@ CREATE TABLE `shoutbox` (
 --
 
 INSERT INTO `shoutbox` (`uid`, `message`, `time`, `id`) VALUES
-(1, 'ShoutBox flushed by an admin.', 'Apr 26, 7:58 pm', 25);
+(1, 'ShoutBox flushed by an admin.', 'Apr 26, 7:58 pm', 25),
+(1, 'Hallo', 'Jun 21, 4:18 pm', 26);
 
 -- --------------------------------------------------------
 
@@ -95,7 +104,9 @@ CREATE TABLE `subscription` (
 INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
 ('1m-seaTgRRIKtDReUHEszde', 'admin', '2023-04-26 17:54:55'),
 ('3m-3gwRSxnKmxgV2Bx6Put5', 'admin', '2023-04-26 17:54:57'),
-('Trail-z5IbijJQZhW185yRD6S3', 'admin', '2023-04-26 17:54:57');
+('Trail-z5IbijJQZhW185yRD6S3', 'admin', '2023-04-26 17:54:57'),
+('3m-DYFIJwo5nfZTMCaLlwZY', 'admin', '2023-06-21 14:18:18'),
+('Trail-2Td39U1sq3HA6PUT4yze', 'admin', '2023-06-21 14:18:21');
 
 -- --------------------------------------------------------
 
@@ -120,7 +131,7 @@ CREATE TABLE `system` (
 --
 
 INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 1, 1);
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -143,9 +154,11 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(126, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'May 09 th, 23:02'),
-(127, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'May 17 th, 21:20'),
-(128, 'admin', 'Login', 'Firefox', 'Windows 10', '127.0.0.1', 'May 17 th, 21:46');
+(155, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 15:54'),
+(156, 'admin', 'Generated an inv: ucT4mRGCjfPhmy5', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 16:05'),
+(157, 'admin2', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 16:06'),
+(158, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 18 th, 19:40'),
+(159, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 18 th, 21:17');
 
 -- --------------------------------------------------------
 
@@ -172,15 +185,18 @@ CREATE TABLE `users` (
   `resetcount` int(10) DEFAULT 0,
   `lastreset` text DEFAULT NULL,
   `invites` int(11) NOT NULL DEFAULT 0,
-  `invitescount` int(11) NOT NULL DEFAULT 0
+  `invitescount` int(11) NOT NULL DEFAULT 0,
+  `discord_access_token` varchar(255) DEFAULT NULL,
+  `discord_refresh_token` varchar(255) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', '127.0.0.1', '2023-05-17 21:46:41', '2023-05-17 21:20:45', 'none', 11, '2023-04-26', 6, 0);
+INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`) VALUES
+(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', NULL, '2023-07-18 21:17:07', '2023-07-18 19:40:34', 'none', 11, '2023-04-26', 3, 0, NULL, ''),
+(2, 'admin2', '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, NULL, 0, 0, 'System', '2023-07-01 14:06:00', NULL, '2023-07-01 16:06:06', NULL, NULL, 0, NULL, 0, 0, NULL, '');
 
 --
 -- Indexes for dumped tables
@@ -241,19 +257,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `shoutbox`
 --
 ALTER TABLE `shoutbox`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

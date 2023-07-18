@@ -4,6 +4,7 @@
 // Only Public methods
 
 require_once SITE_ROOT . "/app/models/UsersModel.php";
+require_once SITE_ROOT . "/app/require.php";
 require_once "SessionController.php";
 date_default_timezone_set('Europe/Vienna');
 class UserController extends Users
@@ -227,7 +228,7 @@ class UserController extends Users
         return $this->delother($token);
     }
 
-    
+
     public function tokenlogin($token)
     {
         $result = $this->logintoken($token);
@@ -239,9 +240,7 @@ class UserController extends Users
             $this->log($username, "Logged in via cookie", auth_logs);
             $this->loglogin();
             Util::redirect("/index.php");
-        }
-        else
-        {
+        } else {
             $this->logoutUser(false);
             return "Login with stored token failed.";
         }
@@ -274,33 +273,33 @@ class UserController extends Users
         $currentPassword = $data["currentPassword"];
         $newPassword = $data["newPassword"];
         $confirmPassword = $data["confirmPassword"];
-    
+
         // Empty error array
         $errors = array();
-    
+
         // Validate password
         if (empty($currentPassword)) {
             $errors[] = "Please enter a current password.";
         }
-    
+
         if (empty($newPassword)) {
             $errors[] = "Please enter a new password.";
         } elseif (strlen($newPassword) < 4) {
             $errors[] = "New password is too short.";
         }
-    
+
         if (empty($confirmPassword)) {
             $errors[] = "Please enter a confirm password.";
         } elseif ($confirmPassword != $newPassword) {
             $errors[] = "Confirm password does not match new password, please try again.";
         }
-    
+
         // Check if there are any errors
         if (empty($errors)) {
             // Hashing the password
             $hashedPassword = password_hash($newPassword, PASSWORD_ARGON2I);
             $result = $this->updatePass($currentPassword, $hashedPassword, $username);
-    
+
             if ($result) {
                 $this->flushtokens($username);
                 Util::redirect("/auth/logout.php");
@@ -386,7 +385,7 @@ class UserController extends Users
     {
         return $this->getshoutbox();
     }
-    
+
     public function getuser($identifier)
     {
         return $this->getuserdata($identifier);
@@ -407,5 +406,261 @@ class UserController extends Users
     {
         $username = Session::Get("username");
         return $this->invs($username);
+    }
+
+    public function set_access_token($token)
+    {
+        $username = Session::Get("username");
+        return $this->set_discord_access_token($token, $username);
+    }
+
+    public function set_refresh_token($token)
+    {
+        $username = Session::Get("username");
+        return $this->set_refresh_discord_access_token($token, $username);
+    }
+
+    public function get_access_token()
+    {
+        $username = Session::Get("username");
+        return $this->get_discord_token($username);
+    }
+
+    public function get_refresh_token()
+    {
+        $username = Session::Get("username");
+        return $this->get_discord_refresh_token($username);
+    }
+
+    public function refresh_token()
+    {
+        $username = Session::Get("username");
+        $current_access_token = $this->get_access_token();
+
+        if ($this->is_access_token_valid($current_access_token)) {
+            return $current_access_token;
+        } else {
+            $refresh_token = $this->get_refresh_token();
+            $new_access_token = $this->get_new_access_token($refresh_token);
+            $this->set_refresh_discord_access_token($new_access_token, $username);
+            return $new_access_token;
+        }
+    }
+
+    private function is_access_token_valid($access_token)
+    {
+        // Send a request to Discord's API to validate the access token
+        $url = 'https://discord.com/api/v13/users/@me';
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $access_token,
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+
+        return $httpCode === 200;
+    }
+
+    private function get_new_access_token($refresh_token)
+    {
+        $url = 'https://discord.com/api/v8/oauth2/token';
+
+        $data = [
+            'client_id' => Util::securevar(client_id),
+            'client_secret' => Util::securevar(client_secret),
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refresh_token,
+            'redirect_uri' => Util::securevar(SITE_URL . SUB_DIR . '/user/profile.php'),
+            'scope' => 'identify'
+        ];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($data),
+        ]);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        $response = json_decode($response, true);
+
+        if (isset($response['access_token'])) {
+            return $response['access_token'];
+        } else {
+            return null;
+        }
+    }
+
+    public function discord_link($code)
+    {
+        $uid = Session::Get("uid");
+        if (!empty($code)) {
+            $discord_code = $code;
+
+            $payload = [
+                'code' => $discord_code,
+                'client_id' => Util::securevar(client_id),
+                'client_secret' => Util::securevar(client_secret),
+                'grant_type' => 'authorization_code',
+                'redirect_uri' => Util::securevar(SITE_URL . SUB_DIR . '/user/profile.php'),
+                'scope' => 'identify',
+            ];
+
+            $payload_string = http_build_query($payload);
+            $discord_token_url = "https://discordapp.com/api/oauth2/token";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $discord_token_url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $result = curl_exec($ch);
+
+            if ($result === false) {
+                Util::display("Error: " . Util::securevar(curl_error($ch)));
+                curl_close($ch);
+                exit();
+            }
+
+            $result = json_decode($result, true);
+
+            if (!isset($result["access_token"])) {
+                Util::display("Error: Failed to get access token from Discord.");
+                exit();
+            }
+
+            if (!isset($result["refresh_token"])) {
+                Util::display("Error: Failed to get refresh token from Discord.");
+                exit();
+            }
+
+            $access_token = Util::securevar($result["access_token"]);
+            $refresh_token = Util::securevar($result["refresh_token"]);
+
+            $discord_users_url = "https://discordapp.com/api/users/@me";
+            $header = [
+                "Authorization: Bearer $access_token",
+                "Content-Type: application/x-www-form-urlencoded",
+            ];
+
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($ch, CURLOPT_URL, $discord_users_url);
+            curl_setopt($ch, CURLOPT_POST, false);
+
+            $result = curl_exec($ch);
+
+            if ($result === false) {
+                Util::display("Error: " . Util::securevar(curl_error($ch)));
+                curl_close($ch);
+                exit();
+            }
+
+            $result = json_decode($result, true);
+
+            if (!isset($result["id"])) {
+                Util::display("Error: Failed to get user ID from Discord.");
+                exit();
+            }
+
+            $id = Util::securevar($result["id"]);
+            $avatar = Util::securevar($result["avatar"]);
+
+            $path = Util::securevar(IMG_DIR . $uid);
+
+            if (@getimagesize($path . ".png")) {
+                unlink($path . ".png");
+            } elseif (@getimagesize($path . ".jpg")) {
+                unlink($path . ".jpg");
+            } elseif (@getimagesize($path . ".gif")) {
+                unlink($path . ".gif");
+            }
+
+            $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
+            $img = $path . ".png";
+            file_put_contents($img, file_get_contents($url));
+            chmod(IMG_DIR, 0775);
+            chmod($img, 0775);
+            $this->set_access_token($access_token);
+            $this->set_refresh_token($refresh_token);
+            header("location: profile.php");
+        }
+    }
+    private function downloadAvatarWithAccessToken($userId)
+    {
+        $accessToken = $this->get_access_token();
+
+        // Check if access token is available and valid
+        if ($accessToken && $this->is_access_token_valid($accessToken)) {
+            $url = "https://discord.com/api/v13/users/$userId";
+            $header = [
+                "Authorization: Bearer $accessToken",
+                "Content-Type: application/x-www-form-urlencoded",
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $result = curl_exec($ch);
+
+            if ($result === false) {
+                Util::display("Error: " . Util::securevar(curl_error($ch)));
+                curl_close($ch);
+                return false;
+            }
+
+            $result = json_decode($result, true);
+
+            if (!isset($result["id"])) {
+                Util::display("Error: Failed to get user ID from Discord.");
+                return false;
+            }
+
+            $id = Util::securevar($result["id"]);
+            $avatar = Util::securevar($result["avatar"]);
+
+            $path = Util::securevar(IMG_DIR . $userId);
+
+            if (@getimagesize($path . ".png")) {
+                unlink($path . ".png");
+            } elseif (@getimagesize($path . ".jpg")) {
+                unlink($path . ".jpg");
+            } elseif (@getimagesize($path . ".gif")) {
+                unlink($path . ".gif");
+            }
+
+            $avatarUrl = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
+            $avatarPath = $path . ".png";
+            file_put_contents($avatarPath, file_get_contents($avatarUrl));
+            chmod(IMG_DIR, 0775);
+            chmod($avatarPath, 0775);
+
+            return true;
+        }
+
+        // Access token is invalid or expired, refresh it
+        $refreshedAccessToken = $this->refresh_token();
+
+        // Check if the refresh token was successful and download the avatar
+        if ($refreshedAccessToken) {
+            $this->set_access_token($refreshedAccessToken);
+            return $this->downloadAvatarWithAccessToken($userId);
+        }
+
+        return false;
     }
 }

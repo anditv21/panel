@@ -689,8 +689,33 @@ class Users extends Database
         $user = $this->statement->fetch();
         return $user;
     }
-    
 
+    protected function set_discord_access_token($token, $username)
+    {
+        $this->prepare("UPDATE `users` SET `discord_access_token` = ? WHERE `username` = ?");
+        $this->statement->execute([$token, $username]);
+    }
+    
+    protected function set_refresh_discord_access_token($token, $username) {
+        $this->prepare("UPDATE `users` SET `discord_refresh_token` = ? WHERE `username` = ?");
+        $this->statement->execute([$token, $username]);
+    }
+    
+    protected function get_discord_refresh_token($username)
+    {
+        $this->prepare("SELECT `discord_access_token` from `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->discord_access_token;
+    }
+
+    protected function get_refresh_discord_access_token($username)
+    {
+        $this->prepare("SELECT `discord_refresh_token` from `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+        return $result->discord_refresh_token;
+    }
 
     protected function get_user_Browser()
     {
