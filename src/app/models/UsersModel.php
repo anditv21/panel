@@ -586,7 +586,6 @@ class Users extends Database
             return $result;     
     }
 
-
     public function getip(): string
     {
         $headers = [
@@ -621,7 +620,15 @@ class Users extends Database
             }
         }
     
+        // Don`t log the servers ip
+        $serverIp = $_SERVER['SERVER_ADDR'];
+        if ($ip === $serverIp) {
+            return 'localhost';
+        }
+    
+        return '';
     }
+    
 
 
 
