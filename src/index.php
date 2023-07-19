@@ -53,7 +53,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       <!--Welome message-->
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
-            Welcome back, <a href="/panel/profile.php"><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
+            Welcome back, <a href='<?php  Util::display(SUB_DIR. "/user/profile.php"); ?>'><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
             <?php
             $date_obj = new DateTime($user->getlastlogin());
             $formatted_date = $date_obj->format('F j, Y, g:ia');
