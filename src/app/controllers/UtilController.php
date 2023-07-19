@@ -107,60 +107,61 @@ class Util extends UtilMod
         $username = Session::get('username');
         return $this->subActiveCheck($username);
     }
-// admin check
-public static function adminCheck($redirect = true)
-{
-    $util = new UtilMod();
-    $res = $util->checkadmin(Session::get("username"));
-    if ($res != true) {
-        if ($redirect && basename($_SERVER['PHP_SELF']) != 'index.php') {
-            Session::set("admin", (int) 0);
-            Util::redirect('/index.php');
-            exit(); // to prevent infinite loop
+    
+    // admin check
+    public static function adminCheck($redirect = true)
+    {
+        $util = new UtilMod();
+        $res = $util->checkadmin(Session::get("username"));
+        if ($res != true) {
+            if ($redirect && basename($_SERVER['PHP_SELF']) != 'index.php') {
+                Session::set("admin", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("admin", (int) 1);
+            return true;
         }
-    } else {
-        Session::set("admin", (int) 1);
-        return true;
     }
-}
 
-// supp check
-public static function suppCheck($redirect = true)
-{
-    $util = new UtilMod();
-    $res = $util->checksupp(Session::get("username"));
-    if ($res != true) {
-        if ($redirect && basename($_SERVER['PHP_SELF']) != 'index.php') {
-            Session::set("supp", (int) 0);
-            Util::redirect('/index.php');
-            exit(); // to prevent infinite loop
+    // supp check
+    public static function suppCheck($redirect = true)
+    {
+        $util = new UtilMod();
+        $res = $util->checksupp(Session::get("username"));
+        if ($res != true) {
+            if ($redirect && basename($_SERVER['PHP_SELF']) != 'index.php') {
+                Session::set("supp", (int) 0);
+                Util::redirect('/index.php');
+                exit(); // to prevent infinite loop
+            }
+        } else {
+            Session::set("supp", (int) 1);
+            return true;
         }
-    } else {
-        Session::set("supp", (int) 1);
-        return true;
     }
-}
 
-// ban check
-public static function banCheck($redirect = true)
-{
-    $util = new UtilMod();
-    $res = $util->checkban(Session::get("username"));
+    // ban check
+    public static function banCheck($redirect = true)
+    {
+        $util = new UtilMod();
+        $res = $util->checkban(Session::get("username"));
 
-    // If user is banned
-    if ($res == true) {
-        if ($redirect && basename($_SERVER['PHP_SELF']) != 'banned.php') {
+        // If user is banned
+        if ($res == true) {
+            if ($redirect && basename($_SERVER['PHP_SELF']) != 'banned.php') {
+                Session::set("banned", (int) 1);
+                Util::redirect('/banned.php');
+                exit(); // to prevent infinite loop
+            }
             Session::set("banned", (int) 1);
-            Util::redirect('/banned.php');
-            exit(); // to prevent infinite loop
+            return true;
+        } else {
+            Session::set("banned", (int) 0);
+            return false;
         }
-        Session::set("banned", (int) 1);
-        return true;
-    } else {
-        Session::set("banned", (int) 0);
-        return false;
     }
-}
 
 
     public static function getjoin()

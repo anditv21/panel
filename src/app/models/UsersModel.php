@@ -598,13 +598,20 @@ class Users extends Database
             'HTTP_X_REAL_IP'
         ];
     
+        // Initialize the server IP variable
+        $serverIp = $_SERVER['SERVER_ADDR'];
+    
         foreach ($headers as $header) {
             if (array_key_exists($header, $_SERVER)) {
                 $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
                 if ($ip !== false) {
                     // Check if it's an IPv4 address
                     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        return $ip; // Return IPv4 address
+                        if ($ip === $serverIp) {
+                            return 'localhost';
+                        } else {
+                            return $ip; // Return IPv4 address
+                        }
                     }
                 }
             }
@@ -615,19 +622,18 @@ class Users extends Database
             if (array_key_exists($header, $_SERVER)) {
                 $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
                 if ($ip !== false) {
-                    return $ip; // Return IPv6 address
+                    if ($ip === $serverIp) {
+                        return 'localhost';
+                    } else {
+                        return $ip; // Return IPv6 address
+                    }
                 }
             }
         }
     
-        // Don`t log the servers ip
-        $serverIp = $_SERVER['SERVER_ADDR'];
-        if ($ip === $serverIp) {
-            return 'localhost';
-        }
-    
         return '';
     }
+    
     
 
 
