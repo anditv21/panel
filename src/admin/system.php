@@ -121,25 +121,28 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       <!--Status-->
       <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
          <div class="card">
-            <div class=" card-body row">
+            <div class="card-body row">
                <div class="col-6 text-center">
-                  <h3><i class="fas fa-syringe fa-2x"></i></h3>
+                  <h3>
+                     <?php if ($System->getSystemData()->status == "Online") : ?>
+                        <i class="fas fa-globe fa-2x"></i>
+                     <?php elseif ($System->getSystemData()->status == "Offline") : ?>
+                        <i class="fas fa-plug fa-2x"></i>
+                     <?php endif; ?>
+                  </h3>
                </div>
                <div class="col-6">
                   <h4>
-                     <?php if (
-                        $System->getSystemData()->status == "Online"
-                     ) : ?>
+                     <?php if ($System->getSystemData()->status == "Online") : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Online</span></div>
-                     <?php elseif (
-                        $System->getSystemData()->status == "Offline"
-                     ) : ?>
+                     <?php elseif ($System->getSystemData()->status == "Offline") : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: red;">Offline</span></div>
                      <?php endif; ?>
                   </h4>
                   <span class="small text-muted text-uppercase">status</span>
                </div>
             </div>
+
          </div>
       </div>
       <!--Version-->
@@ -264,7 +267,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
-            <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the status?');">
+               <button name="SystemStatus" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the status?');">
                   SET status+-
                </button>
 
