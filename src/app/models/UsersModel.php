@@ -730,6 +730,59 @@ class Users extends Database
         return $result->discord_refresh_token;
     }
 
+    protected function set_new_display_name($display_name, $username)
+    {
+        // Check if 30 days have passed since the last username change
+        $this->prepare("SELECT `username_change` FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch(); 
+        
+        if ($result && $result->username_change) {
+            $last_username_change = strtotime($result->username_change);
+            $thirty_days_ago = strtotime("-30 days");
+    
+            if ($last_username_change >= $thirty_days_ago) {
+                // It hasn't been 30 days yet, so return false
+                return false;
+            }
+        }
+        
+        $this->prepare("UPDATE `users` SET `displayname` = ?, `username_change` = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE `username` = ?");
+        $this->statement->execute([$display_name, $username]);
+    
+        return true;
+    }
+    
+    protected function get_current_name_cooldown($username)
+    {
+        $this->prepare("SELECT `username_change` FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch(); // Assuming only one row is expected
+    
+        if ($row && isset($row->username_change)) {
+            // If the result is not empty, return the username_change value
+            return $row->username_change;
+        } else {
+            $currentDate = date('Y-m-d');
+            $newDate = date('Y-m-d', strtotime($currentDate));
+            return $newDate;
+        }
+    }
+    
+
+    protected function get_display_name($username)
+    {
+        $this->prepare("SELECT `displayname` FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+    
+        if ($result && isset($result->displayname) && !empty($result->displayname)) {
+            return $result->displayname;
+        } else {
+            return $username;
+        }
+    }
+
     protected function get_user_Browser()
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];

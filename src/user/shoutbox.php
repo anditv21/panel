@@ -39,7 +39,10 @@ foreach ($messages as $message) :
       }
       ?>
       <a href="<?php Util::display(SUB_DIR. "/viewprofile.php?uid=".$message['uid']); ?>" >
-        <?php Util::display(Util::securevar($message["username"] . " ($message[uid]) @ " . $message["time"])); ?>
+        <?php
+        $userbyid = $user->getuserbyuid($message['uid']);
+        $displayname = $user->fetch_display_name($userbyid->username);
+        Util::display(Util::securevar($displayname . " ($message[uid]) @ " . $message["time"])); ?>
       </a>
       <?php
       if ($user_role != "" || $message["uid"] == Session::get("uid")) {

@@ -15,6 +15,7 @@ class UserController extends Users
         Session::set("login", true);
         Session::set("uid", (int) $user->uid);
         Session::set("username", $user->username);
+        Session::set("display_name", $user->display_name);
         Session::set("admin", (int) $user->admin);
         Session::set("supp", (int) $user->supp);
         Session::set("banned", (int) $user->banned);
@@ -484,6 +485,26 @@ class UserController extends Users
         } else {
             return null;
         }
+    }
+
+    public function set_display_name($display_name)
+    {
+        $username = Session::Get('username');
+        return $this->set_new_display_name($display_name, $username);
+   
+    }
+
+    public function fetch_display_name($username)
+    {
+        return $this->get_display_name($username);
+    }
+    
+    
+
+    public function get_name_cooldown()
+    {
+        $username = Session::Get('username');
+        return $this->get_current_name_cooldown($username);
     }
 
     public function discord_link($code)

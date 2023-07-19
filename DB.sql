@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 18, 2023 at 07:40 PM
+-- Generation Time: Jul 19, 2023 at 06:43 PM
 -- Server version: 10.5.19-MariaDB-0+deb11u2
 -- PHP Version: 7.4.33
 
@@ -60,8 +60,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
-('admin', '2e469c195021b8fb65204101a714ae71', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 15:54'),
-('admin', '46dfcbb81ed8190d9d54e6abbb6062eb', '127.0.0.1', 'Chrome', 'Windows 10', 'July 18 th, 21:17'),
+('admin', '01225b379e9193de9824516eaf208629', 'localhost', 'Chrome', 'Windows 10', 'July 19 th, 18:52'),
 ('admin2', '52fa63920d65096d32977c704f797e44', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 16:06');
 
 -- --------------------------------------------------------
@@ -154,11 +153,12 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(155, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 15:54'),
-(156, 'admin', 'Generated an inv: ucT4mRGCjfPhmy5', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 16:05'),
 (157, 'admin2', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 16:06'),
-(158, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 18 th, 19:40'),
-(159, 'admin', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 18 th, 21:17');
+(167, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 9:38'),
+(169, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 13:25'),
+(170, 'admin', 'Deleted token 735362e9fe391b20e1276ce2ff91bf2f', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 13:25'),
+(171, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 17:10'),
+(172, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 18:52');
 
 -- --------------------------------------------------------
 
@@ -169,11 +169,13 @@ INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time
 CREATE TABLE `users` (
   `uid` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `displayname` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `hwid` varchar(255) DEFAULT NULL,
   `admin` int(1) NOT NULL DEFAULT 0,
   `supp` int(1) NOT NULL DEFAULT 0,
   `sub` date DEFAULT NULL,
+  `username_change` date DEFAULT NULL,
   `frozen` int(1) NOT NULL DEFAULT 0,
   `banned` int(1) NOT NULL DEFAULT 0,
   `invitedBy` varchar(255) NOT NULL,
@@ -194,9 +196,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `password`, `hwid`, `admin`, `supp`, `sub`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`) VALUES
-(1, 'admin', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, '2023-07-15', 0, 0, '', '2022-07-05 22:04:37', NULL, '2023-07-18 21:17:07', '2023-07-18 19:40:34', 'none', 11, '2023-04-26', 3, 0, NULL, ''),
-(2, 'admin2', '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, NULL, 0, 0, 'System', '2023-07-01 14:06:00', NULL, '2023-07-01 16:06:06', NULL, NULL, 0, NULL, 0, 0, NULL, '');
+INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`) VALUES
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, NULL, NULL, 0, 0, '', '2022-07-05 22:04:37', NULL, '2023-07-19 18:52:08', '2023-07-19 17:10:18', 'none', 11, '2023-04-26', 3, 0, NULL, ''),
+(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, NULL, NULL, 0, 0, 'System', '2023-07-01 14:06:00', NULL, '2023-07-01 16:06:06', NULL, NULL, 0, NULL, 0, 0, NULL, '');
 
 --
 -- Indexes for dumped tables
@@ -263,7 +265,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
 
 --
 -- AUTO_INCREMENT for table `users`
