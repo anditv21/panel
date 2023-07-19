@@ -47,11 +47,11 @@
 					<?php else : ?>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/auth/login.php">Login</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/auth/login.php">Login <i class="fas fa-sign-in-alt"></i></a>
 						</li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/auth/register.php">Register</a>
+							<a class="nav-link" href="<?= SUB_DIR ?>/auth/register.php">Register <i class="fas fa-user-alt"></i></a>
 						</li>
 
 					<?php endif; ?>
