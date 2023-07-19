@@ -4,7 +4,7 @@
 // Only Protected methods
 // Only interats with 'Users/System/Invites' tables
 
-// ** Every block should be wrapped in Session::isAdmin(); check **
+// ** Every block should be wrapped in $this->checkadmin(); check **
 
 require_once SITE_ROOT . '/app/core/Database.php';
 require_once SITE_ROOT . "/app/require.php";
@@ -16,7 +16,7 @@ class Admin extends Database
     // - includes hashed passwords too.
     protected function UserArray()
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $this->prepare('SELECT * FROM `users` ORDER BY uid ASC');
             $this->statement->execute();
 
@@ -27,7 +27,7 @@ class Admin extends Database
 
     protected function bannedArray()
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $query = 'SELECT * FROM `users` where banned = 1 ORDER BY uid ASC';
 
             $this->prepare($query);
@@ -39,7 +39,7 @@ class Admin extends Database
 
     protected function updatenews($news)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `news` = ? ');
             $this->statement->execute([$news]);
         }
@@ -47,7 +47,7 @@ class Admin extends Database
 
     protected function pwreset($hashedPassword, $username)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
             $this->statement->execute([$hashedPassword, $username]);
 
@@ -66,14 +66,17 @@ class Admin extends Database
 
     protected function bannreason($reason, $uid)
     {
-        $this->prepare('UPDATE `users` SET `banreason` = ? WHERE `uid` = ?');
-        $this->statement->execute([$reason, $uid]);
-        return true;
+        if ($this->checkadmin()) {
+
+            $this->prepare('UPDATE `users` SET `banreason` = ? WHERE `uid` = ?');
+            $this->statement->execute([$reason, $uid]);
+            return true;
+        }
     }
 
     protected function subgift($name, $sub, $time)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             if ($sub <= 0) {
                 if ($time === 'LT') {
                     $time = '24000';
@@ -143,7 +146,7 @@ class Admin extends Database
 
     protected function checksubbyun($name)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('SELECT `sub` FROM `users` where `username` = ?');
             $this->statement->execute([$name]);
             $result = $this->statement->fetch();
@@ -155,7 +158,7 @@ class Admin extends Database
     // Get array of all invite codes
     protected function invCodeArray()
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $this->prepare('SELECT * FROM `invites`');
             $this->statement->execute();
 
@@ -167,7 +170,7 @@ class Admin extends Database
     // Create invite code
     protected function invCodeGen($code, $createdBy)
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
@@ -177,7 +180,7 @@ class Admin extends Database
 
     protected function deleteinvcode($code)
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$code]);
             $user = new UserController();
@@ -187,7 +190,7 @@ class Admin extends Database
 
     protected function deletesub($code)
     {
-        if (Session::isAdmin() or Session::isSupp()) {
+        if ($this->checkadmin() or $this->checksupp()) {
             $this->prepare('DELETE FROM `subscription` WHERE `code` = ?');
             $this->statement->execute([$code]);
             $user = new UserController();
@@ -197,7 +200,7 @@ class Admin extends Database
 
     protected function flushsubs()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('DELETE FROM `subscription`');
             $this->statement->execute();
             $user = new UserController();
@@ -208,20 +211,20 @@ class Admin extends Database
 
     protected function flushinvs()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('DELETE FROM `invites`');
             $this->statement->execute();
             $user = new UserController();
             $user->log(Session::get("username"), "Flushed all invitation codes", admin_logs);
         }
     }
-    
+
 
 
     // Get array of all subscription codes
     protected function subCodeArray()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('SELECT * FROM `subscription`');
             $this->statement->execute();
 
@@ -233,7 +236,7 @@ class Admin extends Database
     // Create subscription code
     protected function subCodeGen($code, $createdBy)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
@@ -244,58 +247,64 @@ class Admin extends Database
     // Resets HWID
     protected function HWID($uid)
     {
-        if (Session::isAdmin() || Session::isSupp()) {
+        if ($this->checkadmin() || $this->checksupp()) {
             $this->prepare('UPDATE `users` SET `hwid` = NULL, `resetcount` = `resetcount` + 1, `lastreset` = ? WHERE `uid` = ?');
             $this->statement->execute([date('Y-m-d'), $uid]);
-    
+
             $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $result = $this->statement->fetch();
-    
+
             $adminUsername = Session::get('username');
             $user = new UserController();
             $user->log($adminUsername, "Reset the hwid of $result->username ($uid)", admin_logs);
             $user->loguser($result->username, "$adminUsername resetted your HWID", false);
         }
     }
-    
+
 
     // Set user ban / unban
     protected function banned($uid)
     {
-        if (Session::isAdmin()) {
-    
-            // Check if user is banned
-            $this->prepare('SELECT `banned`, `username` FROM `users` WHERE `uid` = ?');
+        if ($this->checkadmin()) {
+
+            // Check if user is an admin
+            $this->prepare('SELECT `banned`, `username`, `admin` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
-    
-            // Set banned status to opposite of current status
+
+            if ($userData->admin == 1) {
+                return;
+            }
+
+            // Set banned status to the opposite of the current status
             $banned = $userData->banned ? 0 : 1;
-    
+
             // Update user's banned status
             $this->prepare('UPDATE `users` SET `banned` = ? WHERE `uid` = ?');
             $this->statement->execute([$banned, $uid]);
-    
+
             // Get username for logging
             $username = Session::get('username');
             $user = new UserController();
 
             if ($banned) {
-                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);  
-                $user->loguser($userData->username, "Banned by $username", false);  
+                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
+                $user->loguser($userData->username, "Banned by $username", false);
             } else {
-                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);  
+                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Unbanned by $username", false);
             }
-    
-        }  
+        }
     }
 
     // Set user admin / non admin
     protected function administrator($uid)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
+            if ($uid <= 1) {
+                return;
+            }
 
             // Check if user is an admin
             $this->prepare('SELECT `admin` FROM `users` WHERE `uid` = ?');
@@ -312,8 +321,8 @@ class Admin extends Database
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
 
-			$username = Session::get('username'); 			
-            $user = new UserController();			 	 	 	  	  	  
+            $username = Session::get('username');
+            $user = new UserController();
             if ($admin) {
                 $user->log($username, "Added Admin perms to {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Set to admin by {$username}", false);
@@ -321,44 +330,47 @@ class Admin extends Database
                 $user->log($username, "Removed Admin perms from {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Admin removed by {$username}", false);
             }
-            
         }
     }
 
     // Set user supp / non supp
     protected function supporter($uid)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
+
+            if ($uid <= 1) {
+                return;
+            }
+
             // Get user data and username for logging
             $this->prepare('SELECT `supp`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
-    
+
             // Set supp status to opposite of current status
             $supp = $userData->supp ? 0 : 1;
-    
+
             // Update user's supp status and log changes 
             $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$supp, $uid]);
-    
+
             $username = Session::get('username');
             $user = new UserController();
-    
+
             if ($supp) {
-                $user->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs); 
-                $user->loguser($userData->username, "Set to Supp by $username", false); 
-            } else { 
-                $user->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs); 
-                $user->loguser($userData->username, "Supp removed by $username", false); 
-            } 
-    
-        } 												  
-    }  
+                $user->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs);
+                $user->loguser($userData->username, "Set to Supp by $username", false);
+            } else {
+                $user->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs);
+                $user->loguser($userData->username, "Supp removed by $username", false);
+            }
+        }
+    }
 
     //
     protected function SystemStatus()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             // Get current System status
             $this->prepare('SELECT `status` FROM `system`');
             $this->statement->execute();
@@ -384,7 +396,7 @@ class Admin extends Database
     //
     protected function SystemMaint()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             // Get current maintenance status
             $this->prepare('SELECT `maintenance` FROM `system`');
             $this->statement->execute();
@@ -409,7 +421,7 @@ class Admin extends Database
 
     protected function DiscordLink()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             // Get current discordlinking status
             $this->prepare('SELECT `discordlinking` FROM `system`');
             $this->statement->execute();
@@ -435,7 +447,7 @@ class Admin extends Database
     //
     protected function SystemVersion($ver)
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `version` = ?');
             $this->statement->execute([$ver]);
 
@@ -448,7 +460,7 @@ class Admin extends Database
     //
     protected function Systemfreeze()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('SELECT `frozen` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
@@ -530,7 +542,7 @@ class Admin extends Database
                         );
                         $this->statement->execute([$subTime, $row->username]);
                         $user = new UserController();
-                        $user->loguser($row->username, "Sub unfreezed by ". Session::get('username'), false);
+                        $user->loguser($row->username, "Sub unfreezed by " . Session::get('username'), false);
                     }
                 }
 
@@ -550,7 +562,7 @@ class Admin extends Database
     //
     protected function Systeminvite()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('SELECT `invites` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
@@ -575,18 +587,20 @@ class Admin extends Database
 
     protected function chatflush()
     {
-        $this->prepare('DELETE FROM `shoutbox`');
-        $this->statement->execute();
-        
-        $msg = "ShoutBox flushed by an admin.";
-        $time = date("M j, g:i a");
-        $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
-        $this->statement->execute([1, $msg, $time]);
+        if ($this->checkadmin()) {
+            $this->prepare('DELETE FROM `shoutbox`');
+            $this->statement->execute();
+
+            $msg = "ShoutBox flushed by an admin.";
+            $time = date("M j, g:i a");
+            $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
+            $this->statement->execute([1, $msg, $time]);
+        }
     }
 
     protected function shoutbox()
     {
-        if (Session::isAdmin()) {
+        if ($this->checkadmin()) {
             $this->prepare('SELECT `shoutbox` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
@@ -611,27 +625,58 @@ class Admin extends Database
 
     protected function invgift($username, $invites)
     {
-        $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
-        $this->statement->execute([$invites, $username]);
-        $adminusername = Session::get('username');
-        $user = new UserController();
-        $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
+        if ($this->checkadmin()) {
+            $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
+            $this->statement->execute([$invites, $username]);
+            $adminusername = Session::get('username');
+            $user = new UserController();
+            $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
+        }
     }
 
     protected function giftallinvs()
     {
-        $this->prepare('SELECT `username`, `invites` FROM `users`');
-        $this->statement->execute();
-        $users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
-        $user = new UserController();
-        $adminusername = Session::get('username');
-        foreach ($users as $userData) {
-            $username = $userData['username'];
-            $invites = $userData['invites'] + 5;
-            $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
-            $this->statement->execute([$invites, $username]);           
+        if ($this->checkadmin()) {
+            $this->prepare('SELECT `username`, `invites` FROM `users`');
+            $this->statement->execute();
+            $users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+            $user = new UserController();
+            $adminusername = Session::get('username');
+            foreach ($users as $userData) {
+                $username = $userData['username'];
+                $invites = $userData['invites'] + 5;
+                $this->prepare('UPDATE `users` SET `invites` = ? WHERE `username` = ?');
+                $this->statement->execute([$invites, $username]);
+            }
+            $user->log($adminusername, "Gifted 5 invites to everyone", system_logs);
         }
-        $user->log($adminusername, "Gifted 5 invites to everyone", system_logs);
     }
-    
+
+    protected function checkban()
+    {
+
+        $username = Session::get('username');
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $userData = $this->statement->fetch();
+        return $userData->banned;
+    }
+
+    protected function checkadmin()
+    {
+        $username = Session::get('username');
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $userData = $this->statement->fetch();
+        return $userData->admin;
+    }
+
+    protected function checksupp()
+    {
+        $username = Session::get('username');
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $userData = $this->statement->fetch();
+        return $userData->supp;
+    }
 }
