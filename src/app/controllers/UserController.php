@@ -202,14 +202,14 @@ class UserController extends Users
         }
     }
 
-    public function deletetoken($token)
+    public function deletetoken($token, $password)
     {
-        return $this->tokendelete($token);
+        return $this->tokendelete($token, $password);
     }
 
-    public function deleteother($token)
+    public function deleteother($token, $password)
     {
-        return $this->delother($token);
+        return $this->delother($token, $password);
     }
 
 
