@@ -62,16 +62,28 @@ class Users extends Database
         return true;
     }
 
-    protected function flushlogs()
+    protected function flushlogs($password)
     {
         $username = Session::get('username');
-        $this->prepare("DELETE FROM `userlogs` WHERE `username` = ?");
+        $this->prepare("SELECT `password` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+    
 
+        if (password_verify(($password), $result->password)) {
+            // Passwords match, proceed to flush logs
+            $this->prepare("DELETE FROM `userlogs` WHERE `username` = ?");
+            $this->statement->execute([$username]);
+    
+            $this->loguser($username, "Flushed all logs");
+            return true;
+        } else {
+            // Incorrect password, do not flush logs
+            return false;
+        }
 
-        $this->loguser($username, "Flushed all logs");
-        return true;
     }
+    
 
     protected function gethwidcount($uid)
     {

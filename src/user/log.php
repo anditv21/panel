@@ -19,14 +19,14 @@ Util::head("Logs");
 Util::navbar();
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["flush"])) {
-      $flush = Util::securevar($_POST["flush"]);
-      if (isset($flush)) {
-         $error = $user->flush();
-      }
+   if (isset($_POST["password"])) {
+      $submittedPassword = Util::securevar($_POST["password"]);
+      $error = $user->flush($submittedPassword);
    }
-   header('location: log.php');
+   header('Location: log.php');
+   exit;
 }
+
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -47,6 +47,22 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       height: 3px;
       border-bottom: 1px solid #000;
    }
+
+   .modal-content {
+      background-color: #101010 !important;
+   }
+
+   .modal-title {
+      color: white !important;
+   }
+
+   .modal-body {
+      color: white !important;
+   }
+
+   .modal-footer {
+      border-top: 1px solid #444444 !important;
+   }
 </style>
 <div class="divide"></div>
 <main class="container mt-2">
@@ -58,10 +74,48 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </div>
          <?php endif; ?>
       </div>
+      <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="passwordModalLabel">Enter Password to Flush Logs</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form method="POST" id="flushForm">
+                     <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                     </div>
+                  </form>
+               </div>
+               <div class="modal-footer">
+                  <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+         // Function to open the Bootstrap modal dialog
+         function openPasswordModal() {
+            $('#passwordModal').modal('show');
+         }
+
+         function openPasswordModal() {
+            $('#passwordModal').modal('show');
+         }
+
+         // Function to handle form submission
+         function submitForm() {
+            $('#flushForm').submit(); // Submit the form
+         }
+      </script>
       <div class="card">
          <div class="card-body">
             <form method="POST">
-               <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: You are about to delete all logs!');" name="flush" type="submit">Flush all logs</button>
+               <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Flush all logs</a>
             </form>
          </div>
       </div>
@@ -95,10 +149,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   </td>
                   <td><?php Util::display("<br><p onclick=\"copyToClipboard('" . $user->getlastip() . "')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
                   </td>
-
-
-
-
                </tr>
             <?php endforeach; ?>
          </tbody>

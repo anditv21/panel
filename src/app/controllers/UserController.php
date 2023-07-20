@@ -61,9 +61,9 @@ class UserController extends Users
         return $result;
     }
 
-    public function flush()
+    public function flush($password)
     {
-        $result = $this->flushlogs();
+        $result = $this->flushlogs($password);
         return $result;
     }
 
