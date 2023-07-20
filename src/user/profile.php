@@ -253,7 +253,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
                                     <?php if ($days_left > 0) : ?>
                                         <div class="form-group">
-                                            <input disabled="disabled" autocomplete="off" class="form-control form-control-sm" placeholder="Display name" name="display_name" required>
+                                            <input disabled="disabled" autocomplete="off" class="form-control form-control-sm" minlength="4" maxlength="14" placeholder="Display name" name="display_name" required>
                                         </div>
 
                                         <button class="btn btn-outline-primary btn-block" disabled="disabled">
@@ -263,7 +263,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                     <?php
                                     else : ?>
                                         <div class="form-group">
-                                            <input autocomplete="off" class="form-control form-control-sm" placeholder="Display name" name="display_name" required>
+                                            <input autocomplete="off" class="form-control form-control-sm" minlength="4" maxlength="14" placeholder="Display name" name="display_name" required>
                                         </div>
 
                                         <button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: You can change your display name only once every 30 days. Are you sure you want to continue?');" name="change_display_name" type="submit" value="submit">

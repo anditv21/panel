@@ -747,8 +747,8 @@ class Users extends Database
         // Check if 30 days have passed since the last username change
         $this->prepare("SELECT `username_change` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
-        $result = $this->statement->fetch(); 
-        
+        $result = $this->statement->fetch();
+    
         if ($result && $result->username_change) {
             $last_username_change = strtotime($result->username_change);
             $thirty_days_ago = strtotime("-30 days");
@@ -758,12 +758,22 @@ class Users extends Database
                 return false;
             }
         }
-        
+    
+        // Validate display name on length (4-14 characters)
+        if (empty($display_name)) {
+            return false;
+        } elseif (strlen($display_name) < 4 || strlen($display_name) > 14) {
+            return false;
+        }
+    
+        // Update the display name and set the username_change date
         $this->prepare("UPDATE `users` SET `displayname` = ?, `username_change` = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE `username` = ?");
         $this->statement->execute([$display_name, $username]);
     
         return true;
     }
+    
+    
     
     protected function get_current_name_cooldown($username)
     {
