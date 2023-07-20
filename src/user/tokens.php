@@ -168,9 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
     </script>
         <div class="card">
             <div class="card-body">
-                <form method="POST">
                     <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</a>
-            </div>
             </form>
         </div>
 

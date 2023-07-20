@@ -114,9 +114,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       </script>
       <div class="card">
          <div class="card-body">
-            <form method="POST">
                <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Flush all logs</a>
-            </form>
          </div>
       </div>
       <br>
