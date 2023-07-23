@@ -83,6 +83,7 @@ class Users extends Database
         if (password_verify(($password), $result->password)) {
             $this->prepare("DELETE FROM `login` WHERE `username` = ? AND `remembertoken` != ?");
             $this->statement->execute([$username, $token]);
+            $this->loguser($username, "Logged out of other devices");
             return True;
         } else {
             // Incorrect password, do not flush logs
@@ -184,6 +185,7 @@ class Users extends Database
 
         // Verify the hashed password against the provided password. 
         if (password_verify($password, $row->password)) {
+            $this->loguser($username, "Logged in");
             return $row; // Return the row if the passwords match. 
         }
 
@@ -216,7 +218,7 @@ class Users extends Database
                     $time = date("F d S, G:i");
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os, $token]);
-
+                    $this->loguser($username, "Logged in via cookie");
                     return $newrow; // Return username if authentication succeeds. 
 
                 } else {
@@ -266,8 +268,6 @@ class Users extends Database
         $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
 
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
-
-
             $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
             return ($this->statement->execute([$invCode]));
         } else {
@@ -659,6 +659,7 @@ class Users extends Database
         $result = $this->statement->fetch();
         return $result->frozen;
     }
+
     public function loguser($username, $action, $logip = true)
     {
         if ($logip) {
@@ -721,6 +722,7 @@ class Users extends Database
     {
         $this->prepare("UPDATE `users` SET `discord_access_token` = ? WHERE `username` = ?");
         $this->statement->execute([$token, $username]);
+        $this->loguser($username, "Linked discord account");
     }
 
     protected function set_refresh_discord_access_token($token, $username)
@@ -772,7 +774,7 @@ class Users extends Database
         // Update the display name and set the username_change date
         $this->prepare("UPDATE `users` SET `displayname` = ?, `username_change` = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE `username` = ?");
         $this->statement->execute([$display_name, $username]);
-
+        $this->loguser($username, "Changed display name to $display_name");
         return true;
     }
 
