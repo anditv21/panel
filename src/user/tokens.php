@@ -88,6 +88,55 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
 <main class="container mt-2">
     <div class="row">
         <br>
+        <div class="card">
+            <div class="card-body">
+                    <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</a>
+            </form>
+        </div>
+        </div>
+        <br>
+        <table class="rounded table">
+            <thead>
+                <tr>
+                    <th scope="col">IP</th>
+                    <th scope="col">Token</th>
+                    <th scope="col">Last used</th>
+                    <th scope="col">Browser</th>
+                    <th scope="col">OS</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($tokenarray as $row) : ?>
+                    <tr style="text-align: center;">
+                        <td>
+                            <p onclick="copyToClipboard('<?php Util::display($row->ip); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->ip); ?></p>
+                        </td>
+                        <td>
+                            <p onclick="copyToClipboard('<?php Util::display($row->remembertoken); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->remembertoken); ?></p>
+                        </td>
+                        <td>
+                            <p><?php Util::display($row->time); ?></p>
+                        </td>
+                        <td>
+                            <p><?php Util::display($row->browser); ?></p>
+                        </td>
+                        <td>
+                            <p><?php Util::display($row->os); ?></p>
+                        </td>
+
+
+                            <td><a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
+                                <br>
+                                <?php if ($row->remembertoken ==  Util::securevar($_COOKIE["login_cookie"])) : ?>
+                                    <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
+                                <?php endif; ?>
+                            </td>
+
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
         <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
          <div class="modal-dialog">
             <div class="modal-content">
@@ -166,55 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
         $('#passwordform2').submit(); // Submit the form
     }
     </script>
-        <div class="card">
-            <div class="card-body">
-                    <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</a>
-            </form>
-        </div>
 
-        <table class="rounded table">
-            <thead>
-                <tr>
-                    <th scope="col">IP</th>
-                    <th scope="col">Token</th>
-                    <th scope="col">Last used</th>
-                    <th scope="col">Browser</th>
-                    <th scope="col">OS</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($tokenarray as $row) : ?>
-                    <tr style="text-align: center;">
-                        <td>
-                            <p onclick="copyToClipboard('<?php Util::display($row->ip); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->ip); ?></p>
-                        </td>
-                        <td>
-                            <p onclick="copyToClipboard('<?php Util::display($row->remembertoken); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->remembertoken); ?></p>
-                        </td>
-                        <td>
-                            <p><?php Util::display($row->time); ?></p>
-                        </td>
-                        <td>
-                            <p><?php Util::display($row->browser); ?></p>
-                        </td>
-                        <td>
-                            <p><?php Util::display($row->os); ?></p>
-                        </td>
-
-
-                            <td><a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
-                                <br>
-                                <?php if ($row->remembertoken ==  Util::securevar($_COOKIE["login_cookie"])) : ?>
-                                    <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
-                                <?php endif; ?>
-                            </td>
-
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
 </main>
 <style>
     .spoiler:hover {
