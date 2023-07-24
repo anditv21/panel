@@ -73,7 +73,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g6
+Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g67
 
 <li>ShoutBox (can be disabled from admin dashboard)</li>
 
