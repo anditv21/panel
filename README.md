@@ -75,17 +75,19 @@ Default login: <code>admin</code>:<code>admin</code>
 
 Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g6
 
-<li>ShoutBox</li>
+<li>ShoutBox (can be disabled from admin dashboard)</li>
 
 <li>Change password</li>
 
-<li>Activate multiple subscription´s with code (30/90 days)</li>
+<li>Activate multiple subscription´s with code (Trail/30/90 days)</li>
 
 <li>Activate Trail subscription´s with code (3 days)</li>
 
 <li>Download loader (Needs a sub)</li>
 
-<li>Manage login tokens/cookies</li>
+<li>Change display name</li>
+
+<li>Manage login tokens/cookies (requires password)</li>
 
 <li>Set a Profile Picture</li>
 <li>Public user profile (https://bit.ly/3M6BKuQ)</li>
@@ -111,7 +113,7 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 <summary>Click to see a preview</summary>
 
 <img  src="https://i.ibb.co/GHbF6Ly/opera-Bei-I6vs-O9-Z.png">
-
+<li>Flushing logs (requires password)</li>
 </details>
 
   
