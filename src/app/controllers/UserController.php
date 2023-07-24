@@ -230,6 +230,13 @@ class UserController extends Users
         }
     }
 
+
+    public function setTokenNoteById($selectedTokenId, $note)
+    {
+        return $this->setnoteById($selectedTokenId, $note);
+    }
+
+
     public function activateSub($code)
     {
         // Bind data
@@ -491,15 +498,14 @@ class UserController extends Users
     {
         $username = Session::Get('username');
         return $this->set_new_display_name($display_name, $username);
-   
     }
 
     public function fetch_display_name($username)
     {
         return $this->get_display_name($username);
     }
-    
-    
+
+
 
     public function get_name_cooldown()
     {

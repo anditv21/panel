@@ -91,6 +91,12 @@ class Users extends Database
         }
     }
 
+    protected function setnoteById($selectedTokenId, $note)
+    {
+        $this->prepare("UPDATE `login` SET `note` = ? WHERE `id` = ?");
+        $this->statement->execute([$note, $selectedTokenId]);
+    }
+
 
     protected function flushlogs($password)
     {

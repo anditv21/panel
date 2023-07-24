@@ -22,27 +22,40 @@ Util::navbar();
 
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-
     if (isset($_POST["password2"])) {
         $token = Util::securevar($_POST["deltoken"]);
         $password = Util::securevar($_POST["password2"]);
         if (isset($token, $password)) {
-         $user->deletetoken($token, $password);
+            $user->deletetoken($token, $password);
+            header("location: tokens.php");
+            exit();
         }
     }
-    header("location: tokens.php");
-}
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
-    $password = Util::securevar($_POST["password"]);
+    if (isset($_POST["password"])) {
+        $password = Util::securevar($_POST["password"]);
 
-    $token = Util::securevar($_COOKIE['login_cookie']);
-    $error = $user->deleteother($token, $password);
-    if (!$error) {
-        header('location: tokens.php');
-        exit();
+        $token = Util::securevar($_COOKIE['login_cookie']);
+        $error = $user->deleteother($token, $password);
+        if (!$error) {
+            header('location: tokens.php');
+            exit(); 
+        }
+    }
+
+    
+    if (isset($_POST["setnote"])) {
+        $selectedTokenId = Util::securevar($_POST["setnote"]);
+        $note = Util::securevar($_POST["note"]);
+        $error = $user->setTokenNoteById($selectedTokenId, $note);
+        if (!$error) {
+            header('location: tokens.php');
+            exit();
+        }
     }
 }
+
+
 
 
 ?>
@@ -81,25 +94,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
     .modal-footer {
         border-top: 1px solid #444444 !important;
     }
+
+    table.rounded {
+        margin-top: 20px !important;
+    }
 </style>
 
 
 <div class="divide"></div>
 <main class="container mt-2">
     <div class="row">
-        <br>
-        <div class="card">
-            <div class="card-body">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>" method="post">
+                        <label for="id">Select a token by ID:</label><br>
+                        <select name="setnote" class="form-control form-control-sm">
+                            <br>
+                            <?php foreach ($tokenarray as $row) : ?>
+                                <?php Util::Display("<option value='$row->id'>" . "$row->id </option>"); ?>
+                            <?php endforeach; ?>
+                        </select>
+                        <br>
+                        <label>Enter a note to the selected token</label><br>
+                        <input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="iPhone" name="note" required>
+                        <br>
+                        <button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Set note</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
                     <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</a>
-            </form>
+                </div>
+            </div>
         </div>
-        </div>
+        <br>
+        <br>
         <br>
         <table class="rounded table">
             <thead>
                 <tr>
                     <th scope="col">IP</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Token</th>
+                    <th scope="col">Note</th>
                     <th scope="col">Last used</th>
                     <th scope="col">Browser</th>
                     <th scope="col">OS</th>
@@ -113,7 +154,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                             <p onclick="copyToClipboard('<?php Util::display($row->ip); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->ip); ?></p>
                         </td>
                         <td>
+                            <p><?php Util::display($row->id); ?></p>
+                        </td>
+                        <td>
                             <p onclick="copyToClipboard('<?php Util::display($row->remembertoken); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($row->remembertoken); ?></p>
+                        </td>
+                        <td>
+                            <p><?php Util::display($row->note); ?></p>
                         </td>
                         <td>
                             <p><?php Util::display($row->time); ?></p>
@@ -126,96 +173,98 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                         </td>
 
 
-                            <td><a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
-                                <br>
-                                <?php if ($row->remembertoken ==  Util::securevar($_COOKIE["login_cookie"])) : ?>
-                                    <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
-                                <?php endif; ?>
-                            </td>
+                        <td><a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
+                            <br>
+                            <?php if ($row->remembertoken ==  Util::securevar($_COOKIE["login_cookie"])) : ?>
+                                <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
+                            <?php endif; ?>
+                        </td>
 
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
         <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="passwordModalLabel">Enter Password to logout of all other devices</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                  </button>
-               </div>
-               <div class="modal-body">
-                  <form method="POST" id="passwordform">
-                     <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                     </div>
-                  </form>
-               </div>
-               <div class="modal-footer">
-                  <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
-               </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordModalLabel">Enter Password to logout of all other devices</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" id="passwordform">
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-      <div class="modal fade" id="passwordModal2" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel2" aria-hidden="true">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="passwordModalLabel2">Enter Password to delete this token</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                  </button>
-               </div>
-               <div class="modal-body">
-                  <form method="POST" id="passwordform2">
-                     <div class="form-group">
-                        <label for="password2">Password:</label>
-                        <input type="password" class="form-control" id="password2" name="password2" required>
-                     </div>
-                  </form>
-               </div>
-               <div class="modal-footer">
-                <button type="submit" form="passwordform2" class="btn btn-outline-primary btn-block" onclick="submitForm2()">Submit</button>
+        </div>
+        <div class="modal fade" id="passwordModal2" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel2" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordModalLabel2">Enter Password to delete this token</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" id="passwordform2">
+                            <div class="form-group">
+                                <label for="password2">Password:</label>
+                                <input type="password" class="form-control" id="password2" name="password2" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" form="passwordform2" class="btn btn-outline-primary btn-block" onclick="submitForm2()">Submit</button>
+                    </div>
+                </div>
             </div>
-            </div>
-         </div>
-      </div>
-      <script>
-    // Function to open the Bootstrap modal dialog
-    function openPasswordModal() {
-        $('#passwordModal').modal('show');
-    }
-    
-    // Function to handle form submission
-    function submitForm() {
-        $('#passwordform').submit(); // Submit the form
-    }
+        </div>
+        <script>
+            // Function to open the Bootstrap modal dialog
+            function openPasswordModal() {
+                $('#passwordModal').modal('show');
+            }
+
+            // Function to handle form submission
+            function submitForm() {
+                $('#passwordform').submit(); // Submit the form
+            }
 
 
-    // Function to open the Bootstrap modal dialog
-    function openPasswordModal2(token) {
-        $("#passwordModal2").data("token", token);
-        $('#passwordModal2').modal('show');
-    }
+            // Function to open the Bootstrap modal dialog
+            function openPasswordModal2(token) {
+                $("#passwordModal2").data("token", token);
+                $('#passwordModal2').modal('show');
+            }
 
-    // Function to handle form submission
-    function submitForm2() {
-        const token = $("#passwordModal2").data("token");
-        if (token) {
-            // Set the token as a hidden input in the form
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'deltoken',
-                value: token
-            }).appendTo('#passwordform2');
-        }
-        $('#passwordform2').submit(); // Submit the form
-    }
-    </script>
+            // Function to handle form submission
+            function submitForm2() {
+                const token = $("#passwordModal2").data("token");
+                if (token) {
+                    // Set the token as a hidden input in the form
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'deltoken',
+                        value: token
+                    }).appendTo('#passwordform2');
+                }
+                $('#passwordform2').submit(); // Submit the form
+            }
+        </script>
 
+    </div>
+    <br>
 </main>
 <style>
     .spoiler:hover {

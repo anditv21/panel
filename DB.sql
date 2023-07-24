@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 19, 2023 at 06:43 PM
+-- Generation Time: Jul 24, 2023 at 11:09 AM
 -- Server version: 10.5.19-MariaDB-0+deb11u2
 -- PHP Version: 7.4.33
 
@@ -47,21 +47,23 @@ INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
 --
 
 CREATE TABLE `login` (
+  `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `remembertoken` varchar(255) NOT NULL,
   `ip` varchar(255) NOT NULL,
   `browser` varchar(255) NOT NULL,
   `os` varchar(255) NOT NULL,
-  `time` varchar(255) NOT NULL
+  `time` varchar(255) NOT NULL,
+  `note` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES
-('admin', '01225b379e9193de9824516eaf208629', 'localhost', 'Chrome', 'Windows 10', 'July 19 th, 18:52'),
-('admin2', '52fa63920d65096d32977c704f797e44', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 16:06');
+INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`) VALUES
+(1, 'admin2', '52fa63920d65096d32977c704f797e44', '127.0.0.1', 'Chrome', 'Windows 10', 'July 01 st, 16:06', ''),
+(2, 'admin', 'dc0bd9cdeb18760b1425a33b55890c71', 'localhost', 'Chrome', 'Windows 10', 'July 24 th, 12:30', 'Laptop');
 
 -- --------------------------------------------------------
 
@@ -154,11 +156,8 @@ CREATE TABLE `userlogs` (
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
 (157, 'admin2', 'Login', 'Chrome', 'Windows 10', '127.0.0.1', 'July 01 st, 16:06'),
-(167, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 9:38'),
-(169, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 13:25'),
-(170, 'admin', 'Deleted token 735362e9fe391b20e1276ce2ff91bf2f', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 13:25'),
-(171, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 17:10'),
-(172, 'admin', 'Login', 'Chrome', 'Windows 10', 'localhost', 'July 19 th, 18:52');
+(209, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'July 24 th, 12:30'),
+(210, 'admin', 'Deleted token ff13477c9028794aa1426054c4e636b2', 'Chrome', 'Windows 10', 'localhost', 'July 24 th, 12:31');
 
 -- --------------------------------------------------------
 
@@ -197,7 +196,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'Fetter-4773-Bauer-4205e529af89', 1, 1, NULL, NULL, 0, 0, '', '2022-07-05 22:04:37', NULL, '2023-07-19 18:52:08', '2023-07-19 17:10:18', 'none', 11, '2023-04-26', 3, 0, NULL, ''),
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-08-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-07-24 12:30:43', '2023-07-23 13:34:06', 'none', 12, '2023-07-20', 15, 0, NULL, ''),
 (2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, NULL, NULL, 0, 0, 'System', '2023-07-01 14:06:00', NULL, '2023-07-01 16:06:06', NULL, NULL, 0, NULL, 0, 0, NULL, '');
 
 --
@@ -214,6 +213,7 @@ ALTER TABLE `invites`
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
+  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `remembertoken` (`remembertoken`);
 
 --
@@ -256,6 +256,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `login`
+--
+ALTER TABLE `login`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `shoutbox`
 --
 ALTER TABLE `shoutbox`
@@ -265,7 +271,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
 
 --
 -- AUTO_INCREMENT for table `users`
