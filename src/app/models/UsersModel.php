@@ -246,8 +246,8 @@ class Users extends Database
         date_default_timezone_set("Europe/Vienna");
         $time = date("F d S, G:i");
 
-        $this->prepare('INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`) VALUES (?, ?, ?, ?, ?, ?)');
-        $this->statement->execute([$username, $token, $ip, $browser, $os, $time]);
+        $this->prepare('INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        $this->statement->execute([$username, $token, $ip, $browser, $os, $time, "none"]);
     }
 
     // Register - Sends data to DB
