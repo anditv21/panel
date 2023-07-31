@@ -29,7 +29,6 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             $user->deletetoken($token, $password);
             header("location: tokens.php");
             exit();
-        }
     }
 
     if (isset($_POST["password"])) {
@@ -37,21 +36,17 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
         $token = Util::securevar($_COOKIE['login_cookie']);
         $error = $user->deleteother($token, $password);
-        if (!$error) {
-            header('location: tokens.php');
-            exit(); 
-        }
+        header('location: tokens.php');
+        exit();
     }
 
-    
+
     if (isset($_POST["setnote"])) {
         $selectedTokenId = Util::securevar($_POST["setnote"]);
         $note = Util::securevar($_POST["note"]);
         $error = $user->setTokenNoteById($selectedTokenId, $note);
-        if (!$error) {
-            header('location: tokens.php');
-            exit();
-        }
+        header('location: tokens.php');
+        exit();
     }
 }
 
