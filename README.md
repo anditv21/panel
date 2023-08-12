@@ -75,7 +75,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g67
 
-<li>ShoutBox (can be disabled from admin dashboard)</li>
+<li>ShoutBox (can be disabled from admin dashboard / users are muteable)</li>
 
 <li>Change password</li>
 
@@ -158,6 +158,8 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 <li>Make user admin/non-admin </li>
 
 <li>Make user supporter/non-supp </li>
+
+<li>Mute a user for the shoutbox</li>
 
 <li>Reset HWID</li>
 
