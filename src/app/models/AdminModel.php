@@ -291,6 +291,10 @@ class Admin extends Database
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Banned by $username", false);
+                
+                // Delete shoutbox entries from banned user
+                $this->prepare('DELETE FROM `shoutbox` WHERE `uid` = ?');
+                $this->statement->execute([$uid]);
             } else {
                 $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Unbanned by $username", false);
