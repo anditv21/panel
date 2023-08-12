@@ -1,6 +1,5 @@
 <?php
 require_once "app/require.php";
-require_once "app/controllers/UserController.php";
 date_default_timezone_set('Europe/Vienna');
 $user = new UserController();
 Session::init();
