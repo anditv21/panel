@@ -655,9 +655,6 @@ class Users extends Database
     }
 
 
-
-
-
     public function isfrozen($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
@@ -814,6 +811,14 @@ class Users extends Database
         } else {
             return $username;
         }
+    }
+
+    protected function check_mute($uid)
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `uid` = ?');
+        $this->statement->execute([$uid]);
+        $userData = $this->statement->fetch();
+        return $userData->muted;
     }
 
     protected function get_user_Browser()

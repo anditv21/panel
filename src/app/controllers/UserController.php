@@ -505,12 +505,15 @@ class UserController extends Users
         return $this->get_display_name($username);
     }
 
-
-
     public function get_name_cooldown()
     {
         $username = Session::Get('username');
         return $this->get_current_name_cooldown($username);
+    }
+
+    public function mutecheck($uid)
+    {
+        return $this->check_mute($uid);
     }
 
     public function discord_link($code)

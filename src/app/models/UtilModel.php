@@ -7,14 +7,14 @@ require_once SITE_ROOT . "/app/core/Database.php";
 date_default_timezone_set('Europe/Vienna');
 class UtilMod extends Database
 {
-    protected function checkban($username)
+    protected function checkBan($username)
     {
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
         return $userData->banned;
     }
-
+    
     protected function checkadmin($username)
     {
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
@@ -29,6 +29,20 @@ class UtilMod extends Database
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
         return $userData->supp;
+    }
+
+    protected function checkmute($username)
+    {
+        try {
+            $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+            $this->statement->execute([$username]);
+            $result = $this->statement->fetch();
+    
+            return $result->muted;
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage());
+            return 0;
+        }
     }
 
     protected function validateRememberToken($token)

@@ -31,6 +31,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST["setAdmin"])) {
       $adminuser = Util::securevar($_POST["setAdmin"]);
    }
+   if (isset($_POST["setMute"])) {
+      $mute = Util::securevar($_POST["setMute"]);
+   }
 
    if (isset($hwid)) {
       Util::suppCheck();
@@ -57,6 +60,13 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       Util::adminCheck();
       $rowUID = $adminuser;
       $admin->setAdmin($rowUID);
+   }
+
+   
+   if (isset($mute)) {
+      Util::suppCheck();
+      $rowUID = $mute;
+      $admin->setMute($rowUID);
    }
 
    header("location: users.php");
@@ -126,6 +136,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   <th scope="col">Username</th>
                   <th scope="col" class="text-center">Admin</th>
                   <th scope="col" class="text-center">Banned</th>
+                  <th scope="col" class="text-center">ShoutBox Muted</th>
                   <th scope="col">Actions</th>
                </tr>
             </thead>
@@ -193,6 +204,13 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                               <i class="fas fa-times-circle"></i>
                            <?php endif; ?>
                         </td>
+                        <td class="text-center">
+                           <?php if ($row->muted == 1) : ?>
+                              <i class="fas fa-check-circle"></i>
+                           <?php else : ?>
+                              <i class="fas fa-times-circle"></i>
+                           <?php endif; ?>
+                        </td>
                         <td>
                            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                               <button value="<?php Util::display(
@@ -216,6 +234,12 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                        ); ?>" target="_blank" name="setAdmin" title="View Profile" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white">
                                  <i class="fas fa-user-circle"></i>
                               </a>
+
+                              <button value="<?php Util::display(
+                                                $row->uid
+                                             ); ?>" name="setMute" title="Mute/Unmute" data-toggle="tooltip" data-placement="top" class="btn btn-sm text-white" type="submit">
+                                 <i class="fas fa-microphone-slash"></i>
+                              </button>
                            </form>
                         </td>
                      </tr>

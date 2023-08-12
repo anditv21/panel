@@ -142,27 +142,38 @@ class Util extends UtilMod
         }
     }
 
+
     // ban check
     public static function banCheck($redirect = true)
     {
         $util = new UtilMod();
-        $res = $util->checkban(Session::get("username"));
-
-        // If user is banned
+        $res = $util->checkBan(Session::get("username"));
         if ($res == true) {
-            if ($redirect && basename($_SERVER['PHP_SELF']) != 'banned.php') {
-                Session::set("banned", (int) 1);
+            if ($redirect && basename($_SERVER['PHP_SELF']) !== 'banned.php') {
+                Session::set("banned", 1);
                 Util::redirect('/banned.php');
                 exit(); // to prevent infinite loop
             }
-            Session::set("banned", (int) 1);
+            Session::set("banned", 1);
             return true;
         } else {
-            Session::set("banned", (int) 0);
+            Session::set("banned", 0);
             return false;
         }
     }
-
+    
+    public static function muteCheck()
+    {
+        $username = Session::get("username");
+        if ($username === null) {
+            error_log("user not found");
+            return false;
+        }
+    
+        $util = new UtilMod();
+        $res = $util->checkmute($username);
+        return $res;
+    }
 
     public static function getjoin()
     {

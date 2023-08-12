@@ -371,6 +371,43 @@ class Admin extends Database
         }
     }
 
+
+    // Set user mute / unmute
+    protected function mute($uid)
+    {
+        if ($this->checkadmin()) {
+            if ($uid <= 1) {
+                return;
+            }
+
+            // Check if user is muted
+            $this->prepare('SELECT `muted` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $userData = $this->statement->fetch();
+
+            // Set mute status to opposite of current status
+            $muted = (int)!$userData->muted;
+
+            $this->prepare('UPDATE `users` SET `muted` = ? WHERE `uid` = ?');
+            $this->statement->execute([$muted, $uid]);
+
+            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
+            $this->statement->execute([$uid]);
+            $userData = $this->statement->fetch();
+
+            $username = Session::get('username');
+            $user = new UserController();
+            if ($muted) {
+                $user->log($username, "Muted {$userData->username} ($uid)", admin_logs);
+                $user->logUser($userData->username, "Muted by {$username}", false);
+            } else {
+                $user->log($username, "Unmuted {$userData->username} ($uid)", admin_logs);
+                $user->logUser($userData->username, "Mute removed by {$username}", false);
+            }
+        }
+    }
+
+
     //
     protected function SystemStatus()
     {
@@ -658,7 +695,6 @@ class Admin extends Database
 
     protected function checkban()
     {
-
         $username = Session::get('username');
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
@@ -669,7 +705,7 @@ class Admin extends Database
     protected function checkadmin()
     {
         $username = Session::get('username');
-        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
         return $userData->admin;
@@ -678,7 +714,7 @@ class Admin extends Database
     protected function checksupp()
     {
         $username = Session::get('username');
-        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
         return $userData->supp;

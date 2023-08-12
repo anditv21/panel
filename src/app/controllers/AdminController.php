@@ -130,6 +130,11 @@ class AdminController extends Admin
         return $this->supporter($uid);
     }
 
+    public function setMute($uid)
+    {
+        return $this->mute($uid);
+    }
+
     //
     public function setSystemStatus()
     {

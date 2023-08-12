@@ -21,8 +21,10 @@ Util::navbar();
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    $msg = Util::securevar($_POST['shoutbox-message']);
-   $user->sendmsg($msg);
-   //ob_end_clean(); // discard any output before sending HTTP headers
+   if (Util::muteCheck() == False)
+   {
+      $user->sendmsg($msg);
+   }
    header('location: index.php');
    exit;
 }
@@ -96,6 +98,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   <div class="col-lg-9 col-md-8 col-sm-12">
                      <div id="shoutbox"><?php require_once('shoutbox.php'); ?></div>
                      <br>
+                     <?php if (Util::muteCheck() == False): ?>
                      <form action="" method="post">
                         <div class="form-group">
                            <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
@@ -109,7 +112,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                            <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
                         </div>
                      </form>
-
+                       <?php endif; ?>
                   </div>
                </div>
             </div>
