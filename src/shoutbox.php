@@ -4,6 +4,8 @@ date_default_timezone_set('Europe/Vienna');
 $user = new UserController();
 Session::init();
 
+Util::banCheck();
+Util::checktoken();
 
 if (!Session::isLogged()) {
   Util::redirect("/auth/login.php");
