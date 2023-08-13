@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 12, 2023 at 08:26 PM
+-- Generation Time: Aug 13, 2023 at 07:03 PM
 -- Server version: 10.5.19-MariaDB-0+deb11u2
 -- PHP Version: 7.4.33
 
@@ -41,7 +41,8 @@ INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
 ('ucT4mRGCjfPhmy5', 'admin', '2023-07-01 14:05:14'),
 ('uQlxfN9b8eWE1l6', 'admin', '2023-07-25 11:46:13'),
 ('zJzs49Z92tvnRbg', 'admin', '2023-07-25 11:46:13'),
-('yce3USspTOquBiB', 'admin', '2023-07-25 11:46:13');
+('yce3USspTOquBiB', 'admin', '2023-07-25 11:46:13'),
+('R5zYVZAhQT4b52Y', 'admin', '2023-08-13 10:51:25');
 
 -- --------------------------------------------------------
 
@@ -65,8 +66,9 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`) VALUES
-(9, 'admin2', '98d2f2fb8bc439b4c97d693365581299', 'localhost', 'Chrome', 'Windows 10', 'August 12 th, 22:17', 'none'),
-(10, 'admin', '4b66233123fbe9273ebdcc0a858e7d60', 'localhost', 'Chrome', 'Windows 10', 'August 12 th, 19:16', 'none');
+(9, 'admin2', '98d2f2fb8bc439b4c97d693365581299', 'localhost', 'Chrome', 'Windows 10', 'August 12 th, 22:45', 'none'),
+(11, 'admin2', '7874dcb8ea1a362aa21b6a79c26f7c6b', '45.85.219.118', 'Chrome', 'Windows 10', 'August 13 th, 12:49', 'none'),
+(13, 'admin', 'f3039c2e717ec15ceda90e29d3c23871', 'localhost', 'Chrome', 'Windows 10', 'August 13 th, 20:59', 'none');
 
 -- --------------------------------------------------------
 
@@ -100,17 +102,6 @@ CREATE TABLE `subscription` (
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `subscription`
---
-
-INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('1m-seaTgRRIKtDReUHEszde', 'admin', '2023-04-26 17:54:55'),
-('3m-3gwRSxnKmxgV2Bx6Put5', 'admin', '2023-04-26 17:54:57'),
-('Trail-z5IbijJQZhW185yRD6S3', 'admin', '2023-04-26 17:54:57'),
-('3m-DYFIJwo5nfZTMCaLlwZY', 'admin', '2023-06-21 14:18:18'),
-('Trail-2Td39U1sq3HA6PUT4yze', 'admin', '2023-06-21 14:18:21');
-
 -- --------------------------------------------------------
 
 --
@@ -134,7 +125,7 @@ CREATE TABLE `system` (
 --
 
 INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 0, 1, 1);
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -157,8 +148,18 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(267, 'admin2', 'Muted by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 22:20'),
-(268, 'admin2', 'Mute removed by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 22:20');
+(278, 'admin2', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:46'),
+(279, 'admin2', 'Logged in', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:49'),
+(280, 'admin2', 'Login', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:49'),
+(281, 'admin2', 'Unbanned by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 22:55'),
+(282, 'admin2', 'Muted by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 22:58'),
+(283, 'admin2', 'Mute removed by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 22:58'),
+(284, 'admin2', 'Banned by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 12 th, 23:00'),
+(289, 'admin2', 'Unbanned by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 13 th, 12:49'),
+(293, 'admin2', 'Banned by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 13 th, 12:51'),
+(294, 'admin2', 'Unbanned by admin', 'Chrome', 'Windows 10', 'Staff/System', 'August 13 th, 12:52'),
+(303, 'admin', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'August 13 th, 21:00'),
+(304, 'admin', 'Deleted token 6efa5768612672e67a6a24bb8d53a6e3', 'Chrome', 'Windows 10', 'localhost', 'August 13 th, 21:00');
 
 -- --------------------------------------------------------
 
@@ -189,7 +190,8 @@ CREATE TABLE `users` (
   `invites` int(11) NOT NULL DEFAULT 0,
   `invitescount` int(11) NOT NULL DEFAULT 0,
   `discord_access_token` varchar(255) DEFAULT NULL,
-  `discord_refresh_token` varchar(255) NOT NULL,
+  `discord_refresh_token` varchar(255) DEFAULT NULL,
+  `dcid` varchar(255) DEFAULT NULL,
   `muted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -197,9 +199,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `muted`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'e7b81f23-815f-433f-8cb7-bbb5c41596ef', 1, 1, '2023-08-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-08-12 19:16:37', '2023-08-12 19:03:00', 'none', 13, '2023-07-30', 12, 0, NULL, '', 0),
-(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, NULL, NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-12 22:17:50', '2023-08-12 20:49:32', 'none', 0, NULL, 0, 0, NULL, '', 0);
+INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`) VALUES
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'e7b81f23-815f-433f-8cb7-bbb5c41596ef', 1, 1, '2023-08-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-08-13 20:59:42', '2023-08-13 19:10:22', 'none', 13, '2023-07-30', 16, 0, NULL, NULL, NULL, 0),
+(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, '2089-04-28', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 0, NULL, 5, 0, NULL, '', NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -261,19 +263,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
 --
 ALTER TABLE `shoutbox`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=305;
 
 --
 -- AUTO_INCREMENT for table `users`

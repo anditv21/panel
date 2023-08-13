@@ -414,7 +414,7 @@ class UserController extends Users
     public function get_access_token()
     {
         $username = Session::Get("username");
-        return $this->get_discord_token($username);
+        return $this->get_discord_refresh_token($username);
     }
 
     public function get_refresh_token()
@@ -441,8 +441,8 @@ class UserController extends Users
     private function is_access_token_valid($access_token)
     {
         // Send a request to Discord's API to validate the access token
-        $url = 'https://discord.com/api/v13/users/@me';
-
+        $url = 'https://discord.com/api/v6/users/@me';
+    
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -451,14 +451,35 @@ class UserController extends Users
                 'Authorization: Bearer ' . $access_token,
             ],
         ]);
-
+    
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
+    
+        if ($httpCode !== 200) {
+            curl_close($curl);
+            return false; 
+        }
+    
         curl_close($curl);
-
-        return $httpCode === 200;
+    
+        try {
+            $data = json_decode($response, true);
+    
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return false; 
+            }
+    
+            // Check if the API response contains expected data
+            if (isset($data['id'])) {
+                return true; // Token is valid
+            } else {
+                return false; 
+            }
+        } catch (Exception $e) {
+            return false; 
+        }
     }
+    
 
     private function get_new_access_token($refresh_token)
     {
@@ -516,6 +537,24 @@ class UserController extends Users
         return $this->check_mute($uid);
     }
 
+    public function getdcid($uid)
+    {
+        $result = $this->check_dcid($uid);
+        
+        if ($result === null || $result === false) {
+            return false;
+        }
+        
+        return $result;
+    }
+    
+
+    public function setdcid($dcid, $uid)
+    {
+        return $this->set_dcid($dcid, $uid);
+    }
+    
+
     public function discord_link($code)
     {
         $uid = Session::Get("uid");
@@ -532,7 +571,7 @@ class UserController extends Users
             ];
 
             $payload_string = http_build_query($payload);
-            $discord_token_url = "https://discordapp.com/api/oauth2/token";
+            $discord_token_url = "https://discordapp.com/api/v9/oauth2/token";
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $discord_token_url);
@@ -608,19 +647,22 @@ class UserController extends Users
             chmod($img, 0775);
             $this->set_access_token($access_token);
             $this->set_refresh_token($refresh_token);
+            $this->set_dcid($id, $uid);
             header("location: profile.php");
         }
     }
-    private function downloadAvatarWithAccessToken($userId)
+   
+
+   public function downloadAvatarWithAccessToken($userId, $uid)
     {
         $accessToken = $this->get_access_token();
 
+        
         // Check if access token is available and valid
         if ($accessToken && $this->is_access_token_valid($accessToken)) {
-            $url = "https://discord.com/api/v13/users/$userId";
+            $url = "https://discord.com/api/v9/users/@me";
             $header = [
-                "Authorization: Bearer $accessToken",
-                "Content-Type: application/x-www-form-urlencoded",
+                "Authorization: Bearer $accessToken"
             ];
 
             $ch = curl_init();
@@ -629,7 +671,7 @@ class UserController extends Users
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $result = curl_exec($ch);
-
+            
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
                 curl_close($ch);
@@ -637,6 +679,7 @@ class UserController extends Users
             }
 
             $result = json_decode($result, true);
+            
 
             if (!isset($result["id"])) {
                 Util::display("Error: Failed to get user ID from Discord.");
@@ -645,8 +688,7 @@ class UserController extends Users
 
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
-
-            $path = Util::securevar(IMG_DIR . $userId);
+            $path = Util::securevar(IMG_DIR . $uid);
 
             if (@getimagesize($path . ".png")) {
                 unlink($path . ".png");

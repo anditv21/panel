@@ -821,6 +821,21 @@ class Users extends Database
         return $userData->muted;
     }
 
+    protected function check_dcid($uid)
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `uid` =?');
+        $this->statement->execute([$uid]);
+        $userData = $this->statement->fetch();
+        return $userData->dcid;
+    }
+
+    protected function set_dcid($dcid, $uid)
+    {
+        $this->prepare('UPDATE `users` SET `dcid` = ? WHERE `uid` = ?');
+        $this->statement->execute([$dcid, $uid]);
+    }
+
+
     protected function get_user_Browser()
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];

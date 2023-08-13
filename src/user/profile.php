@@ -7,6 +7,23 @@ Session::init();
 if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
+$uid = Session::get("uid");
+$username = Session::get("username");
+$displayname = $user->fetch_display_name($username);
+$admin = Session::get("admin");
+$userfrozen = $user->getfrozen();
+$sub = $user->getSubStatus();
+Util::banCheck();
+Util::checktoken();
+Util::head("Profile");
+Util::navbar();
+
+
+if(!$user->getdcid($uid) == false)
+{
+    $user->downloadAvatarWithAccessToken($user->getdcid($uid), $uid);
+}
+
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     if (isset($_POST["updatePassword"])) {
         $error = $user->updateUserPass(Util::securevar($_POST));
@@ -21,16 +38,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     }
     header("location: profile.php");
 }
-$uid = Session::get("uid");
-$username = Session::get("username");
-$displayname = $user->fetch_display_name($username);
-$admin = Session::get("admin");
-$userfrozen = $user->getfrozen();
-$sub = $user->getSubStatus();
-Util::banCheck();
-Util::checktoken();
-Util::head("Profile");
-Util::navbar();
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"]) && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"])) {
     header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
