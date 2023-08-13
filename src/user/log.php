@@ -130,26 +130,31 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </tr>
          </thead>
          <tbody>
-            <?php foreach ($logarray as $row) : ?>
-               <tr style="text-align: center;">
+    <?php foreach ($logarray as $row) : ?>
+        <tr style="text-align: center;">
 
-                  <td><?php Util::display(
-                           $row->time
-                        ); ?>
-                  </td>
-                  <td><?php Util::display(
-                           $row->action
-                        ); ?>
-                  </td>
-                  <td><?php Util::display(
-                           $row->os
-                        ); ?>
-                  </td>
-                  <td><?php Util::display("<br><p onclick=\"copyToClipboard('" . $user->getlastip() . "')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
-                  </td>
-               </tr>
-            <?php endforeach; ?>
-         </tbody>
+            <td><?php Util::display($row->time); ?></td>
+
+            <?php
+            $action = $row->action;
+
+            echo '<td>';
+            if (strpos($action, 'Generated an inv:') === 0) {
+                echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
+            } else {
+                Util::display($action);
+            }
+            echo '</td>';
+            ?>
+
+            <td><?php Util::display($row->os); ?></td>
+
+            <td><?php Util::display("<br><p onclick=\"copyToClipboard('" . $user->getlastip() . "')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
+
       </table>
    </div>
 </main>
