@@ -47,3 +47,29 @@ async def get_user_avatar(dcid):
         raise 
     except Exception as e:
         print("Error while getting user avatar: %s", e)
+        
+        
+async def get_linked_users():
+    try:
+        baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
+        url = f"{baseurl}/api.php?bot=true&key={get_config_value('api_key')}&function=linkedusers"
+        async with aiohttp.ClientSession() as session:
+            response = await session.get(url=url)
+            response.raise_for_status()
+            data = await response.json()
+
+            if "status" in data and data["status"] == "success":
+                users = data.get("data", [])
+                return users
+            else:
+                raise ValueError("Invalid response format: 'status' not found or not 'success'")
+
+    except aiohttp.ClientError as client_error:
+        print("Aiohttp client error:", client_error)
+        raise
+    except ValueError as value_error:
+        print("Value error:", value_error)
+        raise
+    except Exception as e:
+        print("Error while getting linked users:", e)
+        raise        

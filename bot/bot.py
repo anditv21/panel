@@ -11,7 +11,7 @@ from discord.ext import commands, tasks
 
 from helpers.config import get_config_value
 from helpers.general import (clear_console)
-from functions import get_user_count
+from functions import get_user_count, get_linked_users
 
 sys.dont_write_bytecode = True
 
@@ -40,6 +40,7 @@ class Bot(commands.Bot):
 intents = discord.Intents.all()
 intents.presences = True
 intents.members = True
+intents.guilds = True
 bot = Bot(intents=intents)
 bot.remove_command("help")
 
@@ -54,32 +55,52 @@ async def on_ready():
 
 
 
-
 @tasks.loop(seconds=5)
 async def bg_task():
     await bot.wait_until_ready()
-    count = await get_user_count()
-    while not bot.is_closed():
-    
 
-        status_list = [
-            (discord.Status.dnd, discord.Activity(
-                type=discord.ActivityType.watching, name="github.com/anditv21/panel")),
-            (discord.Status.dnd, discord.Activity(
-                type=discord.ActivityType.watching, name="anditv.dev")),
-            (discord.Status.dnd, discord.Activity(
-                type=discord.ActivityType.watching, name=f"{count} users"))
-        ]
-        current_index = 0
-        while current_index < len(status_list):
-            status, activity = status_list[current_index]
-            try:
-                await bot.change_presence(status=status, activity=activity)
-                await asyncio.sleep(5)
-            except discord.HTTPException as e:
-                print(f"Error occurred while changing presence: {e}")
+    # Get linked users from the API
+    linked_users_response = await get_linked_users()
 
-            current_index += 1
+    usercount = await get_user_count()
+
+    status_list = [
+        (discord.Status.dnd, discord.Activity(
+            type=discord.ActivityType.watching, name="github.com/anditv21/panel")),
+        (discord.Status.dnd, discord.Activity(
+            type=discord.ActivityType.watching, name="anditv.dev")),
+        (discord.Status.dnd, discord.Activity(
+            type=discord.ActivityType.watching, name=f"{usercount} users"))
+    ]
+
+    current_index = 0
+    while not bot.is_closed() and current_index < len(status_list):
+        status, activity = status_list[current_index]
+        try:
+            await bot.change_presence(status=status, activity=activity)
+
+            guild = bot.get_guild(int(get_config_value("guild_id")))
+            if guild:
+                for user_data in linked_users_response:
+                    dcid = user_data['dcid']
+                    display_name = f"{user_data['displayname']} ({user_data['uid']})"
+
+                    member = guild.get_member(int(dcid))
+                    if member:
+                        if member.id == int(dcid):
+                            await member.edit(nick=display_name)
+                        else:
+                            print(f"Member ID mismatch: {member.id} != {dcid}")
+                    else:
+                        print(f"Member not found: {dcid}")        
+            else:
+                print(f"Guild not found {get_config_value('guild_id')}")
+            await asyncio.sleep(5)
+        except discord.HTTPException as e:
+            print(f"Error occurred while changing presence: {e}")
+
+        current_index += 1
+
 
 """
 @bot.event

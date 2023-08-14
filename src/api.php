@@ -36,7 +36,10 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
                         }
                     } elseif ($botFunction === 'usercount') {
                         $response = $API->get_user_count();
-                    } else {
+                    } 
+                    elseif ($botFunction === 'linkedusers') {
+                        $response = $API->linked_users();
+                    }else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }
                 } else {

@@ -152,5 +152,25 @@ class API extends Database
         }
         return $response;
     }
+
+    protected function get_linked_users()
+    {
+        try {
+            $this->prepare("SELECT `uid`, `displayname`, `dcid` FROM `users` WHERE `dcid` IS NOT NULL");
+            $this->statement->execute();
+            $linked_users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    
+            $response = [
+                "status" => "success",
+                "data" => $linked_users
+            ];
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "error" => $e->getMessage()
+            ];
+        }
+        return $response;
+    }
 }
     

@@ -21,4 +21,9 @@ class ApiController extends API
     {
         return $this->count_users();
     }
+
+    public function linked_users()
+    {
+        return $this->get_linked_users();
+    }
 }
