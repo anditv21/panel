@@ -97,7 +97,7 @@ class API extends Database
             $sub = $this->statement->rowCount();
         } catch (Exception $e) {
             $response = [
-                "status" => "error",
+                "status" => "failed",
                 "exception" => $e,
             ];
         }
@@ -110,4 +110,41 @@ class API extends Database
         ];
         return $response;
     }
+
+    protected function getuserbydiscord($dcid)
+    {
+        try {
+            $this->prepare("SELECT `username`, `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
+            $this->statement->execute([$dcid]);
+            $result = $this->statement->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$result) {
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided discord id was found"
+                ];
+            } else {
+                $username = $result['username'] ?? '';
+                $displayname = $result['displayname'] ?? '';
+                $banned = $result['banned'] ?? '';
+                $admin = $result['admin'] ?? '';
+                $supp = $result['supp'] ?? '';
+    
+                $response = [
+                    "username" => $username,
+                    "display_name" => $displayname, 
+                    "banned" => $banned,
+                    "admin" => $admin,
+                    "supp" => $supp
+                ];
+            }
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "error" => $e->getMessage()
+            ];
+        }
+        return $response;
+    }
 }
+    

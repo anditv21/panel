@@ -16,4 +16,9 @@ class ApiController extends API
     {
         return $this->statsAPI();
     }
+
+    public function getbydcid($dcid)
+    {
+        return $this->getuserbydiscord($dcid);
+    }
 }
