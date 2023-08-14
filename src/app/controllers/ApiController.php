@@ -21,4 +21,9 @@ class ApiController extends API
     {
         return $this->getuserbydiscord($dcid);
     }
+
+    public function get_user_count()
+    {
+        return $this->count_users();
+    }
 }

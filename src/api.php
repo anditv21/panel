@@ -41,8 +41,8 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
                             $response = array('status' => 'failed', 'error' => "Missing or empty 'discord id' parameter");
 
                         }
-                    } elseif ($botFunction === 'test') {
-
+                    } elseif ($botFunction === 'usercount') {
+                        $response = $API->get_user_count();
                     } else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }

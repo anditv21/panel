@@ -146,5 +146,24 @@ class API extends Database
         }
         return $response;
     }
+
+    protected function count_users()
+    {
+        try {
+            $this->prepare("SELECT * FROM `users`");
+            $this->statement->execute();
+            $usercount = $this->statement->rowCount();
+            $response = [
+                "status" => "success",
+                "text" => $usercount
+            ];
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "error" => $e->getMessage()
+            ];
+        }
+        return $response;
+    }
 }
     
