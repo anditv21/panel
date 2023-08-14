@@ -1,4 +1,6 @@
 {
     "token": "",
-    "api_key": "yes"
+    "api_key": "yes",
+    "domain": "anditv.dev",
+    "subfolder": "/panel"
 }

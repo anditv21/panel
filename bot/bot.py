@@ -11,6 +11,7 @@ from discord.ext import commands, tasks
 
 from helpers.config import get_config_value
 from helpers.general import (clear_console)
+from functions import get_user_count
 
 sys.dont_write_bytecode = True
 
@@ -32,8 +33,7 @@ class Bot(commands.Bot):
                     try:
                         await bot.load_extension(f'cogs.{filepath}.{filename}')
                     except Exception as error:
-                        print(f'Failed to load cogs.{filepath}.{filename}: {error}')
-
+                        print(f'Failed to load cogs.{filepath}.{filename}: {error}')                      
         await self.tree.sync()
 
 
@@ -58,8 +58,9 @@ async def on_ready():
 @tasks.loop(seconds=5)
 async def bg_task():
     await bot.wait_until_ready()
+    count = await get_user_count()
     while not bot.is_closed():
-
+    
 
         status_list = [
             (discord.Status.dnd, discord.Activity(
@@ -67,15 +68,18 @@ async def bg_task():
             (discord.Status.dnd, discord.Activity(
                 type=discord.ActivityType.watching, name="anditv.dev")),
             (discord.Status.dnd, discord.Activity(
-                type=discord.ActivityType.watching, name=f"{len(bot.guilds)} servers"))
+                type=discord.ActivityType.watching, name=f"{count} users"))
         ]
+        current_index = 0
+        while current_index < len(status_list):
+            status, activity = status_list[current_index]
+            try:
+                await bot.change_presence(status=status, activity=activity)
+                await asyncio.sleep(5)
+            except discord.HTTPException as e:
+                print(f"Error occurred while changing presence: {e}")
 
-        if platform.system() == 'Windows':
-            status_list[2] = (discord.Status.idle, discord.Activity(
-                type=discord.ActivityType.playing, name="development"))
-            await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(
-                type=discord.ActivityType.playing, name="development"))
-            return False
+            current_index += 1
 
 """
 @bot.event
