@@ -10,13 +10,6 @@ $API = new ApiController();
 // Get the server's IP address
 $serverIP = $_SERVER['SERVER_ADDR'];
 
-// Check data
-
-if (isset($_GET['stats'])) {
-    $response = $API->getStatsAPI();
-    echo(json_encode($response));
-    return true;
-}
 
 if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
     $allowedIP = $serverIP;
@@ -41,9 +34,12 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
                             $response = array('status' => 'failed', 'error' => "Missing or empty 'discord id' parameter");
 
                         }
-                    } elseif ($botFunction === 'test') {
-
-                    } else {
+                    } elseif ($botFunction === 'usercount') {
+                        $response = $API->get_user_count();
+                    } 
+                    elseif ($botFunction === 'linkedusers') {
+                        $response = $API->linked_users();
+                    }else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }
                 } else {

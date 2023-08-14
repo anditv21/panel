@@ -1,0 +1,1 @@
+# This is just a small template to give you an idea of what is possible in combination with the panel and discord bots.
