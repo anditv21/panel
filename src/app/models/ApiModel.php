@@ -82,7 +82,7 @@ class API extends Database
     protected function getuserbydiscord($dcid)
     {
         try {
-            $this->prepare("SELECT `username`, `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `uid`, `username`, `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
     
@@ -92,6 +92,23 @@ class API extends Database
                     "error" => "No user with the provided discord id was found"
                 ];
             } else {
+                $uid = $result['uid'];
+                $path = IMG_DIR . $uid;
+                if (@getimagesize($path . ".png")) {
+                    $avatarurl = IMG_URL . $uid . ".png?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".jpg")) {
+                    $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".gif")) {
+                    $avatarurl = IMG_URL . $uid . ".gif?" . Util::randomCode(5);
+                } else {
+                    $avatarurl =
+                        SITE_URL .
+                        SUB_DIR .
+                        "/assets/img/avatars/Portrait_Placeholder.png";
+                }
+
+
+                $uid = $result['uid'] ?? '';
                 $username = $result['username'] ?? '';
                 $displayname = $result['displayname'] ?? '';
                 $banned = $result['banned'] ?? '';
@@ -99,11 +116,13 @@ class API extends Database
                 $supp = $result['supp'] ?? '';
     
                 $response = [
+                    "uid" => $uid,
                     "username" => $username,
                     "display_name" => $displayname, 
                     "banned" => $banned,
                     "admin" => $admin,
-                    "supp" => $supp
+                    "supp" => $supp,
+                    "avatar_url" => $avatarurl
                 ];
             }
         } catch (Exception $e) {

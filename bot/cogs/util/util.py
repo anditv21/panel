@@ -11,7 +11,7 @@ import cpuinfo
 import discord
 from discord import app_commands
 from discord.ext import commands
-
+from functions import get_user_avatar
 
 sys.dont_write_bytecode = True
 
@@ -24,20 +24,25 @@ class Util(commands.Cog):
     async def avatar(self, interaction: discord.Interaction, member: discord.Member = None):
         if member is None:
             member = interaction.user
+        
+        try:
+            avatar_url = await get_user_avatar(str(member.id))
+        except Exception as e:
+            await interaction.response.send_message(content=f"An error occurred while fetching the avatar: {e}")
+            return
 
         embed = discord.Embed(
-            title=f"Download {member.display_name}'s Avatar", 
-            url=member.
-            avatar,
+            title=f"{member.display_name}'s Avatar",
+            description=f"[Download Avatar]({avatar_url})",
             color=0x00EFDB
         ).set_author(
             name=f"{member.display_name}'s avatar",
-            url=f"https://discord.com/users/{member.id}", 
-            icon_url=member.avatar
+            url=f"https://discord.com/users/{member.id}",
+            icon_url=avatar_url
         ).set_image(
-            url=member.avatar
+            url=avatar_url
         ).set_footer(
-            text=f"Requested by {interaction.user.name}",
+            text=f"Requested by {interaction.user.display_name}",
             icon_url=interaction.user.avatar
         )
         await interaction.response.send_message(embed=embed)
