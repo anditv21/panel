@@ -114,27 +114,37 @@ class API extends Database
     protected function getuserbydiscord($dcid)
     {
         try {
-            $this->prepare("SELECT `username`, `displayname`, `banned` FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `username`, `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
     
             if (!$result) {
-                return false; 
-            }
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided discord id was found"
+                ];
+            } else {
+                $username = $result['username'] ?? '';
+                $displayname = $result['displayname'] ?? '';
+                $banned = $result['banned'] ?? '';
+                $admin = $result['admin'] ?? '';
+                $supp = $result['supp'] ?? '';
     
-            return [
-                "username" => $result['username'],
-                "display_name" => $result['displayname'], 
-                "banned" => $result['banned'],
-                "admin" => $result['admin'],
-                "supp" => $result['supp']
-            ];
+                $response = [
+                    "username" => $username,
+                    "display_name" => $displayname, 
+                    "banned" => $banned,
+                    "admin" => $admin,
+                    "supp" => $supp
+                ];
+            }
         } catch (Exception $e) {
             $response = [
                 "status" => "failed",
-                "exception" => $e,
+                "error" => $e->getMessage()
             ];
         }
+        return $response;
     }
 }
     
