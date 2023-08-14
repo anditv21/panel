@@ -97,7 +97,7 @@ class API extends Database
             $sub = $this->statement->rowCount();
         } catch (Exception $e) {
             $response = [
-                "status" => "error",
+                "status" => "failed",
                 "exception" => $e,
             ];
         }
@@ -110,4 +110,29 @@ class API extends Database
         ];
         return $response;
     }
+
+    protected function getuserbydiscord($dcid)
+    {
+        try {
+            $this->prepare("SELECT `username`, `displayname`, `banned` FROM `users` WHERE `dcid` = ?");
+            $this->statement->execute([$dcid]);
+            $result = $this->statement->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$result) {
+                return false; 
+            }
+    
+            return [
+                "username" => $result['username'],
+                "display_name" => $result['displayname'], 
+                "banned" => $result['banned']
+            ];
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "exception" => $e,
+            ];
+        }
+    }
 }
+    
