@@ -1,4 +1,33 @@
 <?php
+function getPhpErrorLogDir() {
+  $errorLogDir = ini_get('error_log');
+  $notFound = true;
+
+  if (empty($errorLogDir)) {
+      $serverSoftware = strtolower($_SERVER['SERVER_SOFTWARE']);
+
+      if (strpos($serverSoftware, 'nginx') !== false) {
+          $errorLogDir = '/var/log/nginx/error.log';
+      } elseif (strpos($serverSoftware, 'apache') !== false) {
+          $errorLogDir = '/var/log/apache2/error.log';
+      } elseif (strpos($serverSoftware, 'lighttpd') !== false) {
+          $errorLogDir = '/var/log/lighttpd/error.log';
+      }
+      
+      if (!empty($errorLogDir)) {
+          $notFound = false;
+      }
+  } else {
+      if (file_exists($errorLogDir)) {
+          $notFound = false;
+      }
+  }
+
+  return $notFound ? 'Error log not found' : $errorLogDir;
+}
+
+
+
 echo '<title>Panel-Setup Help</title><style>body {background-color: #141617;}</style>';
 
 // Check PHP version
@@ -15,13 +44,13 @@ if (file_exists('app/core/Database.php') && file_exists('app/core/DiscordConfig.
 } else {
   echo "<p style='color: white;'>❌ Rename ";
   if (!file_exists('app/core/Database.php') && !file_exists('app/core/DiscordConfig.php')) {
-    echo "app/core/Database to Database.php and app/core/DiscordConfig to DiscordConfig.php";
+    echo "<b>app/core/Database to Database.php and app/core/DiscordConfig to DiscordConfig.php</b>";
   } else {
     if (!file_exists('app/core/Database.php')) {
-      echo "app/core/Database to Database.php";
+      echo "<b>app/core/Database to Database.php</b>";
     }
     if (!file_exists('app/core/DiscordConfig.php')) {
-      echo "app/core/DiscordConfig to DiscordConfig.php";
+      echo "<b>app/core/DiscordConfig to DiscordConfig.php</b>";
     }
   }
   echo "</p>";
@@ -34,7 +63,7 @@ if (file_exists('app/core/DiscordConfig.php')) {
   if (defined('client_id') && defined('client_secret') && client_id != '1234' && client_secret != 'yoursecret') {
     echo "<p style='color: white;'>✅ Discord Application details are set</p>";
   } else {
-    echo "<p style='color: white;'>❌ Set Discord Application details in app/core/DiscordConfig.php</p>";
+    echo "<p style='color: white;'>❌ Set Discord Application details in <b>app/core/DiscordConfig.php</b></p>";
   }
 } 
 
@@ -56,7 +85,7 @@ if (file_exists('app/core/Database.php')) {
     foreach ($missingProperties as $property) {
       echo "$property ";
     }
-    echo "in app/core/Database.php</p>";
+    echo "in <b>app/core/Database.php</b></p>";
   } else {
     echo "<p style='color: white;'>✅ Database credentials are set</p>";
   }
@@ -76,7 +105,7 @@ if (file_exists('app/core/Config.php')) {
   if (defined('SUB_DIR') && SUB_DIR == '/'.$parentDir || SUB_DIR == "") {
     echo "<p style='color: white;'>✅ Subfolder is correctly set</p>";
   } else {
-    echo "<p style='color: white;'>❌ Folder name and SUB_DIR constant do not match. Replace '".SUB_DIR."' with '/$parentDir' in app/core/Config.php </p>";
+    echo "<p style='color: white;'>❌ Folder name and SUB_DIR constant do not match. Replace '".SUB_DIR."' with '/$parentDir' in <b>app/core/Config.php</b></p>";
   }
 } else {
   echo "<p style='color: white;'>❌ Config file not found</p>";
@@ -86,9 +115,14 @@ if (file_exists('app/core/Config.php')) {
 // Check if PHP has read and write access to /usercontent/avatar
 $avatarDir = 'usercontent/avatar';
 if (is_writable($avatarDir) && is_readable($avatarDir)) {
-  echo "<p style='color: white;'>✅ PHP has read and write access to /$avatarDir</p>";
+  echo "<p style='color: white;'>✅ PHP has read and write access to <b>/$avatarDir</b></p>";
 } else {
-  echo "<p style='color: white;'>❌ PHP does not have read and write access to /$avatarDir</p>";
+  echo "<p style='color: white;'>❌ PHP does not have read and write access to <b>/$avatarDir</b></p>";
 }
+
+
+$errorLogDir = getPhpErrorLogDir();
+echo "<p style='color: white;'>⚠️ PHP Error Log Directory: <b>" . $errorLogDir."</b></p>";
+
 echo "<br><h3 style='color: white;'><b>You still having problems? Then maybe the <a href='https://github.com/anditv21/panel/wiki/Common-issues' target='_blank'>wiki</a> will help you</b></h3>";
 ?>
