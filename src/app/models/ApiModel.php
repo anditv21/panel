@@ -125,7 +125,9 @@ class API extends Database
             return [
                 "username" => $result['username'],
                 "display_name" => $result['displayname'], 
-                "banned" => $result['banned']
+                "banned" => $result['banned'],
+                "admin" => $result['admin'],
+                "supp" => $result['supp']
             ];
         } catch (Exception $e) {
             $response = [
