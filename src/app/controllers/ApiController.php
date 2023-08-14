@@ -12,11 +12,6 @@ class ApiController extends API
         return $this->userAPI($username, $password, $hwid);
     }
 
-    public function getStatsAPI()
-    {
-        return $this->statsAPI();
-    }
-
     public function getbydcid($dcid)
     {
         return $this->getuserbydiscord($dcid);

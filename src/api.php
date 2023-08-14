@@ -10,13 +10,6 @@ $API = new ApiController();
 // Get the server's IP address
 $serverIP = $_SERVER['SERVER_ADDR'];
 
-// Check data
-
-if (isset($_GET['stats'])) {
-    $response = $API->getStatsAPI();
-    echo(json_encode($response));
-    return true;
-}
 
 if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
     $allowedIP = $serverIP;

@@ -79,38 +79,6 @@ class API extends Database
         return $response;
     }
 
-    protected function statsAPI()
-    {
-        try {
-            $this->prepare("SELECT * FROM `users`");
-            $this->statement->execute();
-            $usercount = $this->statement->rowCount();
-
-            $this->prepare("SELECT * FROM `users` WHERE `banned` =  1");
-            $this->statement->execute();
-            $banned = $this->statement->rowCount();
-
-            $this->prepare(
-                "SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()"
-            );
-            $this->statement->execute();
-            $sub = $this->statement->rowCount();
-        } catch (Exception $e) {
-            $response = [
-                "status" => "failed",
-                "exception" => $e,
-            ];
-        }
-
-        $response = [
-            "status" => "success",
-            "usercount" => $usercount,
-            "bannedcount" => $banned,
-            "activeusers" => $sub,
-        ];
-        return $response;
-    }
-
     protected function getuserbydiscord($dcid)
     {
         try {
