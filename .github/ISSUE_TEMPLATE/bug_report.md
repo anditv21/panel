@@ -1,17 +1,6 @@
----
-name: Bug report
-about: Create a bug report
-title: "[BUG]"
-theme: "gamesense/modern"
-labels: bug
+**Describe the bug:**
 
-
----
-
-**Describe the bug**
 A clear and concise description of what the bug is.
-
-E.g: The '...' label shows nothing.
 
 **To Reproduce**
 Steps to reproduce the bug:
@@ -20,14 +9,17 @@ Steps to reproduce the bug:
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+**Expected behavior:**
+
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+**Screenshots:**
+
 If applicable, add screenshots to help explain your problem.
 
-**Error log**
-Please include the error message of the error log if possible.
+**Error log:**
+
+Please your php error log. (if not the issue will probably be closed)
 
 **Additional context**
 Add any other context about the problem here.
