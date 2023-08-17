@@ -11,7 +11,7 @@ import cpuinfo
 import discord
 from discord import app_commands
 from discord.ext import commands
-from functions import get_user_avatar
+from functions import get_user_avatar, generate_sub
 
 sys.dont_write_bytecode = True
 
@@ -47,60 +47,12 @@ class Util(commands.Cog):
         )
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="userinfo", description="Shows information about a user")
-    @app_commands.describe(member="About which member do you want to get infos?")
-    async def userinfo(self, interaction: discord.Interaction, member: discord.Member = None):
-        if member is None:
-            member = interaction.user
-
-        user_created_at = member.created_at.strftime("%b %d, %Y %I:%M %p")
-        joined_at = member.joined_at.strftime("%b %d, %Y %I:%M %p")
-
-        embed = discord.Embed(
-            color=member.color
-        ).set_thumbnail(
-            url=member.display_avatar
-        ).set_author(
-            name=f"{member.display_name}'s Info",
-            icon_url=member.avatar
-        ).add_field(
-            name="Name",
-            value=f"```{member.name}```",
-            inline=False
-        )   .add_field(
-            name="Display Name",
-            value=f"```{member.display_name}```",
-            inline=False
-        ).add_field(
-            name="Global Name",
-            value=f"```{member.global_name}```",
-            inline=False
-        ).add_field(
-            name="ID",
-            value=f"```{member.id}```",
-            inline=False
-        ).add_field(
-            name="Creation",
-            value=f"```{user_created_at}```",
-            inline=False
-        ).add_field(
-            name="Avatar",
-            value=f"[Click here]({member.avatar})",
-            inline=False
-        ).add_field(
-            name="Joined",
-            value=f"{joined_at}",
-            inline=True
-        ).add_field(
-            name="Nickname",
-            value=f"{member.nick}",
-            inline=True
-        ).add_field(
-            name="Highest Role",
-            value=f"{member.top_role.mention}",
-            inline=True
-        )
-        await interaction.response.send_message(embed=embed, ephemeral=False)
+    @app_commands.command(name="generate_sub", description="Generates a new sub")
+    async def gen_sub(self, interaction: discord.Interaction, time: Literal["Trail", "1m", "3m"]):
+        member = interaction.user
+        inv = await generate_sub(time, member.id)
+        embed = discord.Embed(description=inv, color=0x00D9FF)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @app_commands.command(name="ping", description="Pong")
     async def ping(self, interaction: discord.Interaction):

@@ -5,6 +5,7 @@
 // * Interats with all tables *
 
 require_once SITE_ROOT . "/app/core/Database.php";
+require_once SITE_ROOT . "/app/require.php";
 
 class API extends Database
 {
@@ -164,6 +165,53 @@ class API extends Database
                 "status" => "success",
                 "data" => $linked_users
             ];
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "error" => $e->getMessage()
+            ];
+        }
+        return $response;
+    }
+
+    protected function generate_sub($dcid, $time)
+    {
+        try {
+            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->statement->execute([$dcid]);
+            $result = $this->statement->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$result) {
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided Discord ID was found"
+                ];
+            }
+    
+            $code = "$time-" . Util::randomCode(20);
+            if ($result["admin"]) {
+                $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
+                $this->statement->execute([$code, $result["username"]]);
+                $user = new UserController();
+                $user->log($result["username"], "Generated a sub", 'admin_logs');
+    
+                $response = [
+                    "status" => "success",
+                    "text" => $code
+                ];
+            }
+            elseif(empty($result["admin"]))
+            {
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided Discord ID was found"
+                ];
+            } else {
+                $response = [
+                    "status" => "failed",
+                    "error" => "You don't have the necessary permissions to perform this action."
+                ];
+            }
         } catch (Exception $e) {
             $response = [
                 "status" => "failed",

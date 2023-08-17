@@ -26,4 +26,10 @@ class ApiController extends API
     {
         return $this->get_linked_users();
     }
+    
+    public function generate_subscription($dcid, $time)
+    {
+        return $this->generate_sub($dcid, $time);
+        
+    }
 }

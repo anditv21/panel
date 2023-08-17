@@ -39,7 +39,18 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
                     } 
                     elseif ($botFunction === 'linkedusers') {
                         $response = $API->linked_users();
-                    }else {
+                    }
+                    elseif ($botFunction === 'generate_sub') {
+                        if (isset($_GET['dcid']) && !empty($_GET['dcid']) && isset($_GET['time']) && !empty($_GET['time'])) {
+                            $dcid = Util::securevar($_GET['dcid']);
+                            $time = Util::securevar($_GET['time']);
+                            $response = $API->generate_subscription($dcid, $time);
+                        } else {
+                            $response = array('status' => 'failed', 'error' => "Missing or empty 'discord id' or 'time' parameter");
+
+                        }
+                    }
+                    else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }
                 } else {
