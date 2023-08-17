@@ -25,7 +25,7 @@ class Bot(commands.Bot):
 
     async def setup_hook(self):
         clear_console()
-        print("Loading cogs...")
+        print("[BOT] Loading cogs...")
         for filepath in os.listdir('cogs'):
             for filename in os.listdir(f'cogs/{filepath}'):
                 if filename.endswith('.py'):
@@ -34,6 +34,7 @@ class Bot(commands.Bot):
                         await bot.load_extension(f'cogs.{filepath}.{filename}')
                     except Exception as error:
                         print(f'Failed to load cogs.{filepath}.{filename}: {error}')                      
+        print("[BOT] Connecting to discord...")
         await self.tree.sync()
 
 
@@ -63,6 +64,7 @@ async def bg_task():
     linked_users_response = await get_linked_users()
 
     usercount = await get_user_count()
+    rename_users = get_config_value("rename_users")
 
     status_list = [
         (discord.Status.dnd, discord.Activity(
@@ -78,23 +80,24 @@ async def bg_task():
         status, activity = status_list[current_index]
         try:
             await bot.change_presence(status=status, activity=activity)
+            if rename_users == "true" or rename_users == "True":
+                guild = bot.get_guild(int(get_config_value("guild_id")))
+                if guild:
+                    for user_data in linked_users_response:
+                        dcid = user_data['dcid']
+                        display_name = f"{user_data['displayname']} ({user_data['uid']})"
 
-            guild = bot.get_guild(int(get_config_value("guild_id")))
-            if guild:
-                for user_data in linked_users_response:
-                    dcid = user_data['dcid']
-                    display_name = f"{user_data['displayname']} ({user_data['uid']})"
-
-                    member = guild.get_member(int(dcid))
-                    if member:
-                        if member.id == int(dcid):
-                            await member.edit(nick=display_name)
+                        member = guild.get_member(int(dcid))
+                        if member:
+                            if member.id == int(dcid):
+                                await member.edit(nick=display_name)
+                            else:
+                                print(f"Member ID mismatch: {member.id} != {dcid}")
                         else:
-                            print(f"Member ID mismatch: {member.id} != {dcid}")
-                    else:
-                        print(f"Member not found: {dcid}")        
-            else:
-                print(f"Guild not found {get_config_value('guild_id')}")
+                            print(f"Member not found: {dcid}")        
+                else:
+                    print(f"Guild not found {get_config_value('guild_id')}")
+
             await asyncio.sleep(5)
         except discord.HTTPException as e:
             print(f"Error occurred while changing presence: {e}")
