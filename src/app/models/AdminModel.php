@@ -485,6 +485,37 @@ class Admin extends Database
         }
     }
 
+    protected function DiscordLogging()
+    {
+        if ($this->checkadmin()) {
+    
+            // Get current discordlogging status
+            $this->prepare('SELECT `discordlogging` FROM `system`');
+            $this->statement->execute();
+            $status = $this->statement->fetch();
+    
+            $username = Session::get('username');
+            $user = new UserController();
+    
+            if ($status->discordlogging) {
+                // Send the log
+                $user->log($username, "Disabled discord logging", system_logs);
+    
+                // Disable discordlogging in the database
+                $this->prepare('UPDATE `system` SET `discordlogging` = 0');
+                $this->statement->execute();
+            } else {
+                // Enable discordlogging in the database
+                $this->prepare('UPDATE `system` SET `discordlogging` = 1');
+                $this->statement->execute();
+    
+                // Send the log
+                $user->log($username, "Enabled discord logging", system_logs);
+            }
+        }
+    }
+    
+    
     //
     protected function SystemVersion($ver)
     {

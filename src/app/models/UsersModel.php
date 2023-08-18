@@ -5,6 +5,7 @@
 // Only interats with 'users' table
 
 require_once SITE_ROOT . "/app/core/Database.php";
+require_once SITE_ROOT . "/app/controllers/SystemController.php";
 date_default_timezone_set('Europe/Vienna');
 class Users extends Database
 {
@@ -479,6 +480,9 @@ class Users extends Database
 
     protected function sendlog($username, $action, $webhook)
     {
+        $System = new SystemController();
+        $logging = $System->getSystemData()->discordlogging;
+        if($logging == 0){return true;}
         if ($webhook == auth_logs) {
             $title = "Auth-Log";
         } elseif ($webhook == user_logs) {

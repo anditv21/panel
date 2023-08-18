@@ -49,6 +49,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST['discordlinking'])) {
       $discordlinking = Util::securevar($_POST['discordlinking']);
    }
+   if (isset($_POST['discordlogging'])) {
+      $discordlogging = Util::securevar($_POST['discordlogging']);
+   }
 
    Util::adminCheck();
 
@@ -91,6 +94,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    }
    if (isset($discordlinking)) {
       $admin->setDiscordLink();
+   }
+   if (isset($discordlogging)) {
+      $admin->setDiscordLogging();
    }
    header("location: system.php");
 }
@@ -264,6 +270,25 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </div>
          </div>
       </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
+                  <h3><i class="fas fa-file-signature"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        if ($System->getSystemData()->discordlogging == 1) {
+                           Util::display("Enabled");
+                        } else {
+                           Util::display("Disabled");
+                        } ?></h4>
+                  <span class="small text-muted text-uppercase">discord-logging</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
       <div class="col-12 mt-3">
          <div class="rounded p-3 mb-3">
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
@@ -289,6 +314,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
                <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Account Linking status?');">
                   SET Discord Account Linking+-
+               </button>
+
+               <button name="discordlogging" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord logging status?');">
+                  SET Discord Account Logging+-
                </button>
                <br>
                <br>

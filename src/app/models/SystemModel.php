@@ -24,6 +24,8 @@ class System extends Database
         // Discord Linking
         $result->discordlinking = (int) $result->discordlinking;
 
+        // Discord Logging
+        $result->discordlogging = (int) $result->discordlogging;
         return $result;
     }
 }
