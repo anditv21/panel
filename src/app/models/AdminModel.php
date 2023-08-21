@@ -435,6 +435,32 @@ class Admin extends Database
     }
 
     //
+    protected function discordReLink()
+    {
+        if ($this->checkadmin()) {
+            // Get current relkink status
+            $this->prepare('SELECT `relinkdiscord` FROM `system`');
+            $this->statement->execute();
+            $SystemStatus = $this->statement->fetch();
+
+            // Set status to opposite of current status
+            $status = $SystemStatus->relinkdiscord ? 0 : 1;
+
+            // Update relink status
+            $this->prepare('UPDATE `system` SET `relinkdiscord` = ?');
+            $this->statement->execute([$status]);
+
+            $username = Session::get('username');
+            $user = new UserController();
+            if ($status) {
+                $user->log($username, "Turned discord re-link on", system_logs);
+            } else {
+                $user->log($username, "Turned discord re-link off", system_logs);
+            }
+        }
+    }
+
+    //
     protected function SystemMaint()
     {
         if ($this->checkadmin()) {

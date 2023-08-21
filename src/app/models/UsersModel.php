@@ -839,6 +839,15 @@ class Users extends Database
         $this->statement->execute([$dcid, $uid]);
     }
 
+    protected function hasLinkedDiscord()
+    {
+        $username = Session::get('username');
+        $this->prepare('SELECT * FROM `users` WHERE `username` =?');
+        $this->statement->execute([$username]);
+        $userData = $this->statement->fetch();
+        if($userData->dcid != NULL){return True;}
+        else{return False;}
+    }
 
     protected function get_user_Browser()
     {

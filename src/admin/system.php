@@ -49,6 +49,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    if (isset($_POST['discordlinking'])) {
       $discordlinking = Util::securevar($_POST['discordlinking']);
    }
+   if (isset($_POST['discordrelinking'])) {
+      $discordrelinking = Util::securevar($_POST['discordrelinking']);
+   }
    if (isset($_POST['discordlogging'])) {
       $discordlogging = Util::securevar($_POST['discordlogging']);
    }
@@ -94,6 +97,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    }
    if (isset($discordlinking)) {
       $admin->setDiscordLink();
+   }
+   if (isset($discordrelinking)) {
+      $admin->setDiscordReLink();
    }
    if (isset($discordlogging)) {
       $admin->setDiscordLogging();
@@ -274,6 +280,25 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
          <div class="card">
             <div class=" card-body row">
                <div class="col-6 text-center">
+                  <h3><i class="fab fa-discord"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        if ($System->getSystemData()->relinkdiscord == 1) {
+                           Util::display("Enabled");
+                        } else {
+                           Util::display("Disabled");
+                        } ?></h4>
+                  <span class="small text-muted text-uppercase">discord-re-linking</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
                   <h3><i class="fas fa-file-signature"></i></h3>
                </div>
                <div class="col-6">
@@ -314,6 +339,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
                <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Account Linking status?');">
                   SET Discord Account Linking+-
+               </button>
+               <br>   
+               <br>      
+               <button name="discordrelinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Re-linking status?');">
+                  SET Discord Re-Linking+-
                </button>
 
                <button name="discordlogging" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord logging status?');">

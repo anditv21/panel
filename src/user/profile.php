@@ -39,11 +39,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     header("location: profile.php");
 }
 // if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"]) && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"])) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_FILES["file_up"]["tmp_name"]) && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->relinkdiscord == 1) {
     header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
     exit();
 }
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemData()->discordlinking == 1 || $System->relinkdiscord == 1 || ($System->relinkdiscord == 0 && !$user->isDiscordLinked())) {
     if (isset($_GET['code'])) {
         $code = Util::securevar($_GET['code']);
         $user->discord_link($code);
@@ -146,10 +146,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                             echo '<script>alert("Failed to upload file.")</script>';
                         }
                     } ?>
-                    <?php if ($System->getSystemData()->discordlinking == 1) : ?>
+                    <?php if ($System->getSystemData()->discordlinking == 1 || $System->relinkdiscord == 1 || ($System->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
                         <form method="POST" enctype="multipart/form-data">
                             <center>
-                                <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Get from Discord (BETA)</button>
+                                <?php $link = $user->isDiscordLinked(); echo "<p>$link</p>"; ?>
+                                <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Link Discord (BETA)</button>
                                 <br>
                             </center>
                             <br>

@@ -553,6 +553,11 @@ class UserController extends Users
     {
         return $this->set_dcid($dcid, $uid);
     }
+
+    public function isDiscordLinked()
+    {
+        return $this->hasLinkedDiscord();
+    }
     
 
     public function discord_link($code)

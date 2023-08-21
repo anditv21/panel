@@ -152,10 +152,17 @@ class AdminController extends Admin
         return $this->DiscordLink();
     }
 
+    public function setDiscordReLink()
+    {
+        return $this->DiscordReLink();
+    }
+
+
     public function setDiscordLogging()
     {
         return $this->DiscordLogging();
     }
+
     //
     public function setSystemVersion($data)
     {
