@@ -11,7 +11,7 @@ import cpuinfo
 import discord
 from discord import app_commands
 from discord.ext import commands
-from functions import get_user_avatar, generate_sub
+from functions import get_user_avatar, generate_sub, generate_inv
 
 sys.dont_write_bytecode = True
 
@@ -51,6 +51,13 @@ class Util(commands.Cog):
     async def gen_sub(self, interaction: discord.Interaction, time: Literal["Trail", "1m", "3m"]):
         member = interaction.user
         inv = await generate_sub(time, member.id)
+        embed = discord.Embed(description=inv, color=0x00D9FF)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+    @app_commands.command(name="generate_inv", description="Generates a new invitation")
+    async def gen_inv(self, interaction: discord.Interaction):
+        member = interaction.user
+        inv = await generate_inv(member.id)
         embed = discord.Embed(description=inv, color=0x00D9FF)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 

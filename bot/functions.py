@@ -87,8 +87,33 @@ async def generate_sub(time, dcid):
             if "status" in data and data["status"] == "success":
                 if "text" in data:
                     return data["text"]
-                else:
-                    raise ValueError("Invalid response format: 'text' not found")
+            elif "status" in data and data["status"] == "failed":
+                return data["error"]
+            else:
+                raise ValueError("Invalid response format: 'status' not found or not 'success/failed'")
+
+    except aiohttp.ClientError as client_error:
+        print("Aiohttp client error:", client_error)
+        raise
+    except ValueError as value_error:
+        print("Value error:", value_error)
+        raise
+    except Exception as e:
+        print("Error while getting linked users:", e)
+        raise
+    
+async def generate_inv(dcid):
+    try:
+        baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
+        url = f"{baseurl}/api.php?bot=true&key={get_config_value('api_key')}&function=generate_inv&dcid={dcid}"
+        async with aiohttp.ClientSession() as session:
+            response = await session.get(url=url)
+            response.raise_for_status()
+            data = await response.json()
+
+            if "status" in data and data["status"] == "success":
+                if "text" in data:
+                    return data["text"]
             elif "status" in data and data["status"] == "failed":
                 return data["error"]
             else:

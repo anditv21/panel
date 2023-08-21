@@ -50,6 +50,14 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
 
                         }
                     }
+                    elseif ($botFunction === 'generate_inv') {
+                        if (isset($_GET['dcid']) && !empty($_GET['dcid'])) {
+                            $dcid = Util::securevar($_GET['dcid']);
+                            $response = $API->generate_invite($dcid);
+                        } else {
+                            $response = array('status' => 'failed', 'error' => "Missing or empty 'discord id' parameter");
+                        }
+                    }
                     else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }

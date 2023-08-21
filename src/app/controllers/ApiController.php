@@ -29,7 +29,11 @@ class ApiController extends API
     
     public function generate_subscription($dcid, $time)
     {
-        return $this->generate_sub($dcid, $time);
-        
+        return $this->generate_sub($dcid, $time); 
+    }
+
+    public function generate_invite($dcid)
+    {
+        return $this->generate_inv($dcid); 
     }
 }

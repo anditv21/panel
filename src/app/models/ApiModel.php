@@ -220,5 +220,52 @@ class API extends Database
         }
         return $response;
     }
+
+    protected function generate_inv($dcid)
+    {
+        try {
+            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->statement->execute([$dcid]);
+            $result = $this->statement->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$result) {
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided Discord ID was found"
+                ];
+            }
+    
+            $code = Util::randomCode(20);
+            if ($result["admin"]) {
+                $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+                $this->statement->execute([$code, $result["username"]]);
+                $user = new UserController();
+                $user->log($result["username"], "Generated an invitation", 'admin_logs');
+    
+                $response = [
+                    "status" => "success",
+                    "text" => $code
+                ];
+            }
+            elseif(empty($result["admin"] || $result["supp"]))
+            {
+                $response = [
+                    "status" => "failed",
+                    "error" => "No user with the provided Discord ID was found"
+                ];
+            } else {
+                $response = [
+                    "status" => "failed",
+                    "error" => "You don't have the necessary permissions to perform this action."
+                ];
+            }
+        } catch (Exception $e) {
+            $response = [
+                "status" => "failed",
+                "error" => $e->getMessage()
+            ];
+        }
+        return $response;
+    }
 }
     
