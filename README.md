@@ -147,6 +147,12 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 
 <li>Set News</li>
 
+<li>Enable/Disable Discord Logs</li>
+
+<li>Enable/Disable Discord Link</li>
+
+<li>Enable/Disable Discord Re-Link</li>
+
 <li>Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3VS78if)</li>
 
 <li>Generate invite code</li>
