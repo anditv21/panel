@@ -55,7 +55,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <li>Login (Multiple device remember Login) (Screenshot: https://tinyurl.com/mwd6uhz)</li>
 
-<li>Register (Invite only / can be deactivated) (Screenshot: https://tinyurl.com/yc3j4z99)</li>
+<li>Register Invite only (can be deactivated) (Screenshot: https://tinyurl.com/yc3j4z99)</li>
 
 <li>Banned Page (Screenshot: https://bit.ly/3vYaHse)</li>
 
@@ -75,11 +75,11 @@ Default login: <code>admin</code>:<code>admin</code>
 
 Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g67
 
-<li>ShoutBox (can be disabled from admin dashboard / users are muteable)</li>
+<li>ShoutBox (can be disabled from admin dashboard & users are muteable)</li>
 
 <li>Change password</li>
 
-<li>Activate multiple subscription´s with code (Trail/30/90 days)</li>
+<li>Activate subscription´s with code (Trail/30/90 days)</li>
 
 <li>Activate Trail subscription´s with code (3 days)</li>
 
@@ -94,7 +94,7 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 
 <ul>
 
-<li>Get Profile Picture from Discord (currently only static)</li></ul>
+<li>Get Profile Picture from Discord (only static pictures)</li></ul>
 
 
 
@@ -128,22 +128,15 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 
 <li>Screenshot: https://bit.ly/3GXtf21 / https://bit.ly/3IC7O8a</li>
 
-<li>Disable Invite System (Admin only)</li>
+<h1>Admin only:</h1>
 
-<li>Freeze all subscriptions (experimental) (Admin only)</li>
+<li>Disable Invite System</li>
 
-<li>Gift user subscription (Admin only) (Screenshot: https://bit.ly/3ivNJ8K)</li>
+<li>Freeze all subscriptions (Beta)</li>
 
-  
+<li>Gift user subscription (Screenshot: https://bit.ly/3ivNJ8K)</li>
 
-
-
-
-  
-
-<li>View a users last known IP address </li>
-
-<li>Password Reset (Admin only)</li>
+<li>Password Reset</li>
 
 <li>Set News</li>
 
@@ -152,25 +145,20 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 <li>Enable/Disable Discord Link</li>
 
 <li>Enable/Disable Discord Re-Link</li>
+  
+<li>Generate subscription code</li>
 
-<li>Ban-Management panel (Admin only) (Screenshot: https://bit.ly/3VS78if)</li>
-
-<li>Generate invite code</li>
-
-<li>Generate subscription code (Admin only)</li>
-
-<li>Ban/unban user (Admin only)</li>
+<li>Ban/unban user</li>
 
 <li>Make user admin/non-admin </li>
 
 <li>Make user supporter/non-supp </li>
 
-<li>Mute a user for the shoutbox</li>
+<li>Ban-Management panel (Screenshot: https://bit.ly/3VS78if)</li>
 
-<li>Reset HWID</li>
+<li>Set status ofline/online</li>
 
-<li>Set cheat ofline/online (Admin only)</li>
-<li>Set version/maintenance/non-maintenance </li>
+<li>Set version/maintenance/non-maintenance</li>
 
 <li>ShoutBox</li>
 <ul>
@@ -184,8 +172,17 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 <li>Invite wave (5 Invites)</li>
 </ul>
 
-  
 
+
+
+<h1>Supporter:</h1>
+<li>View a users last known IP address </li>
+
+<li>Generate invite code</li>
+
+<li>Mute a user for the shoutbox</li>
+
+<li>Reset HWID</li>
 </details>
 
  
