@@ -610,6 +610,15 @@ class Users extends Database
         return $result;
     }
 
+    public function getWhitelistedIPs(): array
+    {
+        $this->prepare('SELECT `ip` FROM `ip_whitelist`');
+        $this->statement->execute();
+        $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
+        return $result;
+    }
+
+
     public function getip(): string
     {
         $headers = [
@@ -621,14 +630,21 @@ class Users extends Database
             'REMOTE_ADDR',
             'HTTP_X_REAL_IP'
         ];
-
+    
         // Initialize the server IP variable
-        $serverIp = $_SERVER['SERVER_ADDR'];
-
+        $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
+    
+        // Fetch whitelisted IPs
+        $whitelistedIPs = $this->getWhitelistedIPs();
+    
         foreach ($headers as $header) {
             if (array_key_exists($header, $_SERVER)) {
                 $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
                 if ($ip !== false) {
+                    if (in_array($ip, $whitelistedIPs)) {
+                        return 'localhost';
+                    }
+    
                     // Check if it's an IPv4 address
                     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                         if ($ip === $serverIp) {
@@ -640,12 +656,16 @@ class Users extends Database
                 }
             }
         }
-
+    
         // If IPv4 not found or empty, proceed with IPv6
         foreach ($headers as $header) {
             if (array_key_exists($header, $_SERVER)) {
                 $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
                 if ($ip !== false) {
+                    if (in_array($ip, $whitelistedIPs)) {
+                        return 'localhost';
+                    }
+    
                     if ($ip === $serverIp) {
                         return 'localhost';
                     } else {
@@ -654,11 +674,10 @@ class Users extends Database
                 }
             }
         }
-
+    
         return '';
     }
-
-
+    
     public function isfrozen($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");

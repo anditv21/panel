@@ -11,10 +11,13 @@ $API = new ApiController();
 $serverIP = $_SERVER['SERVER_ADDR'];
 
 
-if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
-    $allowedIP = $serverIP;
 
-    if ($_SERVER['REMOTE_ADDR'] !== $allowedIP) {
+if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
+    $whitelistedIPs = $API->getiparray();
+    $serverIP = Util::securevar($_SERVER['SERVER_ADDR']);
+    $remoteIP = Util::securevar($_SERVER['REMOTE_ADDR']);
+    
+    if ($remoteIP !== $serverIP && !in_array($remoteIP, $whitelistedIPs)) {
         $response = array('status' => 'failed', 'error' => 'Unauthorized IP');
     } else {
         if (empty($_GET['key'])) {

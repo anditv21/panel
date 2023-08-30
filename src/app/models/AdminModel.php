@@ -776,4 +776,42 @@ class Admin extends Database
         $userData = $this->statement->fetch();
         return $userData->supp;
     }
+
+    protected function ip_whitelist($ip, $username)
+    {
+        if ($this->checkadmin() && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
+            $this->statement->execute([$ip, $username]);
+        }    
+        else
+        {
+            return "This is not a valid ipv4.";
+        }
+    }
+
+    protected function unlist_ip($ip, $username)
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('DELETE FROM `ip_whitelist` WHERE `ip` = ?');
+            $this->statement->execute([$ip]);
+
+            $user = new UserController();
+            $user->log($username, "Added $ip to whitelist", system_logs);
+            $user->loguser($username, "Added $ip to whitelist");
+        }    
+        else
+        {
+            return "This is not a valid ipv4.";
+        }
+    }
+
+    protected function IPArray()
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('SELECT * FROM `ip_whitelist`');
+            $this->statement->execute();
+            $result = $this->statement->fetchAll();
+            return $result;
+        }
+    }
 }

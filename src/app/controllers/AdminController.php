@@ -202,4 +202,22 @@ class AdminController extends Admin
     {
         return $this->giftallinvs();
     }
+
+    public function whitelist_ip($ip)
+    {
+        $username = Session::get('username');
+        return $this->ip_whitelist($ip, $username);
+    }
+
+    public function del_ip($ip)
+    {
+        $username = Session::get('username');
+        return $this->unlist_ip($ip, $username);
+    }
+
+
+    public function getIPArray()
+    {
+        return $this->IPArray();
+    }
 }

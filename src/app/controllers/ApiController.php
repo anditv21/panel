@@ -36,4 +36,9 @@ class ApiController extends API
     {
         return $this->generate_inv($dcid); 
     }
+
+    public function getiparray()
+    {
+        return $this->getWhitelistedIPs();
+    }
 }

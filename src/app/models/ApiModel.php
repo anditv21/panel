@@ -267,5 +267,13 @@ class API extends Database
         }
         return $response;
     }
+
+    protected function getWhitelistedIPs(): array
+    {
+        $this->prepare('SELECT `ip` FROM `ip_whitelist`');
+        $this->statement->execute();
+        $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
+        return $result;
+    }
 }
     
