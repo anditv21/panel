@@ -76,33 +76,38 @@ async def bg_task():
     ]
 
     current_index = 0
-    while not bot.is_closed() and current_index < len(status_list):
-        status, activity = status_list[current_index]
-        try:
-            await bot.change_presence(status=status, activity=activity)
-            if rename_users == "true" or rename_users == "True":
-                guild = bot.get_guild(int(get_config_value("guild_id")))
-                if guild:
-                    for user_data in linked_users_response:
-                        dcid = user_data['dcid']
-                        display_name = f"{user_data['displayname']} ({user_data['uid']})"
+        while not bot.is_closed() and current_index < len(status_list):
+            status, activity = status_list[current_index]
+            try:
+                await bot.change_presence(status=status, activity=activity)
+                if rename_users == "true" or rename_users == "True":
+                    guild = bot.get_guild(int(get_config_value("guild_id")))
+                    if guild:
+                        for user_data in linked_users_response:
+                            dcid = user_data['dcid']
+                            display_name = user_data.get('displayname')
+                            username = user_data.get('username')
 
-                        member = guild.get_member(int(dcid))
-                        if member:
-                            if member.id == int(dcid):
-                                await member.edit(nick=display_name)
+                            member = guild.get_member(int(dcid))
+                            if member:
+                                if member.id == int(dcid):
+                                    if display_name:
+                                        nick = f"{display_name} ({user_data['uid']})"
+                                    else:
+                                        nick = f"{username} ({user_data['uid']})"
+                                    await member.edit(nick=nick)
+                                else:
+                                    print(f"Member ID mismatch: {member.id} != {dcid}")
                             else:
-                                print(f"Member ID mismatch: {member.id} != {dcid}")
-                        else:
-                            print(f"Member not found: {dcid}")        
-                else:
-                    print(f"Guild not found {get_config_value('guild_id')}")
+                                print(f"Member not found: {dcid}")
+                    else:
+                        print(f"Guild not found {get_config_value('guild_id')}")
 
-            await asyncio.sleep(5)
-        except discord.HTTPException as e:
-            print(f"Error occurred while changing presence: {e}")
+                await asyncio.sleep(5)
+            except discord.HTTPException as e:
+                print(f"Error occurred while changing presence: {e}")
 
-        current_index += 1
+            current_index += 1
 
 
 """
