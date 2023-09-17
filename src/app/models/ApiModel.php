@@ -83,7 +83,7 @@ class API extends Database
     protected function getuserbydiscord($dcid)
     {
         try {
-            $this->prepare("SELECT `uid`, `username`, `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `uid`, `username`, `sub` , `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
     
@@ -115,6 +115,7 @@ class API extends Database
                 $banned = $result['banned'] ?? '';
                 $admin = $result['admin'] ?? '';
                 $supp = $result['supp'] ?? '';
+                $sub = $result['sub'] ?? '';
     
                 $response = [
                     "uid" => $uid,
@@ -123,7 +124,8 @@ class API extends Database
                     "banned" => $banned,
                     "admin" => $admin,
                     "supp" => $supp,
-                    "avatar_url" => $avatarurl
+                    "avatar_url" => $avatarurl,
+                    "sub" => $sub
                 ];
             }
         } catch (Exception $e) {
@@ -157,7 +159,7 @@ class API extends Database
     protected function get_linked_users()
     {
         try {
-            $this->prepare("SELECT `uid`, `displayname`, `dcid` FROM `users` WHERE `dcid` IS NOT NULL");
+            $this->prepare("SELECT `uid`, `username` ,`displayname`, `dcid` FROM `users` WHERE `dcid` IS NOT NULL");
             $this->statement->execute();
             $linked_users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
     
