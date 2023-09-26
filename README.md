@@ -85,16 +85,15 @@ Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JM
 
 <li>Download loader (Needs a sub)</li>
 
-<li>Change display name</li>
+<li>Change display name (30day cooldown)</li>
 
 <li>Manage login tokens/cookies (requires password)</li>
 
-<li>Set a Profile Picture</li>
 <li>Public user profile (https://bit.ly/3M6BKuQ)</li>
 
 <ul>
 
-<li>Get Profile Picture from Discord (only static pictures)</li></ul>
+<li>Get Profile Picture from Discord (only static)</li></ul>
 
 
 
