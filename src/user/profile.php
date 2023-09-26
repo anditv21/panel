@@ -116,10 +116,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                     endif; ?>
                     <center>
                         <?php if (Util::getavatar($uid) == false) : ?>
-                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img width="120" height="120" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
+                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
                         <?php
                         else : ?>
-                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img width="120" height="120" class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar($uid)); ?>" style="border-color: rgb(255,255,255)!important;"></a>
+                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar($uid)); ?>" style="border-color: rgb(255,255,255)!important;"></a>
                         <?php
                         endif; ?>
                     </center>
