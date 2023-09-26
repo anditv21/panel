@@ -149,7 +149,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                     <?php if ($System->getSystemData()->discordlinking == 1 || $System->relinkdiscord == 1 || ($System->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
                         <form method="POST" enctype="multipart/form-data">
                             <center>
-                                <?php $link = $user->isDiscordLinked(); echo "<p>$link</p>"; ?>
                                 <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Link Discord (BETA)</button>
                                 <br>
                             </center>
