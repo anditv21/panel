@@ -47,10 +47,10 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 	if (isset($_POST['flushInvs'])) {
-		$delinv = Util::securevar($_POST['flushInvs']);
+		$flushinvs = Util::securevar($_POST['flushInvs']);
 	}
 
-	if (isset($delinv)) {
+	if (isset($flushinvs)) {
 		Util::adminCheck();
 		$admin->flushInvCode();
 	}
