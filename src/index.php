@@ -62,6 +62,14 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             Util::display("Last login: {$formatted_date} from ");
             ?>
             <em onclick="copyToClipboard('<?php Util::display($user->getlastip()); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($user->getlastip()); ?></em>
+         
+            <?php 
+            $loginfails = Session::get("loginfails");
+            if ($loginfails > 0) : ?>
+            <br>
+            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
+            
+            <?php endif; ?>
          </div>
       </div>
 
@@ -71,9 +79,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       if ($System->getSystemData()->frozen == 1) : ?>
          <div class="col-12 mt-3 mb-2">
             <div class="alert alert-primary" role="alert">
-               <b style="color: #6cc312;"><?php Util::display(
-                                             "WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"
-                                          ); ?></b>
+               <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"); ?></b>
             </div>
          </div>
       <?php endif;

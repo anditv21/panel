@@ -21,6 +21,7 @@ class UserController extends Users
         Session::set("banned", (int) $user->banned);
         Session::set("invitedBy", $user->invitedBy);
         Session::set("createdAt", $user->createdAt);
+        Session::set("loginfails", $user->loginfails);
     }
 
     public function gettokenarray()
@@ -71,6 +72,7 @@ class UserController extends Users
     {
         return $this->gethwidcount($uid);
     }
+
     public function getresetdate($uid)
     {
         return $this->getlastreset($uid);
@@ -195,8 +197,10 @@ class UserController extends Users
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin();
+                $this->resetfails($username);
                 Util::redirect("/index.php");
             } else {
+                $this->loginfail($username);
                 return "Username/Password is wrong.";
             }
         }

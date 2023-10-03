@@ -251,6 +251,27 @@ class Users extends Database
         $this->statement->execute([$username, $token, $ip, $browser, $os, $time, "none"]);
     }
 
+    protected function loginfail($username)
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch();
+
+        if (!$row) {
+            return false; 
+        }
+        else {
+            $this->prepare('UPDATE `users` SET `loginfails` = `loginfails` + 1 WHERE `username` = ?');
+            $this->statement->execute([$username]);
+        }
+    }
+
+    protected function resetfails($username)
+    {
+        $this->prepare('UPDATE `users` SET `loginfails` = 0 WHERE `username` = ?');
+        $this->statement->execute([$username]);
+    }
+
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
