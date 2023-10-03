@@ -201,7 +201,11 @@ class UserController extends Users
                 Util::redirect("/index.php");
             } else {
                 $this->loginfail($username);
-                return "Username/Password is wrong.";
+                if(!$this->doesthisuserexist($username))
+                {
+                    return "No user with this name was found.";
+                }
+                return "Username/Password combination is wrong.";
             }
         }
     }

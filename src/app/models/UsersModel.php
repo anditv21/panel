@@ -251,13 +251,21 @@ class Users extends Database
         $this->statement->execute([$username, $token, $ip, $browser, $os, $time, "none"]);
     }
 
-    protected function loginfail($username)
+    protected function doesthisuserexist($username)
     {
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $row = $this->statement->fetch();
 
         if (!$row) {
+            return false; 
+        }
+        else return true;
+    }
+
+    protected function loginfail($username)
+    {
+        if (!$this->doesthisuserexist($username)) {
             return false; 
         }
         else {
