@@ -9,7 +9,7 @@ Session::init();
 if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
-if (!Session::isBanned()) {
+if (!Util::banCheck()) {
     Util::redirect("/index.php");
 }
 
