@@ -146,11 +146,11 @@
                            <?php if ($admin || $supp) : ?>
                               <div class="col-12 clearfix">
                                  <i class="fas fa-microchip"></i> HWID Resets:
-                                 <p class="float-right mb-0"><?php Util::Display($user->getresetcount($uid)); ?></p>
+                                 <p class="float-right mb-0"><?php Util::Display($user->getresetcount($uid)); ?>&nbsp;<img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Only visible as admin or sup"></p>
                               </div>
                               <div class="col-12 clearfix">
                                  <i class="fas fa-history"></i> Last Reset:
-                                 <p class="float-right mb-0"><?php Util::Display(Util::daysago($user->getresetdate($uid))); ?></p>
+                                 <p class="float-right mb-0"><?php Util::Display(Util::daysago($user->getresetdate($uid))); ?>&nbsp;<img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Only visible as admin or sup"></p>
                               </div>
                            <?php endif; ?>
                         <?php else : ?>
