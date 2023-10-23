@@ -7,10 +7,10 @@ $user = new UserController();
 Session::init();
 
 if (!Session::isLogged()) {
-    Util::redirect("/auth/login.php");
+	Util::redirect("/auth/login.php");
 }
 if (!Util::banCheck()) {
-    Util::redirect("/index.php");
+	Util::redirect("/index.php");
 }
 
 $username = Session::get("username");

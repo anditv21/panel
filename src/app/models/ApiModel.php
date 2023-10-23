@@ -86,7 +86,7 @@ class API extends Database
             $this->prepare("SELECT `uid`, `username`, `sub` , `displayname`, `banned`, `admin`, `supp` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
-    
+
             if (!$result) {
                 $response = [
                     "status" => "failed",
@@ -116,11 +116,11 @@ class API extends Database
                 $admin = $result['admin'] ?? '';
                 $supp = $result['supp'] ?? '';
                 $sub = $result['sub'] ?? '';
-    
+
                 $response = [
                     "uid" => $uid,
                     "username" => $username,
-                    "display_name" => $displayname, 
+                    "display_name" => $displayname,
                     "banned" => $banned,
                     "admin" => $admin,
                     "supp" => $supp,
@@ -162,7 +162,7 @@ class API extends Database
             $this->prepare("SELECT `uid`, `username` ,`displayname`, `dcid` FROM `users` WHERE `dcid` IS NOT NULL");
             $this->statement->execute();
             $linked_users = $this->statement->fetchAll(PDO::FETCH_ASSOC);
-    
+
             $response = [
                 "status" => "success",
                 "data" => $linked_users
@@ -182,28 +182,26 @@ class API extends Database
             $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
-    
+
             if (!$result) {
                 $response = [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
-    
+
             $code = "$time-" . Util::randomCode(20);
             if ($result["admin"]) {
                 $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
                 $this->statement->execute([$code, $result["username"]]);
                 $user = new UserController();
                 $user->log($result["username"], "Generated a sub", 'admin_logs');
-    
+
                 $response = [
                     "status" => "success",
                     "text" => $code
                 ];
-            }
-            elseif(empty($result["admin"]))
-            {
+            } elseif (empty($result["admin"])) {
                 $response = [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
@@ -229,28 +227,26 @@ class API extends Database
             $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
-    
+
             if (!$result) {
                 $response = [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
-    
+
             $code = Util::randomCode(20);
             if ($result["admin"]) {
                 $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
                 $this->statement->execute([$code, $result["username"]]);
                 $user = new UserController();
                 $user->log($result["username"], "Generated an invitation", 'admin_logs');
-    
+
                 $response = [
                     "status" => "success",
                     "text" => $code
                 ];
-            }
-            elseif(empty($result["admin"] || $result["supp"]))
-            {
+            } elseif (empty($result["admin"] || $result["supp"])) {
                 $response = [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
@@ -278,4 +274,3 @@ class API extends Database
         return $result;
     }
 }
-    

@@ -26,15 +26,15 @@ class ApiController extends API
     {
         return $this->get_linked_users();
     }
-    
+
     public function generate_subscription($dcid, $time)
     {
-        return $this->generate_sub($dcid, $time); 
+        return $this->generate_sub($dcid, $time);
     }
 
     public function generate_invite($dcid)
     {
-        return $this->generate_inv($dcid); 
+        return $this->generate_inv($dcid);
     }
 
     public function getiparray()

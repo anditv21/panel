@@ -291,7 +291,7 @@ class Admin extends Database
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Banned by $username", false);
-                
+
                 // Delete shoutbox entries from banned user
                 $this->prepare('DELETE FROM `shoutbox` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
@@ -514,19 +514,19 @@ class Admin extends Database
     protected function DiscordLogging()
     {
         if ($this->checkadmin()) {
-    
+
             // Get current discordlogging status
             $this->prepare('SELECT `discordlogging` FROM `system`');
             $this->statement->execute();
             $status = $this->statement->fetch();
-    
+
             $username = Session::get('username');
             $user = new UserController();
-    
+
             if ($status->discordlogging) {
                 // Send the log
                 $user->log($username, "Disabled discord logging", system_logs);
-    
+
                 // Disable discordlogging in the database
                 $this->prepare('UPDATE `system` SET `discordlogging` = 0');
                 $this->statement->execute();
@@ -534,14 +534,14 @@ class Admin extends Database
                 // Enable discordlogging in the database
                 $this->prepare('UPDATE `system` SET `discordlogging` = 1');
                 $this->statement->execute();
-    
+
                 // Send the log
                 $user->log($username, "Enabled discord logging", system_logs);
             }
         }
     }
-    
-    
+
+
     //
     protected function SystemVersion($ver)
     {
@@ -782,9 +782,7 @@ class Admin extends Database
         if ($this->checkadmin() && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$ip, $username]);
-        }    
-        else
-        {
+        } else {
             return "This is not a valid ipv4.";
         }
     }
@@ -798,9 +796,7 @@ class Admin extends Database
             $user = new UserController();
             $user->log($username, "Added $ip to whitelist", system_logs);
             $user->loguser($username, "Added $ip to whitelist");
-        }    
-        else
-        {
+        } else {
             return "This is not a valid ipv4.";
         }
     }

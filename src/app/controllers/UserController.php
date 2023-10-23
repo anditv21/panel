@@ -201,8 +201,7 @@ class UserController extends Users
                 Util::redirect("/index.php");
             } else {
                 $this->loginfail($username);
-                if(!$this->doesthisuserexist($username))
-                {
+                if (!$this->doesthisuserexist($username)) {
                     return "No user with this name was found.";
                 }
                 return "Username/Password combination is wrong.";
@@ -450,7 +449,7 @@ class UserController extends Users
     {
         // Send a request to Discord's API to validate the access token
         $url = 'https://discord.com/api/v6/users/@me';
-    
+
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -459,35 +458,35 @@ class UserController extends Users
                 'Authorization: Bearer ' . $access_token,
             ],
         ]);
-    
+
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    
+
         if ($httpCode !== 200) {
             curl_close($curl);
-            return false; 
+            return false;
         }
-    
+
         curl_close($curl);
-    
+
         try {
             $data = json_decode($response, true);
-    
+
             if (json_last_error() !== JSON_ERROR_NONE) {
-                return false; 
+                return false;
             }
-    
+
             // Check if the API response contains expected data
             if (isset($data['id'])) {
                 return true; // Token is valid
             } else {
-                return false; 
+                return false;
             }
         } catch (Exception $e) {
-            return false; 
+            return false;
         }
     }
-    
+
 
     private function get_new_access_token($refresh_token)
     {
@@ -548,14 +547,14 @@ class UserController extends Users
     public function getdcid($uid)
     {
         $result = $this->check_dcid($uid);
-        
+
         if ($result === null || $result === false) {
             return false;
         }
-        
+
         return $result;
     }
-    
+
 
     public function setdcid($dcid, $uid)
     {
@@ -566,7 +565,7 @@ class UserController extends Users
     {
         return $this->hasLinkedDiscord();
     }
-    
+
 
     public function discord_link($code)
     {
@@ -664,13 +663,13 @@ class UserController extends Users
             header("location: profile.php");
         }
     }
-   
 
-   public function downloadAvatarWithAccessToken($userId, $uid)
+
+    public function downloadAvatarWithAccessToken($userId, $uid)
     {
         $accessToken = $this->get_access_token();
 
-        
+
         // Check if access token is available and valid
         if ($accessToken && $this->is_access_token_valid($accessToken)) {
             $url = "https://discord.com/api/v9/users/@me";
@@ -684,7 +683,7 @@ class UserController extends Users
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $result = curl_exec($ch);
-            
+
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
                 curl_close($ch);
@@ -692,7 +691,7 @@ class UserController extends Users
             }
 
             $result = json_decode($result, true);
-            
+
 
             if (!isset($result["id"])) {
                 Util::display("Error: Failed to get user ID from Discord.");

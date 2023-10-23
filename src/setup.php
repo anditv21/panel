@@ -125,4 +125,3 @@ $errorLogDir = getPhpErrorLogDir();
 echo "<p style='color: white;'>⚠️ PHP Error Log Directory: <b>" . $errorLogDir."</b></p>";
 
 echo "<br><h3 style='color: white;'><b>You still having problems? Then maybe the <a href='https://github.com/anditv21/panel/wiki/Common-issues' target='_blank'>wiki</a> will help you</b></h3>";
-?>

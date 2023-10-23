@@ -22,5 +22,5 @@ if ($user->getSubStatus() < 0) {
 $System = Util::randomCode(10);
 
 header('Content-type: application/x-dosexec');
-header('Content-Disposition: attachment; filename="'.$System.'".exe"');
+header('Content-Disposition: attachment; filename="' . $System . '".exe"');
 readfile(LOADER_URL);

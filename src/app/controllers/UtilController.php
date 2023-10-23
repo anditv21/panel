@@ -107,7 +107,7 @@ class Util extends UtilMod
         $username = Session::get('username');
         return $this->subActiveCheck($username);
     }
-    
+
     // admin check
     public static function adminCheck($redirect = true)
     {
@@ -161,7 +161,7 @@ class Util extends UtilMod
             return false;
         }
     }
-    
+
     public static function muteCheck()
     {
         $username = Session::get("username");
@@ -169,7 +169,7 @@ class Util extends UtilMod
             error_log("user not found");
             return false;
         }
-    
+
         $util = new UtilMod();
         $res = $util->checkmute($username);
         return $res;

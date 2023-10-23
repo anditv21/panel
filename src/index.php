@@ -21,8 +21,7 @@ Util::navbar();
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    $msg = Util::securevar($_POST['shoutbox-message']);
-   if (Util::muteCheck() == False)
-   {
+   if (Util::muteCheck() == False) {
       $user->sendmsg($msg);
    }
    header('location: index.php');
@@ -39,20 +38,20 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       <!--Welome message-->
       <div class="col-12 mt-3 mb-2">
          <div class="alert alert-primary" role="alert">
-            Welcome back, <a href='<?php  Util::display(SUB_DIR. "/user/profile.php"); ?>'><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
+            Welcome back, <a href='<?php Util::display(SUB_DIR . "/user/profile.php"); ?>'><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
             <?php
             $date_obj = new DateTime($user->getlastlogin());
             $formatted_date = $date_obj->format('F j, Y, g:ia');
             Util::display("Last login: {$formatted_date} from ");
             ?>
             <em onclick="copyToClipboard('<?php Util::display($user->getlastip()); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($user->getlastip()); ?></em>
-         
-            <?php 
+
+            <?php
             $loginfails = Session::get("loginfails");
             if ($loginfails > 0) : ?>
-            <br>
-            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
-            
+               <br>
+               <em style="color: red" ;>Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
+
             <?php endif; ?>
          </div>
       </div>
@@ -88,34 +87,33 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   <div class="col-lg-9 col-md-8 col-sm-12">
                      <div id="shoutbox"><?php require_once('shoutbox.php'); ?></div>
                      <br>
-                     <?php if (Util::muteCheck() == False): ?>
-                     <form action="" method="post">
-                        <div class="form-group">
-                           <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
-                        </div>
-                        <button type="submit" class="btn btn-outline-primary">Send</button>
-                        <br>
-                        <br>
-                        <div class="legend">
-                           <span class="own-username">You</span> &ndash; Your own messages<br>
-                           <span class="admin-username">Admin</span> &ndash; Messages from administrators<br>
-                           <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
-                        </div>
-                     </form>
-                       <?php endif; ?>
+                     <?php if (Util::muteCheck() == False) : ?>
+                        <form action="" method="post">
+                           <div class="form-group">
+                              <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
+                           </div>
+                           <button type="submit" class="btn btn-outline-primary">Send</button>
+                           <br>
+                           <br>
+                           <div class="legend">
+                              <span class="own-username">You</span> &ndash; Your own messages<br>
+                              <span class="admin-username">Admin</span> &ndash; Messages from administrators<br>
+                              <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
+                           </div>
+                        </form>
+                     <?php endif; ?>
                   </div>
                </div>
             </div>
          </div>
          <script>
-      function reload() {
-         $(document).ready(function() {
-            $("#shoutbox").load("shoutbox.php");
-         });
-      }
+            function reload() {
+               $(document).ready(function() {
+                  $("#shoutbox").load("shoutbox.php");
+               });
+            }
 
-      setInterval(reload, 500);
-
+            setInterval(reload, 500);
          </script>
       <?php endif; ?>
       <!--Status-->
@@ -190,10 +188,6 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             <?php endif; ?>
          </div>
       </div>
-
-
-
-
    </div>
 </main>
 <script>
@@ -210,20 +204,8 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       document.execCommand('copy');
       document.body.removeChild(textarea);
    }
-
 </script>
 <style>
-   .spoiler:hover {
-      color: white;
-      max-width: fit-content;
-   }
-
-   .spoiler {
-      color: black;
-      background-color: black;
-      max-width: fit-content;
-   }
-
    .chat {
       padding-top: 2%;
       padding-left: 2%;
@@ -274,28 +256,6 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
    .supp-username {
       color: #FF00E8;
       font-weight: bold;
-   }
-
-   /* ===== Scrollbar CSS ===== */
-   /* Firefox */
-   * {
-      scrollbar-width: auto;
-      scrollbar-color: #6cc312 #222222;
-   }
-
-   /* Chrome, Edge, and Safari */
-   *::-webkit-scrollbar {
-      width: 16px;
-   }
-
-   *::-webkit-scrollbar-track {
-      background: #222222;
-   }
-
-   *::-webkit-scrollbar-thumb {
-      background-color: #6cc312;
-      border-radius: 10px;
-      border: 3px solid #222222;
    }
 </style>
 <?php Util::footer(); ?>

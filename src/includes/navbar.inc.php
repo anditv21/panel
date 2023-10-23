@@ -1,6 +1,6 @@
 <body>
- <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
 	<nav style="background-image: linear-gradient(to bottom, #303030 0%, #151515 100%);" class="navbar navbar-expand-lg navbar-dark">
 
 		<div class="container">
@@ -15,29 +15,29 @@
 
 				<ul class="navbar-nav ml-auto">
 
-					<!-- Check if logged in --> 
+					<!-- Check if logged in -->
 					<?php if (Session::isLogged() == true) : ?>
 						<?php if (Util::banCheck(false) == false) : ?>
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/profile.php">Profile <i class="fas fa-user"></i></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/log.php">Account-Logs <i class="fas fa-history"></i></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/tokens.php">Login Tokens <i class="fas fa-shield-alt"></i></a>
-						</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?= SUB_DIR ?>/user/profile.php">Profile <i class="fas fa-user"></i></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?= SUB_DIR ?>/user/log.php">Account-Logs <i class="fas fa-history"></i></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?= SUB_DIR ?>/user/tokens.php">Login Tokens <i class="fas fa-shield-alt"></i></a>
+							</li>
 
 						<?php endif; ?>
 						<?php if (Util::adminCheck(false) == false or Util::suppCheck(false) == false) : ?>
-							
-						<li class="nav-item">
-							<a class="nav-link" href="<?= SUB_DIR ?>/user/invites.php">User Invites <i class="fas fa-envelope"></i></a>
-						</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?= SUB_DIR ?>/user/invites.php">User Invites <i class="fas fa-envelope"></i></a>
+							</li>
 						<?php endif; ?>
-						<!-- Check if admin --> 
+						<!-- Check if admin -->
 						<?php if (Util::adminCheck(false) == true or Util::suppCheck(false) == true) : ?>
-							
+
 							<li class="nav-item">
 								<a class="nav-link" href="<?= SUB_DIR ?>/admin">Admin <i class="fas fa-user-shield"></i></a>
 							</li>

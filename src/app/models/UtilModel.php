@@ -14,7 +14,7 @@ class UtilMod extends Database
         $userData = $this->statement->fetch();
         return $userData->banned;
     }
-    
+
     protected function checkadmin($username)
     {
         $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
@@ -37,7 +37,7 @@ class UtilMod extends Database
             $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
             $this->statement->execute([$username]);
             $result = $this->statement->fetch();
-    
+
             return $result->muted;
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage());
@@ -50,13 +50,10 @@ class UtilMod extends Database
         $this->prepare('SELECT * FROM login WHERE remembertoken = ?');
         $this->statement->execute([$token]);
         $result = $this->statement->fetch();
-    
-        if($result)
-        {
+
+        if ($result) {
             return true;
-        }
-        else
-        {
+        } else {
             setcookie("login_cookie", "", time() - 3600, '/');
             session_unset();
             $_SESSION = [];
@@ -64,5 +61,5 @@ class UtilMod extends Database
             session_destroy();
             Util::redirect("/auth/login.php");
         }
-    }    
+    }
 }

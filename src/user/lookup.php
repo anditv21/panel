@@ -41,7 +41,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
         if (isset($_GET['ip'])) {
             $ip_address = Util::securevar($_GET['ip']);
             $ip_info = getipinfo($ip_address);
-            
+
             foreach ($ip_info as $key => $value) {
                 Util::display("<tr>");
                 Util::display("<th>" . Util::securevar($key) . "</th>");

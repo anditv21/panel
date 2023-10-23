@@ -1,52 +1,52 @@
 <?php
-   require_once "app/require.php";
-   require_once "app/controllers/SystemController.php";
-   
-   $user = new UserController();
-   $System = new SystemController();
-   
-   Session::init();
-   
-   if (!Session::isLogged()) {
-      Util::redirect("/auth/login.php");
-   }
-   $uid = Session::get("uid");
-   $username = Session::get("username");
-   $admin = Util::adminCheck(False);
-   $supp = Util::suppCheck(False);
-   $getuid = Util::securevar($_GET["uid"]);
-   $sub = $user->getSubStatus($username);
-   $userfrozen = $user->getfrozen();
-   $userbyid = $user->getuserbyuid($getuid);
-   $displayname = $user->fetch_display_name($userbyid->username);
+require_once "app/require.php";
+require_once "app/controllers/SystemController.php";
 
-   Util::banCheck();
-   Util::checktoken();
-   Util::head("Profile");
-   Util::navbar();
-   
-   
-   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
-      if (isset($_GET["uid"])) {
-         $uid = Util::securevar($_GET["uid"]);
-   
-         if (!empty($uid)) {
-            $getuid = Util::securevar($_GET["uid"]);
-            $userbyid = $user->getuserbyuid($getuid);
-            if (!empty($userbyid->username)) {
-               $username = $userbyid->username;
-            } else {
-               echo "<script>alert('Username not found for the given UID');</script>";
-               echo "<script>window.history.back();</script>";
-            }
+$user = new UserController();
+$System = new SystemController();
+
+Session::init();
+
+if (!Session::isLogged()) {
+   Util::redirect("/auth/login.php");
+}
+$uid = Session::get("uid");
+$username = Session::get("username");
+$admin = Util::adminCheck(False);
+$supp = Util::suppCheck(False);
+$getuid = Util::securevar($_GET["uid"]);
+$sub = $user->getSubStatus($username);
+$userfrozen = $user->getfrozen();
+$userbyid = $user->getuserbyuid($getuid);
+$displayname = $user->fetch_display_name($userbyid->username);
+
+Util::banCheck();
+Util::checktoken();
+Util::head("Profile");
+Util::navbar();
+
+
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
+   if (isset($_GET["uid"])) {
+      $uid = Util::securevar($_GET["uid"]);
+
+      if (!empty($uid)) {
+         $getuid = Util::securevar($_GET["uid"]);
+         $userbyid = $user->getuserbyuid($getuid);
+         if (!empty($userbyid->username)) {
+            $username = $userbyid->username;
          } else {
-            echo "<script>alert('Please provide a valid UID');</script>";
+            echo "<script>alert('Username not found for the given UID');</script>";
             echo "<script>window.history.back();</script>";
          }
+      } else {
+         echo "<script>alert('Please provide a valid UID');</script>";
+         echo "<script>window.history.back();</script>";
       }
    }
-   ?>
-   
+}
+?>
+
 <link rel="stylesheet" href="../assets/css/custom.css">
 <div class="divide"></div>
 <main class="container mt-2">
@@ -85,10 +85,10 @@
                   <div class="card-body">
                      <div class="h5 border-bottom border-secondary pb-1"><?php Util::Display($userbyid->username); ?></div>
                      <div class="row">
-                     <div class="col-12 clearfix">
-                                    <i class="fas fa-camera-retro"></i> Display name:
-                                    <p class="float-right mb-0"><?php Util::display($displayname); ?></p>
-                                </div>
+                        <div class="col-12 clearfix">
+                           <i class="fas fa-camera-retro"></i> Display name:
+                           <p class="float-right mb-0"><?php Util::display($displayname); ?></p>
+                        </div>
 
                         <?php if ($admin || $supp) : ?>
                            <div class="col-12 clearfix">

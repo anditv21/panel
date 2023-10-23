@@ -258,17 +258,15 @@ class Users extends Database
         $row = $this->statement->fetch();
 
         if (!$row) {
-            return false; 
-        }
-        else return true;
+            return false;
+        } else return true;
     }
 
     protected function loginfail($username)
     {
         if (!$this->doesthisuserexist($username)) {
-            return false; 
-        }
-        else {
+            return false;
+        } else {
             $this->prepare('UPDATE `users` SET `loginfails` = `loginfails` + 1 WHERE `username` = ?');
             $this->statement->execute([$username]);
         }
@@ -511,7 +509,9 @@ class Users extends Database
     {
         $System = new SystemController();
         $logging = $System->getSystemData()->discordlogging;
-        if($logging == 0){return true;}
+        if ($logging == 0) {
+            return true;
+        }
         if ($webhook == auth_logs) {
             $title = "Auth-Log";
         } elseif ($webhook == user_logs) {
@@ -659,13 +659,13 @@ class Users extends Database
             'REMOTE_ADDR',
             'HTTP_X_REAL_IP'
         ];
-    
+
         // Initialize the server IP variable
         $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
-    
+
         // Fetch whitelisted IPs
         $whitelistedIPs = $this->getWhitelistedIPs();
-    
+
         foreach ($headers as $header) {
             if (array_key_exists($header, $_SERVER)) {
                 $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
@@ -673,7 +673,7 @@ class Users extends Database
                     if (in_array($ip, $whitelistedIPs)) {
                         return 'localhost';
                     }
-    
+
                     // Check if it's an IPv4 address
                     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                         if ($ip === $serverIp) {
@@ -685,7 +685,7 @@ class Users extends Database
                 }
             }
         }
-    
+
         // If IPv4 not found or empty, proceed with IPv6
         foreach ($headers as $header) {
             if (array_key_exists($header, $_SERVER)) {
@@ -694,7 +694,7 @@ class Users extends Database
                     if (in_array($ip, $whitelistedIPs)) {
                         return 'localhost';
                     }
-    
+
                     if ($ip === $serverIp) {
                         return 'localhost';
                     } else {
@@ -703,10 +703,10 @@ class Users extends Database
                 }
             }
         }
-    
+
         return '';
     }
-    
+
     public function isfrozen($username)
     {
         $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
@@ -893,8 +893,11 @@ class Users extends Database
         $this->prepare('SELECT * FROM `users` WHERE `username` =?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
-        if($userData->dcid != NULL){return True;}
-        else{return False;}
+        if ($userData->dcid != NULL) {
+            return True;
+        } else {
+            return False;
+        }
     }
 
     protected function get_user_Browser()

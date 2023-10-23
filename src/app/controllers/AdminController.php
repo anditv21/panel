@@ -59,7 +59,7 @@ class AdminController extends Admin
         $code = Util::randomCode(20);
         return $this->invCodeGen($code, $username);
     }
-    
+
     public function delInvCode($delinv)
     {
         return $this->deleteinvcode($delinv);

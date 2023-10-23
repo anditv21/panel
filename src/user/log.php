@@ -33,7 +33,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../assets/css/custom.css">
 <style>
-
    .modal-content {
       background-color: #101010 !important;
    }
@@ -100,7 +99,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       </script>
       <div class="card">
          <div class="card-body">
-               <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Flush all logs</a>
+            <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Flush all logs</a>
          </div>
       </div>
       <br>
@@ -116,29 +115,29 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             </tr>
          </thead>
          <tbody>
-    <?php foreach ($logarray as $row) : ?>
-        <tr style="text-align: center;">
+            <?php foreach ($logarray as $row) : ?>
+               <tr style="text-align: center;">
 
-            <td><?php Util::display($row->time); ?></td>
+                  <td><?php Util::display($row->time); ?></td>
 
-            <?php
-            $action = $row->action;
+                  <?php
+                  $action = $row->action;
 
-            Util::display("<td>");
-            if (strpos($action, 'Generated an inv:') === 0) {
-                echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
-            } else {
-                Util::display($action);
-            }
-            Util::display("</td>");
-            ?>
+                  Util::display("<td>");
+                  if (strpos($action, 'Generated an inv:') === 0) {
+                     echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
+                  } else {
+                     Util::display($action);
+                  }
+                  Util::display("</td>");
+                  ?>
 
-            <td><?php Util::display($row->os); ?></td>
+                  <td><?php Util::display($row->os); ?></td>
 
-            <td><?php Util::display("<br><p onclick=\"lookup('" . $user->getlastip() . "')\" title='Click to lookup' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
+                  <td><?php Util::display("<br><p onclick=\"lookup('" . $user->getlastip() . "')\" title='Click to lookup' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
+               </tr>
+            <?php endforeach; ?>
+         </tbody>
 
 
       </table>
@@ -194,8 +193,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       document.body.removeChild(textarea);
    }
 
-   function lookup(ip)
-   {
+   function lookup(ip) {
       window.location.replace("lookup.php?ip=" + ip);
    }
 </script>

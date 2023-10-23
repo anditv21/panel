@@ -19,8 +19,7 @@ Util::head("Profile");
 Util::navbar();
 
 
-if(!$user->getdcid($uid) == false)
-{
+if (!$user->getdcid($uid) == false) {
     $user->downloadAvatarWithAccessToken($user->getdcid($uid), $uid);
 }
 
