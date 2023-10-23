@@ -59,12 +59,14 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
             $ip_info = getipinfo($ip_address);
             
             foreach ($ip_info as $key => $value) {
-                echo "<tr>";
-                echo "<th>" . Util::securevar($key) . "</th>";
-                echo "<td>" . Util::securevar($value) . "</td>";
-                echo "</tr>";
+                Util::display("<tr>");
+                Util::display("<th>" . Util::securevar($key) . "</th>");
+                Util::display("<td>" . Util::securevar($value) . "</td>");
+                Util::display("</tr>");
             }
         }
         ?>
     </tbody>
 </table>
+
+<?php Util::footer(); ?>
