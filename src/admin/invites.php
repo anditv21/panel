@@ -59,24 +59,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 }
 ?>
 
-<style>
-	.divide {
-		padding: 0;
-		margin: 0;
-		margin-bottom: 30px;
-		background: #1e5799;
-		background: -moz-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-		background: -webkit-gradient(linear, left top, right top, color-stop(0%, #1e5799), color-stop(50%, #f300ff), color-stop(100%, #e0ff00));
-		background: -webkit-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-		background: -o-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-		background: -ms-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-		background: linear-gradient(to right, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#e0ff00', GradientType=1);
-
-		height: 3px;
-		border-bottom: 1px solid #000;
-	}
-</style>
+<link rel="stylesheet" href="../assets/css/custom.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
