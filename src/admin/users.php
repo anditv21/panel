@@ -182,9 +182,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                            </td>
                         </center>
                         <th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>
-                        <td onclick="setClipboard('<?php Util::display($row->lastIP); ?>')" style="color: rgb(255,255,255);">
+                        <td onclick="lookup('<?php Util::display($row->lastIP); ?>')" style="color: rgb(255,255,255);">
                            <?php Util::display(
-                              "<br><p title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
+                              "<br><p title='Click to lookup' data-toggle='tooltip' data-placement='top' class='spoiler' style='maxwith: 100%;'>" .
                                  $row->lastIP .
                                  "</p>"
                            ); ?>
@@ -300,4 +300,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
    $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
    });
+
+   function lookup(ip)
+   {
+      window.location.replace("../user/lookup.php?ip=" + ip);
+   }
 </script>
