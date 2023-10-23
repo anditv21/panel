@@ -138,18 +138,18 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             <?php
             $action = $row->action;
 
-            echo '<td>';
+            Util::display("<td>");
             if (strpos($action, 'Generated an inv:') === 0) {
                 echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
             } else {
                 Util::display($action);
             }
-            echo '</td>';
+            Util::display("</td>");
             ?>
 
             <td><?php Util::display($row->os); ?></td>
 
-            <td><?php Util::display("<br><p onclick=\"copyToClipboard('" . $user->getlastip() . "')\" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
+            <td><?php Util::display("<br><p onclick=\"lookup('" . $user->getlastip() . "')\" title='Click to lookup' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
         </tr>
     <?php endforeach; ?>
 </tbody>
@@ -206,6 +206,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
+   }
+
+   function lookup(ip)
+   {
+      window.location.replace("lookup.php?ip=" + ip);
    }
 </script>
 <?php Util::footer(); ?>
