@@ -900,31 +900,40 @@ class Users extends Database
         }
     }
 
-    protected function get_user_Browser()
-    {
+
+    
+    protected function get_user_Browser() {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $browsers = [
-            '/chrome/i' => 'Chrome',
-            '/firefox/i' => 'Firefox',
-            '/safari/i' => 'Safari',
-            '/edge/i' => 'Edge',
-            '/opera|OPR/i' => 'Opera',
-            '/msie/i' => 'Internet Explorer',
-            '/maxthon/i' => 'Maxthon',
-            '/konqueror/i' => 'Konqueror',
-            '/Valve Steam GameOverlay/i' => 'Steam',
-            '/mobile/i' => 'Mobile',
-            '/Bot/i' => 'Spam/Unknown',
-        ];
-
-        foreach ($browsers as $regexp => $name) {
-            if (preg_match($regexp, $userAgent)) {
-                return $name;
-            }
+    
+        $userBrowser = '';
+    
+        if (stripos($userAgent, 'Edge') !== false) {
+            $userBrowser = 'Microsoft Edge';
+        } elseif (stripos($userAgent, 'Brave') !== false) {
+            $userBrowser = 'Brave';
+        } elseif (stripos($userAgent, 'Chrome') !== false) {
+            $userBrowser = 'Google Chrome';
+        } elseif (stripos($userAgent, 'Safari') !== false && stripos($userAgent, 'Chrome') === false) {
+            $userBrowser = 'Safari';
+        } elseif (stripos($userAgent, 'Firefox') !== false) {
+            $userBrowser = 'Mozilla Firefox';
+        } elseif (stripos($userAgent, 'MSIE') !== false || stripos($userAgent, 'Trident') !== false) {
+            $userBrowser = 'Internet Explorer';
+        } elseif (stripos($userAgent, 'Opera') !== false || stripos($userAgent, 'OPR') !== false) {
+            $userBrowser = 'Opera';
+        } elseif (preg_match('/Konqueror/i', $userAgent)) {
+            $userBrowser = 'Konqueror';
+        } elseif (preg_match('/Valve Steam GameOverlay/i', $userAgent)) {
+            $userBrowser = 'Steam';
+        } elseif (stripos($userAgent, 'Tor') !== false) {
+            $userBrowser = 'Tor Browser';
+        } else {
+            $userBrowser = 'Unknown';
         }
-
-        return "Unknown Browser";
+    
+        return $userBrowser;
     }
+    
 
 
 
