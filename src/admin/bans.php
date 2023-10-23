@@ -21,11 +21,11 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["u"])) {
-      $user = Util::securevar($_POST["u"]);
+   if (isset($_POST["user"])) {
+      $user = Util::securevar($_POST["user"]);
    }
-   if (isset($_POST["r"])) {
-      $reason = Util::securevar($_POST["r"]);
+   if (isset($_POST["reasoon"])) {
+      $reason = Util::securevar($_POST["reason"]);
    }
 
    if (isset($user)) {
@@ -58,7 +58,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                            <?php if (Session::isAdmin()) : ?>
                               <form action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"]));; ?>" method="post">
                                  <label for="u">Select a user:</label><br>
-                                 <select class="form-control form-control-sm" id="u" name="u">
+                                 <select class="form-control form-control-sm" id="user" name="user">
                                     <br>
                                     <?php foreach ($userList as $row) : ?>
                                        <?php Util::display(
@@ -72,7 +72,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                  </select>
                                  <br>
                                  <label>Ban reason:</label><br>
-                                 <input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="r" name="r">
+                                 <input autocapitalize="off" autocomplete="off" type="text" class="form-control form-control-sm" placeholder="Eg: security ban" id="reason" name="reason">
                                  <br>
                                  <button class="btn btn-outline-primary btn-block" id="submit" type="submit" value="submit">Ban/Unban user</button>
                               </form>
