@@ -952,7 +952,6 @@ class Users extends Database
             "/ipod/i" => "iPod",
             "/ipad/i" => "iPad",
             "/linux/i" => "Linux",
-            "/huawei/i" => "Huawei Mobile",
             "/windows nt 10/i" => "Windows 10",
             "/windows nt 6.3/i" => "Windows 8.1",
             "/windows nt 6.2/i" => "Windows 8",
