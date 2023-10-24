@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 03, 2023 at 08:51 AM
--- Server version: 10.5.19-MariaDB-0+deb11u2
+-- Generation Time: Oct 24, 2023 at 06:33 PM
+-- Server version: 10.5.21-MariaDB-0+deb11u1
 -- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -119,15 +119,18 @@ CREATE TABLE `system` (
   `shoutbox` int(11) NOT NULL DEFAULT 1,
   `discordlinking` int(1) NOT NULL DEFAULT 1,
   `discordlogging` int(1) NOT NULL DEFAULT 0,
-  `relinkdiscord` int(1) NOT NULL DEFAULT 1
+  `relinkdiscord` int(1) NOT NULL DEFAULT 1,
+  `cap_service` int(1) NOT NULL DEFAULT 1,
+  `cap_key` varchar(255) DEFAULT NULL,
+  `cap_secret` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `system`
 --
 
-INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1);
+INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`, `cap_service`, `cap_key`, `cap_secret`) VALUES
+(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, 'test', 'test2');
 
 -- --------------------------------------------------------
 
@@ -150,7 +153,8 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(278, 'admin2', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:46');
+(278, 'admin2', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:46'),
+(435, 'admin', 'Flushed all logs', 'Google Chrome', 'Windows 10', 'localhost', 'October 24 th, 19:28');
 
 -- --------------------------------------------------------
 
@@ -192,8 +196,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`, `loginfails`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'e7b81f23-815f-433f-8cb7-bbb5c41596ef', 1, 1, '2023-06-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-10-03 10:46:49', '2023-10-03 10:35:45', 'none', 13, '2023-07-30', 26, 0, NULL, NULL, '854024514781315082', 0, 0),
-(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, '2089-04-28', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 0, NULL, 15, 0, NULL, '', '1005948935690522665', 0, 0);
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-06-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-10-24 19:28:46', '2023-10-24 19:25:12', 'none', 13, '2023-07-30', 26, 0, NULL, NULL, NULL, 0, 0),
+(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, '2089-04-28', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 0, NULL, 15, 0, NULL, NULL, NULL, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -261,7 +265,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
@@ -273,7 +277,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
 
 --
 -- AUTO_INCREMENT for table `users`

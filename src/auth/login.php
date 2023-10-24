@@ -1,24 +1,37 @@
 <?php
 include '../app/require.php';
+require_once "../app/controllers/SystemController.php";
 
 $user = new UserController();
+$system = new SystemController();
 
 Session::init();
 
 if (Session::isLogged()) {
-    Util::redirect('/');
+	Util::redirect('/');
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-    }
-    $error = $user->loginUser($data);
+	if (isset($_POST)) {
+		$data = Util::securevar($_POST);
+	}
+
+	$captcha = $system->vaildateCaptcha($data);
+	if($captcha == True)
+	{
+		$error = $user->loginUser($data);
+	}
+	else
+	{
+		$error = "Captcha failed or not completed";
+	}
+
+	
 }
 if (isset($_COOKIE["login_cookie"])) {
-    $cookie = Util::securevar($_COOKIE["login_cookie"]);
-    if (isset($cookie)) {
-        $error = $user->tokenlogin($cookie);
-    }
+	$cookie = Util::securevar($_COOKIE["login_cookie"]);
+	if (isset($cookie)) {
+		$error = $user->tokenlogin($cookie);
+	}
 }
 Util::head('Login');
 Util::navbar();
@@ -58,7 +71,7 @@ Util::navbar();
 
 		</div>
 
-		<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
+		<div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-xs-12 my-3">
 			<div class="card">
 				<div class="card-body">
 
@@ -81,9 +94,9 @@ Util::navbar();
 						<div class="text-center">
 							<a class="small" href="register.php" style="color: rgb(152,152,152);">Don't have an account?</a>
 						</div>
-
+						<br>
+						<?php Util::display($system->getCaptchaImports()); ?>
 					</form>
-
 				</div>
 			</div>
 		</div>

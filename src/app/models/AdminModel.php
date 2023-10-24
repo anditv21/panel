@@ -810,4 +810,28 @@ class Admin extends Database
             return $result;
         }
     }
+
+    protected function cahngeCaptchaSystem($service)
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('UPDATE `system` SET `cap_service` = ?');
+            $this->statement->execute([$service]);
+        }
+    }
+
+    protected function cahngeCaptchaKey($key)
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('UPDATE `system` SET `cap_key` = ?');
+            $this->statement->execute([$key]);
+        }
+    }
+
+    protected function cahngeCaptchaSecret($secret)
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('UPDATE `system` SET `cap_secret` = ?');
+            $this->statement->execute([$secret]);
+        }
+    }
 }
