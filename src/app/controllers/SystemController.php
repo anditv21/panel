@@ -33,8 +33,7 @@ class SystemController extends System
         $captcha_service = $this->getCapService();
 
         $secret = $this->getSecret();
-        if ($captcha_service == 1)
-        {
+        if ($captcha_service == 1) {
             $hdata = array(
                 'secret' => $secret,
                 'response' =>  Util::securevar($_POST['cf-turnstile-response'])
@@ -48,15 +47,11 @@ class SystemController extends System
             // var_dump($response);
             $responseData = json_decode($response);
             if ($responseData->success) {
-                return True;
+                return true;
+            } else {
+                return false;
             }
-            else
-            {
-                return False;
-            }
-        }
-        elseif($captcha_service == 2)
-        {
+        } elseif($captcha_service == 2) {
             $hdata = array(
                 'secret' => $secret,
                 'response' =>  Util::securevar($_POST['h-captcha-response'])
@@ -70,15 +65,11 @@ class SystemController extends System
             // var_dump($response);
             $responseData = json_decode($response);
             if ($responseData->success) {
-                return True;
+                return true;
+            } else {
+                return false;
             }
-            else
-            {
-                return False;
-            }
-        }
-        elseif($captcha_service == 3)
-        {
+        } elseif($captcha_service == 3) {
             $hdata = array(
                 'secret' => $secret,
                 'response' => Util::securevar($_POST['g-recaptcha-response'])
@@ -92,16 +83,12 @@ class SystemController extends System
             // var_dump($response);
             $responseData = json_decode($response);
             if ($responseData->success) {
-                return True;
+                return true;
+            } else {
+                return false;
             }
-            else
-            {
-                return False;
-            }
-        }
-        elseif($captcha_service == 0)
-        {
-            return True;
+        } elseif($captcha_service == 0) {
+            return true;
         }
     }
 }
