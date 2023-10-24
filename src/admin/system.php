@@ -19,118 +19,115 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["SystemStatus"])) {
-      $Systemstatus = Util::securevar($_POST["SystemStatus"]);
-   }
-   if (isset($_POST["SystemMaint"])) {
-      $SystemMaint = Util::securevar($_POST["SystemMaint"]);
-   }
-   if (isset($_POST["SystemVersion"])) {
-      $SystemVersion = Util::securevar($_POST["SystemVersion"]);
-   }
-   if (isset($_POST["invite"])) {
-      $invite = Util::securevar($_POST["invite"]);
-   }
-   if (isset($_POST['Systemfreeze'])) {
-      $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
-   }
-   if (isset($_POST['flushchat'])) {
-      $flushchat = Util::securevar($_POST['flushchat']);
-   }
-   if (isset($_POST['shoutbox'])) {
-      $shoutbox = Util::securevar($_POST['shoutbox']);
-   }
-   if (isset($_POST['setnews'])) {
-      $news = Util::securevar($_POST['setnews']);
-   }
-   if (isset($_POST['invwave'])) {
-      $invwave = Util::securevar($_POST['invwave']);
-   }
-   if (isset($_POST['discordlinking'])) {
-      $discordlinking = Util::securevar($_POST['discordlinking']);
-   }
-   if (isset($_POST['discordrelinking'])) {
-      $discordrelinking = Util::securevar($_POST['discordrelinking']);
-   }
-   if (isset($_POST['discordlogging'])) {
-      $discordlogging = Util::securevar($_POST['discordlogging']);
-   }
+    if (isset($_POST["SystemStatus"])) {
+        $Systemstatus = Util::securevar($_POST["SystemStatus"]);
+    }
+    if (isset($_POST["SystemMaint"])) {
+        $SystemMaint = Util::securevar($_POST["SystemMaint"]);
+    }
+    if (isset($_POST["SystemVersion"])) {
+        $SystemVersion = Util::securevar($_POST["SystemVersion"]);
+    }
+    if (isset($_POST["invite"])) {
+        $invite = Util::securevar($_POST["invite"]);
+    }
+    if (isset($_POST['Systemfreeze'])) {
+        $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
+    }
+    if (isset($_POST['flushchat'])) {
+        $flushchat = Util::securevar($_POST['flushchat']);
+    }
+    if (isset($_POST['shoutbox'])) {
+        $shoutbox = Util::securevar($_POST['shoutbox']);
+    }
+    if (isset($_POST['setnews'])) {
+        $news = Util::securevar($_POST['setnews']);
+    }
+    if (isset($_POST['invwave'])) {
+        $invwave = Util::securevar($_POST['invwave']);
+    }
+    if (isset($_POST['discordlinking'])) {
+        $discordlinking = Util::securevar($_POST['discordlinking']);
+    }
+    if (isset($_POST['discordrelinking'])) {
+        $discordrelinking = Util::securevar($_POST['discordrelinking']);
+    }
+    if (isset($_POST['discordlogging'])) {
+        $discordlogging = Util::securevar($_POST['discordlogging']);
+    }
 
-   if (isset($_POST['service'])) {
-      $service = Util::securevar($_POST['service']);
-   }
+    if (isset($_POST['service'])) {
+        $service = Util::securevar($_POST['service']);
+    }
 
-   if (isset($_POST['setkey'])) {
-      $key = Util::securevar($_POST['site_key']);
-   }
+    if (isset($_POST['setkey'])) {
+        $key = Util::securevar($_POST['site_key']);
+    }
 
-   if (isset($_POST['setsecret'])) {
-      $secret = Util::securevar($_POST['site_secret']);
-   }
+    if (isset($_POST['setsecret'])) {
+        $secret = Util::securevar($_POST['site_secret']);
+    }
 
 
-   Util::adminCheck();
+    Util::adminCheck();
 
-   if (isset($Systemstatus)) {
-      $admin->setSystemStatus();
-   }
+    if (isset($Systemstatus)) {
+        $admin->setSystemStatus();
+    }
 
-   if (isset($SystemMaint)) {
-      $admin->setSystemMaint();
-   }
+    if (isset($SystemMaint)) {
+        $admin->setSystemMaint();
+    }
 
-   if (isset($SystemVersion)) {
-      $ver = floatval(Util::securevar($_POST["version"]));
-      $admin->setSystemVersion($ver);
-   }
+    if (isset($SystemVersion)) {
+        $ver = floatval(Util::securevar($_POST["version"]));
+        $admin->setSystemVersion($ver);
+    }
 
-   if (isset($invite)) {
-      $admin->setinvite();
-   }
+    if (isset($invite)) {
+        $admin->setinvite();
+    }
 
-   if (isset($news)) {
-      $news = Util::securevar($_POST["msg"]);
-      $admin->setnews($news);
-   }
+    if (isset($news)) {
+        $news = Util::securevar($_POST["msg"]);
+        $admin->setnews($news);
+    }
 
-   if (isset($Systemfreeze)) {
-      $admin->setSystemfreeze();
-   }
+    if (isset($Systemfreeze)) {
+        $admin->setSystemfreeze();
+    }
 
-   if (isset($flushchat)) {
-      $admin->flushchat();
-   }
+    if (isset($flushchat)) {
+        $admin->flushchat();
+    }
 
-   if (isset($shoutbox)) {
-      $admin->setshoutbox();
-   }
+    if (isset($shoutbox)) {
+        $admin->setshoutbox();
+    }
 
-   if (isset($invwave)) {
-      $admin->invwave();
-   }
-   if (isset($discordlinking)) {
-      $admin->setDiscordLink();
-   }
-   if (isset($discordrelinking)) {
-      $admin->setDiscordReLink();
-   }
-   if (isset($discordlogging)) {
-      $admin->setDiscordLogging();
-   }
-   if(isset($service))
-   {
-      $admin->setCaptchaSystem($service);
-   }
-   if(isset($key))
-   {
-      $admin->setCaptchaKey($key);
-   }
-   if(isset($secret))
-   {
-      $admin->setCaptchaSecret($secret);
-   }
+    if (isset($invwave)) {
+        $admin->invwave();
+    }
+    if (isset($discordlinking)) {
+        $admin->setDiscordLink();
+    }
+    if (isset($discordrelinking)) {
+        $admin->setDiscordReLink();
+    }
+    if (isset($discordlogging)) {
+        $admin->setDiscordLogging();
+    }
+    if(isset($service)) {
+        $admin->setCaptchaSystem($service);
+    }
+    if(isset($key)) {
+        $admin->setCaptchaKey($key);
+    }
+    if(isset($secret)) {
+        $admin->setCaptchaSecret($secret);
+    }
 
-   header("location: system.php");
+    header("location: system.php");
 }
 
 
@@ -191,11 +188,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $System->getSystemData()->maintenance == "-"
+                         $System->getSystemData()->maintenance == "-"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: white;">No</span></div>
                      <?php elseif (
-                        $System->getSystemData()->maintenance == "UNDER"
+                         $System->getSystemData()->maintenance == "UNDER"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: yellow;">Yes</span></div>
                      <?php endif; ?>
@@ -215,11 +212,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                        $System->getSystemData()->invites == "0"
+                         $System->getSystemData()->invites == "0"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color:#ff0000;">Disabled</span></div>
                      <?php elseif (
-                        $System->getSystemData()->invites == "1"
+                         $System->getSystemData()->invites == "1"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Enabled</span></div>
                      <?php endif; ?>
@@ -239,9 +236,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->frozen == 1) {
-                           Util::display("Frozen");
+                            Util::display("Frozen");
                         } else {
-                           Util::display("Normal");
+                            Util::display("Normal");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">sub-status</span>
                </div>
@@ -257,9 +254,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->shoutbox == 1) {
-                           Util::display("Enabled");
+                            Util::display("Enabled");
                         } else {
-                           Util::display("Disabled");
+                            Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">shoutbox-status</span>
                   <br>
@@ -276,9 +273,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->discordlinking == 1) {
-                           Util::display("Enabled");
+                            Util::display("Enabled");
                         } else {
-                           Util::display("Disabled");
+                            Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-linking</span>
                   <br>
@@ -295,9 +292,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->relinkdiscord == 1) {
-                           Util::display("Enabled");
+                            Util::display("Enabled");
                         } else {
-                           Util::display("Disabled");
+                            Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-re-linking</span>
                   <br>
@@ -314,9 +311,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->discordlogging == 1) {
-                           Util::display("Enabled");
+                            Util::display("Enabled");
                         } else {
-                           Util::display("Disabled");
+                            Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-logging</span>
                   <br>
@@ -333,16 +330,16 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         $service = $System->getSystemData()->cap_service;
-                        if ($service == 1) {
-                           Util::display("Turnstile");
-                        } elseif ($service == 2) {
-                           Util::display("hCaptcha");
-                        } elseif ($service == 3) {
-                           Util::display("reCaptcha");
-                        } elseif ($service == 0) {
-                           Util::display("None");
-                        }
-                        ?>
+if ($service == 1) {
+    Util::display("Turnstile");
+} elseif ($service == 2) {
+    Util::display("hCaptcha");
+} elseif ($service == 3) {
+    Util::display("reCaptcha");
+} elseif ($service == 0) {
+    Util::display("None");
+}
+?>
                   </h4>
                   <span class="small text-muted text-uppercase">captcha-service</span>
                   <br>

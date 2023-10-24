@@ -40,7 +40,7 @@ class System extends Database
         $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        
+
         $service = $result->cap_service;
         $site_key = $result->cap_key;
 
@@ -53,9 +53,7 @@ class System extends Database
         } elseif ($service == 3) {
             return '<script src="https://www.google.com/recaptcha/api.js" async defer></script>
                 <div class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
-        }
-        elseif ($service == 0)
-        {
+        } elseif ($service == 0) {
             return 0;
         }
     }
@@ -65,7 +63,7 @@ class System extends Database
         $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        
+
         return $result->cap_secret;
     }
 
@@ -74,8 +72,8 @@ class System extends Database
         $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        
+
         return $result->cap_service;
     }
-    
+
 }

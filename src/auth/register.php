@@ -8,22 +8,19 @@ $System = new SystemController();
 Session::init();
 
 if (Session::isLogged()) {
-	Util::redirect('/');
+    Util::redirect('/');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if (isset($_POST)) {
-		$data = Util::securevar($_POST);
-	}
+    if (isset($_POST)) {
+        $data = Util::securevar($_POST);
+    }
 
-	$captcha = $System->vaildateCaptcha($data);
-	if($captcha == True)
-	{
-		$error = $user->registerUser($data);
-	}
-	else
-	{
-		$error = "Captcha failed or not completed";
-	}
+    $captcha = $System->vaildateCaptcha($data);
+    if($captcha == true) {
+        $error = $user->registerUser($data);
+    } else {
+        $error = "Captcha failed or not completed";
+    }
 }
 
 Util::head('Register');
