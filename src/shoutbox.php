@@ -8,21 +8,21 @@ Util::banCheck();
 Util::checktoken();
 
 if (!Session::isLogged()) {
-  Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
 $messages = $user->getmsgs();
 
 foreach ($messages as $message) :
-  $userobject = $user->getuser($message['uid']);
-  $user_role = "";
-  if ($userobject->admin == 1) {
-    $user_role = "admin";
-  } elseif ($userobject->supp == 1) {
-    $user_role = "supp";
-  }
-?>
+    $userobject = $user->getuser($message['uid']);
+    $user_role = "";
+    if ($userobject->admin == 1) {
+        $user_role = "admin";
+    } elseif ($userobject->supp == 1) {
+        $user_role = "supp";
+    }
+    ?>
 
   <div class="d-flex">
     <div>
@@ -32,29 +32,29 @@ foreach ($messages as $message) :
 
       <strong>
         <?php
-        if ($message["uid"] == Session::get("uid")) {
-          Util::display('<span class="own-username username">');
-        } elseif ($user_role == "admin") {
-          Util::display('<span class="admin-username username">');
-        } elseif ($user_role == "supp") {
-          Util::display('<span class="supp-username username">');
-        }
-        ?>
+            if ($message["uid"] == Session::get("uid")) {
+                Util::display('<span class="own-username username">');
+            } elseif ($user_role == "admin") {
+                Util::display('<span class="admin-username username">');
+            } elseif ($user_role == "supp") {
+                Util::display('<span class="supp-username username">');
+            }
+    ?>
         <a href="<?php Util::display(SUB_DIR . "/viewprofile.php?uid=" . $message['uid']); ?>">
           <?php
-          $userbyid = $user->getuserbyuid($message['uid']);
-          $displayname = $user->fetch_display_name($userbyid->username);
-          Util::display(Util::securevar($displayname . " ($message[uid]) @ " . $message["time"])); ?>
+      $userbyid = $user->getuserbyuid($message['uid']);
+    $displayname = $user->fetch_display_name($userbyid->username);
+    Util::display(Util::securevar($displayname . " ($message[uid]) @ " . $message["time"])); ?>
         </a>
         <?php
         if ($user_role != "" || $message["uid"] == Session::get("uid")) {
-          Util::display('</span>');
+            Util::display('</span>');
         }
-        ?>:
+    ?>:
       </strong>
       <?php
       Util::display(Util::securevar($message["message"]));
-      ?>
+    ?>
     </div>
   </div>
 

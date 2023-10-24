@@ -354,7 +354,7 @@ class Admin extends Database
             // Set supp status to opposite of current status
             $supp = $userData->supp ? 0 : 1;
 
-            // Update user's supp status and log changes 
+            // Update user's supp status and log changes
             $this->prepare('UPDATE `users` SET `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$supp, $uid]);
 

@@ -8,13 +8,13 @@ $System = new SystemController();
 Session::init();
 
 if (Session::isLogged()) {
-	Util::redirect('/');
+    Util::redirect('/');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if (isset($_POST)) {
-		$data = Util::securevar($_POST);
-		$error = $user->registerUser($data);
-	}
+    if (isset($_POST)) {
+        $data = Util::securevar($_POST);
+        $error = $user->registerUser($data);
+    }
 }
 
 Util::head('Register');

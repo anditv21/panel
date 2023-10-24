@@ -20,45 +20,45 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST["genSub"])) {
-		$gen1 =  Util::securevar($_POST["genSub"]);
-	}
-	if (isset($_POST["genSub2"])) {
-		$gen2 = Util::securevar($_POST["genSub2"]);
-	}
-	if (isset($_POST["genSub3"])) {
-		$gen3 = Util::securevar($_POST["genSub3"]);
-	}
-	if (isset($_POST["delSub"])) {
-		$delsub = Util::securevar($_POST["delSub"]);
-	}
-	if (isset($_POST["flushSub"])) {
-		$flushsub = Util::securevar($_POST["flushSub"]);
-	}
+    if (isset($_POST["genSub"])) {
+        $gen1 =  Util::securevar($_POST["genSub"]);
+    }
+    if (isset($_POST["genSub2"])) {
+        $gen2 = Util::securevar($_POST["genSub2"]);
+    }
+    if (isset($_POST["genSub3"])) {
+        $gen3 = Util::securevar($_POST["genSub3"]);
+    }
+    if (isset($_POST["delSub"])) {
+        $delsub = Util::securevar($_POST["delSub"]);
+    }
+    if (isset($_POST["flushSub"])) {
+        $flushsub = Util::securevar($_POST["flushSub"]);
+    }
 
 
 
-	if (isset($gen1)) {
-		$admin->getSubCodeGen($username);
-	}
+    if (isset($gen1)) {
+        $admin->getSubCodeGen($username);
+    }
 
-	if (isset($gen2)) {
-		$admin->getSubCodeGen3M($username);
-	}
-	if (isset($gen3)) {
-		$admin->getSubCodeGentrail($username);
-	}
+    if (isset($gen2)) {
+        $admin->getSubCodeGen3M($username);
+    }
+    if (isset($gen3)) {
+        $admin->getSubCodeGentrail($username);
+    }
 
-	if (isset($delsub)) {
-		$admin->delsubcode($delsub);
-		error_log('Sub deleted:' . $delsub);
-	}
+    if (isset($delsub)) {
+        $admin->delsubcode($delsub);
+        error_log('Sub deleted:' . $delsub);
+    }
 
-	if (isset($flushsub)) {
-		$admin->flushsubcodes();
-	}
+    if (isset($flushsub)) {
+        $admin->flushsubcodes();
+    }
 
-	header("location: sub.php");
+    header("location: sub.php");
 }
 ?>
 

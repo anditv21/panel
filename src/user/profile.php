@@ -129,27 +129,27 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                                     <p class="float-right mb-0">
                                         <?php
                                         $time = $user->gettime();
-                                        if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
-                                            $sub = $sub + $time;
-                                            if ($sub < 1000) {
-                                                Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-                                            } elseif ($sub < 1) {
-                                                Util::display('<i class="fa fa-times"></i>');
-                                            } else {
-                                                Util::display("Lifetime");
-                                            }
-                                        } else {
-                                            if ($sub > 8000) {
-                                                Util::display("Lifetime");
-                                            } else {
-                                                if ($sub >= 0) {
-                                                    Util::display("$sub days");
-                                                } else {
-                                                    Util::display('<i class="fa fa-times"></i>');
-                                                }
-                                            }
-                                        }
-                                        ?>
+if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
+    $sub = $sub + $time;
+    if ($sub < 1000) {
+        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+    } elseif ($sub < 1) {
+        Util::display('<i class="fa fa-times"></i>');
+    } else {
+        Util::display("Lifetime");
+    }
+} else {
+    if ($sub > 8000) {
+        Util::display("Lifetime");
+    } else {
+        if ($sub >= 0) {
+            Util::display("$sub days");
+        } else {
+            Util::display('<i class="fa fa-times"></i>');
+        }
+    }
+}
+?>
                                     </p>
                                 </div>
                                 <div class="col-12 clearfix">
@@ -194,10 +194,10 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                                 <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                                     <?php
                                     $cooldown_date = $user->get_name_cooldown();
-                                    // Calculate the number of days left before the user can change the display name again
-                                    $current_date = date('Y-m-d');
-                                    $days_left = max(0, strtotime($cooldown_date) - strtotime($current_date)) / (24 * 60 * 60);
-                                    ?>
+// Calculate the number of days left before the user can change the display name again
+$current_date = date('Y-m-d');
+$days_left = max(0, strtotime($cooldown_date) - strtotime($current_date)) / (24 * 60 * 60);
+?>
 
                                     <?php if ($days_left > 0) : ?>
                                         <div class="form-group">

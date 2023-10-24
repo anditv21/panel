@@ -6,19 +6,19 @@ $user = new UserController();
 Session::init();
 
 if (Session::isLogged()) {
-	Util::redirect('/');
+    Util::redirect('/');
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST)) {
-		$data = Util::securevar($_POST);
-	}
-	$error = $user->loginUser($data);
+    if (isset($_POST)) {
+        $data = Util::securevar($_POST);
+    }
+    $error = $user->loginUser($data);
 }
 if (isset($_COOKIE["login_cookie"])) {
-	$cookie = Util::securevar($_COOKIE["login_cookie"]);
-	if (isset($cookie)) {
-		$error = $user->tokenlogin($cookie);
-	}
+    $cookie = Util::securevar($_COOKIE["login_cookie"]);
+    if (isset($cookie)) {
+        $error = $user->tokenlogin($cookie);
+    }
 }
 Util::head('Login');
 Util::navbar();

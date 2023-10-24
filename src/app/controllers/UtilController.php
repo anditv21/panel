@@ -6,7 +6,6 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 
 class Util extends UtilMod
 {
-
     public function setPageTitle($title)
     {
         if (!empty(Session::get("username"))) {
@@ -26,7 +25,7 @@ class Util extends UtilMod
 
     public static function head($title)
     {
-        $util = new Util;
+        $util = new Util();
         $util->setPageTitle($title);
         include SITE_ROOT . '/includes/head.inc.php';
     }
@@ -61,7 +60,7 @@ class Util extends UtilMod
             foreach ($var as $key => $value) {
                 if (is_string($value)) {
                     $new_array[$key] = htmlspecialchars(stripslashes(trim($value)));
-                } else if (is_array($value)) {
+                } elseif (is_array($value)) {
                     $new_array[$key] = self::securevar($value);
                 } else {
                     $new_array[$key] = $value;
@@ -247,7 +246,7 @@ class Util extends UtilMod
         $days = floor($diff / (60 * 60 * 24));
         if ($days == 0) {
             return 'Today';
-        } else if ($days == 1) {
+        } elseif ($days == 1) {
             return 'Yesterday';
         } else {
             return $days . ' days ago';

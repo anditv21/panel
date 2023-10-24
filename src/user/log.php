@@ -6,7 +6,7 @@ $user = new UserController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $uid = Session::get("uid");
@@ -19,12 +19,12 @@ Util::head("Logs");
 Util::navbar();
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["password"])) {
-      $submittedPassword = Util::securevar($_POST["password"]);
-      $error = $user->flush($submittedPassword);
-   }
-   header('Location: log.php');
-   exit;
+    if (isset($_POST["password"])) {
+        $submittedPassword = Util::securevar($_POST["password"]);
+        $error = $user->flush($submittedPassword);
+    }
+    header('Location: log.php');
+    exit;
 }
 
 ?>
@@ -123,14 +123,14 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   <?php
                   $action = $row->action;
 
-                  Util::display("<td>");
-                  if (strpos($action, 'Generated an inv:') === 0) {
-                     echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
-                  } else {
-                     Util::display($action);
-                  }
-                  Util::display("</td>");
-                  ?>
+                Util::display("<td>");
+                if (strpos($action, 'Generated an inv:') === 0) {
+                    echo 'Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>';
+                } else {
+                    Util::display($action);
+                }
+                Util::display("</td>");
+                ?>
 
                   <td><?php Util::display($row->os); ?></td>
 

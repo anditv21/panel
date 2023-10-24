@@ -85,7 +85,7 @@ class Users extends Database
             $this->prepare("DELETE FROM `login` WHERE `username` = ? AND `remembertoken` != ?");
             $this->statement->execute([$username, $token]);
             $this->loguser($username, "Logged out of other devices");
-            return True;
+            return true;
         } else {
             // Incorrect password, do not flush logs
             return false;
@@ -187,16 +187,16 @@ class Users extends Database
         $row = $this->statement->fetch();
 
         if (!$row) {
-            return false; // If no user is found, return false. 
+            return false; // If no user is found, return false.
         }
 
-        // Verify the hashed password against the provided password. 
+        // Verify the hashed password against the provided password.
         if (password_verify($password, $row->password)) {
             $this->loguser($username, "Logged in");
-            return $row; // Return the row if the passwords match. 
+            return $row; // Return the row if the passwords match.
         }
 
-        return false; // Return false if the passwords don't match. 
+        return false; // Return false if the passwords don't match.
 
     }
 
@@ -226,7 +226,7 @@ class Users extends Database
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os, $token]);
                     $this->loguser($username, "Logged in via cookie");
-                    return $newrow; // Return username if authentication succeeds. 
+                    return $newrow; // Return username if authentication succeeds.
 
                 } else {
                     return false;
@@ -259,7 +259,9 @@ class Users extends Database
 
         if (!$row) {
             return false;
-        } else return true;
+        } else {
+            return true;
+        }
     }
 
     protected function loginfail($username)
@@ -298,7 +300,7 @@ class Users extends Database
             }
         }
 
-        // Prepare an insert statement to add the user to the users table. 
+        // Prepare an insert statement to add the user to the users table.
         $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
 
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
@@ -490,7 +492,7 @@ class Users extends Database
 
             if ($freezingtime) {
 
-                // Use the DateTime class to calculate the difference between the two dates 
+                // Use the DateTime class to calculate the difference between the two dates
                 $date1 = new DateTime(gmdate('Y-m-d', $freezingtime));
                 $date2 = new DateTime(gmdate('Y-m-d', time()));
 
@@ -893,20 +895,21 @@ class Users extends Database
         $this->prepare('SELECT * FROM `users` WHERE `username` =?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
-        if ($userData->dcid != NULL) {
-            return True;
+        if ($userData->dcid != null) {
+            return true;
         } else {
-            return False;
+            return false;
         }
     }
 
 
-    
-    protected function get_user_Browser() {
+
+    protected function get_user_Browser()
+    {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    
+
         $userBrowser = '';
-    
+
         if (stripos($userAgent, 'Edge') !== false) {
             $userBrowser = 'Microsoft Edge';
         } elseif (stripos($userAgent, 'Brave') !== false) {
@@ -930,17 +933,17 @@ class Users extends Database
         } else {
             $userBrowser = 'Unknown';
         }
-    
+
         return $userBrowser;
     }
-    
+
 
     protected function get_user_os()
     {
         global $user_agent;
         $user_agent = $_SERVER["HTTP_USER_AGENT"];
         $os_platform = "Unknown";
-    
+
         $os_array = [
             "/android/i" => "Android",
             "/blackberry/i" => "BlackBerry",
@@ -977,7 +980,7 @@ class Users extends Database
             "/deepin/i" => "Deepin",
             "/manjaro/i" => "Manjaro",
         ];
-    
+
         foreach ($os_array as $regex => $value) {
             if (preg_match($regex, $user_agent)) {
                 $os_platform = $value;
@@ -985,5 +988,5 @@ class Users extends Database
         }
         return $os_platform;
     }
-    
+
 }
