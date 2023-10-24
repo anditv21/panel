@@ -19,92 +19,118 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-    if (isset($_POST["SystemStatus"])) {
-        $Systemstatus = Util::securevar($_POST["SystemStatus"]);
-    }
-    if (isset($_POST["SystemMaint"])) {
-        $SystemMaint = Util::securevar($_POST["SystemMaint"]);
-    }
-    if (isset($_POST["SystemVersion"])) {
-        $SystemVersion = Util::securevar($_POST["SystemVersion"]);
-    }
-    if (isset($_POST["invite"])) {
-        $invite = Util::securevar($_POST["invite"]);
-    }
-    if (isset($_POST['Systemfreeze'])) {
-        $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
-    }
-    if (isset($_POST['flushchat'])) {
-        $flushchat = Util::securevar($_POST['flushchat']);
-    }
-    if (isset($_POST['shoutbox'])) {
-        $shoutbox = Util::securevar($_POST['shoutbox']);
-    }
-    if (isset($_POST['setnews'])) {
-        $news = Util::securevar($_POST['setnews']);
-    }
-    if (isset($_POST['invwave'])) {
-        $invwave = Util::securevar($_POST['invwave']);
-    }
-    if (isset($_POST['discordlinking'])) {
-        $discordlinking = Util::securevar($_POST['discordlinking']);
-    }
-    if (isset($_POST['discordrelinking'])) {
-        $discordrelinking = Util::securevar($_POST['discordrelinking']);
-    }
-    if (isset($_POST['discordlogging'])) {
-        $discordlogging = Util::securevar($_POST['discordlogging']);
-    }
+   if (isset($_POST["SystemStatus"])) {
+      $Systemstatus = Util::securevar($_POST["SystemStatus"]);
+   }
+   if (isset($_POST["SystemMaint"])) {
+      $SystemMaint = Util::securevar($_POST["SystemMaint"]);
+   }
+   if (isset($_POST["SystemVersion"])) {
+      $SystemVersion = Util::securevar($_POST["SystemVersion"]);
+   }
+   if (isset($_POST["invite"])) {
+      $invite = Util::securevar($_POST["invite"]);
+   }
+   if (isset($_POST['Systemfreeze'])) {
+      $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
+   }
+   if (isset($_POST['flushchat'])) {
+      $flushchat = Util::securevar($_POST['flushchat']);
+   }
+   if (isset($_POST['shoutbox'])) {
+      $shoutbox = Util::securevar($_POST['shoutbox']);
+   }
+   if (isset($_POST['setnews'])) {
+      $news = Util::securevar($_POST['setnews']);
+   }
+   if (isset($_POST['invwave'])) {
+      $invwave = Util::securevar($_POST['invwave']);
+   }
+   if (isset($_POST['discordlinking'])) {
+      $discordlinking = Util::securevar($_POST['discordlinking']);
+   }
+   if (isset($_POST['discordrelinking'])) {
+      $discordrelinking = Util::securevar($_POST['discordrelinking']);
+   }
+   if (isset($_POST['discordlogging'])) {
+      $discordlogging = Util::securevar($_POST['discordlogging']);
+   }
 
-    Util::adminCheck();
+   if (isset($_POST['service'])) {
+      $service = Util::securevar($_POST['service']);
+   }
 
-    if (isset($Systemstatus)) {
-        $admin->setSystemStatus();
-    }
+   if (isset($_POST['setkey'])) {
+      $key = Util::securevar($_POST['site_key']);
+   }
 
-    if (isset($SystemMaint)) {
-        $admin->setSystemMaint();
-    }
+   if (isset($_POST['setsecret'])) {
+      $secret = Util::securevar($_POST['site_secret']);
+   }
 
-    if (isset($SystemVersion)) {
-        $ver = floatval(Util::securevar($_POST["version"]));
-        $admin->setSystemVersion($ver);
-    }
 
-    if (isset($invite)) {
-        $admin->setinvite();
-    }
+   Util::adminCheck();
 
-    if (isset($news)) {
-        $news = Util::securevar($_POST["msg"]);
-        $admin->setnews($news);
-    }
+   if (isset($Systemstatus)) {
+      $admin->setSystemStatus();
+   }
 
-    if (isset($Systemfreeze)) {
-        $admin->setSystemfreeze();
-    }
+   if (isset($SystemMaint)) {
+      $admin->setSystemMaint();
+   }
 
-    if (isset($flushchat)) {
-        $admin->flushchat();
-    }
+   if (isset($SystemVersion)) {
+      $ver = floatval(Util::securevar($_POST["version"]));
+      $admin->setSystemVersion($ver);
+   }
 
-    if (isset($shoutbox)) {
-        $admin->setshoutbox();
-    }
+   if (isset($invite)) {
+      $admin->setinvite();
+   }
 
-    if (isset($invwave)) {
-        $admin->invwave();
-    }
-    if (isset($discordlinking)) {
-        $admin->setDiscordLink();
-    }
-    if (isset($discordrelinking)) {
-        $admin->setDiscordReLink();
-    }
-    if (isset($discordlogging)) {
-        $admin->setDiscordLogging();
-    }
-    header("location: system.php");
+   if (isset($news)) {
+      $news = Util::securevar($_POST["msg"]);
+      $admin->setnews($news);
+   }
+
+   if (isset($Systemfreeze)) {
+      $admin->setSystemfreeze();
+   }
+
+   if (isset($flushchat)) {
+      $admin->flushchat();
+   }
+
+   if (isset($shoutbox)) {
+      $admin->setshoutbox();
+   }
+
+   if (isset($invwave)) {
+      $admin->invwave();
+   }
+   if (isset($discordlinking)) {
+      $admin->setDiscordLink();
+   }
+   if (isset($discordrelinking)) {
+      $admin->setDiscordReLink();
+   }
+   if (isset($discordlogging)) {
+      $admin->setDiscordLogging();
+   }
+   if(isset($service))
+   {
+      $admin->setCaptchaSystem($service);
+   }
+   if(isset($key))
+   {
+      $admin->setCaptchaKey($key);
+   }
+   if(isset($secret))
+   {
+      $admin->setCaptchaSecret($secret);
+   }
+
+   header("location: system.php");
 }
 
 
@@ -165,11 +191,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                         $System->getSystemData()->maintenance == "-"
+                        $System->getSystemData()->maintenance == "-"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: white;">No</span></div>
                      <?php elseif (
-                         $System->getSystemData()->maintenance == "UNDER"
+                        $System->getSystemData()->maintenance == "UNDER"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: yellow;">Yes</span></div>
                      <?php endif; ?>
@@ -189,11 +215,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4>
                      <?php if (
-                         $System->getSystemData()->invites == "0"
+                        $System->getSystemData()->invites == "0"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color:#ff0000;">Disabled</span></div>
                      <?php elseif (
-                         $System->getSystemData()->invites == "1"
+                        $System->getSystemData()->invites == "1"
                      ) : ?>
                         <div class="text-dark fw-bold h5 mb-0"><span style="color: #00FF00;">Enabled</span></div>
                      <?php endif; ?>
@@ -213,9 +239,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->frozen == 1) {
-                            Util::display("Frozen");
+                           Util::display("Frozen");
                         } else {
-                            Util::display("Normal");
+                           Util::display("Normal");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">sub-status</span>
                </div>
@@ -231,9 +257,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->shoutbox == 1) {
-                            Util::display("Enabled");
+                           Util::display("Enabled");
                         } else {
-                            Util::display("Disabled");
+                           Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">shoutbox-status</span>
                   <br>
@@ -250,9 +276,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->discordlinking == 1) {
-                            Util::display("Enabled");
+                           Util::display("Enabled");
                         } else {
-                            Util::display("Disabled");
+                           Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-linking</span>
                   <br>
@@ -269,9 +295,9 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->relinkdiscord == 1) {
-                            Util::display("Enabled");
+                           Util::display("Enabled");
                         } else {
-                            Util::display("Disabled");
+                           Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-re-linking</span>
                   <br>
@@ -288,11 +314,37 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <div class="col-6">
                   <h4><?php
                         if ($System->getSystemData()->discordlogging == 1) {
-                            Util::display("Enabled");
+                           Util::display("Enabled");
                         } else {
-                            Util::display("Disabled");
+                           Util::display("Disabled");
                         } ?></h4>
                   <span class="small text-muted text-uppercase">discord-logging</span>
+                  <br>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-xl-4 col-sm-6 col-xs-12 mt-3">
+         <div class="card">
+            <div class=" card-body row">
+               <div class="col-6 text-center">
+                  <h3><i class="fas fa-robot"></i></h3>
+               </div>
+               <div class="col-6">
+                  <h4><?php
+                        $service = $System->getSystemData()->cap_service;
+                        if ($service == 1) {
+                           Util::display("Turnstile");
+                        } elseif ($service == 2) {
+                           Util::display("hCaptcha");
+                        } elseif ($service == 3) {
+                           Util::display("reCaptcha");
+                        } elseif ($service == 0) {
+                           Util::display("None");
+                        }
+                        ?>
+                  </h4>
+                  <span class="small text-muted text-uppercase">captcha-service</span>
                   <br>
                </div>
             </div>
@@ -324,8 +376,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Account Linking status?');">
                   SET Discord Account Linking+-
                </button>
-               <br>   
-               <br>      
+               <br>
+               <br>
                <button name="discordrelinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Re-linking status?');">
                   SET Discord Re-Linking+-
                </button>
@@ -342,7 +394,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <div class="form-row mt-1">
                   <div class="col">
-                     <input type="text" class="form-control form-control-sm" placeholder="Version" name="version" required>
+                     <input autocomplete="off" class="form-control form-control-sm" placeholder="Version" name="version" required>
                   </div>
                   <div class="col">
                      <button class="btn btn-outline-primary btn-sm" name="SystemVersion" type="submit" value="submit">Update</button>
@@ -352,10 +404,48 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
                <div class="form-row mt-1">
                   <div class="col">
-                     <input type="text" class="form-control form-control-sm" placeholder='News e.g Version 3.0 is out!' name="msg" required>
+                     <input autocomplete="off" type="text" class="form-control form-control-sm" placeholder='News e.g Version 3.0 is out!' name="msg" required>
                   </div>
                   <div class="col">
                      <button class="btn btn-outline-primary btn-sm" name="setnews" type="submit" value="submit">Update</button>
+                  </div>
+               </div>
+            </form>
+            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+            <div class="form-row mt-1">
+               <div class="col">
+                  <label>Select a Captcha Service</label><br>
+                  <select class="form-control form-control-sm" style="max-width: fit-content;" id="service" name="service">
+                     <option value="1">Turnstile</option>
+                     <option value="2">hCaptcha</option>
+                     <option value="3">reCaptcha</option>
+                     <option value="0">Disabled</option>
+                  </select>
+               </div>
+            </div>
+            <div class="form-row mt-1">
+               <div class="col">
+                  <button class="btn btn-outline-primary btn-sm" id="submit" type="submit" value="submit">Update</button>
+               </div>
+            </div>
+         </form>
+            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+               <div class="form-row mt-1">
+                  <div class="col">
+                     <input autocomplete="off" type="text" class="form-control form-control-sm" placeholder='Captcha Key ex: 0x...' name="site_key" required>
+                  </div>
+                  <div class="col">
+                     <button class="btn btn-outline-primary btn-sm" name="setkey" type="submit" value="submit">Update</button>
+                  </div>
+               </div>
+            </form>
+            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+            <div class="form-row mt-1">
+                  <div class="col">
+                     <input autocomplete="off" type="password" class="form-control form-control-sm" placeholder='Captcha Secret ex: 0x...' name="site_secret" required>
+                  </div>
+                  <div class="col">
+                     <button class="btn btn-outline-primary btn-sm" name="setsecret" type="submit" value="submit">Update</button>
                   </div>
                </div>
             </form>

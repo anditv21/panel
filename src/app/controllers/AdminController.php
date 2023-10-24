@@ -220,4 +220,19 @@ class AdminController extends Admin
     {
         return $this->IPArray();
     }
+
+    public function setCaptchaSystem($service)
+    {
+        return $this->cahngeCaptchaSystem($service);
+    }
+
+    public function setCaptchaKey($key)
+    {
+        return $this->cahngeCaptchaKey($key);
+    }
+
+    public function setCaptchaSecret($secret)
+    {
+        return $this->cahngeCaptchaSecret($secret);
+    }
 }

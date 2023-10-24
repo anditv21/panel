@@ -8,13 +8,22 @@ $System = new SystemController();
 Session::init();
 
 if (Session::isLogged()) {
-    Util::redirect('/');
+	Util::redirect('/');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-        $error = $user->registerUser($data);
-    }
+	if (isset($_POST)) {
+		$data = Util::securevar($_POST);
+	}
+
+	$captcha = $System->vaildateCaptcha($data);
+	if($captcha == True)
+	{
+		$error = $user->registerUser($data);
+	}
+	else
+	{
+		$error = "Captcha failed or not completed";
+	}
 }
 
 Util::head('Register');
@@ -58,7 +67,7 @@ Util::navbar();
 
 		</div>
 
-		<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
+		<div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-xs-12 my-3">
 			<div class="card">
 				<div class="card-body">
 
@@ -93,6 +102,8 @@ Util::navbar();
 						<div class="text-center">
 							<a class="small" href="login.php" style="color: rgb(152,152,152);">Already have an account?</a>
 						</div>
+						<br>
+						<?php Util::display($System->getCaptchaImports()); ?>
 					</form>
 
 				</div>
