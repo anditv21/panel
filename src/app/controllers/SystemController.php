@@ -12,4 +12,9 @@ class SystemController extends System
     {
         return $this->SystemData();
     }
+
+    public function getCaptcha()
+    {
+        return $this->getCaptchaService();
+    }
 }
