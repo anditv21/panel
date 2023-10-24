@@ -5,3 +5,9 @@ name = "csharp"
 
 [[analyzers]]
 name = "php"
+
+[[transformers]]
+name = "php-cs-fixer"
+
+[[transformers]]
+name = "dotnet-format"
