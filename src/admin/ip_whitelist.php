@@ -17,21 +17,20 @@ $username = Session::get("username");
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
-	if (isset($_POST["ip"])) {
-		$ip = Util::securevar($_POST["ip"]);
-	}
+    if (isset($_POST["ip"])) {
+        $ip = Util::securevar($_POST["ip"]);
+    }
     if (isset($_POST["delIP"])) {
-		$delIP = Util::securevar($_POST["delIP"]);
-	}
+        $delIP = Util::securevar($_POST["delIP"]);
+    }
 
-	if (isset($ip)) {
-		$admin->whitelist_ip($ip);
-	}
-    if (isset($delIP))
-    {
+    if (isset($ip)) {
+        $admin->whitelist_ip($ip);
+    }
+    if (isset($delIP)) {
         $admin->del_ip($delIP);
     }
-	header("location: ip_whitelist.php");
+    header("location: ip_whitelist.php");
 }
 ?>
 

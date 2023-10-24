@@ -1,41 +1,42 @@
 <?php
+
 // This source code is from https://github.com/anditv21/anditv.dev/blob/main/sites/ipinfo/ip_info.php
 
 function getip(): string
-    {
-        $headers = [
-            'HTTP_CLIENT_IP',
-            'HTTP_X_FORWARDED_FOR',
-            'HTTP_X_FORWARDED',
-            'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR',
-            'REMOTE_ADDR',
-            'HTTP_X_REAL_IP'
-        ];
-    
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
-                if ($ip !== false) {
-                    // Check if it's an IPv4 address
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        return $ip; // Return IPv4 address
-                    }
+{
+    $headers = [
+        'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR',
+        'HTTP_X_FORWARDED',
+        'HTTP_X_CLUSTER_CLIENT_IP',
+        'HTTP_FORWARDED_FOR',
+        'REMOTE_ADDR',
+        'HTTP_X_REAL_IP'
+    ];
+
+    foreach ($headers as $header) {
+        if (array_key_exists($header, $_SERVER)) {
+            $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
+            if ($ip !== false) {
+                // Check if it's an IPv4 address
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                    return $ip; // Return IPv4 address
                 }
             }
         }
-    
-        // If IPv4 not found or empty, proceed with IPv6
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
-                if ($ip !== false) {
-                    return $ip; // Return IPv6 address
-                }
-            }
-        }
-    
     }
+
+    // If IPv4 not found or empty, proceed with IPv6
+    foreach ($headers as $header) {
+        if (array_key_exists($header, $_SERVER)) {
+            $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+            if ($ip !== false) {
+                return $ip; // Return IPv6 address
+            }
+        }
+    }
+
+}
 
 function getipinfo($ip)
 {

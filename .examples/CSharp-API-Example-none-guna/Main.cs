@@ -37,7 +37,7 @@ namespace loader
             int subdays = checksub(sub);
             subtext.Text = $"You have {subdays} day/s left.";
 
-            if(subdays < 1)
+            if (subdays < 1)
             {
                 MessageBox.Show("Error: You don`t have a sub", "anditv21`s panel edit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);

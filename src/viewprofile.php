@@ -8,12 +8,12 @@ $System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 $uid = Session::get("uid");
 $username = Session::get("username");
-$admin = Util::adminCheck(False);
-$supp = Util::suppCheck(False);
+$admin = Util::adminCheck(false);
+$supp = Util::suppCheck(false);
 $getuid = Util::securevar($_GET["uid"]);
 $sub = $user->getSubStatus($username);
 $userfrozen = $user->getfrozen();
@@ -27,23 +27,23 @@ Util::navbar();
 
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
-   if (isset($_GET["uid"])) {
-      $uid = Util::securevar($_GET["uid"]);
+    if (isset($_GET["uid"])) {
+        $uid = Util::securevar($_GET["uid"]);
 
-      if (!empty($uid)) {
-         $getuid = Util::securevar($_GET["uid"]);
-         $userbyid = $user->getuserbyuid($getuid);
-         if (!empty($userbyid->username)) {
-            $username = $userbyid->username;
-         } else {
-            echo "<script>alert('Username not found for the given UID');</script>";
+        if (!empty($uid)) {
+            $getuid = Util::securevar($_GET["uid"]);
+            $userbyid = $user->getuserbyuid($getuid);
+            if (!empty($userbyid->username)) {
+                $username = $userbyid->username;
+            } else {
+                echo "<script>alert('Username not found for the given UID');</script>";
+                echo "<script>window.history.back();</script>";
+            }
+        } else {
+            echo "<script>alert('Please provide a valid UID');</script>";
             echo "<script>window.history.back();</script>";
-         }
-      } else {
-         echo "<script>alert('Please provide a valid UID');</script>";
-         echo "<script>window.history.back();</script>";
-      }
-   }
+        }
+    }
 }
 ?>
 
@@ -68,8 +68,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                   <?php else : ?>
                      <?php
                      $ext = pathinfo(Util::getavatar($userbyid->uid), PATHINFO_EXTENSION);
-                     $name = $userbyid->uid . "." . $ext;
-                     ?>
+                      $name = $userbyid->uid . "." . $ext;
+                      ?>
                      <a href="<?php Util::Display(Util::getavatar($userbyid->uid)); ?>" download="<?php Util::Display($name); ?>">
                         <img width="120" height="120" class="rounded-circle img-profile" src="<?php Util::Display(Util::getavatar($userbyid->uid)); ?>" style="border-color: rgb(255,255,255)!important;">
                      </a>
@@ -99,28 +99,28 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                               <i class="fas fa-calendar-alt"></i> Sub:
                               <p class="float-right mb-0">
                                  <?php
-                                 $time = $user->gettime();
-                                 if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
-                                    $sub = $sub + $time;
-                                    if ($sub < 1000) {
-                                       Util::Display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-                                    } elseif ($sub < 1) {
-                                       Util::Display('<i class="fa fa-times"></i>');
+                                  $time = $user->gettime();
+                            if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
+                                $sub = $sub + $time;
+                                if ($sub < 1000) {
+                                    Util::Display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+                                } elseif ($sub < 1) {
+                                    Util::Display('<i class="fa fa-times"></i>');
+                                } else {
+                                    Util::Display("Lifetime");
+                                }
+                            } else {
+                                if ($sub > 8000) {
+                                    Util::Display("Lifetime");
+                                } else {
+                                    if ($sub >= 0) {
+                                        Util::Display("$sub days");
                                     } else {
-                                       Util::Display("Lifetime");
+                                        Util::Display('<i class="fa fa-times"></i>');
                                     }
-                                 } else {
-                                    if ($sub > 8000) {
-                                       Util::Display("Lifetime");
-                                    } else {
-                                       if ($sub >= 0) {
-                                          Util::Display("$sub days");
-                                       } else {
-                                          Util::Display('<i class="fa fa-times"></i>');
-                                       }
-                                    }
-                                 }
-                                 ?>
+                                }
+                            }
+?>
                               </p>
                            </div>
                            <div class="col-12 clearfix">
@@ -146,12 +146,12 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                               <i class="fas fa-calendar-alt"></i> Sub:
                               <p class="float-right mb-0">
                                  <?php
-                                 if ($sub > 0) {
-                                    Util::Display('<i class="fas fa-check-circle" aria-hidden="true"></i>');
-                                 } else {
-                                    Util::Display('<i class="fa fa-times"></i>');
-                                 }
-                                 ?>
+if ($sub > 0) {
+    Util::Display('<i class="fas fa-check-circle" aria-hidden="true"></i>');
+} else {
+    Util::Display('<i class="fa fa-times"></i>');
+}
+                            ?>
                               </p>
                            </div>
                            <div class="col-12 clearfix">

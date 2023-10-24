@@ -8,7 +8,7 @@ $System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -20,12 +20,12 @@ Util::head("Main");
 Util::navbar();
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-   $msg = Util::securevar($_POST['shoutbox-message']);
-   if (Util::muteCheck() == False) {
-      $user->sendmsg($msg);
-   }
-   header('location: index.php');
-   exit;
+    $msg = Util::securevar($_POST['shoutbox-message']);
+    if (Util::muteCheck() == false) {
+        $user->sendmsg($msg);
+    }
+    header('location: index.php');
+    exit;
 }
 ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -41,14 +41,14 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             Welcome back, <a href='<?php Util::display(SUB_DIR . "/user/profile.php"); ?>'><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
             <?php
             $date_obj = new DateTime($user->getlastlogin());
-            $formatted_date = $date_obj->format('F j, Y, g:ia');
-            Util::display("Last login: {$formatted_date} from ");
-            ?>
+$formatted_date = $date_obj->format('F j, Y, g:ia');
+Util::display("Last login: {$formatted_date} from ");
+?>
             <em onclick="copyToClipboard('<?php Util::display($user->getlastip()); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($user->getlastip()); ?></em>
 
             <?php
-            $loginfails = Session::get("loginfails");
-            if ($loginfails > 0) : ?>
+$loginfails = Session::get("loginfails");
+if ($loginfails > 0) : ?>
                <br>
                <em style="color: red" ;>Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
 
@@ -59,14 +59,14 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
       <!--Sub frozen warning -->
       <?php
       $time = $user->gettime();
-      if ($System->getSystemData()->frozen == 1) : ?>
+if ($System->getSystemData()->frozen == 1) : ?>
          <div class="col-12 mt-3 mb-2">
             <div class="alert alert-primary" role="alert">
                <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"); ?></b>
             </div>
          </div>
       <?php endif;
-      ?>
+?>
       <!--News-->
       <div class="col-lg-9 col-md-12">
          <div class="rounded p-3 mb-3">
@@ -87,7 +87,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   <div class="col-lg-9 col-md-8 col-sm-12">
                      <div id="shoutbox"><?php require_once('shoutbox.php'); ?></div>
                      <br>
-                     <?php if (Util::muteCheck() == False) : ?>
+                     <?php if (Util::muteCheck() == false) : ?>
                         <form action="" method="post">
                            <div class="form-group">
                               <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
@@ -126,34 +126,34 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                <div class="col-12 clearfix">
                   <i class="fas fa-info-circle"></i> Status:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $System->getSystemData()->status
-                                                ); ?></p>
+                      $System->getSystemData()->status
+                  ); ?></p>
                </div>
                <!--System version-->
                <div class="col-12 clearfix">
                   <i class="fas fa-code-branch"></i>&nbsp; Version:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $System->getSystemData()->version
-                                                ); ?></p>
+                      $System->getSystemData()->version
+                  ); ?></p>
                </div>
                <div class="col-12 clearfix">
                   <i class="fas fa-user-clock"></i> Sub:
                   <p class="float-right mb-0">
                      <?php if ($System->getSystemData()->frozen != 0) {
-                        $sub = $sub + $time;
-                        if ($sub < 1000) {
-                           Util::display(
-                              "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
-                           );
-                        } elseif ($sub < 1) {
-                           Util::display('<i class="fa fa-times"></i>');
-                        } else {
-                           Util::display("Lifetime");
-                        }
+                         $sub = $sub + $time;
+                         if ($sub < 1000) {
+                             Util::display(
+                                 "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
+                             );
+                         } elseif ($sub < 1) {
+                             Util::display('<i class="fa fa-times"></i>');
+                         } else {
+                             Util::display("Lifetime");
+                         }
                      } elseif ($sub > 0) {
-                        Util::display("Active");
+                         Util::display("Active");
                      } else {
-                        Util::display("None");
+                         Util::display("None");
                      } ?></p>
                </div>
             </div>
@@ -165,15 +165,15 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                <div class="col-12 clearfix">
                   Users:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $user->getUserCount()
-                                                ); ?></p>
+                      $user->getUserCount()
+                  ); ?></p>
                </div>
                <!--Latest User-->
                <div class="col-12 clearfix">
                   Latest User:
                   <p class="float-right mb-0"><?php Util::display(
-                                                   $user->getNewUser()
-                                                ); ?></p>
+                      $user->getNewUser()
+                  ); ?></p>
                </div>
             </div>
             <br>

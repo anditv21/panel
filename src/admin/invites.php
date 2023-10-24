@@ -22,40 +22,40 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST['genInv'])) {
-		$geninv = Util::securevar($_POST['genInv']);
-	}
+    if (isset($_POST['genInv'])) {
+        $geninv = Util::securevar($_POST['genInv']);
+    }
 
-	if (isset($geninv)) {
-		Util::suppCheck();
-		$admin->getInvCodeGen($username);
-	}
+    if (isset($geninv)) {
+        Util::suppCheck();
+        $admin->getInvCodeGen($username);
+    }
 
-	header("location: invites.php");
+    header("location: invites.php");
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST['delInv'])) {
-		$delinv = Util::securevar($_POST['delInv']);
-	}
+    if (isset($_POST['delInv'])) {
+        $delinv = Util::securevar($_POST['delInv']);
+    }
 
-	if (isset($delinv)) {
-		Util::suppCheck();
-		$admin->delInvCode($delinv);
-	}
+    if (isset($delinv)) {
+        Util::suppCheck();
+        $admin->delInvCode($delinv);
+    }
 
-	header("location: invites.php");
+    header("location: invites.php");
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-	if (isset($_POST['flushInvs'])) {
-		$flushinvs = Util::securevar($_POST['flushInvs']);
-	}
+    if (isset($_POST['flushInvs'])) {
+        $flushinvs = Util::securevar($_POST['flushInvs']);
+    }
 
-	if (isset($flushinvs)) {
-		Util::adminCheck();
-		$admin->flushInvCode();
-	}
+    if (isset($flushinvs)) {
+        Util::adminCheck();
+        $admin->flushInvCode();
+    }
 
-	header("location: invites.php");
+    header("location: invites.php");
 }
 ?>
 

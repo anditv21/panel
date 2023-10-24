@@ -87,4 +87,4 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
     }
 }
 
-echo (json_encode($response));
+echo(json_encode($response));

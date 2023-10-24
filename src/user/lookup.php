@@ -49,7 +49,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                 Util::display("</tr>");
             }
         }
-        ?>
+?>
     </tbody>
 </table>
 
