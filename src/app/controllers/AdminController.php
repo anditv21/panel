@@ -238,9 +238,9 @@ class AdminController extends Admin
 
     public function changeEmbedColor($color)
     {
-        
+
         $color = ltrim($color, '#');
         return $this->setEmbedColor($color);
     }
-    
+
 }
