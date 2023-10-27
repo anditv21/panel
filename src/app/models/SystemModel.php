@@ -54,7 +54,7 @@ class System extends Database
             return '<script src="https://www.google.com/recaptcha/api.js" async defer></script>
                 <div class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
         } elseif ($service == 0) {
-            return 0;
+            return "";
         }
     }
 
