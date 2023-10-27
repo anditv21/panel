@@ -33,9 +33,9 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <a href="https://i.ibb.co/8jz5Fwv/image.png"><img src="https://i.ibb.co/8jz5Fwv/image.png" /></a>
 
-<a href="https://i.ibb.co/LJTfrSw/image.png"><img src="https://i.ibb.co/LJTfrSw/image.png" /></a>
+<a href="https://i.ibb.co/1bmV8hH/brave-EVE37-Csow-C53570.png"><img src="https://i.ibb.co/1bmV8hH/brave-EVE37-Csow-C53570.png" /></a>
 
-<a href="https://i.ibb.co/chkvZgT/image.png"><img src="https://i.ibb.co/chkvZgT/image.png" /></a>
+<a href="https://i.ibb.co/yVz8cz7/brave-w-R1-WBf-Rwia78663.png"><img src="https://i.ibb.co/yVz8cz7/brave-w-R1-WBf-Rwia78663.png" /></a>
 <a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
   
 
