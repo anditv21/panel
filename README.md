@@ -59,6 +59,8 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <li>Banned Page (Screenshot: https://bit.ly/3vYaHse)</li>
 
+<li>Auth captcha using Cloudflare Turnstile, hCaptcha, Google`s reCaptcha or disabled (Read the <a href="https://github.com/anditv21/panel/wiki/Setup">wiki</a> for more information)</li>
+
 </ul>
 
 </details>
