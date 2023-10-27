@@ -38,11 +38,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     header("location: profile.php");
 }
 // if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->relinkdiscord == 1) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->getSystemData()->relinkdiscord == 1) {
     header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
     exit();
 }
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemData()->discordlinking == 1 || $System->relinkdiscord == 1 || ($System->relinkdiscord == 0 && !$user->isDiscordLinked())) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) {
     if (isset($_GET['code'])) {
         $code = Util::securevar($_GET['code']);
         $user->discord_link($code);
@@ -87,8 +87,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title text-center">Avatar</h4>
-                    <?php if ($System->getSystemData()->discordlinking == 1 || $System->relinkdiscord == 1 || ($System->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
-                        <form method="POST" enctype="multipart/form-data">
+                    <?php if ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
+                        <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>" enctype="multipart/form-data">
                             <center>
                                 <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Link Discord</button>
                                 <br>
