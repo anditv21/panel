@@ -2,7 +2,6 @@
 
 // Extends to class Database
 // Only Protected methods
-// Only interats with 'users' table
 
 require_once SITE_ROOT . "/app/core/Database.php";
 require_once SITE_ROOT . "/app/controllers/SystemController.php";
@@ -537,7 +536,7 @@ class Users extends Database
                         "title" => $title,
                         "description" => SITE_NAME,
                         "timestamp" => $timestamp,
-                        "color" => hexdec("F03BEA"),
+                        "color" => hexdec($this->getCurrentColor()),
                         "fields" => [
                             [
                                 "name" => "User:",
@@ -902,6 +901,14 @@ class Users extends Database
         }
     }
 
+    protected function getCurrentColor()
+    {
+        $this->prepare('SELECT * FROM `system`');
+        $this->statement->execute();
+        $data = $this->statement->fetch();
+
+        return $data->embed_color;
+    }
 
 
     protected function get_user_Browser()

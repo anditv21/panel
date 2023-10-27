@@ -834,4 +834,12 @@ class Admin extends Database
             $this->statement->execute([$secret]);
         }
     }
+
+    protected function setEmbedColor($color)
+    {
+        if ($this->checkadmin()) {
+            $this->prepare('UPDATE `system` SET `embed_color` = ?');
+            $this->statement->execute([$color]);
+        }
+    }
 }

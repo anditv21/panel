@@ -730,4 +730,9 @@ class UserController extends Users
 
         return false;
     }
+
+    public function getEmbedColor()
+    {
+        return $this->getCurrentColor();
+    }
 }

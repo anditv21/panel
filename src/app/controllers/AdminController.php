@@ -235,4 +235,12 @@ class AdminController extends Admin
     {
         return $this->cahngeCaptchaSecret($secret);
     }
+
+    public function changeEmbedColor($color)
+    {
+        
+        $color = ltrim($color, '#');
+        return $this->setEmbedColor($color);
+    }
+    
 }
