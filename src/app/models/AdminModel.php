@@ -979,7 +979,7 @@ class Admin extends Database
         return $os_platform;
     }
 
-    
+
     public function getip(): string
     {
         $headers = [
