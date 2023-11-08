@@ -42,6 +42,7 @@ class Admin extends Database
         if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `news` = ? ');
             $this->statement->execute([$news]);
+            $this->admin_log(Session::get("username"), "Set the news to: $news");
         }
     }
 
@@ -59,7 +60,7 @@ class Admin extends Database
             $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
 
             $user->loguser($currentUsername, "Password resetted by $currentUsername", false);
-
+            $this->admin_log(Session::get("username"), "Reset the password for $oldUsername");
             return true;
         }
     }
@@ -111,6 +112,7 @@ class Admin extends Database
                     $username = Session::get('username');
                     $user = new UserController();
                     $user->log($username, "Removed $name`s sub", admin_logs);
+                    $this->admin_log(Session::get("username"), "Removed $name`s sub");
                     $user->loguser($name, "$username removed your sub");
                 } else {
                     if ($time === 'LT') {
@@ -139,6 +141,7 @@ class Admin extends Database
                     $username = Session::get('username');
                     $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
                     $user->loguser($name, "$username gifted you a $time day/s sub", false);
+                    $this->admin_log(Session::get("username"), "Gifted a $time day/s sub.  \n to: $name");
                 }
             }
         }
@@ -175,6 +178,7 @@ class Admin extends Database
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
             $user->log($createdBy, "Generated an invitation", admin_logs);
+            $this->admin_log($createdBy, "Generated an invitation");
         }
     }
 
@@ -185,6 +189,7 @@ class Admin extends Database
             $this->statement->execute([$code]);
             $user = new UserController();
             $user->log(Session::get("username"), "Deleted invitation with code $code", admin_logs);
+            $this->admin_log(Session::get("username"), "Deleted invitation with code $code");
         }
     }
 
@@ -195,6 +200,7 @@ class Admin extends Database
             $this->statement->execute([$code]);
             $user = new UserController();
             $user->log(Session::get("username"), "Deleted subscription with code $code", admin_logs);
+            $this->admin_log(Session::get("username"), "Deleted subscription with code $code");
         }
     }
 
@@ -204,7 +210,8 @@ class Admin extends Database
             $this->prepare('DELETE FROM `subscription`');
             $this->statement->execute();
             $user = new UserController();
-            $user->log(Session::get("username"), "Flushed all subscriptions", admin_logs);
+            $user->log(Session::get("username"), "Flushed all subscrirptions", admin_logs);
+            $this->admin_log(Session::get("username"), "Flushed all subscrirptions");
         }
     }
 
@@ -216,6 +223,7 @@ class Admin extends Database
             $this->statement->execute();
             $user = new UserController();
             $user->log(Session::get("username"), "Flushed all invitation codes", admin_logs);
+            $this->admin_log(Session::get("username"), "Flushed all invitation codes");
         }
     }
 
@@ -241,6 +249,7 @@ class Admin extends Database
             $this->statement->execute([$code, $createdBy]);
             $user = new UserController();
             $user->log($createdBy, "Generated an subscription code", admin_logs);
+            $this->admin_log($createdBy, "Generated an subscription code");
         }
     }
 
@@ -259,6 +268,7 @@ class Admin extends Database
             $user = new UserController();
             $user->log($adminUsername, "Reset the hwid of $result->username ($uid)", admin_logs);
             $user->loguser($result->username, "$adminUsername resetted your HWID", false);
+            $this->admin_log($adminUsername, "Reset the hwid of $result->username ($uid)");
         }
     }
 
@@ -291,13 +301,14 @@ class Admin extends Database
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Banned by $username", false);
-
+                $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
                 // Delete shoutbox entries from banned user
                 $this->prepare('DELETE FROM `shoutbox` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
             } else {
-                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);
+                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Unbanned by $username", false);
+                $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
             }
         }
     }
@@ -330,9 +341,11 @@ class Admin extends Database
             if ($admin) {
                 $user->log($username, "Added Admin perms to {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Set to admin by {$username}", false);
+                $this->admin_log($username, "Added Admin perms to {$userData->username} ($uid)");
             } else {
                 $user->log($username, "Removed Admin perms from {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Admin removed by {$username}", false);
+                $this->admin_log($username, "Removed Admin perms from {$userData->username} ($uid)");
             }
         }
     }
@@ -364,9 +377,11 @@ class Admin extends Database
             if ($supp) {
                 $user->log($username, "Added Supp perms to $userData->username ($uid)", admin_logs);
                 $user->loguser($userData->username, "Set to Supp by $username", false);
+                $this->admin_log($username, "Added Supp perms to $userData->username ($uid)");
             } else {
                 $user->log($username, "Removed Supp perms from $userData->username ($uid)", admin_logs);
                 $user->loguser($userData->username, "Supp removed by $username", false);
+                $this->admin_log($username, "Removed Supp perms from $userData->username ($uid)");
             }
         }
     }
@@ -400,9 +415,11 @@ class Admin extends Database
             if ($muted) {
                 $user->log($username, "Muted {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Muted by {$username}", false);
+                $this->admin_log($username, "Muted {$userData->username} ($uid)");
             } else {
                 $user->log($username, "Unmuted {$userData->username} ($uid)", admin_logs);
                 $user->logUser($userData->username, "Mute removed by {$username}", false);
+                $this->admin_log($username, "Unmuted {$userData->username} ($uid)");
             }
         }
     }
@@ -428,8 +445,10 @@ class Admin extends Database
             $user = new UserController();
             if ($status) {
                 $user->log($username, "Set the System status to offline", system_logs);
+                $this->admin_log($username, "Set the System status to offline");
             } else {
                 $user->log($username, "Set the System status to online", system_logs);
+                $this->admin_log($username, "Set the System status to online");
             }
         }
     }
@@ -454,8 +473,10 @@ class Admin extends Database
             $user = new UserController();
             if ($status) {
                 $user->log($username, "Turned discord re-link on", system_logs);
+                $this->admin_log($username, "Turned discord re-link on");
             } else {
                 $user->log($username, "Turned discord re-link off", system_logs);
+                $this->admin_log($username, "Turned discord re-link off");
             }
         }
     }
@@ -480,8 +501,10 @@ class Admin extends Database
             $user = new UserController();
             if ($maintenance) {
                 $user->log($username, "Set the System status to under maintenance", system_logs);
+                $this->admin_log($username, "Set the System status to under maintenance");
             } else {
                 $user->log($username, "Set the System status to no maintenance", system_logs);
+                $this->admin_log($username, "Set the System status to no maintenance");
             }
         }
     }
@@ -505,8 +528,10 @@ class Admin extends Database
             $user = new UserController();
             if ($discordlinking) {
                 $user->log($username, "Enabled discord linking", system_logs);
+                $this->admin_log($username, "Enabled discord linking");
             } else {
                 $user->log($username, "Disabled discord linking", system_logs);
+                $this->admin_log($username, "Disabled discord linking");
             }
         }
     }
@@ -526,6 +551,7 @@ class Admin extends Database
             if ($status->discordlogging) {
                 // Send the log
                 $user->log($username, "Disabled discord logging", system_logs);
+                $this->admin_log($username, "Disabled discord logging");
 
                 // Disable discordlogging in the database
                 $this->prepare('UPDATE `system` SET `discordlogging` = 0');
@@ -537,6 +563,7 @@ class Admin extends Database
 
                 // Send the log
                 $user->log($username, "Enabled discord logging", system_logs);
+                $this->admin_log($username, "Enabled discord logging");
             }
         }
     }
@@ -552,6 +579,7 @@ class Admin extends Database
             $username = Session::get('username');
             $user = new UserController();
             $user->log($username, "Updated the System version to $ver", system_logs);
+            $this->admin_log($username, "Updated the System version to $ver");
         }
     }
 
@@ -596,6 +624,8 @@ class Admin extends Database
                 $user = new UserController();
                 $user->log($username, "Freezed all subs", system_logs);
                 $user->loguser($row->username, "Sub freezed by $username");
+                $this->admin_log($username, "Freezed all subs");
+
             } else {
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
@@ -653,6 +683,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Unfreezed all subs", system_logs);
+                $this->admin_log($username, "Unfreezed all subs");
             }
         }
     }
@@ -672,6 +703,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Activated the Invite-System", system_logs);
+                $this->admin_log($username, "Activated the Invite-System");
             } else {
                 $this->prepare('UPDATE `system` SET `invites` = 0');
                 $this->statement->execute();
@@ -679,6 +711,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Deactivated the Invite-System", system_logs);
+                $this->admin_log($username, "Deactivated the Invite-System");
             }
         }
     }
@@ -693,6 +726,7 @@ class Admin extends Database
             $time = date("M j, g:i a");
             $this->prepare("INSERT INTO `shoutbox` (`uid`, `message`, `time`) VALUES (?,?,?)");
             $this->statement->execute([1, $msg, $time]);
+            $this->admin_log(Session::get("username"), "Flushed the shoutbox");
         }
     }
 
@@ -710,6 +744,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Activated the ShoutBox", system_logs);
+                $this->admin_log($username, "Activated the ShoutBox");
             } else {
                 $this->prepare('UPDATE `system` SET `shoutbox` = 0');
                 $this->statement->execute();
@@ -717,6 +752,7 @@ class Admin extends Database
                 $username = Session::get('username');
                 $user = new UserController();
                 $user->log($username, "Deactivated the ShoutBox", system_logs);
+                $this->admin_log($username, "Deactivated the ShoutBox");
             }
         }
     }
@@ -729,6 +765,7 @@ class Admin extends Database
             $adminusername = Session::get('username');
             $user = new UserController();
             $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
+            $this->admin_log($adminusername, "Giftet $invites\s to $username");
         }
     }
 
@@ -747,6 +784,7 @@ class Admin extends Database
                 $this->statement->execute([$invites, $username]);
             }
             $user->log($adminusername, "Gifted 5 invites to everyone", system_logs);
+            $this->admin_log($adminusername, "Gifted 5 invites to everyone");
         }
     }
 
@@ -816,6 +854,7 @@ class Admin extends Database
         if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `cap_service` = ?');
             $this->statement->execute([$service]);
+            $this->admin_log(Session::get("username"), "Changed captcha service to $service");
         }
     }
 
@@ -824,6 +863,7 @@ class Admin extends Database
         if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `cap_key` = ?');
             $this->statement->execute([$key]);
+            $this->admin_log(Session::get("username"), "Changed captcha key");
         }
     }
 
@@ -832,6 +872,7 @@ class Admin extends Database
         if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `cap_secret` = ?');
             $this->statement->execute([$secret]);
+            $this->admin_log(Session::get("username"), "Changed captcha secret");
         }
     }
 
@@ -840,6 +881,178 @@ class Admin extends Database
         if ($this->checkadmin()) {
             $this->prepare('UPDATE `system` SET `embed_color` = ?');
             $this->statement->execute([$color]);
+            $this->admin_log(Session::get("username"), "Changed embed color");
         }
+    }
+
+    public function admin_log($username, $action)
+    {
+        $ip = $this->getip();
+        $Time = date("F d S, G:i");
+
+        $this->prepare('INSERT INTO `adminlogs` (`username`, `action`, `ip`, `time`) VALUES (?, ?, ?, ?)');
+        $this->statement->execute([$username, $action, $ip, $Time]);
+    }
+
+    protected function get_user_Browser()
+    {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        $userBrowser = '';
+
+        if (stripos($userAgent, 'Edge') !== false) {
+            $userBrowser = 'Microsoft Edge';
+        } elseif (stripos($userAgent, 'Brave') !== false) {
+            $userBrowser = 'Brave';
+        } elseif (stripos($userAgent, 'Chrome') !== false) {
+            $userBrowser = 'Google Chrome';
+        } elseif (stripos($userAgent, 'Safari') !== false && stripos($userAgent, 'Chrome') === false) {
+            $userBrowser = 'Safari';
+        } elseif (stripos($userAgent, 'Firefox') !== false) {
+            $userBrowser = 'Mozilla Firefox';
+        } elseif (stripos($userAgent, 'MSIE') !== false || stripos($userAgent, 'Trident') !== false) {
+            $userBrowser = 'Internet Explorer';
+        } elseif (stripos($userAgent, 'Opera') !== false || stripos($userAgent, 'OPR') !== false) {
+            $userBrowser = 'Opera';
+        } elseif (preg_match('/Konqueror/i', $userAgent)) {
+            $userBrowser = 'Konqueror';
+        } elseif (preg_match('/Valve Steam GameOverlay/i', $userAgent)) {
+            $userBrowser = 'Steam';
+        } elseif (stripos($userAgent, 'Tor') !== false) {
+            $userBrowser = 'Tor Browser';
+        } else {
+            $userBrowser = 'Unknown';
+        }
+
+        return $userBrowser;
+    }
+
+
+    protected function get_user_os()
+    {
+        global $user_agent;
+        $user_agent = $_SERVER["HTTP_USER_AGENT"];
+        $os_platform = "Unknown";
+
+        $os_array = [
+            "/android/i" => "Android",
+            "/blackberry/i" => "BlackBerry",
+            "/chrome/i" => "Chrome OS",
+            "/ubuntu/i" => "Ubuntu",
+            "/macintosh|mac os x/i" => "Mac OS X",
+            "/mac_powerpc/i" => "Mac OS 9",
+            "/iphone/i" => "iPhone",
+            "/ipod/i" => "iPod",
+            "/ipad/i" => "iPad",
+            "/linux/i" => "Linux",
+            "/windows nt 10/i" => "Windows 10",
+            "/windows nt 6.3/i" => "Windows 8.1",
+            "/windows nt 6.2/i" => "Windows 8",
+            "/windows nt 6.1/i" => "Windows 7",
+            "/windows nt 6.0/i" => "Windows Vista",
+            "/windows nt 5.2/i" => "Windows Server 2003/XP x64",
+            "/windows nt 5.1/i" => "Windows XP",
+            "/windows nt 5.0/i" => "Windows 2000",
+            "/windows me/i" => "Windows ME",
+            "/win98/i" => "Windows 98",
+            "/win95/i" => "Windows 95",
+            "/win16/i" => "Windows 3.11",
+            "/centos/i" => "CentOS",
+            "/debian/i" => "Debian",
+            "/fedora/i" => "Fedora",
+            "/redhat/i" => "Red Hat",
+            "/suse/i" => "openSUSE",
+            "/mint/i" => "Linux Mint",
+            "/kali/i" => "Kali Linux",
+            "/elementary/i" => "Elementary OS",
+            "/zorin/i" => "Zorin OS",
+            "/huawei/i" => "Huawei",
+            "/deepin/i" => "Deepin",
+            "/manjaro/i" => "Manjaro",
+        ];
+
+        foreach ($os_array as $regex => $value) {
+            if (preg_match($regex, $user_agent)) {
+                $os_platform = $value;
+            }
+        }
+        return $os_platform;
+    }
+
+    
+    public function getip(): string
+    {
+        $headers = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'REMOTE_ADDR',
+            'HTTP_X_REAL_IP'
+        ];
+
+        // Initialize the server IP variable
+        $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
+
+        // Fetch whitelisted IPs
+        $whitelistedIPs = $this->getWhitelistedIPs();
+
+        foreach ($headers as $header) {
+            if (array_key_exists($header, $_SERVER)) {
+                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
+                if ($ip !== false) {
+                    if (in_array($ip, $whitelistedIPs)) {
+                        return 'localhost';
+                    }
+
+                    // Check if it's an IPv4 address
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                        if ($ip === $serverIp) {
+                            return 'localhost';
+                        } else {
+                            return $ip; // Return IPv4 address
+                        }
+                    }
+                }
+            }
+        }
+
+        // If IPv4 not found or empty, proceed with IPv6
+        foreach ($headers as $header) {
+            if (array_key_exists($header, $_SERVER)) {
+                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+                if ($ip !== false) {
+                    if (in_array($ip, $whitelistedIPs)) {
+                        return 'localhost';
+                    }
+
+                    if ($ip === $serverIp) {
+                        return 'localhost';
+                    } else {
+                        return $ip; // Return IPv6 address
+                    }
+                }
+            }
+        }
+
+        return '';
+    }
+
+    public function getWhitelistedIPs(): array
+    {
+        $this->prepare('SELECT `ip` FROM `ip_whitelist`');
+        $this->statement->execute();
+        $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
+        return $result;
+    }
+
+    protected function logarray()
+    {
+        $this->prepare("SELECT * FROM `adminlogs` ORDER BY `id` DESC");
+        $this->statement->execute([]);
+
+        $result = $this->statement->fetchAll();
+        return $result;
     }
 }

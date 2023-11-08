@@ -243,4 +243,10 @@ class AdminController extends Admin
         return $this->setEmbedColor($color);
     }
 
+    public function getlogarray()
+    {
+        $result = $this->logarray();
+        return $result;
+    }
+
 }

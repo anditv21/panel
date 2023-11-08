@@ -14,6 +14,7 @@
 			<a href='userinvites.php' class="btn btn-outline-primary btn-sm">User Invites</a>
 			<a href='ip_whitelist.php' class="btn btn-outline-primary btn-sm">IP-Whitelist</a>
 			<a href='system.php' class="btn btn-outline-primary btn-sm">System</a>
+			<a href='log.php' class="btn btn-outline-primary btn-sm">Admin-Logs</a>
 		</div>
 	</div>
 <?php endif; ?>
