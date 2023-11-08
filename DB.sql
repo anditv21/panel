@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 24, 2023 at 06:33 PM
+-- Generation Time: Nov 08, 2023 at 08:23 AM
 -- Server version: 10.5.21-MariaDB-0+deb11u1
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `panel-edit`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `adminlogs`
+--
+
+CREATE TABLE `adminlogs` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `time` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `adminlogs`
+--
+
+INSERT INTO `adminlogs` (`id`, `username`, `action`, `ip`, `time`) VALUES
+(1, 'admin', 'Set the System status to offline', 'localhost', 'November 08 th, 9:17');
 
 -- --------------------------------------------------------
 
@@ -69,6 +90,13 @@ CREATE TABLE `login` (
   `time` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`) VALUES
+(60, 'admin', '2c518139ab60d878430c0f35c85cc493', 'localhost', 'Google Chrome', 'Windows 10', 'November 08 th, 9:17', 'none');
 
 -- --------------------------------------------------------
 
@@ -122,15 +150,16 @@ CREATE TABLE `system` (
   `relinkdiscord` int(1) NOT NULL DEFAULT 1,
   `cap_service` int(1) NOT NULL DEFAULT 1,
   `cap_key` varchar(255) DEFAULT NULL,
-  `cap_secret` varchar(255) DEFAULT NULL
+  `cap_secret` varchar(255) DEFAULT NULL,
+  `embed_color` varchar(7) NOT NULL DEFAULT 'F03BEA'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `system`
 --
 
-INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`, `cap_service`, `cap_key`, `cap_secret`) VALUES
-(0, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, 'test', 'test2');
+INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`, `cap_service`, `cap_key`, `cap_secret`, `embed_color`) VALUES
+(1, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, 'test', 'test2', 'ff00dd');
 
 -- --------------------------------------------------------
 
@@ -154,7 +183,9 @@ CREATE TABLE `userlogs` (
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
 (278, 'admin2', 'Flushed all logs', 'Chrome', 'Windows 10', 'localhost', 'August 12 th, 22:46'),
-(435, 'admin', 'Flushed all logs', 'Google Chrome', 'Windows 10', 'localhost', 'October 24 th, 19:28');
+(473, 'admin', 'Flushed all logs', 'Google Chrome', 'Windows 10', 'localhost', 'November 07 th, 8:29'),
+(474, 'admin', 'Logged in via cookie', 'Google Chrome', 'Windows 10', 'localhost', 'November 08 th, 9:17'),
+(475, 'admin', 'Login', 'Google Chrome', 'Windows 10', 'localhost', 'November 08 th, 9:17');
 
 -- --------------------------------------------------------
 
@@ -196,12 +227,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`, `loginfails`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-06-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-10-24 19:28:46', '2023-10-24 19:25:12', 'none', 13, '2023-07-30', 26, 0, NULL, NULL, NULL, 0, 0),
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-06-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-11-08 09:17:08', '2023-11-07 08:23:04', 'none', 13, '2023-07-30', 26, 0, NULL, NULL, NULL, 0, 0),
 (2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, '2089-04-28', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 0, NULL, 15, 0, NULL, NULL, NULL, 0, 0);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `adminlogs`
+--
+ALTER TABLE `adminlogs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `invites`
@@ -262,10 +299,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `adminlogs`
+--
+ALTER TABLE `adminlogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
@@ -277,7 +320,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
 
 --
 -- AUTO_INCREMENT for table `users`
