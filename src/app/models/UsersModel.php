@@ -201,32 +201,43 @@ class Users extends Database
 
     protected function logintoken($token)
     {
+        // Check if the provided token exists in the 'login' table
         $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
         $this->statement->execute([$token]);
-
+    
         if ($this->statement->rowCount() > 0) {
             $row = $this->statement->fetch();
             $username = $row->username;
-
+    
             if ($row) {
+                // Set a cookie named 'login_cookie' with the provided token, valid for 1 year
                 setcookie("login_cookie", $token, time() + 31556926, '/');
-
+    
+                // Fetch user information from the 'users' table using the username
                 $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
                 $this->statement->execute([$username]);
                 $newrow = $this->statement->fetch();
-
+    
+                // If user information is found
                 if ($newrow) {
+                    // Get user's Info
                     $ip = $this->getip();
                     $browser = $this->get_user_Browser();
                     $os = $this->get_user_os();
-
+    
+                    // Get the current date and time in the 'Europe/Vienna' timezone
                     date_default_timezone_set("Europe/Vienna");
                     $time = date("F d S, G:i");
+    
+                    // Update the 'login' table with the new timestamp, IP, browser, and OS
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os, $token]);
+    
+                    // Log the user's login via cookie
                     $this->loguser($username, "Logged in via cookie");
-                    return $newrow; // Return username if authentication succeeds.
-
+    
+                    // Return user information if authentication succeeds
+                    return $newrow;
                 } else {
                     return false;
                 }
@@ -237,6 +248,7 @@ class Users extends Database
             return false;
         }
     }
+    
 
     protected function addrememberToken($token, $username)
     {
