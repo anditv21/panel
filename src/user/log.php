@@ -109,6 +109,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
             <tr>
                <th scope="col" class="text-center">Time</th>
                <th scope="col" class="text-center">Action</th>
+               <th scope="col" class="text-center">Browser</th>
                <th scope="col" class="text-center">OS</th>
                <th scope="col">IP</th>
             </tr>
@@ -131,8 +132,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                 Util::display("</td>");
                 ?>
 
+                  <td><?php Util::display($row->browser); ?></td>
                   <td><?php Util::display($row->os); ?></td>
-
                   <td><?php Util::display("<br><p onclick=\"lookup('" . $user->getlastip() . "')\" title='Click to lookup' data-toggle='tooltip' data-placement='top' class='spoiler'>" . $row->ip . "</p>"); ?>
                </tr>
             <?php endforeach; ?>
