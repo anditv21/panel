@@ -6,6 +6,8 @@
 
 <h3 align="center">Overview</h3>
 
+<h3 align="center"><a href="https://github.com/anditv21/panel/releases/tag/v1.5.5">README</a></h3>
+
 <p align="center">
 
 <img  src="https://i.imgur.com/VB2ial8.png" />
