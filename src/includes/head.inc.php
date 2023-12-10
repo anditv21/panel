@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="<?= SUB_DIR ?>/bootstrap/css/bootstrap.min.css" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= SUB_DIR ?>/assets/css/custom.css" />
+
+    <!-- Main JS functions -->
+    <script src="<?= SUB_DIR ?>/assets/js/main.js"></script>
 </head>
 
 </html>

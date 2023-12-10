@@ -1,3 +1,5 @@
+getBrowser();
+
 let capsLockOn = false; // Tracks the state of the Caps Lock key
 
 document.addEventListener('keydown', function(event) {
@@ -78,3 +80,49 @@ function bulkDownload(tableElement) {
   anchor.download = "codes.txt";
   anchor.click();
 }
+
+function getBrowser() {
+  // Detect browser
+  let browserName = "Unknown";
+
+  // Brave
+  if (!!navigator.brave && !!navigator.brave.isBrave()) {
+      browserName = "Brave";
+  }
+  // Opera
+  else if (
+      /Opera|OPR\//i.test(navigator.userAgent) ||
+      navigator.vendor.includes("Opera")
+  ) {
+      browserName = "Opera";
+  }
+  // Safari
+  else if (!!navigator.vendor && navigator.vendor.includes("Apple")) {
+      browserName = "Safari";
+  }
+  // Safari
+  else if (!!window.safari) {
+      browserName = "Safari";
+  }
+  // Firefox
+  else if (/Firefox/i.test(navigator.userAgent)) {
+      browserName = "Firefox";
+  }
+  // Microsoft Edge
+  else if (/Edg/i.test(navigator.userAgent)) {
+      browserName = "Microsoft Edge";
+  }
+  // Chrome
+  else if (!!window.chrome) {
+      browserName = "Chrome";
+  }
+
+  // Set the cookie
+  const expirationDate = new Date();
+  expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+  // Set the cookie with a one-year expiration date
+  document.cookie = `browser=${browserName}; expires=${expirationDate.toUTCString()}; path=/`;
+}
+
+
