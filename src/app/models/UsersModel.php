@@ -596,8 +596,6 @@ class Users extends Database
             // Update the last login time and current login time in one query
             $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin`, `currentLogin` = ? WHERE `username` = ?");
             $this->statement->execute([$loginTime, $username]);
-
-            $this->loguser($username, "Login");
         } catch (PDOException $e) {
 
             error_log("Error updating login time: " . $e->getMessage());
@@ -956,6 +954,7 @@ class Users extends Database
         return $userBrowser;
     }
 
+    
 
     protected function get_user_os()
     {
