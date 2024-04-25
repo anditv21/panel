@@ -1,5 +1,5 @@
 
-#### note: Due to low usage of this theme, it will only get important security updates.
+### note: this theme is outdated and there may be security vulnerabilities..
 
 #### modern theme
 👤 **sxck1337**
