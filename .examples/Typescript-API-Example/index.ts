@@ -1,4 +1,4 @@
-/* API Example made by https://github.com/Ghostboy00/ */
+/* API Example made by https://github.com/ghostboy-dev/ */
 
 import readline from "readline";
 import { execSync } from "child_process";
