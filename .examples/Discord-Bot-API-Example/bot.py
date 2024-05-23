@@ -33,7 +33,7 @@ class Bot(commands.Bot):
                     try:
                         await bot.load_extension(f'cogs.{filepath}.{filename}')
                     except Exception as error:
-                        print(f'Failed to load cogs.{filepath}.{filename}: {error}')                      
+                        print(f'Failed to load cogs.{filepath}.{filename}: {error}')
         print("[BOT] Connecting to discord...")
         await self.tree.sync()
 

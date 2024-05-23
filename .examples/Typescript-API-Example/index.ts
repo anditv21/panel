@@ -44,14 +44,14 @@ function getHardwareId(): string | null {
                 encoding: 'utf8'
             }
         );
-  
+
         // Parse output to extract GUID value
         const regex = /REG_SZ\s+(.*)\s*/;
         const match = output.match(regex);
         if (!match || !match[1]) {
             throw new Error(`Not found: ${command}`);
         }
-    
+
         return match[1];
     } catch (e) {
         console.error(`Error getting machine GUID: ${e}`);
@@ -84,7 +84,7 @@ async function main() {
                 process.exit();
             }, 500);
         };
-      
+
         // version check
         if (userInfo.Systemversion !== VERSION) {
             console.log("You are using a outdated version.");
@@ -93,7 +93,7 @@ async function main() {
                 process.exit();
             }, 500);
         };
-      
+
         // print System status
         if (userInfo.Systemstatus === 0) {
             console.log("Status: Online");
@@ -102,7 +102,7 @@ async function main() {
         } else if (userInfo.Systemmaintenance === 1) {
             console.log("Status: Maintenance");
         }
-      
+
         // ban check
         if (userInfo.banned === 1) {
             console.log("You have been banned.");
@@ -112,9 +112,9 @@ async function main() {
         } else {
             console.log("You are not banned.");
         };
-    
+
         console.log(`You have ${checksub(userInfo.sub)} day/s sub left.`);
-      
+
         // hwid check
         if (getHardwareId() === userInfo.hwid || userInfo.hwid === null || userInfo.hwid === "") {
             console.log("HWID does match.");
@@ -138,7 +138,7 @@ async function input(question: string): Promise<string> {
         input: process.stdin,
         output: process.stdout,
     });
-    
+
     return new Promise((resolve) => {
         readLineInterface.question(question, (answer: string) => {
             readLineInterface.close();

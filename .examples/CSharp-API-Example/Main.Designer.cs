@@ -45,9 +45,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // welcome
-            // 
+            //
             this.welcome.AutoSize = true;
             this.welcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcome.ForeColor = System.Drawing.SystemColors.Window;
@@ -57,9 +57,9 @@
             this.welcome.Size = new System.Drawing.Size(75, 20);
             this.welcome.TabIndex = 10;
             this.welcome.Text = "welcome";
-            // 
+            //
             // statustext
-            // 
+            //
             this.statustext.AutoSize = true;
             this.statustext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statustext.ForeColor = System.Drawing.SystemColors.Window;
@@ -69,9 +69,9 @@
             this.statustext.Size = new System.Drawing.Size(55, 20);
             this.statustext.TabIndex = 11;
             this.statustext.Text = "status";
-            // 
+            //
             // subtext
-            // 
+            //
             this.subtext.AutoSize = true;
             this.subtext.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.subtext.ForeColor = System.Drawing.SystemColors.Window;
@@ -81,9 +81,9 @@
             this.subtext.Size = new System.Drawing.Size(36, 20);
             this.subtext.TabIndex = 14;
             this.subtext.Text = "sub";
-            // 
+            //
             // Inviter
-            // 
+            //
             this.Inviter.AutoSize = true;
             this.Inviter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Inviter.ForeColor = System.Drawing.SystemColors.Window;
@@ -93,9 +93,9 @@
             this.Inviter.Size = new System.Drawing.Size(54, 20);
             this.Inviter.TabIndex = 15;
             this.Inviter.Text = "Inviter";
-            // 
+            //
             // status
-            // 
+            //
             this.status.AutoSize = true;
             this.status.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.status.ForeColor = System.Drawing.SystemColors.Window;
@@ -105,17 +105,17 @@
             this.status.Size = new System.Drawing.Size(62, 20);
             this.status.TabIndex = 16;
             this.status.Text = "Status:";
-            // 
+            //
             // avatar
-            // 
+            //
             this.avatar.Location = new System.Drawing.Point(111, 70);
             this.avatar.Name = "avatar";
             this.avatar.Size = new System.Drawing.Size(126, 113);
             this.avatar.TabIndex = 9;
             this.avatar.TabStop = false;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Controls.Add(this.pictureBox2);
@@ -125,9 +125,9 @@
             this.panel1.Size = new System.Drawing.Size(355, 47);
             this.panel1.TabIndex = 154;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
+            //
             // pictureBox3
-            // 
+            //
             this.pictureBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.pictureBox3.Image = global::loader.Properties.Resources.x;
             this.pictureBox3.Location = new System.Drawing.Point(285, 1);
@@ -137,9 +137,9 @@
             this.pictureBox3.TabIndex = 5;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click_1);
-            // 
+            //
             // pictureBox2
-            // 
+            //
             this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.pictureBox2.Image = global::loader.Properties.Resources.logo;
             this.pictureBox2.Location = new System.Drawing.Point(155, 6);
@@ -148,9 +148,9 @@
             this.pictureBox2.Size = new System.Drawing.Size(50, 39);
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Image = global::loader.Properties.Resources.slider;
             this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
             this.pictureBox1.Location = new System.Drawing.Point(-4, 48);
@@ -159,9 +159,9 @@
             this.pictureBox1.Size = new System.Drawing.Size(383, 3);
             this.pictureBox1.TabIndex = 153;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // Main
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));

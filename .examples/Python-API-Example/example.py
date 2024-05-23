@@ -9,62 +9,62 @@ import winreg
 from getpass import getpass
 
 # Constants
-DOMAIN = 'anditv.it' 
+DOMAIN = 'anditv.it'
 SUB_DIR = "/panel/"
 API_KEY = 'yes' # api key from config file on panel
 VERSION = '1'
 
 def main():
     username = input(f'[Login] Username >> ')
-    password = getpass(f'[Login] Password >> ') 
+    password = getpass(f'[Login] Password >> ')
     apiresult = json.loads(str(send_login_request(username, password, get_machine_guid())))
-    
-    
+
+
     if (apiresult["status"] == "failed"):
         print("Username or password incorrect.")
         time.sleep(5)
         sys.exit()
-        
-        
+
+
     # version check
     if(str(apiresult["Systemversion"]) != VERSION):
         print("You are using a outdated version.")
-        print(apiresult["Systemversion"]) 
+        print(apiresult["Systemversion"])
         time.sleep(5)
         sys.exit()
-            
-        
+
+
     # print System status
     if(apiresult["Systemstatus"] == "0"):
         print("Status: Online")
     elif(apiresult["Systemstatus"] == "1"):
         print("Status: Offline")
     elif(apiresult["Systemmaintenance"] == "1"):
-        print("Status: Maintenance")    
-        
+        print("Status: Maintenance")
+
     # ban check
     if(apiresult["banned"] == "1"):
         print("Account is bannedad.")
         time.sleep(5)
         sys.exit()
     else:
-        print("Account is not banned.")    
-        
-    
-    print(f"You have {checksub(apiresult['sub'])} day/s sub left.")           
-    
-    
+        print("Account is not banned.")
+
+
+    print(f"You have {checksub(apiresult['sub'])} day/s sub left.")
+
+
         # hwid check
     if(get_machine_guid() == apiresult["hwid"]):
         print("HIWD does match.")
     elif(apiresult["hwid"] == None or ""):
         print("HIWD does match.")
     else:
-        print("HWID does not match.")      
+        print("HWID does not match.")
         time.sleep(5)
-        sys.exit()  
-        
-               
+        sys.exit()
+
+
 
 def get_hardware_id():
     try:
@@ -102,11 +102,11 @@ def checksub(sub):
     else:
         value = (datetime.datetime.strptime(sub, '%Y-%m-%d') - datetime.datetime.now()).days
         return value
-    
-    
 
 
-    
+
+
+
 def get_machine_guid():
     try:
         location = r"SOFTWARE\Microsoft\Cryptography"

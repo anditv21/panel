@@ -43,9 +43,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
@@ -55,9 +55,9 @@
             this.label1.Size = new System.Drawing.Size(86, 20);
             this.label1.TabIndex = 146;
             this.label1.Text = "Username";
-            // 
+            //
             // passwordtextbox
-            // 
+            //
             this.passwordtextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.passwordtextbox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(195)))), ((int)(((byte)(18)))));
             this.passwordtextbox.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -79,9 +79,9 @@
             this.passwordtextbox.Size = new System.Drawing.Size(268, 31);
             this.passwordtextbox.TabIndex = 148;
             this.passwordtextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
+            //
             // Passwordlabel
-            // 
+            //
             this.Passwordlabel.AutoSize = true;
             this.Passwordlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.857143F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Passwordlabel.ForeColor = System.Drawing.SystemColors.Control;
@@ -91,9 +91,9 @@
             this.Passwordlabel.Size = new System.Drawing.Size(83, 20);
             this.Passwordlabel.TabIndex = 149;
             this.Passwordlabel.Text = "Password";
-            // 
+            //
             // usernametextbox
-            // 
+            //
             this.usernametextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.usernametextbox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(195)))), ((int)(((byte)(18)))));
             this.usernametextbox.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -115,9 +115,9 @@
             this.usernametextbox.Size = new System.Drawing.Size(268, 31);
             this.usernametextbox.TabIndex = 150;
             this.usernametextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
+            //
             // loginbtn
-            // 
+            //
             this.loginbtn.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(195)))), ((int)(((byte)(18)))));
             this.loginbtn.BorderThickness = 1;
             this.loginbtn.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
@@ -136,9 +136,9 @@
             this.loginbtn.TabIndex = 151;
             this.loginbtn.Text = "Login";
             this.loginbtn.Click += new System.EventHandler(this.guna2Button1_Click);
-            // 
+            //
             // pictureBox3
-            // 
+            //
             this.pictureBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.pictureBox3.Image = global::loader.Properties.Resources.x;
             this.pictureBox3.Location = new System.Drawing.Point(288, 0);
@@ -148,9 +148,9 @@
             this.pictureBox3.TabIndex = 5;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
-            // 
+            //
             // pictureBox2
-            // 
+            //
             this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.pictureBox2.Image = global::loader.Properties.Resources.logo;
             this.pictureBox2.Location = new System.Drawing.Point(154, 4);
@@ -159,9 +159,9 @@
             this.pictureBox2.Size = new System.Drawing.Size(46, 44);
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Image = global::loader.Properties.Resources.slider;
             this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
             this.pictureBox1.Location = new System.Drawing.Point(-11, 50);
@@ -170,9 +170,9 @@
             this.pictureBox1.Size = new System.Drawing.Size(386, 5);
             this.pictureBox1.TabIndex = 147;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Controls.Add(this.pictureBox2);
@@ -182,9 +182,9 @@
             this.panel1.Size = new System.Drawing.Size(359, 48);
             this.panel1.TabIndex = 152;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
+            //
             // Login
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));

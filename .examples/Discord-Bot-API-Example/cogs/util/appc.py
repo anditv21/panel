@@ -48,14 +48,14 @@ class util_apps(commands.Cog):
             member = interaction.user
 
         user_created_at = member.created_at.strftime("%b %d, %Y %I:%M %p")
-        joined_at = ""  
-        nickname = ""  
-        top_role = ""  
+        joined_at = ""
+        nickname = ""
+        top_role = ""
 
         if interaction.guild:
             joined_at = member.joined_at.strftime("%b %d, %Y %I:%M %p")
-            nickname = member.nick if member.nick else "None"  
-            top_role = member.top_role.mention  
+            nickname = member.nick if member.nick else "None"
+            top_role = member.top_role.mention
 
         embed = discord.Embed(
             color=member.color
@@ -90,7 +90,7 @@ class util_apps(commands.Cog):
             inline=False
         )
 
-        if interaction.guild: 
+        if interaction.guild:
             embed.add_field(
                 name="Joined",
                 value=f"{joined_at}",

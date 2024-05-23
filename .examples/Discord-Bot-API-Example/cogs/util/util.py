@@ -24,7 +24,7 @@ class Util(commands.Cog):
     async def avatar(self, interaction: discord.Interaction, member: discord.Member = None):
         if member is None:
             member = interaction.user
-        
+
         try:
             avatar_url = await get_user_avatar(str(member.id))
         except Exception as e:
@@ -53,7 +53,7 @@ class Util(commands.Cog):
         inv = await generate_sub(time, member.id)
         embed = discord.Embed(description=inv, color=0x00D9FF)
         await interaction.response.send_message(embed=embed, ephemeral=True)
-        
+
     @app_commands.command(name="generate_inv", description="Generates a new invitation")
     async def gen_inv(self, interaction: discord.Interaction):
         member = interaction.user

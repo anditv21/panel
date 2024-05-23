@@ -18,13 +18,13 @@ async def get_user_count():
 
     except aiohttp.ClientError as client_error:
         print("Aiohttp client error: %s", client_error)
-        raise 
+        raise
     except ValueError as value_error:
         print("Value error: %s", value_error)
-        raise 
+        raise
     except Exception as e:
         print("Error while getting user count: %s", e)
-        
+
 async def get_user_avatar(dcid):
     try:
         baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
@@ -41,14 +41,14 @@ async def get_user_avatar(dcid):
 
     except aiohttp.ClientError as client_error:
         print("Aiohttp client error: %s", client_error)
-        raise 
+        raise
     except ValueError as value_error:
         print("Value error: %s", value_error)
-        raise 
+        raise
     except Exception as e:
         print("Error while getting user avatar: %s", e)
-        
-        
+
+
 async def get_linked_users():
     try:
         baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
@@ -72,9 +72,9 @@ async def get_linked_users():
         raise
     except Exception as e:
         print("Error while getting linked users:", e)
-        raise        
-    
-    
+        raise
+
+
 async def generate_sub(time, dcid):
     try:
         baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
@@ -101,7 +101,7 @@ async def generate_sub(time, dcid):
     except Exception as e:
         print("Error while getting linked users:", e)
         raise
-    
+
 async def generate_inv(dcid):
     try:
         baseurl = "https://" + get_config_value("domain") + get_config_value("subfolder")
