@@ -649,17 +649,39 @@ class UserController extends Users
 
             $path = Util::securevar(IMG_DIR . $uid);
 
-            if (@getimagesize($path . ".png")) {
-                unlink($path . ".png");
-            } elseif (@getimagesize($path . ".jpg")) {
-                unlink($path . ".jpg");
-            } elseif (@getimagesize($path . ".gif")) {
-                unlink($path . ".gif");
+            // Remove existing images
+            foreach (['png', 'jpg', 'gif'] as $ext) {
+                if (@getimagesize($path . ".$ext")) {
+                    unlink($path . ".$ext");
+                }
             }
 
-            $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
-            $img = $path . ".png";
-            file_put_contents($img, file_get_contents($url));
+            $url = "https://cdn.discordapp.com/avatars/$id/$avatar";
+
+            // Download the image data
+            $imageData = file_get_contents($url);
+            if ($imageData === false) {
+                Util::display("Error: Could not download avatar image.");
+                exit();
+            }
+
+            // Determine the file extension based on the image data
+            $imageInfo = getimagesizefromstring($imageData);
+            if ($imageInfo === false) {
+                Util::display("Error: Could not determine image type.");
+                exit();
+            }
+
+            $mime = $imageInfo['mime'];
+            $ext = 'png'; // default extension
+            if ($mime == 'image/jpeg') {
+                $ext = 'jpg';
+            } elseif ($mime == 'image/gif') {
+                $ext = 'gif';
+            }
+
+            $img = $path . ".$ext";
+            file_put_contents($img, $imageData);
             chmod(IMG_DIR, 0775);
             chmod($img, 0775);
             $this->set_access_token($access_token);
@@ -669,11 +691,9 @@ class UserController extends Users
         }
     }
 
-
     public function downloadAvatarWithAccessToken($userId, $uid)
     {
         $accessToken = $this->get_access_token();
-
 
         // Check if access token is available and valid
         if ($accessToken && $this->is_access_token_valid($accessToken)) {
@@ -697,7 +717,6 @@ class UserController extends Users
 
             $result = json_decode($result, true);
 
-
             if (!isset($result["id"])) {
                 Util::display("Error: Failed to get user ID from Discord.");
                 return false;
@@ -707,17 +726,39 @@ class UserController extends Users
             $avatar = Util::securevar($result["avatar"]);
             $path = Util::securevar(IMG_DIR . $uid);
 
-            if (@getimagesize($path . ".png")) {
-                unlink($path . ".png");
-            } elseif (@getimagesize($path . ".jpg")) {
-                unlink($path . ".jpg");
-            } elseif (@getimagesize($path . ".gif")) {
-                unlink($path . ".gif");
+            // Remove existing images
+            foreach (['png', 'jpg', 'gif'] as $ext) {
+                if (@getimagesize($path . ".$ext")) {
+                    unlink($path . ".$ext");
+                }
             }
 
-            $avatarUrl = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
-            $avatarPath = $path . ".png";
-            file_put_contents($avatarPath, file_get_contents($avatarUrl));
+            $avatarUrl = "https://cdn.discordapp.com/avatars/$id/$avatar";
+
+            // Download the image data
+            $imageData = file_get_contents($avatarUrl);
+            if ($imageData === false) {
+                Util::display("Error: Could not download avatar image.");
+                return false;
+            }
+
+            // Determine the file extension based on the image data
+            $imageInfo = getimagesizefromstring($imageData);
+            if ($imageInfo === false) {
+                Util::display("Error: Could not determine image type.");
+                return false;
+            }
+
+            $mime = $imageInfo['mime'];
+            $ext = 'png'; // default extension
+            if ($mime == 'image/jpeg') {
+                $ext = 'jpg';
+            } elseif ($mime == 'image/gif') {
+                $ext = 'gif';
+            }
+
+            $avatarPath = $path . ".$ext";
+            file_put_contents($avatarPath, $imageData);
             chmod(IMG_DIR, 0775);
             chmod($avatarPath, 0775);
 
@@ -730,7 +771,7 @@ class UserController extends Users
         // Check if the refresh token was successful and download the avatar
         if ($refreshedAccessToken) {
             $this->set_access_token($refreshedAccessToken);
-            return $this->downloadAvatarWithAccessToken($userId);
+            return $this->downloadAvatarWithAccessToken($userId, $uid);
         }
 
         return false;

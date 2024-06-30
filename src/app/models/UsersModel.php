@@ -34,7 +34,7 @@ class Users extends Database
         $result = $this->statement->fetchAll();
         return $result;
     }
-    
+
     protected function getnews()
     {
         $this->prepare("SELECT * FROM `system`");
@@ -849,7 +849,7 @@ class Users extends Database
     {
         $this->prepare("SELECT `username_change` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
-        $row = $this->statement->fetch(); 
+        $row = $this->statement->fetch();
 
         if ($row && isset($row->username_change)) {
             return $row->username_change;
@@ -923,16 +923,16 @@ class Users extends Database
     {
         if(isset($_COOKIE['browser'])) {
             $userBrowser = Util::securevar($_COOKIE['browser']);
-            
+
             setcookie('browser', '', time() - 3600, '/');
         } else {
 
             return "Error detecting Browser";
         }
-    
+
         return $userBrowser;
     }
-    
+
 
     protected function get_user_os()
     {
