@@ -1,64 +1,46 @@
 getBrowser();
 
-let capsLockOn = false; // Tracks the state of the Caps Lock key
-
-document.addEventListener('keydown', function(event) {
-  if (event.getModifierState && event.getModifierState('CapsLock')) {
-    capsLockOn = true;
-    updateCapsLockMessage();
-  }
+$(document).ready(function () {
+  $('[data-toggle="tooltip"]').tooltip();
 });
 
-document.addEventListener('keyup', function(event) {
-  if (event.getModifierState && !event.getModifierState('CapsLock')) {
-    capsLockOn = false;
-    updateCapsLockMessage();
-  }
-});
-
-function updateCapsLockMessage() {
-  var message = document.getElementById('caps-lock-message');
-  if (capsLockOn) {
-    message.style.display = 'block';
-  } else {
-    message.style.display = 'none';
-  }
+function setClipboard(value) {
+  var tempInput = document.createElement("input");
+  tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+  tempInput.value = value;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
 }
 
-var throttledUpdateCapsLockMessage = throttle(updateCapsLockMessage, 200);
 
-var passwordInputs = document.querySelectorAll('input[type="password"]');
-passwordInputs.forEach(function(input) {
-  input.addEventListener('input', throttledUpdateCapsLockMessage);
+
+document.addEventListener("DOMContentLoaded", function() {
+  var capsLockMessage = document.getElementById("caps-lock-message");
+
+  document.querySelectorAll("input[type='password']").forEach(function(input) {
+      input.addEventListener("keyup", function(event) {
+          if (event.getModifierState && event.getModifierState("CapsLock")) {
+            capsLockMessage.style.color = "red";
+            console.log("Caps Lock is on");
+          } else {
+            capsLockMessage.style.color = "#0d0f0f";
+            console.log("Caps Lock is off");
+          }
+      });
+  });
 });
 
-function throttle(func, delay) {
-  let timeoutId;
-  let lastExecTime = 0;
 
-  return function(...args) {
-    const currentTime = Date.now();
-    const timeSinceLastExec = currentTime - lastExecTime;
 
-    if (!timeoutId && timeSinceLastExec >= delay) {
-      func.apply(this, args);
-      lastExecTime = currentTime;
-    } else if (!timeoutId) {
-      timeoutId = setTimeout(() => {
-        func.apply(this, args);
-        lastExecTime = Date.now();
-        timeoutId = null;
-      }, delay - timeSinceLastExec);
-    }
-  };
-}
 
 function copyToClipboard(text) {
-  const textarea = document.createElement('textarea');
+  const textarea = document.createElement("textarea");
   textarea.value = text;
   document.body.appendChild(textarea);
   textarea.select();
-  document.execCommand('copy');
+  document.execCommand("copy");
   document.body.removeChild(textarea);
 }
 
@@ -82,47 +64,29 @@ function bulkDownload(tableElement) {
 }
 
 function getBrowser() {
-  // Detect browser
   let browserName = "Unknown";
 
-  // Brave
   if (!!navigator.brave && !!navigator.brave.isBrave()) {
-      browserName = "Brave";
-  }
-  // Opera
-  else if (
-      /Opera|OPR\//i.test(navigator.userAgent) ||
-      navigator.vendor.includes("Opera")
+    browserName = "Brave";
+  } else if (
+    /Opera|OPR\//i.test(navigator.userAgent) ||
+    navigator.vendor.includes("Opera")
   ) {
-      browserName = "Opera";
-  }
-  // Safari
-  else if (!!navigator.vendor && navigator.vendor.includes("Apple")) {
-      browserName = "Safari";
-  }
-  // Safari
-  else if (!!window.safari) {
-      browserName = "Safari";
-  }
-  // Firefox
-  else if (/Firefox/i.test(navigator.userAgent)) {
-      browserName = "Firefox";
-  }
-  // Microsoft Edge
-  else if (/Edg/i.test(navigator.userAgent)) {
-      browserName = "Microsoft Edge";
-  }
-  // Chrome
-  else if (!!window.chrome) {
-      browserName = "Chrome";
+    browserName = "Opera";
+  } else if (!!navigator.vendor && navigator.vendor.includes("Apple")) {
+    browserName = "Safari";
+  } else if (!!window.safari) {
+    browserName = "Safari";
+  } else if (/Firefox/i.test(navigator.userAgent)) {
+    browserName = "Firefox";
+  } else if (/Edg/i.test(navigator.userAgent)) {
+    browserName = "Microsoft Edge";
+  } else if (!!window.chrome) {
+    browserName = "Chrome";
   }
 
-  // Set the cookie
   const expirationDate = new Date();
   expirationDate.setFullYear(expirationDate.getFullYear() + 1);
 
-  // Set the cookie with a one-year expiration date
   document.cookie = `browser=${browserName}; expires=${expirationDate.toUTCString()}; path=/`;
 }
-
-

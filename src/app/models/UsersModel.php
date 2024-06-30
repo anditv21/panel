@@ -26,6 +26,15 @@ class Users extends Database
         return $this->statement->rowCount() > 0;
     }
 
+    protected function UserArray()
+    {
+        $this->prepare('SELECT * FROM `users` ORDER BY uid ASC');
+        $this->statement->execute();
+
+        $result = $this->statement->fetchAll();
+        return $result;
+    }
+    
     protected function getnews()
     {
         $this->prepare("SELECT * FROM `system`");
@@ -201,7 +210,6 @@ class Users extends Database
 
     protected function logintoken($token)
     {
-        // Check if the provided token exists in the 'login' table
         $this->prepare("SELECT * FROM `login` WHERE `remembertoken` = ?");
         $this->statement->execute([$token]);
 
@@ -210,34 +218,24 @@ class Users extends Database
             $username = $row->username;
 
             if ($row) {
-                // Set a cookie named 'login_cookie' with the provided token, valid for 1 year
                 setcookie("login_cookie", $token, time() + 31556926, '/');
 
-                // Fetch user information from the 'users' table using the username
                 $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
                 $this->statement->execute([$username]);
                 $newrow = $this->statement->fetch();
 
-                // If user information is found
                 if ($newrow) {
-                    // Get user's Info
                     $ip = $this->getip();
                     $browser = $this->get_user_Browser();
                     $os = $this->get_user_os();
 
-                    // Get the current date and time in the 'Europe/Vienna' timezone
                     date_default_timezone_set("Europe/Vienna");
                     $time = date("F d S, G:i");
-
-                    // Update the 'login' table with the new timestamp, IP, browser, and OS
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os, $token]);
-
-                    // Log the user's login via cookie
                     $this->loguser($username, "Logged in via cookie");
+                    return $newrow; // Return username if authentication succeeds.
 
-                    // Return user information if authentication succeeds
-                    return $newrow;
                 } else {
                     return false;
                 }
@@ -248,7 +246,6 @@ class Users extends Database
             return false;
         }
     }
-
 
     protected function addrememberToken($token, $username)
     {
@@ -596,6 +593,8 @@ class Users extends Database
             // Update the last login time and current login time in one query
             $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin`, `currentLogin` = ? WHERE `username` = ?");
             $this->statement->execute([$loginTime, $username]);
+
+            $this->loguser($username, "Login");
         } catch (PDOException $e) {
 
             error_log("Error updating login time: " . $e->getMessage());
@@ -850,10 +849,9 @@ class Users extends Database
     {
         $this->prepare("SELECT `username_change` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
-        $row = $this->statement->fetch(); // Assuming only one row is expected
+        $row = $this->statement->fetch(); 
 
         if ($row && isset($row->username_change)) {
-            // If the result is not empty, return the username_change value
             return $row->username_change;
         } else {
             $currentDate = date('Y-m-d');
@@ -923,46 +921,18 @@ class Users extends Database
 
     protected function get_user_Browser()
     {
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $userBrowser = '';
-
-        if (stripos($userAgent, 'Edge') !== false) {
-            $userBrowser = 'Microsoft Edge';
-        } elseif (stripos($userAgent, 'Brave') !== false) {
-            $userBrowser = 'Brave';
-        } elseif (stripos($userAgent, 'Chrome') !== false) {
-            $userBrowser = 'Google Chrome';
-
-            // Check if the 'browser' cookie is set
-            if (isset($_COOKIE['browser'])) {
-                // Get the value from the 'browser' cookie
-                $userBrowser = $_COOKIE['browser'];
-
-                // Delete the 'browser' cookie
-                setcookie('browser', '', time() - 3600, '/');
-            }
-        } elseif (stripos($userAgent, 'Safari') !== false && stripos($userAgent, 'Chrome') === false) {
-            $userBrowser = 'Safari';
-        } elseif (stripos($userAgent, 'Firefox') !== false) {
-            $userBrowser = 'Mozilla Firefox';
-        } elseif (stripos($userAgent, 'MSIE') !== false || stripos($userAgent, 'Trident') !== false) {
-            $userBrowser = 'Internet Explorer';
-        } elseif (stripos($userAgent, 'Opera') !== false || stripos($userAgent, 'OPR') !== false) {
-            $userBrowser = 'Opera';
-        } elseif (preg_match('/Konqueror/i', $userAgent)) {
-            $userBrowser = 'Konqueror';
-        } elseif (preg_match('/Valve Steam GameOverlay/i', $userAgent)) {
-            $userBrowser = 'Steam';
-        } elseif (stripos($userAgent, 'Tor') !== false) {
-            $userBrowser = 'Tor Browser';
+        if(isset($_COOKIE['browser'])) {
+            $userBrowser = Util::securevar($_COOKIE['browser']);
+            
+            setcookie('browser', '', time() - 3600, '/');
         } else {
-            $userBrowser = 'Unknown';
-        }
 
+            return "Error detecting Browser";
+        }
+    
         return $userBrowser;
     }
-
-
+    
 
     protected function get_user_os()
     {
@@ -1014,4 +984,5 @@ class Users extends Database
         }
         return $os_platform;
     }
+
 }

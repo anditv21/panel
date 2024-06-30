@@ -27,15 +27,15 @@ class Admin extends Database
 
     protected function bannedArray()
     {
-        // Retrieve a list of banned users if the user is an admin or support user
         if ($this->checkadmin() or $this->checksupp()) {
-            $query = 'SELECT * FROM `users` WHERE banned = 1 ORDER BY uid ASC';
+            $query = 'SELECT * FROM `users` where banned = 1 ORDER BY uid ASC';
+
             $this->prepare($query);
             $this->statement->execute();
+
             return $this->statement->fetchAll();
         }
     }
-    
 
     protected function updatenews($news)
     {
@@ -77,81 +77,75 @@ class Admin extends Database
 
     protected function subgift($name, $sub, $time)
     {
-        // Check if the user calling the function is an admin
         if ($this->checkadmin()) {
-            // If the subscription duration is less than or equal to 0
             if ($sub <= 0) {
-                // Handle different time cases
                 if ($time === 'LT') {
                     $time = '24000';
                 }
                 if ($time === 'T') {
-                    $time = '3';
+                    $time = '7';
                 }
                 if ($time === '-') {
-                    return false; // If time is '-', return false
+                    return false;
                 }
-    
-                // Calculate the expiration date of the subscription
+
                 $date = new DateTime(); // Get current date
                 $days = 'P' . $time . 'D';
                 $date->add(new DateInterval($days)); // Adds custom days
                 $subTime = $date->format('Y-m-d'); // Format Year-Month-Day
-    
-                // Update the user's subscription in the database
-                $this->prepare('UPDATE `users` SET `sub` = ? WHERE  `username` = ?');
+
+                $this->prepare(
+                    'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
+                );
                 $this->statement->execute([$subTime, $name]);
-    
-                // Log the sub gift action
+
                 $user = new UserController();
                 $username = Session::get('username');
                 $user->loguser($name, "$username gifted you a $time day/s sub");
             } else {
-                // If the subscription duration is greater than 0
                 if ($time === '-') {
-                    // Remove the user's subscription
-                    $this->prepare('UPDATE `users` SET `sub` = NULL WHERE  `username` = ?');
+                    $this->prepare(
+                        'UPDATE `users` SET `sub` = NULL WHERE  `username` = ?'
+                    );
                     $this->statement->execute([$name]);
-    
-                    // Log the removal of the subscription
+
                     $username = Session::get('username');
                     $user = new UserController();
-                    $user->log($username, "Removed $name`s sub", 'admin_logs');
+                    $user->log($username, "Removed $name`s sub", admin_logs);
                     $this->admin_log(Session::get("username"), "Removed $name`s sub");
                     $user->loguser($name, "$username removed your sub");
                 } else {
-                    // Handle different time cases
                     if ($time === 'LT') {
                         $time = '24000';
                     }
                     if ($time === 'T') {
-                        $time = '3';
+                        $time = '7';
                     }
-    
-                    // Retrieve the current subscription expiration date from the database
-                    $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+
+                    $this->prepare(
+                        'SELECT `sub` FROM `users` WHERE `username` = ?'
+                    );
                     $this->statement->execute([$name]);
                     $date = $this->statement->fetch();
                     $date1 = date_create($date->sub);
                     $days = 'P' . $time . 'D';
                     $date1->add(new DateInterval($days));
                     $subTime = $date1->format('Y-m-d'); // Format Year-Month-Day
-    
-                    // Update the user's subscription in the database
-                    $this->prepare('UPDATE `users` SET `sub` = ? WHERE  `username` = ?');
+
+                    $this->prepare(
+                        'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
+                    );
                     $this->statement->execute([$subTime, $name]);
-    
-                    // Log the sub gift action
+
                     $user = new UserController();
                     $username = Session::get('username');
-                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", 'admin_logs');
+                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
                     $user->loguser($name, "$username gifted you a $time day/s sub", false);
                     $this->admin_log(Session::get("username"), "Gifted a $time day/s sub.  \n to: $name");
                 }
             }
         }
     }
-    
 
     protected function checksubbyun($name)
     {
@@ -592,29 +586,25 @@ class Admin extends Database
     //
     protected function Systemfreeze()
     {
-        // Check if the user calling the function is an admin
         if ($this->checkadmin()) {
-            // Fetch the 'frozen' status from the 'system' table
             $this->prepare('SELECT `frozen` FROM `system`');
             $this->statement->execute();
             $result = $this->statement->fetch();
-    
-            // If the system is not frozen
+
             if ((int) $result->frozen === 0) {
-                // Update the 'frozen' status in the 'system' table to 1
                 $this->prepare('UPDATE `system` SET `frozen` = 1');
                 $this->statement->execute();
-    
-                // Update the 'freezingtime' in the 'system' table to the current UNIX timestamp
-                $this->prepare('UPDATE `system` SET `freezingtime` = UNIX_TIMESTAMP()');
+
+                $this->prepare(
+                    'UPDATE `system` SET `freezingtime` = UNIX_TIMESTAMP()'
+                );
                 $this->statement->execute();
-    
-                // Fetch all users from the 'users' table
+
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
+
                 $userarray = $this->statement->fetchAll();
-    
-                // Iterate through each user
+
                 foreach ($userarray as $row) {
                     $date = new DateTime(); // Get current date
                     $currentDate = $date->format('Y-m-d'); // Format Year-Month-Day
@@ -622,89 +612,81 @@ class Admin extends Database
                     $date2 = date_create($row->sub); // Convert String to date format
                     $diff = date_diff($date1, $date2);
                     $sub = intval($diff->format('%R%a'));
-    
-                    // If the user has an active subscription
+
                     if ($sub >= 1) {
-                        // Update the 'frozen' status for the user to 1
-                        $this->prepare('UPDATE `users` SET `frozen` = 1 WHERE `username` = ?');
+                        $this->prepare(
+                            'UPDATE `users` SET `frozen` = 1 where `username` = ? '
+                        );
                         $this->statement->execute([$row->username]);
                     }
                 }
-    
-                // Log the freezing action
                 $username = Session::get('username');
                 $user = new UserController();
-                $user->log($username, "Freezed all subs", 'system_logs');
+                $user->log($username, "Freezed all subs", system_logs);
                 $user->loguser($row->username, "Sub freezed by $username");
                 $this->admin_log($username, "Freezed all subs");
+
             } else {
-                // If the system is already frozen
                 $this->prepare('SELECT * FROM `users`');
                 $this->statement->execute();
+
                 $userarray = $this->statement->fetchAll();
-    
-                // Iterate through each user
+
                 foreach ($userarray as $row) {
-                    // If the user is frozen
                     if ($row->frozen != 0) {
-                        // Update the 'frozen' status for the user to 0
-                        $this->prepare('UPDATE `users` SET `frozen` = 0 WHERE `username` = ?');
+                        $this->prepare(
+                            'UPDATE `users` SET `frozen` = 0 where `username` = ? '
+                        );
                         $this->statement->execute([$row->username]);
-    
-                        // Fetch 'freezingtime' from the 'system' table
+
                         $this->prepare('SELECT * FROM `system`');
                         $this->statement->execute();
                         $result = $this->statement->fetch();
                         $freezingtime = $result->freezingtime;
                         $freezingtime = gmdate('Y-m-d', $freezingtime);
-    
-                        // Get the current date
+
                         $timenow = gmdate('Y-m-d', time());
-    
-                        // Calculate the difference in days between 'freezingtime' and the current date
-                        $date1 = date_create($freezingtime);
-                        $date2 = date_create($timenow);
+
+                        $date1 = date_create($freezingtime); // Convert String to date format
+                        $date2 = date_create($timenow); // Convert String to date format
                         $diff = date_diff($date1, $date2);
                         $diff = intval($diff->format('%R%a'));
+
                         $days = 'P' . $diff . 'D';
-    
-                        // Fetch the current subscription expiration date for the user
-                        $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+
+
+                        $this->prepare(
+                            'SELECT `sub` FROM `users` WHERE `username` = ?'
+                        );
                         $this->statement->execute([$row->username]);
-                        $currentsub = $this->statement->fetch();
+                        $currentsub  = $this->statement->fetch();
                         $currentsub = date_create($currentsub->sub);
-    
-                        // Add the calculated days to the current subscription expiration date
+
                         $currentsub->add(new DateInterval($days));
                         $subTime = $currentsub->format('Y-m-d'); // Format Year-Month-Day
-    
-                        // Update the user's subscription in the 'users' table
-                        $this->prepare('UPDATE `users` SET `sub` = ? WHERE  `username` = ?');
+
+                        $this->prepare(
+                            'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
+                        );
                         $this->statement->execute([$subTime, $row->username]);
-    
-                        // Log the unfreezing action
                         $user = new UserController();
                         $user->loguser($row->username, "Sub unfreezed by " . Session::get('username'), false);
                     }
                 }
-    
-                // Reset 'frozen' status in the 'system' table to 0
+
                 $this->prepare('UPDATE `system` SET `frozen` = 0');
                 $this->statement->execute();
-    
-                // Reset 'freezingtime' in the 'system' table to 0
+
                 $this->prepare('UPDATE `system` SET `freezingtime` = 0');
                 $this->statement->execute();
-    
-                // Log the unfreezing action
+
                 $username = Session::get('username');
                 $user = new UserController();
-                $user->log($username, "Unfreezed all subs", 'system_logs');
+                $user->log($username, "Unfreezed all subs", system_logs);
                 $this->admin_log($username, "Unfreezed all subs");
             }
         }
     }
-    
 
     //
     protected function Systeminvite()
@@ -850,8 +832,8 @@ class Admin extends Database
             $this->statement->execute([$ip]);
 
             $user = new UserController();
-            $user->log($username, "Added $ip to whitelist", system_logs);
-            $user->loguser($username, "Added $ip to whitelist");
+            $user->log($username, "Added or removed whitelist $ip", system_logs);
+            $user->loguser($username, "Added or removed whitelist $ip");
         } else {
             return "This is not a valid ipv4.";
         }

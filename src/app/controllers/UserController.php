@@ -45,6 +45,10 @@ class UserController extends Users
         Util::redirect("/auth/login.php");
     }
 
+    public function getUserArray()
+    {
+        return $this->UserArray();
+    }
 
     public function banreason($username)
     {
@@ -55,6 +59,7 @@ class UserController extends Users
     {
         return $this->getnews();
     }
+
 
     public function getlogarray($username)
     {
@@ -569,14 +574,10 @@ class UserController extends Users
 
     public function discord_link($code)
     {
-        // Get the user ID from the session
         $uid = Session::Get("uid");
-    
-        // Check if the Discord authorization code is provided
         if (!empty($code)) {
             $discord_code = $code;
-    
-            // Set up the payload for the token request to Discord
+
             $payload = [
                 'code' => $discord_code,
                 'client_id' => Util::securevar(client_id),
@@ -585,90 +586,69 @@ class UserController extends Users
                 'redirect_uri' => Util::securevar(SITE_URL . SUB_DIR . '/user/profile.php'),
                 'scope' => 'identify',
             ];
-    
-            // Convert the payload to a URL-encoded string
+
             $payload_string = http_build_query($payload);
-    
-            
             $discord_token_url = "https://discordapp.com/api/v9/oauth2/token";
-    
-            
+
             $ch = curl_init();
-    
-            // Set cURL options for token request
             curl_setopt($ch, CURLOPT_URL, $discord_token_url);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    
-            
+
             $result = curl_exec($ch);
-    
-            
+
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
                 curl_close($ch);
                 exit();
             }
-    
-            
+
             $result = json_decode($result, true);
-    
-            
+
             if (!isset($result["access_token"])) {
                 Util::display("Error: Failed to get access token from Discord.");
                 exit();
             }
-    
-            
+
             if (!isset($result["refresh_token"])) {
                 Util::display("Error: Failed to get refresh token from Discord.");
                 exit();
             }
-    
-            // Securely store access and refresh tokens
+
             $access_token = Util::securevar($result["access_token"]);
             $refresh_token = Util::securevar($result["refresh_token"]);
-    
-            // Discord user info URL
+
             $discord_users_url = "https://discordapp.com/api/users/@me";
-    
-            // Set cURL options for user info request
             $header = [
                 "Authorization: Bearer $access_token",
                 "Content-Type: application/x-www-form-urlencoded",
             ];
+
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
             curl_setopt($ch, CURLOPT_URL, $discord_users_url);
             curl_setopt($ch, CURLOPT_POST, false);
-    
-            
+
             $result = curl_exec($ch);
-    
-            
+
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
                 curl_close($ch);
                 exit();
             }
-    
-            
+
             $result = json_decode($result, true);
-    
-            
+
             if (!isset($result["id"])) {
                 Util::display("Error: Failed to get user ID from Discord.");
                 exit();
             }
-    
-            // Securely store user ID and avatar
+
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
-    
-            // Set the path for saving the user's avatar
+
             $path = Util::securevar(IMG_DIR . $uid);
-    
-            // Delete existing avatar files
+
             if (@getimagesize($path . ".png")) {
                 unlink($path . ".png");
             } elseif (@getimagesize($path . ".jpg")) {
@@ -676,26 +656,18 @@ class UserController extends Users
             } elseif (@getimagesize($path . ".gif")) {
                 unlink($path . ".gif");
             }
-    
-            // Download and save the user's avatar from Discord
+
             $url = "https://cdn.discordapp.com/avatars/$id/$avatar.png";
             $img = $path . ".png";
             file_put_contents($img, file_get_contents($url));
-    
-            // Set appropriate permissions on directories and files
             chmod(IMG_DIR, 0775);
             chmod($img, 0775);
-    
-            // Set the access token, refresh token, and Discord ID in the session
             $this->set_access_token($access_token);
             $this->set_refresh_token($refresh_token);
             $this->set_dcid($id, $uid);
-    
-            // Redirect to the user's profile page
             header("location: profile.php");
         }
     }
-    
 
 
     public function downloadAvatarWithAccessToken($userId, $uid)
@@ -767,5 +739,10 @@ class UserController extends Users
     public function getEmbedColor()
     {
         return $this->getCurrentColor();
+    }
+
+    public function getUserIP()
+    {
+        return $this->getip();
     }
 }

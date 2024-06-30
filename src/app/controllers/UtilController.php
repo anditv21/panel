@@ -37,8 +37,9 @@ class Util extends UtilMod
 
     public static function adminNavbar()
     {
-        include(SITE_ROOT . '/admin/includes/adminNavbar.inc.php');
+        include(SITE_ROOT . '/includes/navbar.inc.php');
     }
+
 
     public static function footer()
     {
@@ -49,17 +50,6 @@ class Util extends UtilMod
     {
         echo $string;
     }
-
-
-    /**
-     * Sanitizes and secures a variable or an array of variables.
-     *
-     * This function applies HTML escaping, removes extra whitespace, and
-     * protects against potential cross-site scripting (XSS) attacks.
-     *
-     * @param mixed $var The variable or array to be secured.
-     * @return mixed The secured variable or array.
-     */
 
     public static function securevar($var)
     {
@@ -185,58 +175,13 @@ class Util extends UtilMod
         return $res;
     }
 
-    /**
-     * Calculate the number of days since the user's join date, 
-     * based on the stored 'createdAt' value in the session.
-     *
-     * @return int The number of days since the user joined.
-     */
-    public static function getjoin()
-    {
-        $joindate = Session::get("createdAt");
-        $now = new DateTime();
-        $date = new DateTime($joindate);
-        $interval = $now->diff($date);
-
-        // Return the number of days as an integer
-        return (int) $interval->format("%a");
-    }
-
-
-    /**
-     * Calculate the number of days since a specified join date.
-     *
-     * @param string $joindate The join date in "Y-m-d H:i:s" format.
-     *
-     * @return int The number of days since the specified join date.
-     */
-    public static function getjoinprofile($joindate)
+    public static function calculate_days($date)
     {
         $now = new DateTime();
-        $date = DateTime::createFromFormat("Y-m-d H:i:s", $joindate);
+        $date = new DateTime($date);
         $interval = $now->diff($date);
 
-        // Return the number of days as an integer
         return (int) $interval->format("%a");
-    }
-
-
-    public static function daysago($dateString)
-    {
-        if (!$dateString) {
-            return 'Not available';
-        }
-        $date = strtotime($dateString);
-        $now = time();
-        $diff = $now - $date;
-        $days = floor($diff / (60 * 60 * 24));
-        if ($days == 0) {
-            return 'Today';
-        } elseif ($days == 1) {
-            return 'Yesterday';
-        } else {
-            return $days . ' days ago';
-        }
     }
 
     public static function getavatar($uid)
@@ -278,6 +223,24 @@ class Util extends UtilMod
             return  ".gif";
         } else {
             return false;
+        }
+    }
+
+    public static function daysago($dateString)
+    {
+        if (!$dateString) {
+            return 'Not available';
+        }
+        $date = strtotime($dateString);
+        $now = time();
+        $diff = $now - $date;
+        $days = floor($diff / (60 * 60 * 24));
+        if ($days == 0) {
+            return 'Today';
+        } elseif ($days == 1) {
+            return 'Yesterday';
+        } else {
+            return $days . ' days ago';
         }
     }
 }

@@ -2,13 +2,15 @@
 require_once "app/require.php";
 require_once "app/controllers/SystemController.php";
 
+require_once ("includes/head.nav.inc.php");
+
 
 $user = new UserController();
 $System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
-    Util::redirect("/auth/login.php");
+   Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -17,244 +19,195 @@ $uid = Session::get("uid");
 Util::banCheck();
 Util::checktoken();
 Util::head("Main");
-Util::navbar();
-
-if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-    $msg = Util::securevar($_POST['shoutbox-message']);
-    if (Util::muteCheck() == false) {
-        $user->sendmsg($msg);
-    }
-    header('location: index.php');
-    exit;
-}
 ?>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="../assets/css/custom.css">
-<div class="divide"></div>
-<main class="container mt-2">
-   <div class="row">
-      <!--Welome message-->
-      <div class="col-12 mt-3 mb-2">
-         <div class="alert alert-primary" role="alert">
-            Welcome back, <a href='<?php Util::display(SUB_DIR . "/user/profile.php"); ?>'><b style="color: #6cc312;"><?php Util::display($username); ?></b></a>.
-            <?php
-            $date_obj = new DateTime($user->getlastlogin());
-$formatted_date = $date_obj->format('F j, Y, g:ia');
-Util::display("Last login: {$formatted_date} from ");
-?>
-            <em onclick="copyToClipboard('<?php Util::display($user->getlastip()); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'><?php Util::display($user->getlastip()); ?></em>
 
-            <?php
-$loginfails = Session::get("loginfails");
-if ($loginfails > 0) : ?>
-               <br>
-               <em style="color: red" ;>Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
+<!DOCTYPE html>
+<html lang="en">
+<head><?php Util::navbar();?></head>
+<?php display_top_nav("Dashboard"); ?>
+<body class="pace-done no-loader page-sidebar-collapsed">
+   <div class="page-container">
+      <div class="page-content">
 
-            <?php endif; ?>
-         </div>
-      </div>
-
-      <!--Sub frozen warning -->
-      <?php
-      $time = $user->gettime();
-if ($System->getSystemData()->frozen == 1) : ?>
-         <div class="col-12 mt-3 mb-2">
-            <div class="alert alert-primary" role="alert">
-               <b style="color: #6cc312;"><?php Util::display("WARNING: ALL SUBSCRIPTIONS ARE CURRENTLY FROZEN! ($time days  since frozen)"); ?></b>
-            </div>
-         </div>
-      <?php endif;
-?>
-      <!--News-->
-      <div class="col-lg-9 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-newspaper"></i> News</div>
-            <div class="row text-muted">
-               <div class="col-12 clearfix">
-                  <strong><?php Util::display($user->getusernews()); ?></strong>
+         <div class="main-wrapper">
+            <div class="row">
+               <div class="col-lg-6">
+                  <div class="row">
+                     <div class="col-lg-6">
+                        <div class="card stats-card">
+                           <?php if (
+                              $System->getSystemData()->maintenance == "-"
+                           ) : ?>
+                              <div class="card-body" data-aos="fade-down" data-aos-duration="1000">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">No</h5>
+                                    <p class="stats-text">Updating</p>
+                                 </div>
+                                 <div class="stats-icon change-success">
+                                    <i class="material-icons">info</i>
+                                 </div>
+                              </div>
+                           <?php elseif (
+                              $System->getSystemData()->maintenance == "UNDER"
+                           ) : ?>
+                              <div class="card-body">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">Yes</h5>
+                                    <p class="stats-text">Updating</p>
+                                 </div>
+                                 <div class="stats-icon change-danger">
+                                    <i class="material-icons">info</i>
+                                 </div>
+                              </div>
+                           <?php endif; ?>
+                        </div>
+                     </div>
+                     <div class="col-lg-6">
+                        <div class="card stats-card">
+                           <div class="card-body" data-aos="fade-down" data-aos-duration="1000">
+                              <div class="stats-info">
+                                 <h5 class="card-title"><?php Util::display(
+                                                            $System->getSystemData()->version
+                                                         ); ?></h5>
+                                 <p class="stats-text">Loader version</p>
+                              </div>
+                              <div class="stats-icon change-success">
+                                 <i class="material-icons">tag</i>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
-         </div>
-      </div>
-      <br>
-      <?php if ($System->getSystemData()->shoutbox != 0) : ?>
-         <div class="col-lg-9 col-md-12">
-            <div class="rounded p-3 mb-3">
-               <div class="h5 border-bottom border-secondary pb-1"><i class="fas fa-comments"></i> ShoutBox</div>
-               <div class="row text-muted">
-                  <div class="col-lg-9 col-md-8 col-sm-12">
-                     <div id="shoutbox"><?php require_once('shoutbox.php'); ?></div>
-                     <br>
-                     <?php if (Util::muteCheck() == false) : ?>
-                        <form action="" method="post">
-                           <div class="form-group">
-                              <input autocomplete="off" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required style="margin-right: 30px;">
+            <div class="row">
+               <div class="col-lg-4" data-aos="fade-down" data-aos-duration="1000">
+                  <div class="card card-bg">
+                     <div class="card-body">
+                        <h5 class="card-title">Systems</h5>
+                        <div class="transactions-list">
+                           <?php if (
+                              $System->getSystemData()->status == "Online"
+                           ) : ?>
+                              <div class="tr-item">
+                                 <div class="tr-company-name">
+                                    <div class="tr-icon tr-card-icon tr-card-bg-success text-white">
+                                       <i data-feather="info"></i>
+                                    </div>
+                                    <div class="tr-text">
+                                       <h4 class="text-white"><?php Util::display(SITE_NAME); ?></h4>
+                                    </div>
+                                 </div>
+                                 <div class="tr-rate">
+                                    <p><span class="text-success">Online</span></p>
+                                 </div>
+                              </div>
+                           <?php elseif (
+                              $System->getSystemData()->status == "Offline"
+                           ) : ?>
+                              <div class="tr-item">
+                                 <div class="tr-company-name">
+                                    <div class="tr-icon tr-card-icon tr-card-bg-danger text-white">
+                                       <i data-feather="info"></i>
+                                    </div>
+                                    <div class="tr-text">
+                                       <h4 class="text-white"><?php Util::Display(SITE_NAME); ?></h4>
+                                    </div>
+                                 </div>
+                                 <div class="tr-rate">
+                                    <p><span class="text-danger">Offline</span></p>
+                                 </div>
+                              </div>
+                           <?php endif; ?>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4" data-aos="fade-down" data-aos-duration="1000">
+                  <div class="card stat-widget card-bg">
+                     <div class="card-body">
+                        <h5 class="card-title">Discord Server</h5>
+                        <div class="transactions-list">
+                           <div class="tr-item">
+                              <div class="tr-company-name">
+                                 <a href="" target="_blank" class="btn btn-success widget-info-action">Join</a>
+                                 <br>
+                                 <br>
+                              </div>
                            </div>
-                           <button type="submit" class="btn btn-outline-primary">Send</button>
-                           <br>
-                           <br>
-                           <div class="legend">
-                              <span class="own-username">You</span> &ndash; Your own messages<br>
-                              <span class="admin-username">Admin</span> &ndash; Messages from administrators<br>
-                              <span class="supp-username">Supp</span> &ndash; Messages from support staff<br>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4" data-aos="fade-down" data-aos-duration="1000">
+                  <div class="card stat-widget card-bg">
+                     <div class="card-body">
+                        <h5 class="card-title">Latest user</h5>
+                        <div class="transactions-list">
+                           <div class="tr-item">
+                              <div class="tr-company-name">
+                                 <div class="tr-img tr-card-img">
+                                    <img src="<?php Util::display(SUB_DIR) ?>/assets/images/guy.webp" alt="...">
+                                 </div>
+                                 <div class="tr-text">
+                                    <h4 class="text-white"><?php Util::display($user->getNewUser()); ?></h4>
+                                 </div>
+                              </div>
                            </div>
-                        </form>
-                     <?php endif; ?>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="accordion" id="accordionExample" data-aos="fade-down" data-aos-duration="1000">
+               <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        > How can I become a partner?
+                     </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                     <div class="accordion-body">
+                        <li> Contact the developers for more information.</li>
+                     </div>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        > What payments do you accept?
+                     </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                     <div class="accordion-body">
+
+                        <li>Coming soon</li>
+                     </div>
+                  </div>
+               </div>
+               <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingThree">
+                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        > Support
+                     </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                     <div class="accordion-body">
+
+                        You got issues with our product? Then join our <a href="" target="_blank">discord.</a>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
-         <script>
-            function reload() {
-               $(document).ready(function() {
-                  $("#shoutbox").load("shoutbox.php");
-               });
-            }
-
-            setInterval(reload, 500);
-         </script>
-      <?php endif; ?>
-      <!--Status-->
-      <div class="col-lg-3 col-md-12">
-         <div class="rounded p-3 mb-3">
-            <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Status</div>
-            <div class="row text-muted">
-
-               <!--Offline // Online-->
-               <div class="col-12 clearfix">
-                  <i class="fas fa-info-circle"></i> Status:
-                  <p class="float-right mb-0"><?php Util::display(
-                      $System->getSystemData()->status
-                  ); ?></p>
-               </div>
-               <!--System version-->
-               <div class="col-12 clearfix">
-                  <i class="fas fa-code-branch"></i>&nbsp; Version:
-                  <p class="float-right mb-0"><?php Util::display(
-                      $System->getSystemData()->version
-                  ); ?></p>
-               </div>
-               <div class="col-12 clearfix">
-                  <i class="fas fa-user-clock"></i> Sub:
-                  <p class="float-right mb-0">
-                     <?php if ($System->getSystemData()->frozen != 0) {
-                         $sub = $sub + $time;
-                         if ($sub < 1000) {
-                             Util::display(
-                                 "$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)"
-                             );
-                         } elseif ($sub < 1) {
-                             Util::display('<i class="fa fa-times"></i>');
-                         } else {
-                             Util::display("Lifetime");
-                         }
-                     } elseif ($sub > 0) {
-                         Util::display("Active");
-                     } else {
-                         Util::display("None");
-                     } ?></p>
-               </div>
-            </div>
+            <?php 
+            $loginfails = Session::get("loginfails");
+            if ($loginfails > 0) : ?>
             <br>
-            <!--Statistics-->
-            <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;">Statistics</div>
-            <div class="row text-muted">
-               <!--Total Users-->
-               <div class="col-12 clearfix">
-                  Users:
-                  <p class="float-right mb-0"><?php Util::display(
-                      $user->getUserCount()
-                  ); ?></p>
-               </div>
-               <!--Latest User-->
-               <div class="col-12 clearfix">
-                  Latest User:
-                  <p class="float-right mb-0"><?php Util::display(
-                      $user->getNewUser()
-                  ); ?></p>
-               </div>
-            </div>
-            <br>
-            <!-- Check if has sub -->
-            <?php if ($user->getSubStatus() > 0) : ?>
-               <div class="h5 border-bottom border-secondary pb-1" style="text-align: center;"></div>
-               <div class="col-12 text-center pt-1">
+            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
 
-                  <a style="background-color: #191919; color: white;" class="btn" href="download.php">Download Loader <i class="fas fa-download"></i></a>
-
-               </div>
             <?php endif; ?>
-         </div>
-      </div>
-   </div>
-</main>
-<script>
-   $(document).ready(function() {
-      $('[data-toggle="tooltip"]').tooltip();
-   });
-
-
-   function copyToClipboard(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-   }
-</script>
-<style>
-   .chat {
-      padding-top: 2%;
-      padding-left: 2%;
-   }
-
-   img {
-      margin-bottom: 1%;
-   }
-
-   #shoutbox {
-      position: fit-content;
-      overflow-y: scroll;
-      border: 2px solid #6cc312;
-      border-radius: 5px;
-   }
-
-   @media (max-width: 767px) {
-
-      #shoutbox {
-         max-height: 150px;
-      }
-   }
-
-   @media (min-width: 768px) and (max-width: 991px) {
-
-      #shoutbox {
-         max-height: 250px;
-      }
-   }
-
-   @media (min-width: 992px) {
-
-      #shoutbox {
-         max-height: 350px;
-      }
-   }
-
-   .own-username {
-      color: #003EFF;
-      font-weight: bold;
-   }
-
-   .admin-username {
-      color: #FFF300;
-      font-weight: bold;
-   }
-
-   .supp-username {
-      color: #FF00E8;
-      font-weight: bold;
-   }
-</style>
+</body>
 <?php Util::footer(); ?>
+
+</html>

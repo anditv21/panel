@@ -18,7 +18,7 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
     $remoteIP = Util::securevar($_SERVER['REMOTE_ADDR']);
 
     if ($remoteIP !== $serverIP && !in_array($remoteIP, $whitelistedIPs)) {
-        $response = array('status' => 'failed', 'error' => 'Unauthorized IP');
+        $response = array('status' => 'failed', 'error' => 'Unauthorized IP: ' . $remoteIP);
     } else {
         if (empty($_GET['key'])) {
             $response = array('status' => 'failed', 'error' => 'Missing key');

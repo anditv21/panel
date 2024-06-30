@@ -52,30 +52,8 @@ class UtilMod extends Database
         $result = $this->statement->fetch();
 
         if ($result) {
-            $createdAt = strtotime($result->createdAt);
-            $currentDate = strtotime(date('Y-m-d'));
-
-            $dateDifference = ($currentDate - $createdAt) / (60 * 60 * 24); // in days
-
-            if ($dateDifference > 30) {
-
-                // Delete entry from the database
-                $this->prepare('DELETE FROM login WHERE remembertoken = ?');
-                $this->statement->execute([$token]);
-
-                // Perform logout actions
-                setcookie("login_cookie", "", time() - 3600, '/');
-                session_unset();
-                $_SESSION = [];
-                $_SESSION = array();
-                session_destroy();
-
-                Util::redirect("/auth/login.php");
-            }
-
             return true;
         } else {
-            // Token not found, perform logout actions
             setcookie("login_cookie", "", time() - 3600, '/');
             session_unset();
             $_SESSION = [];
@@ -84,5 +62,4 @@ class UtilMod extends Database
             Util::redirect("/auth/login.php");
         }
     }
-
 }

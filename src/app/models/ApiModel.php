@@ -268,9 +268,16 @@ class API extends Database
 
     protected function getWhitelistedIPs(): array
     {
-        $this->prepare('SELECT `ip` FROM `ip_whitelist`');
-        $this->statement->execute();
-        $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
-        return $result;
+        try {
+            $this->prepare('SELECT `ip` FROM `ip_whitelist`');
+            $this->statement->execute();
+            $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
+            return $result;
+        } catch (PDOException $e) {
+
+            echo "Error: " . $e->getMessage();
+            return [];
+        }
     }
+    
 }

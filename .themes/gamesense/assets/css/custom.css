@@ -1,0 +1,105 @@
+:root {
+    --bg-main: #101010;
+    --bg-secondary: #222;
+    --bg-contrast: rgb(24, 26, 48);
+    --accent: #6cc312;
+    --textcolor: #ffffff;
+}
+body {
+    background-color: var(--bg-main) !important;
+    overflow-x: hidden;
+    color: white;
+}
+
+.divide {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 30px;
+    background: #1e5799;
+    background: -moz-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #1e5799), color-stop(50%, #f300ff), color-stop(100%, #e0ff00));
+    background: -webkit-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+    background: -o-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+    background: -ms-linear-gradient(left, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+    background: linear-gradient(to right, #1e5799 0%, #f300ff 50%, #e0ff00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#e0ff00', GradientType=1);
+
+    height: 3px;
+    border-bottom: 1px solid #000;
+}
+
+
+.spoiler:hover {
+    color: white;
+ }
+
+ .spoiler {
+    color: black;
+    background-color: black;
+ }
+
+ 
+ /* ===== Scrollbar CSS ===== */
+ /* Firefox */
+ * {
+    scrollbar-width: auto;
+    scrollbar-color: #6cc312 #222222;
+ }
+
+ /* Chrome, Edge, and Safari */
+ *::-webkit-scrollbar {
+    width: 16px;
+ }
+
+ *::-webkit-scrollbar-track {
+    background: #222222;
+ }
+
+ *::-webkit-scrollbar-thumb {
+    background-color: #6cc312;
+    border-radius: 10px;
+    border: 3px solid #222222;
+ }
+
+.bg-dark {
+    background-color: var(--bg-secondary) !important;
+}
+
+.card {
+    background-color: var(--bg-secondary) !important;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+    border-top: 2px solid #6cc312;
+    font-family: 'Raleway', sans-serif;
+}
+
+.alert {
+    border: none;
+}
+
+.alert-primary,
+.rounded {
+    background-color: var(--bg-secondary) !important;
+    color: #eee;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+    border-top: 2px solid var(--accent);
+}
+.btn-outline-primary {
+    color: var(--accent) !important;
+    border-color: #6cc312 !important;
+}
+
+.btn-outline-primary:hover {
+    color: white !important;
+    background-color: var(--accent) !important;
+}
+
+.form-control {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--accent) !important;
+    color: var(--textcolor) !important;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
