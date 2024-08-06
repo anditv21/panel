@@ -2,7 +2,7 @@
 require_once "app/require.php";
 require_once "app/controllers/SystemController.php";
 
-require_once ("includes/head.nav.inc.php");
+require_once("includes/head.nav.inc.php");
 
 
 $user = new UserController();
@@ -10,7 +10,7 @@ $System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -36,7 +36,7 @@ Util::head("Main");
                      <div class="col-lg-6">
                         <div class="card stats-card">
                            <?php if (
-                              $System->getSystemData()->maintenance == "-"
+                               $System->getSystemData()->maintenance == "-"
                            ) : ?>
                               <div class="card-body" data-aos="fade-down" data-aos-duration="1000">
                                  <div class="stats-info">
@@ -48,7 +48,7 @@ Util::head("Main");
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->maintenance == "UNDER"
+                               $System->getSystemData()->maintenance == "UNDER"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -67,8 +67,8 @@ Util::head("Main");
                            <div class="card-body" data-aos="fade-down" data-aos-duration="1000">
                               <div class="stats-info">
                                  <h5 class="card-title"><?php Util::display(
-                                                            $System->getSystemData()->version
-                                                         ); ?></h5>
+                                     $System->getSystemData()->version
+                                 ); ?></h5>
                                  <p class="stats-text">Loader version</p>
                               </div>
                               <div class="stats-icon change-success">
@@ -87,7 +87,7 @@ Util::head("Main");
                         <h5 class="card-title">Systems</h5>
                         <div class="transactions-list">
                            <?php if (
-                              $System->getSystemData()->status == "Online"
+                               $System->getSystemData()->status == "Online"
                            ) : ?>
                               <div class="tr-item">
                                  <div class="tr-company-name">
@@ -103,7 +103,7 @@ Util::head("Main");
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->status == "Offline"
+                               $System->getSystemData()->status == "Offline"
                            ) : ?>
                               <div class="tr-item">
                                  <div class="tr-company-name">
@@ -200,9 +200,9 @@ Util::head("Main");
                </div>
             </div>
          </div>
-            <?php 
+            <?php
             $loginfails = Session::get("loginfails");
-            if ($loginfails > 0) : ?>
+if ($loginfails > 0) : ?>
             <br>
             <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
 

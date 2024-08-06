@@ -3,7 +3,7 @@ require_once '../app/require.php';
 require_once("../includes/head.nav.inc.php");
 display_top_nav("User list");
 
-$user = new UserController;
+$user = new UserController();
 $ip = $user->getip();
 
 
@@ -77,13 +77,13 @@ Util::head("User list")
                                                             $name = $row->uid . "." . $ext;
                                                             ?>
                                                             <a href="<?php Util::display(
-                                                                            Util::getavatar($row->uid)
-                                                                        ); ?>" download="<?php Util::display(
-                                                                                                $name
-                                                                                            ); ?>">
+                                                                Util::getavatar($row->uid)
+                                                            ); ?>" download="<?php Util::display(
+                                                                $name
+                                                            ); ?>">
                                                                 <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(
-                                                                                                                                                                                                                Util::getavatar($row->uid)
-                                                                                                                                                                                                            ); ?>"></a>
+                                                                    Util::getavatar($row->uid)
+                                                                ); ?>"></a>
                                                         <?php endif; ?>
                                                     </td>
                                                     <th scope="row" data-aos="fade" data-aos-duration="2000"><?php Util::display($row->uid); ?></th>

@@ -22,26 +22,26 @@ Util::navbar();
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["ban"])) {
-      $user = Util::securevar($_POST["ban"]);
-   }
-   if (isset($_POST["reason"])) {
-      $reason = Util::securevar($_POST["reason"]);
-   }
+    if (isset($_POST["ban"])) {
+        $user = Util::securevar($_POST["ban"]);
+    }
+    if (isset($_POST["reason"])) {
+        $reason = Util::securevar($_POST["reason"]);
+    }
 
-   if (isset($user)) {
-      Util::adminCheck();
-      $uid = $user;
+    if (isset($user)) {
+        Util::adminCheck();
+        $uid = $user;
 
-      if ($reason === " " || $reason === "" || empty($reason)) {
-         $reason = "none";
-      }
+        if ($reason === " " || $reason === "" || empty($reason)) {
+            $reason = "none";
+        }
 
-      $admin->setBannreason($reason, $uid);
-      $admin->setBanned($uid);
+        $admin->setBannreason($reason, $uid);
+        $admin->setBanned($uid);
 
-      header("location: bans.php");
-   }
+        header("location: bans.php");
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -111,14 +111,14 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                           <?php foreach ($userList2 as $row) : ?>
                                              <?php
                                              if (isset($_GET["min"]) && isset($_GET["max"])) {
-                                                $min = Util::securevar($_GET["min"]);
-                                                $max =  Util::securevar($_GET["max"]);
+                                                 $min = Util::securevar($_GET["min"]);
+                                                 $max =  Util::securevar($_GET["max"]);
                                              }
 
-                                             ?>
+                                              ?>
                                              <?php if (!isset($min) || !isset($max)) {
-                                                $min = 1;
-                                                $max = 10;
+                                                 $min = 1;
+                                                 $max = 10;
                                              } ?>
                                              <?php if ($row->uid <= $max && $row->uid >= $min) : ?>
                                                 <tr>
@@ -128,19 +128,19 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                                       <?php else : ?>
                                                          <?php
                                                          $ext = pathinfo(
-                                                            Util::getavatar($row->uid),
-                                                            PATHINFO_EXTENSION
+                                                             Util::getavatar($row->uid),
+                                                             PATHINFO_EXTENSION
                                                          );
-                                                         $name = $row->uid . "." . $ext;
-                                                         ?>
+                                                          $name = $row->uid . "." . $ext;
+                                                          ?>
                                                          <a href="<?php Util::display(
-                                                                     Util::getavatar($row->uid)
-                                                                  ); ?>" download="<?php Util::display(
-                                                                           $name
-                                                                        ); ?>">
+                                                             Util::getavatar($row->uid)
+                                                         ); ?>" download="<?php Util::display(
+                                                             $name
+                                                         ); ?>">
                                                             <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(
-                                                                                                                                                                                                         Util::getavatar($row->uid)
-                                                                                                                                                                                                      ); ?>"></a>
+                                                                Util::getavatar($row->uid)
+                                                            ); ?>"></a>
                                                       <?php endif; ?>
                                                    </td>
                                                    <th scope="row" class="text-center"><?php Util::display($row->uid); ?></th>

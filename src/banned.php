@@ -2,7 +2,7 @@
 
 require_once 'app/require.php';
 
-$user = new UserController;
+$user = new UserController();
 Session::init();
 
 if (!Session::isLogged()) {

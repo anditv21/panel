@@ -21,17 +21,17 @@ Util::head("Admin Panel");
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-  if (isset($_POST["username"])) {
-    $username = Util::securevar($_POST["username"]);
-  }
-  if (isset($_POST["invites"])) {
-    $invites = Util::securevar($_POST["invites"]);
-  }
+    if (isset($_POST["username"])) {
+        $username = Util::securevar($_POST["username"]);
+    }
+    if (isset($_POST["invites"])) {
+        $invites = Util::securevar($_POST["invites"]);
+    }
 
-  if (isset($username)) {
-    $admin->giftinvites($username, $invites);
-  }
-  header("location: userinvites.php");
+    if (isset($username)) {
+        $admin->giftinvites($username, $invites);
+    }
+    header("location: userinvites.php");
 }
 ?>
 <!DOCTYPE html>

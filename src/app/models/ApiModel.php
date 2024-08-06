@@ -279,5 +279,5 @@ class API extends Database
             return [];
         }
     }
-    
+
 }

@@ -14,25 +14,25 @@ class System extends Database
         $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-    
+
         // Status
         $result->status = (int) $result->status === 0 ? 'Online' : 'Offline';
-    
+
         // Maintenance
         $result->maintenance = (int) $result->maintenance === 0 ? '-' : 'UNDER';
-    
+
         // Discord Linking
         $result->discordlinking = (int) $result->discordlinking;
-    
+
         // Discord Logging
         $result->discordlogging = (int) $result->discordlogging;
-    
+
         // Discord Re-Link
         $result->relinkdiscord = (int) $result->relinkdiscord;
-    
+
         // Auth captcha
         $result->cap_service = (int) $result->cap_service;
-    
+
         // Auth captcha name based on cap_service value
         switch ($result->cap_service) {
             case 1:
@@ -48,10 +48,10 @@ class System extends Database
                 $result->cap_name = 'Disabled';
                 break;
         }
-    
+
         return $result;
     }
-    
+
     protected function getCaptcha()
     {
         $this->prepare('SELECT * FROM `system`');

@@ -25,5 +25,3 @@ function display_top_nav($title)
     </nav>
  </div>');
 }
-
-?>

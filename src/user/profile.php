@@ -8,7 +8,7 @@ $user = new UserController();
 $System = new SystemController();
 Session::init();
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $uid = Session::get("uid");
@@ -25,33 +25,33 @@ Util::head("Profile");
 
 
 if (!$user->getdcid($uid) == false) {
-   $user->downloadAvatarWithAccessToken($user->getdcid($uid), $uid);
+    $user->downloadAvatarWithAccessToken($user->getdcid($uid), $uid);
 }
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["updatePassword"])) {
-      $error = $user->updateUserPass(Util::securevar($_POST));
-   }
-   if (isset($_POST["activateSub"])) {
-      $error = $user->activateSub(Util::securevar($_POST['subCode']));
-      $error = Util::securevar($_POST['subCode']);
-   }
-   if (isset($_POST["change_display_name"])) {
-      $error = $user->set_display_name(Util::securevar($_POST['display_name']));
-      $error = Util::securevar($_POST['display_name']);
-   }
-   header("location: profile.php");
+    if (isset($_POST["updatePassword"])) {
+        $error = $user->updateUserPass(Util::securevar($_POST));
+    }
+    if (isset($_POST["activateSub"])) {
+        $error = $user->activateSub(Util::securevar($_POST['subCode']));
+        $error = Util::securevar($_POST['subCode']);
+    }
+    if (isset($_POST["change_display_name"])) {
+        $error = $user->set_display_name(Util::securevar($_POST['display_name']));
+        $error = Util::securevar($_POST['display_name']);
+    }
+    header("location: profile.php");
 }
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->getSystemData()->relinkdiscord == 1) {
-   header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
-   exit();
+    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
+    exit();
 }
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) {
-   if (isset($_GET['code'])) {
-      $code = Util::securevar($_GET['code']);
-      $user->discord_link($code);
-   }
+    if (isset($_GET['code'])) {
+        $code = Util::securevar($_GET['code']);
+        $user->discord_link($code);
+    }
 }
 ?>
 
@@ -115,27 +115,27 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                                                    <p>
                                                       <?php
                                                       $time = $user->gettime();
-                                                      if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
-                                                         $sub = $sub + $time;
-                                                         if ($sub < 1000) {
-                                                            Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-                                                         } elseif ($sub < 1) {
-                                                            Util::display('You dont have a active subscription!');
-                                                         } else {
-                                                            Util::display("Lifetime");
-                                                         }
-                                                      } else {
-                                                         if ($sub > 8000) {
-                                                            Util::display("Lifetime");
-                                                         } else {
-                                                            if ($sub >= 0) {
-                                                               Util::display("$sub days");
-                                                            } else {
-                                                               Util::display('You dont have a active subscription!');
-                                                            }
-                                                         }
-                                                      }
-                                                      ?>
+if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
+    $sub = $sub + $time;
+    if ($sub < 1000) {
+        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+    } elseif ($sub < 1) {
+        Util::display('You dont have a active subscription!');
+    } else {
+        Util::display("Lifetime");
+    }
+} else {
+    if ($sub > 8000) {
+        Util::display("Lifetime");
+    } else {
+        if ($sub >= 0) {
+            Util::display("$sub days");
+        } else {
+            Util::display('You dont have a active subscription!');
+        }
+    }
+}
+?>
                                                    </p>
                                                 </div>
                                              </div>
@@ -196,8 +196,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
 
                                              <?php
                                              $cooldown_date = $user->get_name_cooldown();
-                                             $days_left = Util::calculate_days($cooldown_date);
-                                             ?>
+$days_left = Util::calculate_days($cooldown_date);
+?>
 
                                              <?php if ($days_left > 0) : ?>
                                                 <div class="form-group">
