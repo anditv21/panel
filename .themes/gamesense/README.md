@@ -2,7 +2,7 @@
 <h1 align="center">:zap: User Management Panel</h1>
 
 
-
+  
 
 <h3 align="center">Overview</h3>
 
@@ -17,7 +17,7 @@
 Default login: <code>admin</code>:<code>admin</code>
 </p>
 
-
+  
 
 
 <h3>Setup/Issues/Help/FAQ/Loaders & API-Examples</h3>
@@ -25,7 +25,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 
 
-
+  
 ### Preview
 <details>
 
@@ -33,19 +33,18 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <p align="center">
 
-<a href="https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png"><img src="https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png" /></a>
+<a href="https://i.ibb.co/8jz5Fwv/image.png"><img src="https://i.ibb.co/8jz5Fwv/image.png" /></a>
 
-<a href="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png"><img src="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png" /></a>
+<a href="https://i.ibb.co/1bmV8hH/brave-EVE37-Csow-C53570.png"><img src="https://i.ibb.co/1bmV8hH/brave-EVE37-Csow-C53570.png" /></a>
 
-<p>C# Loader (gamesense/old design)</p>
-<a href="https://i.ibb.co/DgVj55c/brave-ry-Owq-Hmm-SE.png"><img src="https://i.ibb.co/DgVj55c/brave-ry-Owq-Hmm-SE.png" /></a>
+<a href="https://i.ibb.co/yVz8cz7/brave-w-R1-WBf-Rwia78663.png"><img src="https://i.ibb.co/yVz8cz7/brave-w-R1-WBf-Rwia78663.png" /></a>
 <a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
-
+  
 
 </details>
 
 
-
+  
 ### Features
 
 ###### AUTH
@@ -56,11 +55,11 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-<li>Login (Multiple device remember Login) (Screenshot: https://ibb.co/ky6PTjm)</li>
+<li>Login (Multiple device remember Login) (Screenshot: https://tinyurl.com/mwd6uhz)</li>
 
-<li>Register Invite only (can be deactivated) (Screenshot: https://ibb.co/hLd9b6D)</li>
+<li>Register Invite only (can be deactivated) (Screenshot: https://tinyurl.com/yc3j4z99)</li>
 
-<li>Banned Page (Screenshot: https://ibb.co/JkmYRYC)</li>
+<li>Banned Page (Screenshot: https://bit.ly/3vYaHse)</li>
 
 <li>Auth captcha using Cloudflare Turnstile, hCaptcha, Google`s reCaptcha or disabled (Read the <a href="https://github.com/anditv21/panel/wiki/Setup">wiki</a> for more information)</li>
 
@@ -68,7 +67,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 </details>
 
-
+  
 
 ###### USER
 
@@ -78,7 +77,7 @@ Default login: <code>admin</code>:<code>admin</code>
 
 <ul>
 
-Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png
+Screenshot: https://bit.ly/3W3SBQj / https://bit.ly/40Lz4Xd / https://bit.ly/3JMb4g67
 
 <li>ShoutBox (can be disabled from admin dashboard & users are muteable)</li>
 
@@ -106,11 +105,11 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 
 </details>
 
-
+  
 
 ###### USER-LOGS
 
-
+  
 
 <details>
 
@@ -120,7 +119,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 <li>Flushing logs (requires password)</li>
 </details>
 
-
+  
 
 ###### Support/Admin-Panel
 
@@ -130,7 +129,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 
 <ul>
 
-<li>Screenshot: https://ibb.co/WpxRgg8</li>
+<li>Screenshot: https://bit.ly/3GXtf21 / https://bit.ly/3IC7O8a</li>
 
 <h1>Admin only:</h1>
 
@@ -138,7 +137,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 
 <li>Freeze all subscriptions (Beta)</li>
 
-<li>Gift user subscription</li>
+<li>Gift user subscription (Screenshot: https://bit.ly/3ivNJ8K)</li>
 
 <li>Password Reset</li>
 
@@ -149,7 +148,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 <li>Enable/Disable Discord Link</li>
 
 <li>Enable/Disable Discord Re-Link</li>
-
+  
 <li>Generate subscription code</li>
 
 <li>Ban/unban user</li>
@@ -158,7 +157,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 
 <li>Make user supporter/non-supp </li>
 
-<li>Ban-Management panel</li>
+<li>Ban-Management panel (Screenshot: https://bit.ly/3VS78if)</li>
 
 <li>Set status ofline/online</li>
 
@@ -189,8 +188,8 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 <li>Reset HWID</li>
 </details>
 
-
-
+ 
+  
 ### Credits
   <details>
 
@@ -203,7 +202,7 @@ Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/
 <li><a href="https://github.com/Phantom-1337/">@Phantom-1337</a> and <a href="https://github.com/sxck1337/">@sxck1337</a> for their cool themes.</li>
 
 
-
+  
 
 </ul>
 
