@@ -38,7 +38,6 @@ Default login: <code>admin</code>:<code>admin</code>
 <a href="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png"><img src="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png" /></a>
 
 <p>C# Loader (gamesense/old design)</p>
-<a href="https://i.ibb.co/DgVj55c/brave-ry-Owq-Hmm-SE.png"><img src="https://i.ibb.co/DgVj55c/brave-ry-Owq-Hmm-SE.png" /></a>
 <a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
 
 
