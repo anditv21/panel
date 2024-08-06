@@ -234,7 +234,7 @@ class UserController extends Users
             $this->createUserSession($result);
             $username = Session::get("username");
             $this->log($username, "Logged in via cookie", auth_logs);
-            $this->loglogin();
+            $this->loglogin($token);
             Util::redirect("/index.php");
         } else {
             $this->logoutUser(false);

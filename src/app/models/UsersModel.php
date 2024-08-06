@@ -584,7 +584,7 @@ class Users extends Database
         }
     }
 
-    protected function loglogin()
+    protected function loglogin($token)
     {
         $username = Session::get("username");
         $loginTime = date('Y-m-d H:i:s');
@@ -594,6 +594,10 @@ class Users extends Database
             $this->prepare("UPDATE `users` SET `lastLogin` = `currentLogin`, `currentLogin` = ? WHERE `username` = ?");
             $this->statement->execute([$loginTime, $username]);
 
+            if (isset($token) && !empty($token)) {
+                $this->prepare("UPDATE `login` SET `time` = ? WHERE `remembertoken` = ?");
+                $this->statement->execute([$loginTime, $token]);
+            }
             $this->loguser($username, "Login");
         } catch (PDOException $e) {
 
