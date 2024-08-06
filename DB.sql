@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4deb2+deb11u1
+-- version 5.2.1deb3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 08, 2023 at 04:54 AM
+-- Generation Time: Aug 06, 2024 at 03:14 PM
 -- Server version: 10.5.21-MariaDB-0+deb11u1
--- PHP Version: 7.4.33
+-- PHP Version: 8.2.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,9 @@ CREATE TABLE `adminlogs` (
 --
 
 INSERT INTO `adminlogs` (`id`, `username`, `action`, `ip`, `time`) VALUES
-(1, 'admin', 'Set the System status to offline', 'localhost', 'November 08 th, 9:17');
+(27, 'admin', 'Turned discord re-link on', 'localhost', 'May 14 th, 16:02'),
+(28, 'admin', 'Changed captcha service to 1', 'localhost', 'May 14 th, 16:02'),
+(30, 'admin', 'Unbanned admin2 (2)', 'localhost', 'May 18 th, 21:07');
 
 -- --------------------------------------------------------
 
@@ -60,7 +62,9 @@ CREATE TABLE `invites` (
 
 INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
 ('PXZwJcXf5zQ6myPg0zjJ', 'admin', '2023-09-27 09:06:56'),
-('yOh20NjgdZ5ruCtH1m8X', 'admin', '2023-09-27 09:06:56');
+('yOh20NjgdZ5ruCtH1m8X', 'admin', '2023-09-27 09:06:56'),
+('iRozSNONSaPqmCB', 'admin', '2024-05-13 20:14:12'),
+('GrwI5IwUMjOGPxj', 'admin', '2024-05-13 20:23:38');
 
 -- --------------------------------------------------------
 
@@ -124,6 +128,13 @@ CREATE TABLE `subscription` (
   `createdAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `subscription`
+--
+
+INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
+('3m-kqH7BqYCGSK8PZdKLhQ8', 'admin', '2024-05-13 20:15:00');
+
 -- --------------------------------------------------------
 
 --
@@ -153,7 +164,7 @@ CREATE TABLE `system` (
 --
 
 INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`, `cap_service`, `cap_key`, `cap_secret`, `embed_color`) VALUES
-(1, 1, 'Welcome to znixv2-panel-edit by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, 'test', 'test2', 'ff00dd');
+(0, 1, 'Welcome to the panel made by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, NULL, NULL, 'ff00dd');
 
 -- --------------------------------------------------------
 
@@ -170,6 +181,15 @@ CREATE TABLE `userlogs` (
   `ip` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `userlogs`
+--
+
+INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
+(572, 'admin', 'Login', 'Brave', 'Windows 10', 'localhost', 'June 30 th, 19:02'),
+(573, 'admin', 'Linked discord account', 'Brave', 'Windows 10', 'localhost', 'June 30 th, 19:27'),
+(574, 'admin', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 06 th, 17:03');
 
 -- --------------------------------------------------------
 
@@ -211,8 +231,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`, `loginfails`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', NULL, 1, 1, '2023-06-01', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2023-12-08 05:42:01', '2023-11-08 09:17:08', 'none', 13, '2023-07-30', 26, 0, NULL, NULL, NULL, 0, 0),
-(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$dUNwRW5vNkJ1S1FubGJjRg$0hKtX7rVveuPpCeatmqb2iX55kEo/qBERXkZkiGGJ8E', NULL, 0, 0, '2089-04-28', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 0, NULL, 15, 0, NULL, NULL, NULL, 0, 0);
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'fetter_bauer-c26b15bf-a96c', 1, 1, '2089-03-19', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2024-06-30 19:02:27', '2024-06-30 18:49:02', 'none', 13, '2023-07-30', 17, 0, NULL, NULL, NULL, 0, 0),
+(2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$SGkxUDJoU083enM2anBRNQ$Vnyxq9VgVQjNAVo8ugf50LjiUwrmcPAd8g/IdaERg/8', NULL, 0, 0, '2089-08-31', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 1, '2024-05-13', 15, 0, NULL, NULL, NULL, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -286,13 +306,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adminlogs`
 --
 ALTER TABLE `adminlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
@@ -304,7 +324,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=478;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=575;
 
 --
 -- AUTO_INCREMENT for table `users`
