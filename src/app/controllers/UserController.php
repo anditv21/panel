@@ -201,7 +201,7 @@ class UserController extends Users
                 setcookie("login_cookie", $token, time() + 31556926, '/');
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
-                $this->loglogin();
+                $this->loglogin($token);
                 $this->resetfails($username);
                 Util::redirect("/index.php");
             } else {
