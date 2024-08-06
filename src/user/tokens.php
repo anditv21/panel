@@ -7,7 +7,7 @@ $user = new UserController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get('username');
@@ -22,24 +22,24 @@ Util::head("Tokens");
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
-   if (isset($_POST["password2"])) {
-      $token = Util::securevar($_POST["deltoken"]);
-      $password = Util::securevar($_POST["password2"]);
-      if (isset($token, $password)) {
-         $user->deletetoken($token, $password);
-      }
-   }
-   header("location: tokens.php");
+    if (isset($_POST["password2"])) {
+        $token = Util::securevar($_POST["deltoken"]);
+        $password = Util::securevar($_POST["password2"]);
+        if (isset($token, $password)) {
+            $user->deletetoken($token, $password);
+        }
+    }
+    header("location: tokens.php");
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
-   $password = Util::securevar($_POST["password"]);
+    $password = Util::securevar($_POST["password"]);
 
-   $token = Util::securevar($_COOKIE['login_cookie']);
-   $error = $user->deleteother($token, $password);
-   if (!$error) {
-      header('location: tokens.php');
-   }
+    $token = Util::securevar($_COOKIE['login_cookie']);
+    $error = $user->deleteother($token, $password);
+    if (!$error) {
+        header('location: tokens.php');
+    }
 }
 
 

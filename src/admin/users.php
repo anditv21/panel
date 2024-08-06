@@ -1,68 +1,68 @@
 /<?php
    require_once "../app/require.php";
-   require_once "../app/controllers/AdminController.php";
-   require_once("../includes/head.nav.inc.php");
+require_once "../app/controllers/AdminController.php";
+require_once("../includes/head.nav.inc.php");
 
 
-   $user = new UserController();
-   $admin = new AdminController();
+$user = new UserController();
+$admin = new AdminController();
 
-   Session::init();
+Session::init();
 
-   $username = Session::get("username");
+$username = Session::get("username");
 
-   $userList = $admin->getUserArray();
+$userList = $admin->getUserArray();
 
-   Util::banCheck();
-   Util::checktoken();
-   Util::suppCheck();
-   Util::head("Admin Panel");
+Util::banCheck();
+Util::checktoken();
+Util::suppCheck();
+Util::head("Admin Panel");
 
-   // if post request
-   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-      if (isset($_POST["resetHWID"])) {
-         $hwid = Util::securevar($_POST["resetHWID"]);
-      }
-      if (isset($_POST["setsupp"])) {
-         $supp = Util::securevar($_POST["setsupp"]);
-      }
-      if (isset($_POST["setBanned"])) {
-         $ban = Util::securevar($_POST["setBanned"]);
-      }
-      if (isset($_POST["setAdmin"])) {
-         $adminuser = Util::securevar($_POST["setAdmin"]);
-      }
+// if post request
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
+    if (isset($_POST["resetHWID"])) {
+        $hwid = Util::securevar($_POST["resetHWID"]);
+    }
+    if (isset($_POST["setsupp"])) {
+        $supp = Util::securevar($_POST["setsupp"]);
+    }
+    if (isset($_POST["setBanned"])) {
+        $ban = Util::securevar($_POST["setBanned"]);
+    }
+    if (isset($_POST["setAdmin"])) {
+        $adminuser = Util::securevar($_POST["setAdmin"]);
+    }
 
-      if (isset($hwid)) {
-         Util::suppCheck();
-         $rowUID = $hwid;
-         $admin->resetHWID($rowUID);
-      }
-
-
-      if (isset($ban)) {
-         Util::adminCheck();
-         $rowUID = $ban;
-         $admin->setBanned($ban);
-      }
+    if (isset($hwid)) {
+        Util::suppCheck();
+        $rowUID = $hwid;
+        $admin->resetHWID($rowUID);
+    }
 
 
-      if (isset($supp)) {
-         Util::adminCheck();
-         $rowUID = $supp;
-         $admin->setsupp($rowUID);
-      }
+    if (isset($ban)) {
+        Util::adminCheck();
+        $rowUID = $ban;
+        $admin->setBanned($ban);
+    }
 
 
-      if (isset($adminuser)) {
-         Util::adminCheck();
-         $rowUID = $adminuser;
-         $admin->setAdmin($rowUID);
-      }
+    if (isset($supp)) {
+        Util::adminCheck();
+        $rowUID = $supp;
+        $admin->setsupp($rowUID);
+    }
 
-      header("location: users.php");
-   }
-   ?>
+
+    if (isset($adminuser)) {
+        Util::adminCheck();
+        $rowUID = $adminuser;
+        $admin->setAdmin($rowUID);
+    }
+
+    header("location: users.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,14 +100,14 @@
                            <tbody>
                               <?php foreach ($userList as $row) : ?>
                                  <?php
-                                 if (isset($_GET["min"]) && isset($_GET["max"])) {
-                                    $min = Util::securevar($_GET["min"]);
-                                    $max = Util::securevar($_GET["max"]);
-                                 }
-                                 ?>
+                              if (isset($_GET["min"]) && isset($_GET["max"])) {
+                                  $min = Util::securevar($_GET["min"]);
+                                  $max = Util::securevar($_GET["max"]);
+                              }
+                                  ?>
                                  <?php if (!isset($min) || !isset($max)) {
-                                    $min = 1;
-                                    $max = 15;
+                                     $min = 1;
+                                     $max = 15;
                                  } ?>
                                  <?php if ($row->uid <= $max && $row->uid >= $min) : ?>
                                     <tr style="text-align: center;">
@@ -117,8 +117,8 @@
                                           <?php else : ?>
                                              <?php
                                              $ext = pathinfo(Util::getavatardl($row->uid), PATHINFO_EXTENSION);
-                                             $name = $row->uid . "." . $ext;
-                                             ?>
+                                              $name = $row->uid . "." . $ext;
+                                              ?>
                                              <a href="<?php Util::display(Util::getavatar($row->uid)); ?>" download="<?php Util::display($name); ?>">
                                                 <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?php Util::display(Util::getavatar($row->uid)); ?>">
                                              </a>
@@ -141,9 +141,9 @@
                                           <?php $days = $user->getSubStatus($row->username); ?>
                                           <?php if ($days > 0) : ?>
                                              <?php if ($days > 600) {
-                                                $days = 'LT';
+                                                 $days = 'LT';
                                              }
-                                             ?>
+                                              ?>
                                              <img title="Has <?php Util::display($days); ?> day/s sub left" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.png" width="15" height="15">
                                           <?php endif; ?>
                                        </td>
@@ -154,10 +154,10 @@
                                        </td>
                                        <td style="text-align: center;">
                                           <p onclick="copyToClipboard('<?php Util::display($row->hwid); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top' class='spoiler'>
-                                             <?php if ($row->hwid !== NULL) {
-                                                Util::display($row->hwid);
+                                             <?php if ($row->hwid !== null) {
+                                                 Util::display($row->hwid);
                                              } else {
-                                                Util::Display('No HWID found.');
+                                                 Util::Display('No HWID found.');
                                              } ?>
                                           </p>
                                        </td>

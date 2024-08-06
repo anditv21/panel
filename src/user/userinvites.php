@@ -2,14 +2,14 @@
 
 require_once '../app/require.php';
 require_once '../app/controllers/UserController.php';
-require_once ("../includes/head.nav.inc.php");
+require_once("../includes/head.nav.inc.php");
 
 $user = new UserController();
 
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $username = Session::get("username");
@@ -23,17 +23,17 @@ Util::head("Profiles");
 
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-   if (isset($_POST['genInv'])) {
-      $geninv = Util::securevar($_POST['genInv']);
-   }
+    if (isset($_POST['genInv'])) {
+        $geninv = Util::securevar($_POST['genInv']);
+    }
 
-   if (isset($geninv)) {
-      $user->geninv($username);
-   }
+    if (isset($geninv)) {
+        $user->geninv($username);
+    }
 
 
-   header("location: userinvites.php");
-   exit();
+    header("location: userinvites.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>

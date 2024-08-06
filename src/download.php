@@ -2,14 +2,18 @@
 
 require_once 'app/require.php';
 require_once 'app/controllers/SystemController.php';
-$user = new UserController;
-$System = new SystemController;
+$user = new UserController();
+$System = new SystemController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/auth/login.php'); }
+if (!Session::isLogged()) {
+    Util::redirect('/auth/login.php');
+}
 Util::banCheck();
-if ($user->getSubStatus() < 1) { Util::redirect('/'); }
+if ($user->getSubStatus() < 1) {
+    Util::redirect('/');
+}
 
 $System = Util::randomCode(35);
 

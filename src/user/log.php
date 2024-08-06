@@ -9,7 +9,7 @@ $user = new UserController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 
 $uid = Session::get("uid");
@@ -22,12 +22,12 @@ Util::head("Logs");
 
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["password"])) {
-      $submittedPassword = Util::securevar($_POST["password"]);
-      $error = $user->flush($submittedPassword);
-   }
-   header('Location: log.php');
-   exit;
+    if (isset($_POST["password"])) {
+        $submittedPassword = Util::securevar($_POST["password"]);
+        $error = $user->flush($submittedPassword);
+    }
+    header('Location: log.php');
+    exit;
 }
 
 ?>

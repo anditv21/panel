@@ -22,72 +22,72 @@ Util::head('Admin Panel');
 
 // Handle POST requests
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-  if (isset($_POST['genInv'])) {
-    $geninv = Util::securevar($_POST['genInv']);
-    if (isset($geninv)) {
-      Util::suppCheck();
-      $admin->getInvCodeGen($username);
+    if (isset($_POST['genInv'])) {
+        $geninv = Util::securevar($_POST['genInv']);
+        if (isset($geninv)) {
+            Util::suppCheck();
+            $admin->getInvCodeGen($username);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST['delInv'])) {
-    $delinv = Util::securevar($_POST['delInv']);
-    if (isset($delinv)) {
-      Util::suppCheck();
-      $admin->delInvCode($delinv);
+    if (isset($_POST['delInv'])) {
+        $delinv = Util::securevar($_POST['delInv']);
+        if (isset($delinv)) {
+            Util::suppCheck();
+            $admin->delInvCode($delinv);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST['flushInvs'])) {
-    $delinv = Util::securevar($_POST['flushInvs']);
-    if (isset($delinv)) {
-      Util::adminCheck();
-      $admin->flushInvCode();
+    if (isset($_POST['flushInvs'])) {
+        $delinv = Util::securevar($_POST['flushInvs']);
+        if (isset($delinv)) {
+            Util::adminCheck();
+            $admin->flushInvCode();
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
-  // Handle Subscription Generation
-  if (isset($_POST["genSub"])) {
-    $gen1 =  Util::securevar($_POST["genSub"]);
-    if (isset($gen1)) {
-      $admin->getSubCodeGen($username);
+    // Handle Subscription Generation
+    if (isset($_POST["genSub"])) {
+        $gen1 =  Util::securevar($_POST["genSub"]);
+        if (isset($gen1)) {
+            $admin->getSubCodeGen($username);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST["genSub2"])) {
-    $gen2 = Util::securevar($_POST["genSub2"]);
-    if (isset($gen2)) {
-      $admin->getSubCodeGen3M($username);
+    if (isset($_POST["genSub2"])) {
+        $gen2 = Util::securevar($_POST["genSub2"]);
+        if (isset($gen2)) {
+            $admin->getSubCodeGen3M($username);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST["genSub3"])) {
-    $gen3 = Util::securevar($_POST["genSub3"]);
-    if (isset($gen3)) {
-      $admin->getSubCodeGentrail($username);
+    if (isset($_POST["genSub3"])) {
+        $gen3 = Util::securevar($_POST["genSub3"]);
+        if (isset($gen3)) {
+            $admin->getSubCodeGentrail($username);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST["delSub"])) {
-    $delsub = Util::securevar($_POST["delSub"]);
-    if (isset($delsub)) {
-      $admin->delsubcode($delsub);
+    if (isset($_POST["delSub"])) {
+        $delsub = Util::securevar($_POST["delSub"]);
+        if (isset($delsub)) {
+            $admin->delsubcode($delsub);
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 
-  if (isset($_POST["flushSub"])) {
-    $flushsub = Util::securevar($_POST["flushSub"]);
-    if (isset($flushsub)) {
-      $admin->flushsubcodes();
+    if (isset($_POST["flushSub"])) {
+        $flushsub = Util::securevar($_POST["flushSub"]);
+        if (isset($flushsub)) {
+            $admin->flushsubcodes();
+        }
+        header("location: codes.php");
     }
-    header("location: codes.php");
-  }
 }
 ?>
 

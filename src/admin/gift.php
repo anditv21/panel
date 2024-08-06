@@ -19,19 +19,19 @@ Util::head("Admin Panel");
 
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-   if (isset($_POST["giftsub"])) {
-      $giftsub = Util::securevar($_POST["giftsub"]);
-   }
-   if (isset($_POST["days"])) {
-      $time = Util::securevar($_POST["days"]);
-   }
+    if (isset($_POST["giftsub"])) {
+        $giftsub = Util::securevar($_POST["giftsub"]);
+    }
+    if (isset($_POST["days"])) {
+        $time = Util::securevar($_POST["days"]);
+    }
 
-   if (isset($giftsub)) {
-      $name = $giftsub;
-      $sub = $admin->subcheckbyusername($name);
-      $admin->giftsub($name, $sub, $time);
-   }
-   header("location: gift.php");
+    if (isset($giftsub)) {
+        $name = $giftsub;
+        $sub = $admin->subcheckbyusername($name);
+        $admin->giftsub($name, $sub, $time);
+    }
+    header("location: gift.php");
 }
 ?>
 <!DOCTYPE html>

@@ -56,12 +56,12 @@ Util::head("Admin Logs");
                                         <td>
                                             <?php
                                             $action = $row->action;
-                                            if (strpos($action, 'Generated an inv:') === 0) {
-                                                Util::display('Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>');
-                                            } else {
-                                                Util::display($action);
-                                            }
-                                            ?>
+                                    if (strpos($action, 'Generated an inv:') === 0) {
+                                        Util::display('Generated an inv: <span class="spoiler">' . substr($action, strlen('Generated an inv:')) . '</span>');
+                                    } else {
+                                        Util::display($action);
+                                    }
+                                    ?>
                                         </td>
                                         <td style='text-align: center;'>
                                             <center>

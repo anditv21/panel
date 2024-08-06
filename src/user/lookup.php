@@ -14,8 +14,8 @@ if (!Session::isLogged()) {
 
 $uid = Session::get("uid");
 $username = Session::get("username");
-$admin = Util::adminCheck(False);
-$supp = Util::suppCheck(False);
+$admin = Util::adminCheck(false);
+$supp = Util::suppCheck(false);
 
 Util::banCheck();
 Util::checktoken();

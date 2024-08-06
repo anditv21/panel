@@ -23,135 +23,135 @@ Util::head("Admin Panel");
 // Handle POST request
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-      if (isset($_POST["SystemStatus"])) {
-         $Systemstatus = Util::securevar($_POST["SystemStatus"]);
-      }
-      if (isset($_POST["SystemMaint"])) {
-         $SystemMaint = Util::securevar($_POST["SystemMaint"]);
-      }
-      if (isset($_POST["SystemVersion"])) {
-         $SystemVersion = Util::securevar($_POST["SystemVersion"]);
-      }
-      if (isset($_POST["invite"])) {
-         $invite = Util::securevar($_POST["invite"]);
-      }
-      if (isset($_POST['Systemfreeze'])) {
-         $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
-      }
-      if (isset($_POST['flushchat'])) {
-         $flushchat = Util::securevar($_POST['flushchat']);
-      }
-      if (isset($_POST['shoutbox'])) {
-         $shoutbox = Util::securevar($_POST['shoutbox']);
-      }
-      if (isset($_POST['setnews'])) {
-         $news = Util::securevar($_POST['setnews']);
-      }
-      if (isset($_POST['invwave'])) {
-         $invwave = Util::securevar($_POST['invwave']);
-      }
-      if (isset($_POST['discordlinking'])) {
-         $discordlinking = Util::securevar($_POST['discordlinking']);
-      }
-      if (isset($_POST['discordrelinking'])) {
-         $discordrelinking = Util::securevar($_POST['discordrelinking']);
-      }
-      if (isset($_POST['discordlogging'])) {
-         $discordlogging = Util::securevar($_POST['discordlogging']);
-      }
+    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
+        if (isset($_POST["SystemStatus"])) {
+            $Systemstatus = Util::securevar($_POST["SystemStatus"]);
+        }
+        if (isset($_POST["SystemMaint"])) {
+            $SystemMaint = Util::securevar($_POST["SystemMaint"]);
+        }
+        if (isset($_POST["SystemVersion"])) {
+            $SystemVersion = Util::securevar($_POST["SystemVersion"]);
+        }
+        if (isset($_POST["invite"])) {
+            $invite = Util::securevar($_POST["invite"]);
+        }
+        if (isset($_POST['Systemfreeze'])) {
+            $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
+        }
+        if (isset($_POST['flushchat'])) {
+            $flushchat = Util::securevar($_POST['flushchat']);
+        }
+        if (isset($_POST['shoutbox'])) {
+            $shoutbox = Util::securevar($_POST['shoutbox']);
+        }
+        if (isset($_POST['setnews'])) {
+            $news = Util::securevar($_POST['setnews']);
+        }
+        if (isset($_POST['invwave'])) {
+            $invwave = Util::securevar($_POST['invwave']);
+        }
+        if (isset($_POST['discordlinking'])) {
+            $discordlinking = Util::securevar($_POST['discordlinking']);
+        }
+        if (isset($_POST['discordrelinking'])) {
+            $discordrelinking = Util::securevar($_POST['discordrelinking']);
+        }
+        if (isset($_POST['discordlogging'])) {
+            $discordlogging = Util::securevar($_POST['discordlogging']);
+        }
 
-      if (isset($_POST['service'])) {
-         $service = Util::securevar($_POST['service']);
-      }
+        if (isset($_POST['service'])) {
+            $service = Util::securevar($_POST['service']);
+        }
 
-      if (isset($_POST['setkey'])) {
-         $key = Util::securevar($_POST['site_key']);
-      }
+        if (isset($_POST['setkey'])) {
+            $key = Util::securevar($_POST['site_key']);
+        }
 
-      if (isset($_POST['setsecret'])) {
-         $secret = Util::securevar($_POST['site_secret']);
-      }
+        if (isset($_POST['setsecret'])) {
+            $secret = Util::securevar($_POST['site_secret']);
+        }
 
-      if (isset($_POST['setcolor'])) {
-         $embed = Util::securevar($_POST['embed_color']);
-      }
+        if (isset($_POST['setcolor'])) {
+            $embed = Util::securevar($_POST['embed_color']);
+        }
 
-      if (isset($_POST['captcha_option'])) {
-         $option = Util::securevar($_POST['captcha_option']);
-      }
-
-
-      Util::adminCheck();
-
-      if (isset($Systemstatus)) {
-         $admin->setSystemStatus();
-      }
-
-      if (isset($SystemMaint)) {
-         $admin->setSystemMaint();
-      }
-
-      if (isset($SystemVersion)) {
-         $ver = floatval(Util::securevar($_POST["version"]));
-         $admin->setSystemVersion($ver);
-      }
-
-      if (isset($invite)) {
-         $admin->setinvite();
-      }
-
-      if (isset($news)) {
-         $news = Util::securevar($_POST["msg"]);
-         $admin->setnews($news);
-      }
-
-      if (isset($Systemfreeze)) {
-         $admin->setSystemfreeze();
-      }
-
-      if (isset($flushchat)) {
-         $admin->flushchat();
-      }
-
-      if (isset($shoutbox)) {
-         $admin->setshoutbox();
-      }
-
-      if (isset($invwave)) {
-         $admin->invwave();
-      }
-      if (isset($discordlinking)) {
-         $admin->setDiscordLink();
-      }
-      if (isset($discordrelinking)) {
-         $admin->setDiscordReLink();
-      }
-      if (isset($discordlogging)) {
-         $admin->setDiscordLogging();
-      }
-      if (isset($option)) {
-         $admin->setCaptchaSystem($option);
-      }
-      if (isset($key)) {
-         $admin->setCaptchaKey($key);
-      }
-      if (isset($secret)) {
-         $admin->setCaptchaSecret($secret);
-      }
-      if (isset($embed)) {
-         $admin->changeEmbedColor($embed);
-      }
+        if (isset($_POST['captcha_option'])) {
+            $option = Util::securevar($_POST['captcha_option']);
+        }
 
 
+        Util::adminCheck();
 
-      header("location: system.php");
-   }
+        if (isset($Systemstatus)) {
+            $admin->setSystemStatus();
+        }
+
+        if (isset($SystemMaint)) {
+            $admin->setSystemMaint();
+        }
+
+        if (isset($SystemVersion)) {
+            $ver = floatval(Util::securevar($_POST["version"]));
+            $admin->setSystemVersion($ver);
+        }
+
+        if (isset($invite)) {
+            $admin->setinvite();
+        }
+
+        if (isset($news)) {
+            $news = Util::securevar($_POST["msg"]);
+            $admin->setnews($news);
+        }
+
+        if (isset($Systemfreeze)) {
+            $admin->setSystemfreeze();
+        }
+
+        if (isset($flushchat)) {
+            $admin->flushchat();
+        }
+
+        if (isset($shoutbox)) {
+            $admin->setshoutbox();
+        }
+
+        if (isset($invwave)) {
+            $admin->invwave();
+        }
+        if (isset($discordlinking)) {
+            $admin->setDiscordLink();
+        }
+        if (isset($discordrelinking)) {
+            $admin->setDiscordReLink();
+        }
+        if (isset($discordlogging)) {
+            $admin->setDiscordLogging();
+        }
+        if (isset($option)) {
+            $admin->setCaptchaSystem($option);
+        }
+        if (isset($key)) {
+            $admin->setCaptchaKey($key);
+        }
+        if (isset($secret)) {
+            $admin->setCaptchaSecret($secret);
+        }
+        if (isset($embed)) {
+            $admin->changeEmbedColor($embed);
+        }
 
 
 
+        header("location: system.php");
+    }
 
-   header("location: index.php");
+
+
+
+    header("location: index.php");
 }
 
 ?>
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                      <div class="col-lg-2">
                         <div class="card stats-card">
                            <?php if (
-                              $System->getSystemData()->status == "Online"
+                               $System->getSystemData()->status == "Online"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -181,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->status == "Offline"
+                               $System->getSystemData()->status == "Offline"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                      <div class="col-lg-2">
                         <div class="card stats-card">
                            <?php if (
-                              $System->getSystemData()->maintenance == "-"
+                               $System->getSystemData()->maintenance == "-"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -211,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->maintenance == "UNDER"
+                               $System->getSystemData()->maintenance == "UNDER"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -239,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            </div>
                         </div>
                      <?php elseif (
-                        $System->getSystemData()->discordlinking == "0"
+                         $System->getSystemData()->discordlinking == "0"
                      ) : ?>
                         <div class="card-body">
                            <div class="stats-info">
@@ -267,7 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            </div>
                         </div>
                      <?php elseif (
-                        $System->getSystemData()->relinkdiscord == "0"
+                         $System->getSystemData()->relinkdiscord == "0"
                      ) : ?>
                         <div class="card-body">
                            <div class="stats-info">
@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            </div>
                         </div>
                      <?php elseif (
-                        $System->getSystemData()->discordlogging == "0"
+                         $System->getSystemData()->discordlogging == "0"
                      ) : ?>
                         <div class="card-body">
                            <div class="stats-info">
@@ -327,8 +327,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <div class="card-body">
                               <div class="stats-info">
                                  <h5 class="card-title"><?php Util::display(
-                                                            $System->getSystemData()->version
-                                                         ); ?></h5>
+                                     $System->getSystemData()->version
+                                 ); ?></h5>
                                  <p class="stats-text">Loader version</p>
                               </div>
                               <div class="stats-icon change-success">
@@ -350,7 +350,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->invites == "0"
+                               $System->getSystemData()->invites == "0"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -378,7 +378,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  </div>
                               </div>
                            <?php elseif (
-                              $System->getSystemData()->frozen == "1"
+                               $System->getSystemData()->frozen == "1"
                            ) : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -397,8 +397,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <div class="card-body">
                               <div class="stats-info">
                                  <h5 class="card-title"><?php Util::display(
-                                                            $user->getUserCount()
-                                                         ); ?></h5>
+                                     $user->getUserCount()
+                                 ); ?></h5>
                                  <p class="stats-text">Total Users</p>
                               </div>
                               <div class="stats-icon tr-card-bg-info text-white">
@@ -412,8 +412,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <div class="card-body">
                               <div class="stats-info">
                                  <h5 class="card-title"><?php Util::display(
-                                                            $user->getNewUser()
-                                                         ); ?></h5>
+                                     $user->getNewUser()
+                                 ); ?></h5>
                                  <p class="stats-text">Latest User</p>
                               </div>
                               <div class="stats-icon tr-card-bg-info text-white">
@@ -427,8 +427,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <div class="card-body">
                               <div class="stats-info">
                                  <h5 class="card-title"><?php Util::display(
-                                                            $user->getBannedUserCount()
-                                                         ); ?></h5>
+                                     $user->getBannedUserCount()
+                                 ); ?></h5>
                                  <p class="stats-text">Banned Users</p>
                               </div>
                               <div class="stats-icon tr-card-bg-info text-white">
@@ -446,7 +446,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                      <div class="card-body">
                         <h5 class="card-title">System Status</h5>
                         <?php if (
-                           $System->getSystemData()->status == "Online"
+                            $System->getSystemData()->status == "Online"
                         ) : ?>
                            <div class="tr-item">
                               <div class="tr-company-name">
@@ -456,8 +456,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <div class="tr-text">
                                     <h4 class="text-white"><?php Util::Display(SITE_NAME); ?></h4>
                                     <p>Active Subs: <?php Util::display(
-                                                         $user->getActiveUserCount()
-                                                      ); ?></p>
+                                        $user->getActiveUserCount()
+                                    ); ?></p>
                                  </div>
                               </div>
                               <div class="tr-rate">
@@ -465,7 +465,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                               </div>
                            </div>
                         <?php elseif (
-                           $System->getSystemData()->status == "Offline"
+                            $System->getSystemData()->status == "Offline"
                         ) : ?>
                            <div class="tr-item">
                               <div class="tr-company-name">
@@ -475,8 +475,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <div class="tr-text">
                                     <h4 class="text-white"><?php Util::Display(SITE_NAME); ?></h4>
                                     <p>Active Subs: <?php Util::display(
-                                                         $user->getActiveUserCount()
-                                                      ); ?></p>
+                                        $user->getActiveUserCount()
+                                    ); ?></p>
                                  </div>
                               </div>
                               <div class="tr-rate">
@@ -496,8 +496,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                      <div class="card-body">
                         <div class="widget-info-container">
                            <form method="POST" action="<?php Util::Display(
-                                                            Util::securevar($_SERVER["PHP_SELF"])
-                                                         ); ?>">
+                               Util::securevar($_SERVER["PHP_SELF"])
+                           ); ?>">
                               <h5 class="widget-info-title text-white">Settings</h5>
                               <p class="widget-info-text">Set System version</p>
 

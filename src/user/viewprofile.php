@@ -2,7 +2,7 @@
 require_once "../app/require.php";
 require_once "../app/controllers/SystemController.php";
 
-require_once ("../includes/head.nav.inc.php");
+require_once("../includes/head.nav.inc.php");
 
 
 $user = new UserController();
@@ -11,12 +11,12 @@ $System = new SystemController();
 Session::init();
 
 if (!Session::isLogged()) {
-   Util::redirect("/auth/login.php");
+    Util::redirect("/auth/login.php");
 }
 $uid = Session::get("uid");
 $username = Session::get("username");
-$admin = Util::adminCheck(False);
-$supp = Util::suppCheck(False);
+$admin = Util::adminCheck(false);
+$supp = Util::suppCheck(false);
 $getuid = Util::securevar($_GET["uid"]);
 $sub = $user->getSubStatus($username);
 $userfrozen = $user->getfrozen();
@@ -30,23 +30,23 @@ Util::head("Profile");
 
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
-   if (isset($_GET["uid"])) {
-      $uid = Util::securevar($_GET["uid"]);
+    if (isset($_GET["uid"])) {
+        $uid = Util::securevar($_GET["uid"]);
 
-      if (!empty($uid)) {
-         $getuid = Util::securevar($_GET["uid"]);
-         $userbyid = $user->getuserbyuid($getuid);
-         if (!empty($userbyid->username)) {
-            $username = $userbyid->username;
-         } else {
-            echo "<script>alert('Username not found for the given UID');</script>";
+        if (!empty($uid)) {
+            $getuid = Util::securevar($_GET["uid"]);
+            $userbyid = $user->getuserbyuid($getuid);
+            if (!empty($userbyid->username)) {
+                $username = $userbyid->username;
+            } else {
+                echo "<script>alert('Username not found for the given UID');</script>";
+                echo "<script>window.history.back();</script>";
+            }
+        } else {
+            echo "<script>alert('Please provide a valid UID');</script>";
             echo "<script>window.history.back();</script>";
-         }
-      } else {
-         echo "<script>alert('Please provide a valid UID');</script>";
-         echo "<script>window.history.back();</script>";
-      }
-   }
+        }
+    }
 }
 ?>
 
@@ -79,12 +79,12 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                               <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
                               <?php
                               $displayName = $view->displayname;
-                              if ($displayName !== null) {
-                                 echo Util::display($view->username . " ($displayName)");
-                              } else {
-                                 echo Util::display($view->username);
-                              }
-                              ?>
+if ($displayName !== null) {
+    echo Util::display($view->username . " ($displayName)");
+} else {
+    echo Util::display($view->username);
+}
+?>
                            </h5>
                               <p data-aos="fade-down" data-aos-duration="1500">UID: <?php Util::display($view->uid); ?> </p>
                               <p>Badges:
