@@ -42,9 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_POST['flushchat'])) {
             $flushchat = Util::securevar($_POST['flushchat']);
         }
-        if (isset($_POST['shoutbox'])) {
-            $shoutbox = Util::securevar($_POST['shoutbox']);
-        }
         if (isset($_POST['setnews'])) {
             $news = Util::securevar($_POST['setnews']);
         }
@@ -112,10 +109,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (isset($flushchat)) {
             $admin->flushchat();
-        }
-
-        if (isset($shoutbox)) {
-            $admin->setshoutbox();
         }
 
         if (isset($invwave)) {
@@ -546,10 +539,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     FREEZE subscriptions+- (BETA)
                                  </button>
 
-                                 <button name="shoutbox" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the shoutbox status?');">
-                                    SET shoutbox+- (BETA)
-                                 </button>
-
                                  <button name="discordlinking" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the Discord Account Linking status?');">
                                     SET Discord Account Linking+-
                                  </button>
@@ -567,8 +556,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                  <br>
                                  <br>
-
-                                 <button type="submit" name="flushchat" onclick="return confirm('Are you sure you want to flush the shoutbox?')" class="btn btn-outline-primary btn-sm">Flush Shoutbox</button>
                                  <button type="submit" name="invwave" onclick="return confirm('Are you sure you want to gift everyone 5 additional invites?')" class="btn btn-outline-primary btn-sm">Invite wave</button>
                            </form>
                         </div>
