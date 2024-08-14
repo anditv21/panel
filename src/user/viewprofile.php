@@ -104,10 +104,10 @@ if ($displayName !== null) {
                                  <?php endif; ?>
 
 
-                              <p>Joined: <?php Util::display(Util::calculate_days($view->createdAt)); ?> ago</p>
+                              <p>Joined: <?php Util::display(Util::daysago($view->createdAt)); ?></p>
                               <p>Invited by: <?php Util::display($view->invitedBy); ?></p>
                               <?php if ($admin || $supp) : ?>
-                              <div class="col-12 clearfix">                           
+                              <div class="col-12 clearfix">
                               <p class="float-right mb-0"><?php Util::Display("HWID Resets: ". $user->getresetcount($uid)); ?></p>
                               </div>
                               <div class="col-12 clearfix">
