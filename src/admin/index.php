@@ -23,131 +23,58 @@ Util::head("Admin Panel");
 // Handle POST request
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-        if (isset($_POST["SystemStatus"])) {
-            $Systemstatus = Util::securevar($_POST["SystemStatus"]);
-        }
-        if (isset($_POST["SystemMaint"])) {
-            $SystemMaint = Util::securevar($_POST["SystemMaint"]);
-        }
-        if (isset($_POST["SystemVersion"])) {
-            $SystemVersion = Util::securevar($_POST["SystemVersion"]);
-        }
-        if (isset($_POST["invite"])) {
-            $invite = Util::securevar($_POST["invite"]);
-        }
-        if (isset($_POST['Systemfreeze'])) {
-            $Systemfreeze = Util::securevar($_POST['Systemfreeze']);
-        }
-        if (isset($_POST['flushchat'])) {
-            $flushchat = Util::securevar($_POST['flushchat']);
-        }
-        if (isset($_POST['setnews'])) {
-            $news = Util::securevar($_POST['setnews']);
-        }
-        if (isset($_POST['invwave'])) {
-            $invwave = Util::securevar($_POST['invwave']);
-        }
-        if (isset($_POST['discordlinking'])) {
-            $discordlinking = Util::securevar($_POST['discordlinking']);
-        }
-        if (isset($_POST['discordrelinking'])) {
-            $discordrelinking = Util::securevar($_POST['discordrelinking']);
-        }
-        if (isset($_POST['discordlogging'])) {
-            $discordlogging = Util::securevar($_POST['discordlogging']);
-        }
+   // Check the request method again for added security
+   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
-        if (isset($_POST['service'])) {
-            $service = Util::securevar($_POST['service']);
-        }
+       // Sanitize and assign POST variables
+       $params = [
+           'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
+           'flushchat', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
+           'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
+       ];
 
-        if (isset($_POST['setkey'])) {
-            $key = Util::securevar($_POST['site_key']);
-        }
+       foreach ($params as $param) {
+           if (isset($_POST[$param])) {
+               ${$param} = Util::securevar($_POST[$param]);
+           }
+       }
 
-        if (isset($_POST['setsecret'])) {
-            $secret = Util::securevar($_POST['site_secret']);
-        }
+       // Perform admin check
+       Util::adminCheck();
 
-        if (isset($_POST['setcolor'])) {
-            $embed = Util::securevar($_POST['embed_color']);
-        }
+       // Execute admin functions based on the sanitized POST variables
+       if (isset($SystemStatus)) $admin->setSystemStatus();
+       if (isset($SystemMaint)) $admin->setSystemMaint();
+       if (isset($SystemVersion)) {
+           $ver = floatval(Util::securevar($_POST["version"]));
+           $admin->setSystemVersion($ver);
+       }
+       if (isset($invite)) $admin->setinvite();
+       if (isset($Systemfreeze)) $admin->setSystemfreeze();
+       if (isset($flushchat)) $admin->flushchat();
+       if (isset($setnews)) {
+           $news = Util::securevar($_POST["msg"]);
+           $admin->setnews($news);
+       }
+       if (isset($invwave)) $admin->invwave();
+       if (isset($discordlinking)) $admin->setDiscordLink();
+       if (isset($discordrelinking)) $admin->setDiscordReLink();
+       if (isset($discordlogging)) $admin->setDiscordLogging();
+       if (isset($captcha_option)) $admin->setCaptchaSystem($captcha_option);
+       if (isset($setkey)) $admin->setCaptchaKey($setkey);
+       if (isset($setsecret)) $admin->setCaptchaSecret($setsecret);
+       if (isset($setcolor)) $admin->changeEmbedColor($setcolor);
 
-        if (isset($_POST['captcha_option'])) {
-            $option = Util::securevar($_POST['captcha_option']);
-        }
+       // Redirect to system page after processing
+       header("location: index.php");
+       exit;
+   }
 
-
-        Util::adminCheck();
-
-        if (isset($Systemstatus)) {
-            $admin->setSystemStatus();
-        }
-
-        if (isset($SystemMaint)) {
-            $admin->setSystemMaint();
-        }
-
-        if (isset($SystemVersion)) {
-            $ver = floatval(Util::securevar($_POST["version"]));
-            $admin->setSystemVersion($ver);
-        }
-
-        if (isset($invite)) {
-            $admin->setinvite();
-        }
-
-        if (isset($news)) {
-            $news = Util::securevar($_POST["msg"]);
-            $admin->setnews($news);
-        }
-
-        if (isset($Systemfreeze)) {
-            $admin->setSystemfreeze();
-        }
-
-        if (isset($flushchat)) {
-            $admin->flushchat();
-        }
-
-        if (isset($invwave)) {
-            $admin->invwave();
-        }
-        if (isset($discordlinking)) {
-            $admin->setDiscordLink();
-        }
-        if (isset($discordrelinking)) {
-            $admin->setDiscordReLink();
-        }
-        if (isset($discordlogging)) {
-            $admin->setDiscordLogging();
-        }
-        if (isset($option)) {
-            $admin->setCaptchaSystem($option);
-        }
-        if (isset($key)) {
-            $admin->setCaptchaKey($key);
-        }
-        if (isset($secret)) {
-            $admin->setCaptchaSecret($secret);
-        }
-        if (isset($embed)) {
-            $admin->changeEmbedColor($embed);
-        }
-
-
-
-        header("location: system.php");
-    }
-
-
-
-
-    header("location: index.php");
+   header("location: index.php");
+   exit;
 }
-
 ?>
+
 
 <head><?php Util::navbar(); ?></head>
 <?php display_top_nav("Admin Panel"); ?>

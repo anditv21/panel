@@ -3,36 +3,36 @@ require_once "../app/require.php";
 require_once("../includes/head.nav.inc.php");
 require_once "../app/controllers/AdminController.php";
 
+// Initialize necessary controllers and session
 $user = new UserController();
 $admin = new AdminController();
-
 Session::init();
 
+// Get session username and user list
 $username = Session::get("username");
-
 $userList = $admin->getUserArray();
 
+// Security checks and page setup
 Util::banCheck();
 Util::checktoken();
 Util::adminCheck();
 Util::head("Admin Panel");
 
-// if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-    if (isset($_POST["giftsub"])) {
-        $giftsub = Util::securevar($_POST["giftsub"]);
-    }
-    if (isset($_POST["days"])) {
-        $time = Util::securevar($_POST["days"]);
+// Handle POST requests
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $giftsub = isset($_POST["giftsub"]) ? Util::securevar($_POST["giftsub"]) : null;
+    $time = isset($_POST["days"]) ? Util::securevar($_POST["days"]) : null;
+
+    if ($giftsub && $time) {
+        $sub = $admin->subcheckbyusername($giftsub);
+        $admin->giftsub($giftsub, $sub, $time);
     }
 
-    if (isset($giftsub)) {
-        $name = $giftsub;
-        $sub = $admin->subcheckbyusername($name);
-        $admin->giftsub($name, $sub, $time);
-    }
+
     header("location: gift.php");
+    exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

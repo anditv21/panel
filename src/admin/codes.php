@@ -4,92 +4,90 @@ require_once '../app/require.php';
 require_once("../includes/head.nav.inc.php");
 require_once '../app/controllers/AdminController.php';
 
+// Initialize necessary controllers and session
 $user = new UserController();
 $admin = new AdminController();
-
 Session::init();
 
+// Get session username
 $username = Session::get("username");
 
+// Fetch invitation and subscription code arrays
 $invList = $admin->getInvCodeArray();
 $subList = $admin->getSubCodeArray();
 
+// Security checks and page setup
 Util::banCheck();
 Util::checktoken();
 Util::suppCheck();
 Util::head('Admin Panel');
 
-
 // Handle POST requests
-if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = null;
+
     if (isset($_POST['genInv'])) {
-        $geninv = Util::securevar($_POST['genInv']);
-        if (isset($geninv)) {
-            Util::suppCheck();
-            $admin->getInvCodeGen($username);
-        }
-        header("location: codes.php");
+        $action = 'generateInvitation';
+    } elseif (isset($_POST['delInv'])) {
+        $action = 'deleteInvitation';
+    } elseif (isset($_POST['flushInvs'])) {
+        $action = 'flushInvitations';
+    } elseif (isset($_POST['genSub'])) {
+        $action = 'generateSubscription1M';
+    } elseif (isset($_POST['genSub2'])) {
+        $action = 'generateSubscription3M';
+    } elseif (isset($_POST['genSub3'])) {
+        $action = 'generateTrialSubscription';
+    } elseif (isset($_POST['delSub'])) {
+        $action = 'deleteSubscription';
+    } elseif (isset($_POST['flushSub'])) {
+        $action = 'flushSubscriptions';
     }
 
-    if (isset($_POST['delInv'])) {
-        $delinv = Util::securevar($_POST['delInv']);
-        if (isset($delinv)) {
-            Util::suppCheck();
-            $admin->delInvCode($delinv);
-        }
-        header("location: codes.php");
-    }
+    if ($action) {
+        switch ($action) {
+            case 'generateInvitation':
+                Util::suppCheck();
+                $admin->getInvCodeGen($username);
+                break;
 
-    if (isset($_POST['flushInvs'])) {
-        $delinv = Util::securevar($_POST['flushInvs']);
-        if (isset($delinv)) {
-            Util::adminCheck();
-            $admin->flushInvCode();
-        }
-        header("location: codes.php");
-    }
-    // Handle Subscription Generation
-    if (isset($_POST["genSub"])) {
-        $gen1 =  Util::securevar($_POST["genSub"]);
-        if (isset($gen1)) {
-            $admin->getSubCodeGen($username);
-        }
-        header("location: codes.php");
-    }
+            case 'deleteInvitation':
+                Util::suppCheck();
+                $admin->delInvCode(Util::securevar($_POST['delInv']));
+                break;
 
-    if (isset($_POST["genSub2"])) {
-        $gen2 = Util::securevar($_POST["genSub2"]);
-        if (isset($gen2)) {
-            $admin->getSubCodeGen3M($username);
-        }
-        header("location: codes.php");
-    }
+            case 'flushInvitations':
+                Util::adminCheck();
+                $admin->flushInvCode();
+                break;
 
-    if (isset($_POST["genSub3"])) {
-        $gen3 = Util::securevar($_POST["genSub3"]);
-        if (isset($gen3)) {
-            $admin->getSubCodeGentrail($username);
-        }
-        header("location: codes.php");
-    }
+            case 'generateSubscription1M':
+                $admin->getSubCodeGen($username);
+                break;
 
-    if (isset($_POST["delSub"])) {
-        $delsub = Util::securevar($_POST["delSub"]);
-        if (isset($delsub)) {
-            $admin->delsubcode($delsub);
-        }
-        header("location: codes.php");
-    }
+            case 'generateSubscription3M':
+                $admin->getSubCodeGen3M($username);
+                break;
 
-    if (isset($_POST["flushSub"])) {
-        $flushsub = Util::securevar($_POST["flushSub"]);
-        if (isset($flushsub)) {
-            $admin->flushsubcodes();
+            case 'generateTrialSubscription':
+                $admin->getSubCodeGentrail($username);
+                break;
+
+            case 'deleteSubscription':
+                $admin->delsubcode(Util::securevar($_POST['delSub']));
+                break;
+
+            case 'flushSubscriptions':
+                $admin->flushsubcodes();
+                break;
         }
+
         header("location: codes.php");
+        exit;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

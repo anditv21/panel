@@ -1,68 +1,55 @@
-/<?php
-   require_once "../app/require.php";
+<?php
+require_once "../app/require.php";
 require_once "../app/controllers/AdminController.php";
-require_once("../includes/head.nav.inc.php");
+require_once "../includes/head.nav.inc.php";
 
-
+// Initialize controllers and session
 $user = new UserController();
 $admin = new AdminController();
-
 Session::init();
 
+// Get session username and user list
 $username = Session::get("username");
-
 $userList = $admin->getUserArray();
 
+// Security checks and page setup
 Util::banCheck();
 Util::checktoken();
 Util::suppCheck();
 Util::head("Admin Panel");
 
-// if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
-    if (isset($_POST["resetHWID"])) {
-        $hwid = Util::securevar($_POST["resetHWID"]);
-    }
-    if (isset($_POST["setsupp"])) {
-        $supp = Util::securevar($_POST["setsupp"]);
-    }
-    if (isset($_POST["setBanned"])) {
-        $ban = Util::securevar($_POST["setBanned"]);
-    }
-    if (isset($_POST["setAdmin"])) {
-        $adminuser = Util::securevar($_POST["setAdmin"]);
-    }
+// Handle POST requests
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $hwid = isset($_POST["resetHWID"]) ? Util::securevar($_POST["resetHWID"]) : null;
+    $supp = isset($_POST["setsupp"]) ? Util::securevar($_POST["setsupp"]) : null;
+    $ban = isset($_POST["setBanned"]) ? Util::securevar($_POST["setBanned"]) : null;
+    $adminuser = isset($_POST["setAdmin"]) ? Util::securevar($_POST["setAdmin"]) : null;
 
-    if (isset($hwid)) {
+    if ($hwid) {
         Util::suppCheck();
-        $rowUID = $hwid;
-        $admin->resetHWID($rowUID);
+        $admin->resetHWID($hwid);
     }
 
-
-    if (isset($ban)) {
+    if ($ban) {
         Util::adminCheck();
-        $rowUID = $ban;
         $admin->setBanned($ban);
     }
 
-
-    if (isset($supp)) {
+    if ($supp) {
         Util::adminCheck();
-        $rowUID = $supp;
-        $admin->setsupp($rowUID);
+        $admin->setsupp($supp);
     }
 
-
-    if (isset($adminuser)) {
+    if ($adminuser) {
         Util::adminCheck();
-        $rowUID = $adminuser;
-        $admin->setAdmin($rowUID);
+        $admin->setAdmin($adminuser);
     }
 
     header("location: users.php");
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

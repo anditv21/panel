@@ -3,35 +3,37 @@ require_once "../app/require.php";
 require_once("../includes/head.nav.inc.php");
 require_once "../app/controllers/AdminController.php";
 
+// Initialize controllers and session
 $user = new UserController();
 $admin = new AdminController();
 Session::init();
+
+// Security checks and page setup
 Util::banCheck();
 Util::checktoken();
 Util::adminCheck();
 Util::head('Admin Panel');
+
+// Get IP whitelist and username
 $ipList = $admin->getIPArray();
 $username = Session::get("username");
 
-// if post request
-if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+// Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $ip = isset($_POST["ip"]) ? Util::securevar($_POST["ip"]) : null;
+    $delIP = isset($_POST["delIP"]) ? Util::securevar($_POST["delIP"]) : null;
 
-    if (isset($_POST["ip"])) {
-        $ip = Util::securevar($_POST["ip"]);
-    }
-    if (isset($_POST["delIP"])) {
-        $delIP = Util::securevar($_POST["delIP"]);
-    }
-
-    if (isset($ip)) {
+    if ($ip) {
         $admin->whitelist_ip($ip);
     }
-    if (isset($delIP)) {
+
+    if ($delIP) {
         $admin->del_ip($delIP);
     }
+
     header("location: ip_whitelist.php");
+    exit;
 }
-?>
 <!DOCTYPE html>
 <html lang="en">
 
