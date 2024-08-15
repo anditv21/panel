@@ -175,14 +175,14 @@ class Util extends UtilMod
         return $res;
     }
 
-    // public static function calculate_days($date)
-    // {
-    //     $now = new DateTime();
-    //     $date = new DateTime($date);
-    //     $interval = $now->diff($date);
+    public static function calculate_days($date)
+    {
+        $now = new DateTime();
+        $date = new DateTime($date);
+        $interval = $now->diff($date);
 
-    //     return (int) $interval->format("%a");
-    // }
+        return (int) $interval->format("%a");
+    }
 
     public static function getavatar($uid)
     {
