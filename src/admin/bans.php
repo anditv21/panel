@@ -102,22 +102,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <tbody>
                               <?php
                               $min = isset($_GET["min"]) ? Util::securevar($_GET["min"]) : 1;
-                              $max = isset($_GET["max"]) ? Util::securevar($_GET["max"]) : 10;
+$max = isset($_GET["max"]) ? Util::securevar($_GET["max"]) : 10;
 
-                              foreach ($bannedUserList as $user) :
-                                 if ($user->uid >= $min && $user->uid <= $max) :
-                              ?>
+foreach ($bannedUserList as $user) :
+    if ($user->uid >= $min && $user->uid <= $max) :
+        ?>
                                     <tr>
                                        <td>
                                           <?php
-                                          $avatarUrl = Util::getavatar($user->uid);
-                                          if (!$avatarUrl) :
-                                          ?>
+                    $avatarUrl = Util::getavatar($user->uid);
+        if (!$avatarUrl) :
+            ?>
                                              <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
                                           <?php else :
-                                             $ext = pathinfo($avatarUrl, PATHINFO_EXTENSION);
-                                             $filename = "{$user->uid}.{$ext}";
-                                          ?>
+                                              $ext = pathinfo($avatarUrl, PATHINFO_EXTENSION);
+                                              $filename = "{$user->uid}.{$ext}";
+                                              ?>
                                              <a href="<?= $avatarUrl; ?>" download="<?= $filename; ?>">
                                                 <img title="Click to download" data-toggle="tooltip" data-placement="top" class="rounded-circle img-profile" width="45" height="45" src="<?= $avatarUrl; ?>"></a>
                                           <?php endif; ?>
@@ -141,8 +141,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     </tr>
                               <?php
                                  endif;
-                              endforeach;
-                              ?>
+endforeach;
+?>
                            </tbody>
                         </table>
                      </div>

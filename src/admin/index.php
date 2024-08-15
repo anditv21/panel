@@ -23,55 +23,81 @@ Util::head("Admin Panel");
 // Handle POST request
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-   // Check the request method again for added security
-   if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
+    // Check the request method again for added security
+    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
-       // Sanitize and assign POST variables
-       $params = [
-           'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
-           'flushchat', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
-           'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
-       ];
+        // Sanitize and assign POST variables
+        $params = [
+            'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
+            'flushchat', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
+            'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
+        ];
 
-       foreach ($params as $param) {
-           if (isset($_POST[$param])) {
-               ${$param} = Util::securevar($_POST[$param]);
-           }
-       }
+        foreach ($params as $param) {
+            if (isset($_POST[$param])) {
+                ${$param} = Util::securevar($_POST[$param]);
+            }
+        }
 
-       // Perform admin check
-       Util::adminCheck();
+        // Perform admin check
+        Util::adminCheck();
 
-       // Execute admin functions based on the sanitized POST variables
-       if (isset($SystemStatus)) $admin->setSystemStatus();
-       if (isset($SystemMaint)) $admin->setSystemMaint();
-       if (isset($SystemVersion)) {
-           $ver = floatval(Util::securevar($_POST["version"]));
-           $admin->setSystemVersion($ver);
-       }
-       if (isset($invite)) $admin->setinvite();
-       if (isset($Systemfreeze)) $admin->setSystemfreeze();
-       if (isset($flushchat)) $admin->flushchat();
-       if (isset($setnews)) {
-           $news = Util::securevar($_POST["msg"]);
-           $admin->setnews($news);
-       }
-       if (isset($invwave)) $admin->invwave();
-       if (isset($discordlinking)) $admin->setDiscordLink();
-       if (isset($discordrelinking)) $admin->setDiscordReLink();
-       if (isset($discordlogging)) $admin->setDiscordLogging();
-       if (isset($captcha_option)) $admin->setCaptchaSystem($captcha_option);
-       if (isset($setkey)) $admin->setCaptchaKey($setkey);
-       if (isset($setsecret)) $admin->setCaptchaSecret($setsecret);
-       if (isset($setcolor)) $admin->changeEmbedColor($setcolor);
+        // Execute admin functions based on the sanitized POST variables
+        if (isset($SystemStatus)) {
+            $admin->setSystemStatus();
+        }
+        if (isset($SystemMaint)) {
+            $admin->setSystemMaint();
+        }
+        if (isset($SystemVersion)) {
+            $ver = floatval(Util::securevar($_POST["version"]));
+            $admin->setSystemVersion($ver);
+        }
+        if (isset($invite)) {
+            $admin->setinvite();
+        }
+        if (isset($Systemfreeze)) {
+            $admin->setSystemfreeze();
+        }
+        if (isset($flushchat)) {
+            $admin->flushchat();
+        }
+        if (isset($setnews)) {
+            $news = Util::securevar($_POST["msg"]);
+            $admin->setnews($news);
+        }
+        if (isset($invwave)) {
+            $admin->invwave();
+        }
+        if (isset($discordlinking)) {
+            $admin->setDiscordLink();
+        }
+        if (isset($discordrelinking)) {
+            $admin->setDiscordReLink();
+        }
+        if (isset($discordlogging)) {
+            $admin->setDiscordLogging();
+        }
+        if (isset($captcha_option)) {
+            $admin->setCaptchaSystem($captcha_option);
+        }
+        if (isset($setkey)) {
+            $admin->setCaptchaKey($setkey);
+        }
+        if (isset($setsecret)) {
+            $admin->setCaptchaSecret($setsecret);
+        }
+        if (isset($setcolor)) {
+            $admin->changeEmbedColor($setcolor);
+        }
 
-       // Redirect to system page after processing
-       header("location: index.php");
-       exit;
-   }
+        // Redirect to system page after processing
+        header("location: index.php");
+        exit;
+    }
 
-   header("location: index.php");
-   exit;
+    header("location: index.php");
+    exit;
 }
 ?>
 
