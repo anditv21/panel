@@ -111,8 +111,8 @@ foreach ($bannedUserList as $user) :
                                        <td>
                                           <?php
                                           $avatarUrl = Util::getavatar($user->uid);
-                                          if (!$avatarUrl) :
-                                          ?>
+        if (!$avatarUrl) :
+            ?>
                                              <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" width="45" height="45">
                                           <?php else :
                                               $ext = pathinfo($avatarUrl, PATHINFO_EXTENSION);
