@@ -40,7 +40,7 @@ class API extends Database
                     $avatarurl =
                         SITE_URL .
                         SUB_DIR .
-                        "/assets/img/avatars/Portrait_Placeholder.png";
+                        "/assets/images/avatars/Portrait_Placeholder.png";
                 }
 
                 $this->prepare("SELECT * FROM `system`");

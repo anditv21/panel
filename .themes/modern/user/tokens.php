@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
                                                                                                                                                                                                                         Session::get("username")
                                                                                                                                                                                                                      ); ?></span>
                               <?php if (Util::getavatar($uid) == false) : ?>
-                                 <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                 <img class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
                               <?php else : ?>
                                  <img class="rounded-circle img-profile" src="<?php echo Util::getavatar($uid); ?>" style="border-color: rgb(255,255,255)!important;">
                               <?php endif; ?>
@@ -141,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["flush"]) && isset($_C
                                        <td style="color: rgb(255,255,255);"><button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->remembertoken); ?>" name="deltoken" onclick="confirm('Are you sure you want to delete this token?')">Delete</button>
                                           <br>
                                           <?php if ($row->remembertoken == Util::securevar($_COOKIE["login_cookie"])) : ?>
-                                            <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
+                                            <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15">
                                           <?php endif; ?>
                                        </td>
                                     </form>

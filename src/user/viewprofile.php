@@ -68,7 +68,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                               <?php $view = $user->getuserbyuid($uid); ?>
                               <div class="rounded-circle img-profile">
                                  <?php if (Util::getavatar($view->uid) == false) : ?>
-                                    <img width="120" height="120" class="border rounded-circle img-profile" src="<?= SUB_DIR ?>/assets/img/avatars/Portrait_Placeholder.png">
+                                    <img width="120" height="120" class="border rounded-circle img-profile" src="<?= SUB_DIR ?>/assets/images/avatars/Portrait_Placeholder.png">
                                  <?php else : ?>
 
                                     <img width="120" height="120" class="rounded-circle img-profile" src="

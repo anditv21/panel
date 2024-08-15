@@ -77,7 +77,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                         <div class="form-group">
                             <input type="password" class="form-control form-control-sm" placeholder="Confirm password" name="confirmPassword" required>
                         </div>
-                        <button class="btn btn-outline-primary btn-block" name="updatePassword" type="submit" value="submit">Update <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15"></button>
+                        <button class="btn btn-outline-primary btn-block" name="updatePassword" type="submit" value="submit">Update <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15"></button>
                     </form>
                 </div>
             </div>
@@ -98,7 +98,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                     endif; ?>
                     <center>
                         <?php if (Util::getavatar($uid) == false) : ?>
-                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
+                            <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;"></a>
                         <?php
                         else : ?>
                             <a href=<?php Util::display(SITE_URL . SUB_DIR . "/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar($uid)); ?>" style="border-color: rgb(255,255,255)!important;"></a>
@@ -204,7 +204,7 @@ $days_left = max(0, strtotime($cooldown_date) - strtotime($current_date)) / (24 
                                         </div>
 
                                         <button class="btn btn-outline-primary btn-block" disabled="disabled">
-                                            <img title="You have to wait <?php echo ceil($days_left); ?> days before you can change your display name." data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
+                                            <img title="You have to wait <?php echo ceil($days_left); ?> days before you can change your display name." data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15">
                                             Change now
                                         </button>
                                     <?php

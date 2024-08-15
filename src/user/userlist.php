@@ -71,7 +71,7 @@ Util::head("User list")
                                                 <tr style="text-align: center;">
                                                     <td scope="row" data-aos="fade-right" data-aos-duration="1000">
                                                         <?php if (Util::getavatar($row->uid) == false) : ?>
-                                                            <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
+                                                            <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" width="45" height="45">
                                                         <?php else : ?>
                                                             <?php $ext = pathinfo(Util::getavatardl($row->uid), PATHINFO_EXTENSION);
                                                             $name = $row->uid . "." . $ext;

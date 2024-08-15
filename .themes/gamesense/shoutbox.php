@@ -26,8 +26,8 @@ foreach ($messages as $message) :
 
   <div class="d-flex">
     <div>
-      <a href="<?php echo Util::getavatardl($message['uid']) ?: '/assets/img/avatars/Portrait_Placeholder.png'; ?>" download="<?php echo Util::display($message['uid'] . Util::getextention($message['uid'])); ?>">
-        <img src="<?php Util::display(Util::getavatardl($message['uid']) ?: SUB_DIR . '/assets/img/avatars/Portrait_Placeholder.png'); ?>" class="rounded-circle img-profile" width="45" height="45">
+      <a href="<?php echo Util::getavatardl($message['uid']) ?: '/assets/images/avatars/Portrait_Placeholder.png'; ?>" download="<?php echo Util::display($message['uid'] . Util::getextention($message['uid'])); ?>">
+        <img src="<?php Util::display(Util::getavatardl($message['uid']) ?: SUB_DIR . '/assets/images/avatars/Portrait_Placeholder.png'); ?>" class="rounded-circle img-profile" width="45" height="45">
       </a>
 
       <strong>

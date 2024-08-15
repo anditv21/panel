@@ -1,7 +1,7 @@
 <!-- Check if logged in -->
 <?php if (Session::isLogged() == true) : ?>
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-        <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#" style="text-align: center;width: 100%;"><span id="icons" style="text-align: center;margin-left: 30px;"><img src=<?php Util::Display(SITE_URL.SUB_DIR ."/assets/img/gey.gif"); ?> style="width: 54px;"></span>
+        <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#" style="text-align: center;width: 100%;"><span id="icons" style="text-align: center;margin-left: 30px;"><img src=<?php Util::Display(SITE_URL.SUB_DIR ."/assets/images/gey.gif"); ?> style="width: 54px;"></span>
                 <div class="sidebar-brand-text mx-3"></div>
             </a>
             <hr class="sidebar-divider my-0">

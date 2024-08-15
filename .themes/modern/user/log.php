@@ -64,7 +64,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     Session::get("username")
 ); ?></span>
                                 <?php if (Util::getavatar($uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                <img class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                 <img class="rounded-circle img-profile" src="<?php echo Util::getavatar(
@@ -85,16 +85,16 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
       <form method="POST">
       &nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-outline-primary btn-block" onclick="return confirm('WARNING: You are about to delete all logs!');" name="flush" type="submit">Flush all logs</button>
                             </form>
-                      
+
                             <br>
                 <div class="container-fluid">
 
                     <div class="row mb-3" data-aos="fade-down" data-aos-duration="600">
                         <div class="col-lg-4">
                             <div class="card mb-3" style="background: #252935;border-style: none;">
-                                <div class="card-body text-center shadow" style="background: #252935;border-style: none;"> 
-                                
-                                
+                                <div class="card-body text-center shadow" style="background: #252935;border-style: none;">
+
+
                                 <table class="table my-0" id="dataTable">
                                     <thead>
                                         <tr>
@@ -121,7 +121,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                                                 </td>
 
                                             </tr>
-                                          
+
 
                                         <?php endforeach; ?>
 
@@ -131,7 +131,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
                                 </table>
 
-</div>               
+</div>
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     <script src="../assets/js/theme.js"></script>
     <script>
        $(document).ready(function(){
-		$('[data-toggle="tooltip"]').tooltip();   
+		$('[data-toggle="tooltip"]').tooltip();
 		});
 </script>
 </body>

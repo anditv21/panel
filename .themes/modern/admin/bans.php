@@ -142,7 +142,7 @@
                   <?php foreach ($userList2 as $row): ?>
                   <tr>
                   <td title="Click to download" data-toggle="tooltip" data-placement="top" style="color: rgb(255,255,255);">                                <?php if (Util::getavatar($row->uid) == false): ?>
-                  <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45" style="border-color: rgb(255,255,255)!important;">
+                  <img class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" width="45" height="45" style="border-color: rgb(255,255,255)!important;">
                   <?php else: ?>
                   <?php
                      $ext = pathinfo(Util::getavatar($uid), PATHINFO_EXTENSION);

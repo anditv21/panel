@@ -1,23 +1,23 @@
 <?php
    require_once '../app/require.php';
    require_once '../app/controllers/AdminController.php';
-   
+
    $user = new UserController();
    $admin = new AdminController();
-   
+
    Session::init();
-   
+
    $userList = $admin->getUserArray();
    $username = Session::get('username');
    $uid = Session::get('uid');
-   
+
    $userList = $admin->getUserArray();
-   
+
    Util::suppCheck();
    Util::banCheck();
    Util::checktoken();
    Util::head('Admin Panel');
-   
+
    if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
        if (isset($_POST["resetHWID"])) {
            $hwid = Util::securevar($_POST["resetHWID"]);
@@ -31,35 +31,35 @@
        if (isset($_POST["setAdmin"])) {
             $adminuser = Util::securevar($_POST["setAdmin"]);
        }
-   
+
        if (isset($hwid)) {
            Util::suppCheck();
            $rowUID = $hwid;
            $admin->resetHWID($rowUID);
        }
-   
-   
+
+
        if (isset($ban)) {
            Util::adminCheck();
            $rowUID = $ban;
            $admin->setBanned($ban);
        }
-   
-   
+
+
        if (isset($supp)) {
            Util::adminCheck();
            $rowUID = $supp;
            $admin->setsupp($rowUID);
        }
-   
-   
+
+
        if (isset($adminuser)) {
            Util::adminCheck();
            $rowUID = $adminuser;
            $admin->setAdmin($rowUID);
        }
-   
-   
+
+
        header('location: table.php');
    }
    ?>
@@ -149,7 +149,7 @@
                                         $min = Util::securevar($_GET["min"]);
                                         $max = Util::securevar($_GET["max"]);
                                     }
-                                    
+
                                     ?>
                                  <?php if (!isset($min) || !isset($max)) {
                                     $min = 1;
@@ -158,7 +158,7 @@
                                  <?php if ($row->uid <= $max && $row->uid >= $min) : ?>
                                  <tr>
                                     <td title="Click to download" data-toggle="tooltip" data-placement="top" style="color: rgb(255,255,255);"> <?php if (Util::getavatar($row->uid) == false) : ?>
-                                       <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45" style="border-color: rgb(255,255,255)!important;">
+                                       <img class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" width="45" height="45" style="border-color: rgb(255,255,255)!important;">
                                        <?php else : ?>
                                        <?php
                                           $ext = pathinfo(Util::getavatar($uid), PATHINFO_EXTENSION);
@@ -276,14 +276,14 @@
          $(document).ready(function() {
              $('[data-toggle="tooltip"]').tooltip();
          });
-         
+
          function redirect() {
              var min = document.getElementById("min");
              min = min.value;
              var max = document.getElementById("max");
              max = max.value;
              window.location.href = 'table.php?min=' + min + '&max=' + max;
-         
+
          }
       </script>
    </body>

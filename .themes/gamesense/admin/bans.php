@@ -107,7 +107,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                      <tr>
                         <td>
                            <?php if (Util::getavatar($row->uid) == false) : ?>
-                              <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" width="45" height="45">
+                              <img title="Click to download" data-toggle="tooltip" data-placement="top" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" width="45" height="45">
                            <?php else : ?>
                               <?php
                               $ext = pathinfo(

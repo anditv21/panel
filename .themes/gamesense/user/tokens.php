@@ -155,7 +155,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                         <td><a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
                             <br>
                             <?php if ($row->remembertoken ==  Util::securevar($_COOKIE["login_cookie"])) : ?>
-                                <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15">
+                                <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../warning.png" width="15" height="15">
                             <?php endif; ?>
                         </td>
 

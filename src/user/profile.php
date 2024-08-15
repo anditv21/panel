@@ -73,7 +73,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                            <br>
                            <center>
                               <?php if (Util::getavatar($uid) == false) : ?>
-                                 <a href=<?php Util::display(SITE_URL . SUB_DIR . "/user/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png"></a>
+                                 <a href=<?php Util::display(SITE_URL . SUB_DIR . "/user/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png"></a>
                               <?php
                               else : ?>
                                  <a href=<?php Util::display(SITE_URL . SUB_DIR . "/user/viewprofile.php?uid=$uid"); ?>><img title='Click to view public profile' data-toggle='tooltip' data-placement='top' width="120" height="120" class="rounded-circle img-profile" src="<?php Util::display(Util::getavatar($uid)); ?>"></a>
@@ -206,7 +206,7 @@ $days_left = Util::calculate_days($cooldown_date);
                                                 <br>
                                                 <div title="You have to wait <?php Util::display(ceil($days_left)); ?> days before you can change your display name." data-toggle="tooltip" data-placement="top">
                                                    <button class="btn btn-outline-primary btn-block" disabled="disabled">
-                                                      <img src="../assets/img/warning.png" width="15" height="15">
+                                                      <img src="../assets/images/warning.png" width="15" height="15">
                                                       Change now
                                                    </button>
                                                 </div>

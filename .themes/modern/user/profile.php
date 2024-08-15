@@ -171,7 +171,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                     Session::get("username")
                                 ); ?></span>
                                 <?php if (Util::getavatar($uid) == false): ?>
-                                <img class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                <img class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                 <img class="rounded-circle img-profile" src="<?php echo Util::getavatar(
@@ -196,7 +196,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                 <div class="card-body text-center shadow" style="background: #252935;border-style: none;">                                <?php if (
                                     Util::getavatar($uid) == false
                                 ): ?>
-                                <img width="160" height="160" class="border rounded-circle img-profile" src="../assets/img/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
+                                <img width="160" height="160" class="border rounded-circle img-profile" src="../assets/images/avatars/Portrait_Placeholder.png" style="border-color: rgb(255,255,255)!important;">
 
                                 <?php else: ?>
                                     <?php
@@ -381,7 +381,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                                     <div class="mb-3"><span style="color: rgb(255,255,255);">Confirm password</span><input class="form-control" name="confirmPassword" type="password" id="username-2" placeholder="********" name="username" style="background: #121421;border-style: none;margin-top: 11px;"></div>
                                                 </div>
                                             </div>
-                                            <div class="mb-3"><button class="btn btn-success btn-sm" name="updatePassword" type="submit" value="submit" style="color: rgb(255,255,255);margin-top: 25px;">Save Password <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/img/warning.png" width="15" height="15"></button></div>
+                                            <div class="mb-3"><button class="btn btn-success btn-sm" name="updatePassword" type="submit" value="submit" style="color: rgb(255,255,255);margin-top: 25px;">Save Password <img title="Changing your password will log you out of all devices." data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15"></button></div>
                                         </form>
                                     </div>
                                 </div>
