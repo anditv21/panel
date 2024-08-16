@@ -1,4 +1,3 @@
-User
 <?php
 require_once "../app/require.php";
 require_once "../app/helpers/ip_info.php";
