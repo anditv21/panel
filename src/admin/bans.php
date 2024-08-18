@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once "../app/require.php";
 require_once("../includes/head.nav.inc.php");
 require_once "../app/controllers/AdminController.php";
@@ -39,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit; // Exit to ensure no further processing
     }
 }
+ob_end_flush();
 ?>
 <!DOCTYPE html>
 <html lang="en">
