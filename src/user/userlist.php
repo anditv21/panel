@@ -24,7 +24,6 @@ Util::head("User list")
 <html lang="en">
 
 <head><?php Util::navbar();?></head>
-<?php display_top_nav("Userlist"); ?>
 
 <body class="pace-done no-loader page-sidebar-collapsed">
     <div class="page-container">
