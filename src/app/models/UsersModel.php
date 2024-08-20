@@ -6,6 +6,7 @@
 require_once SITE_ROOT . "/app/core/Database.php";
 require_once SITE_ROOT . "/app/controllers/SystemController.php";
 date_default_timezone_set('Europe/Vienna');
+
 class Users extends Database
 {
     // Check if username exists
@@ -587,7 +588,8 @@ class Users extends Database
     protected function loglogin($token)
     {
         $username = Session::get("username");
-        $loginTime = date('Y-m-d H:i:s');
+        $loginTime = date('F jS, H:i');
+
 
         try {
             // Update the last login time and current login time in one query
