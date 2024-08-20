@@ -6,7 +6,7 @@
 require_once SITE_ROOT . "/app/models/UsersModel.php";
 require_once SITE_ROOT . "/app/require.php";
 require_once "SessionController.php";
-date_default_timezone_set('Europe/Vienna');
+require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class UserController extends Users
 {
     public function createUserSession($user)

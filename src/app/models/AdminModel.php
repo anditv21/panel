@@ -8,7 +8,7 @@
 
 require_once SITE_ROOT . '/app/core/Database.php';
 require_once SITE_ROOT . "/app/require.php";
-
+require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 
 class Admin extends Database
 {

@@ -5,7 +5,7 @@
 
 require_once SITE_ROOT . "/app/core/Database.php";
 require_once SITE_ROOT . "/app/controllers/SystemController.php";
-date_default_timezone_set('Europe/Vienna');
+require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 
 class Users extends Database
 {

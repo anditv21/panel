@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 06, 2024 at 03:14 PM
+-- Generation Time: Aug 20, 2024 at 05:45 PM
 -- Server version: 10.5.21-MariaDB-0+deb11u1
 -- PHP Version: 8.2.20
 
@@ -42,7 +42,16 @@ CREATE TABLE `adminlogs` (
 INSERT INTO `adminlogs` (`id`, `username`, `action`, `ip`, `time`) VALUES
 (27, 'admin', 'Turned discord re-link on', 'localhost', 'May 14 th, 16:02'),
 (28, 'admin', 'Changed captcha service to 1', 'localhost', 'May 14 th, 16:02'),
-(30, 'admin', 'Unbanned admin2 (2)', 'localhost', 'May 18 th, 21:07');
+(30, 'admin', 'Unbanned admin2 (2)', 'localhost', 'May 18 th, 21:07'),
+(31, 'admin', 'Set the System status to offline', 'localhost', 'August 15 th, 1:01'),
+(32, 'admin', 'Changed captcha service to 1', 'localhost', 'August 15 th, 1:01'),
+(33, 'admin', 'Set the System status to online', 'localhost', 'August 15 th, 1:01'),
+(34, 'admin', 'Changed captcha service to 1', 'localhost', 'August 15 th, 1:01'),
+(35, 'admin', 'Unbanned admin2 (2)', 'localhost', 'August 15 th, 1:05'),
+(36, 'admin', 'Unbanned admin2 (2)', 'localhost', 'August 15 th, 1:05'),
+(37, 'admin', 'Deleted invitation with code GrwI5IwUMjOGPxj', 'localhost', 'August 15 th, 1:07'),
+(38, 'admin', 'Generated an subscription code', 'localhost', 'August 15 th, 1:07'),
+(39, 'admin', 'Changed captcha service to 0', 'localhost', 'August 15 th, 1:15');
 
 -- --------------------------------------------------------
 
@@ -61,10 +70,7 @@ CREATE TABLE `invites` (
 --
 
 INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES
-('PXZwJcXf5zQ6myPg0zjJ', 'admin', '2023-09-27 09:06:56'),
-('yOh20NjgdZ5ruCtH1m8X', 'admin', '2023-09-27 09:06:56'),
-('iRozSNONSaPqmCB', 'admin', '2024-05-13 20:14:12'),
-('GrwI5IwUMjOGPxj', 'admin', '2024-05-13 20:23:38');
+('PXZwJcXf5zQ6myPg0zjJ', 'admin', '2023-09-27 09:06:56');
 
 -- --------------------------------------------------------
 
@@ -95,6 +101,17 @@ CREATE TABLE `login` (
   `note` varchar(255) NOT NULL,
   `createdAt` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`, `createdAt`) VALUES
+(92, 'test', '6bb0ec30b605e97f199e2f50fcb5cc35', 'localhost', 'Brave', 'Windows 10', '2024-08-16 01:09:27', 'none', '2024-08-15'),
+(93, 'test', 'f203b79159666eb524f06c80d0566382', 'localhost', 'Brave', 'Windows 10', '2024-08-16 01:14:30', 'none', '2024-08-15'),
+(94, 'test2', 'e9e0e3258d0c0527a92d536dffbb4edd', 'localhost', 'Brave', 'Windows 10', '2024-08-20 19:17:43', 'none', '2024-08-15'),
+(95, 'admin', '8d53ff4b0d2af6fe36ee624b2eba9a31', 'localhost', 'Brave', 'Windows 10', '2024-08-20 19:17:55', 'none', '2024-08-20'),
+(96, 'admin', '3f5d0ee5a49c191f174414256d2f2fb2', 'localhost', 'Brave', 'Windows 10', 'August 20 th, 19:35', 'none', '2024-08-20');
 
 -- --------------------------------------------------------
 
@@ -133,7 +150,7 @@ CREATE TABLE `subscription` (
 --
 
 INSERT INTO `subscription` (`code`, `createdBy`, `createdAt`) VALUES
-('3m-kqH7BqYCGSK8PZdKLhQ8', 'admin', '2024-05-13 20:15:00');
+('Trail-bz6eCE8aovijilgrAulx', 'admin', '2024-08-14 23:07:47');
 
 -- --------------------------------------------------------
 
@@ -187,9 +204,19 @@ CREATE TABLE `userlogs` (
 --
 
 INSERT INTO `userlogs` (`id`, `username`, `action`, `browser`, `os`, `ip`, `time`) VALUES
-(572, 'admin', 'Login', 'Brave', 'Windows 10', 'localhost', 'June 30 th, 19:02'),
-(573, 'admin', 'Linked discord account', 'Brave', 'Windows 10', 'localhost', 'June 30 th, 19:27'),
-(574, 'admin', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 06 th, 17:03');
+(580, 'admin2', 'Banned by admin', 'Brave', 'Windows 10', 'Staff/System', 'August 15 th, 1:05'),
+(581, 'admin2', 'Unbanned by admin', 'Brave', 'Windows 10', 'Staff/System', 'August 15 th, 1:05'),
+(586, 'test', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:09'),
+(587, 'test', 'Login', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:09'),
+(588, 'test', 'Changed password', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:11'),
+(589, 'test', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:14'),
+(590, 'test', 'Login', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:14'),
+(591, 'test2', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:35'),
+(592, 'test2', 'Login', 'Brave', 'Windows 10', 'localhost', 'August 16 th, 1:35'),
+(593, 'test2', 'Logged in via cookie', 'Brave', 'Windows 10', 'localhost', 'August 20 th, 19:17'),
+(594, 'test2', 'Login', 'Brave', 'Windows 10', 'localhost', 'August 20 th, 19:17'),
+(598, 'admin', 'Flushed all logs', 'Brave', 'Windows 10', 'localhost', 'August 20 th, 19:35'),
+(599, 'admin', 'Logged in', 'Brave', 'Windows 10', 'localhost', 'August 20 th, 19:35');
 
 -- --------------------------------------------------------
 
@@ -212,8 +239,8 @@ CREATE TABLE `users` (
   `invitedBy` varchar(255) NOT NULL,
   `createdAt` timestamp NULL DEFAULT current_timestamp(),
   `lastIP` varchar(255) DEFAULT NULL,
-  `currentLogin` datetime DEFAULT NULL,
-  `lastLogin` datetime DEFAULT NULL,
+  `currentLogin` varchar(255) DEFAULT NULL,
+  `lastLogin` varchar(255) DEFAULT NULL,
   `banreason` varchar(255) DEFAULT NULL,
   `resetcount` int(10) DEFAULT 0,
   `lastreset` text DEFAULT NULL,
@@ -231,7 +258,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`, `loginfails`) VALUES
-(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'fetter_bauer-c26b15bf-a96c', 1, 1, '2089-03-19', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2024-06-30 19:02:27', '2024-06-30 18:49:02', 'none', 13, '2023-07-30', 17, 0, NULL, NULL, NULL, 0, 0),
+(1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'fetter_bauer-c26b15bf-a96c', 1, 1, '2089-06-17', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2024-08-20 19:17:55', '2024-08-16 01:01:10', 'none', 13, '2023-07-30', 17, 0, NULL, NULL, NULL, 0, 0),
 (2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$SGkxUDJoU083enM2anBRNQ$Vnyxq9VgVQjNAVo8ugf50LjiUwrmcPAd8g/IdaERg/8', NULL, 0, 0, '2089-08-31', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 1, '2024-05-13', 15, 0, NULL, NULL, NULL, 0, 0);
 
 --
@@ -306,13 +333,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adminlogs`
 --
 ALTER TABLE `adminlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
@@ -324,7 +351,7 @@ ALTER TABLE `shoutbox`
 -- AUTO_INCREMENT for table `userlogs`
 --
 ALTER TABLE `userlogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=575;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=600;
 
 --
 -- AUTO_INCREMENT for table `users`

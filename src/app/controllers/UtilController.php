@@ -3,7 +3,7 @@
 // Only Public methods
 
 require_once SITE_ROOT . "/app/models/UtilModel.php";
-
+require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class Util extends UtilMod
 {
     public function setPageTitle($title)
