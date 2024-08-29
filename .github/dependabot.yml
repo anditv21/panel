@@ -12,3 +12,21 @@ updates:
     directory: ".examples/Python-API-Example"
     schedule:
       interval: "daily"
+  - package-ecosystem: "pip"
+    directory: ".examples/Discord-Bot-API-Example"
+    schedule:
+      interval: "daily"      
+  - package-ecosystem: "npm"
+    directory: ".examples/JavaScript-API-Example"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: ".examples/Typescript-API-Example"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gomod"
+    directory: ".examples/Go-API-Example"
+    schedule:
+      interval: "daily"
+      
+      
