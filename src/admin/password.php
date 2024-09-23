@@ -10,7 +10,7 @@ $admin = new AdminController();
 Session::init();
 if (!Session::isLogged()) {
     Util::redirect('/auth/login.php');
- }
+}
 
 $userList = $admin->getUserArray();
 $username = Session::get('username');
