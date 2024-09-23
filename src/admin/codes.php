@@ -10,7 +10,7 @@ $admin = new AdminController();
 Session::init();
 
 if (!Session::isLogged()) {
-  Util::redirect('/auth/login.php');
+    Util::redirect('/auth/login.php');
 }
 
 // Get session username
