@@ -10,7 +10,9 @@ $admin = new AdminController();
 
 Session::init();
 
-Util::adminCheck();
+if (!Session::isLogged()) {
+   Util::redirect('/auth/login.php');
+}
 
 $username = Session::get("username");
 $uid = Session::get("uid");
@@ -18,6 +20,8 @@ $uid = Session::get("uid");
 $sub = $user->getSubStatus();
 
 Util::banCheck();
+Util::checktoken();
+Util::suppCheck();
 Util::head("Admin Panel");
 
 // Handle POST request

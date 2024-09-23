@@ -9,6 +9,9 @@ $user = new UserController();
 $admin = new AdminController();
 Session::init();
 
+if (!Session::isLogged()) {
+   Util::redirect('/auth/login.php');
+}
 // Fetch user data
 $userList = $admin->getUserArray();
 $bannedUserList = $admin->getbannedArray();

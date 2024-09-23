@@ -8,7 +8,9 @@ $ip = $user->getip();
 
 
 Session::init();
-
+if (!Session::isLogged()) {
+    Util::redirect('/auth/login.php');
+}
 
 $username = Session::get("username");
 $uid = Session::get("uid");
