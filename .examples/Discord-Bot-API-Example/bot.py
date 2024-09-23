@@ -76,7 +76,7 @@ async def bg_task():
     ]
 
     current_index = 0
-        while not bot.is_closed() and current_index < len(status_list):
+    while not bot.is_closed() and current_index < len(status_list):
             status, activity = status_list[current_index]
             try:
                 await bot.change_presence(status=status, activity=activity)

@@ -19,7 +19,8 @@ def get_config_value(key: str) -> str:
     with open(config_path, "r", encoding="UTF-8") as configfile:
         config = json.load(configfile)
         value = config.get(key)
-        if not value:
+        if value is None:
             print(f"[ERROR] Value for key '{key}' is missing from config.json. Please check the configuration file and try again.")
             sys.exit()
+
     return value
