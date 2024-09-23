@@ -204,7 +204,7 @@ Util::head("Main");
             $loginfails = Session::get("loginfails");
 if ($loginfails > 0) : ?>
             <br>
-            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
+            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/images/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
 
             <?php endif; ?>
 </body>
