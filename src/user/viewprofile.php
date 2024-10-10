@@ -3,7 +3,7 @@ require_once "../app/require.php";
 require_once "../app/controllers/SystemController.php";
 
 require_once("../includes/head.nav.inc.php");
-
+require_once("../includes/head.inc.php");
 
 $user = new UserController();
 $System = new SystemController();
@@ -25,7 +25,7 @@ $displayname = $user->fetch_display_name($userbyid->username);
 
 Util::banCheck();
 Util::checktoken();
-Util::head("Profile");
+
 
 
 
@@ -53,7 +53,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 <!DOCTYPE html>
 <html lang="en">
 <head><?php Util::navbar();?></head>
-<?php display_top_nav("View Profile"); ?>
+<?php Util::display("<title>$userbyid->username - View Profile</title>"); ?>
 <body class="pace-done no-loader page-sidebar-collapsed">
    <div class="page-container">
       <div class="page-content">
