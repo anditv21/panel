@@ -36,14 +36,11 @@ class UserController extends Users
         if ($log) {
             $this->log($username, "Logged out", auth_logs);
         }
-
-        setcookie("login_cookie", "", time() - 3600, '/');
-        session_unset();
-        $_SESSION = [];
-        $_SESSION = array();
-        session_destroy();
-        Util::redirect("/auth/login.php");
+        Util::redirect("/auth/login.php?action=logout");
     }
+
+
+
 
     public function getUserArray()
     {

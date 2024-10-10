@@ -7,9 +7,23 @@ $system = new SystemController();
 
 Session::init();
 
-if (Session::isLogged()) {
-    Util::redirect('/');
+
+if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
+    if (isset($_GET['action'])) {
+        $data = Util::securevar($_GET['action']);
+
+        if ($data === 'logout') {
+            setcookie("login_cookie", "", time() - 3600, '/');
+            session_unset();
+            $_SESSION = [];
+            session_destroy();
+            Util::redirect('/auth/login.php');
+        }
+    }
 }
+
+
+
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
     if (isset($_POST)) {
         $data = Util::securevar($_POST);
