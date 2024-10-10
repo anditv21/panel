@@ -292,14 +292,13 @@ class Users extends Database
     // Register - Sends data to DB
     protected function register($username, $hashedPassword, $invCode)
     {
+        // Fetch system settings
         $this->prepare('SELECT * FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
-        $inviter = 'System';
+        $inviter = 'System'; // Default inviter is 'System'
 
-
-        if ($result && $result->invites) {
-
+        if ($result && $result->invites && !empty($invCode)) {
             $this->prepare('SELECT `createdBy` FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             $row = $this->statement->fetch();
@@ -311,15 +310,19 @@ class Users extends Database
 
         // Prepare an insert statement to add the user to the users table.
         $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
-
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
-            $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
-            return ($this->statement->execute([$invCode]));
-        } else {
 
+            // If invite system is enabled and there was an invite code, delete the invite code
+            if ($result && $result->invites && !empty($invCode)) {
+                $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
+                return $this->statement->execute([$invCode]);
+            }
+            return true;
+        } else {
             return false;
         }
     }
+
 
     // Upddate user password
     protected function updatePass($currentPassword, $hashedPassword, $username)
@@ -927,7 +930,7 @@ class Users extends Database
 
     protected function get_user_Browser()
     {
-        if(isset($_COOKIE['browser'])) {
+        if (isset($_COOKIE['browser'])) {
             $userBrowser = Util::securevar($_COOKIE['browser']);
 
             setcookie('browser', '', time() - 3600, '/');
@@ -990,5 +993,4 @@ class Users extends Database
         }
         return $os_platform;
     }
-
 }

@@ -181,7 +181,7 @@ CREATE TABLE `system` (
 --
 
 INSERT INTO `system` (`status`, `version`, `news`, `maintenance`, `frozen`, `freezingtime`, `invites`, `shoutbox`, `discordlinking`, `discordlogging`, `relinkdiscord`, `cap_service`, `cap_key`, `cap_secret`, `embed_color`) VALUES
-(0, 1, 'Welcome to the panel made by anditv21!', 0, 0, 0, 1, 0, 1, 0, 1, 0, NULL, NULL, 'ff00dd');
+(0, 1, 'Welcome to the panel made by anditv21!', 0, 0, 0, 1, 0, 1, 0, 0, 0, NULL, NULL, 'ff00dd');
 
 -- --------------------------------------------------------
 

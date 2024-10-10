@@ -84,17 +84,15 @@ class UserController extends Users
     }
 
 
-
     public function registerUser($data)
     {
         // Bind login data
         $username = trim($data["username"]);
         $password = $data["password"];
         $confirmPassword = $data["confirmPassword"];
-        $invCode = trim($data["invCode"]);
 
         // Empty error vars
-        $userError = $passError = "";
+        $userError = $passError = $invCodeError = "";
         $usernameValidation = '/^[a-zA-Z0-9]*$/';
 
         // Validate username on length and letters/numbers
@@ -121,15 +119,18 @@ class UserController extends Users
             return $passError = "Password is too short.";
         }
 
-        // Validate confirmPassword on length
+        // Validate confirmPassword
         if (empty($confirmPassword)) {
-            return $passError = "Please enter a password.";
+            return $passError = "Please confirm your password.";
         } elseif ($password != $confirmPassword) {
             return $passError = "Passwords do not match, please try again.";
         }
 
-        if ($this->SystemData()->invites == true) {
-            // Validate invCode
+        // Check if invite system is enabled
+        if ($this->SystemData()->invites) {
+            // Only bind and validate invite code if invites are enabled
+            $invCode = trim($data["invCode"]);
+
             if (empty($invCode)) {
                 return $invCodeError = "Please enter an invite code.";
             } else {
@@ -140,21 +141,22 @@ class UserController extends Users
                     return $invCodeError = "Invite code is invalid or already used.";
                 }
             }
+        } else {
+            // Set invCode to null if invites are disabled
+            $invCode = null;
         }
 
         // Check if all errors are empty
         if (
             empty($userError) &&
             empty($passError) &&
-            empty($invCodeError) &&
-            empty($userExistsError) &&
             empty($invCodeError)
         ) {
-            // Hashing the password
+            // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_ARGON2I);
 
+            // Register the user
             $result = $this->register($username, $hashedPassword, $invCode);
-
 
             // Session start
             if ($result) {
@@ -165,6 +167,7 @@ class UserController extends Users
             }
         }
     }
+
 
     public function loginUser($data)
     {
