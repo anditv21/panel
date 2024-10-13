@@ -6,7 +6,7 @@
 
 <h3 align="center">Overview</h3>
 
-<h3 align="center"><a href="https://github.com/anditv21/panel/releases/tag/v1.5.5">README</a></h3>
+<h3 align="center"><a href="https://github.com/anditv21/panel/releases/tag/v1.6.1">README</a></h3>
 
 <p align="center">
 
