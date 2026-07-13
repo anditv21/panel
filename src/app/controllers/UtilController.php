@@ -126,8 +126,31 @@ class Util extends UtilMod
 
             $util = new UtilMod();
             $result = $util->validateRememberToken($token);
+
+            if ($result && !self::has2faSolved() && basename($_SERVER['PHP_SELF']) !== '2fa.php') {
+                Util::redirect('/auth/2fa.php');
+            }
+
             return $result;
         }
+
+        Util::clearLoginCookie();
+        Session::destroy();
+        Util::redirect('/auth/login.php');
+    }
+
+    public static function has2faSolved($token = null)
+    {
+        if (empty($token)) {
+            if (!isset($_COOKIE['login_cookie'])) {
+                return false;
+            }
+
+            $token = Util::securevar($_COOKIE['login_cookie']);
+        }
+
+        $util = new UtilMod();
+        return $util->check2faSolved($token);
     }
 
 

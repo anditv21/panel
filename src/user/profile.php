@@ -11,12 +11,28 @@ if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
 
+if (!Util::has2faSolved() && (isset($_GET['code']) || isset($_GET['error']))) {
+    $params = [];
+    if (isset($_GET['code'])) {
+        $params['code'] = $_GET['code'];
+    }
+    if (isset($_GET['state'])) {
+        $params['state'] = $_GET['state'];
+    }
+    if (isset($_GET['error'])) {
+        $params['error'] = $_GET['error'];
+    }
+
+    Util::redirect('/auth/2fa.php?' . http_build_query($params));
+}
+
 $uid = Session::get("uid");
 $username = Session::get("username");
 $displayname = $user->fetch_display_name($username);
 $admin = Session::get("admin");
 $userfrozen = $user->getfrozen();
 $sub = $user->getSubStatus();
+$twofactor = $user->is2faEnabled($username);
 
 Util::banCheck();
 Util::checktoken();
@@ -40,10 +56,21 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
         $error = $user->set_display_name(Util::securevar($_POST['display_name']));
         $error = Util::securevar($_POST['display_name']);
     }
+
+    if (isset($_POST["enable2fa"])) {
+        $result = $user->change_2fa_status(1);
+        Util::redirect($result ? '/user/profile.php?2fa=enabled' : '/user/profile.php?2fa=discord');
+    }
+
+    if (isset($_POST["disable2fa"])) {
+        $user->change_2fa_status(0);
+        Util::redirect('/user/profile.php?2fa=disabled');
+    }
+
     header("location: profile.php");
 }
 // if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->getSystemData()->relinkdiscord == 1) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && !isset($_POST["enable2fa"]) && !isset($_POST["disable2fa"]) && $System->getSystemData()->relinkdiscord == 1) {
     header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
     exit();
 }
@@ -65,6 +92,17 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
    <div class="page-container">
       <div class="page-content">
          <div class="main-wrapper">
+            <?php if (isset($_GET['2fa'])) : ?>
+               <div class="alert alert-info text-center">
+                  <?php if ($_GET['2fa'] === 'enabled') : ?>
+                     Two-factor authentication enabled.
+                  <?php elseif ($_GET['2fa'] === 'disabled') : ?>
+                     Two-factor authentication disabled.
+                  <?php else : ?>
+                     Link your Discord account before enabling two-factor authentication.
+                  <?php endif; ?>
+               </div>
+            <?php endif; ?>
             <div class="row">
                <div class="col-xl-12">
                   <center>
@@ -89,6 +127,15 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                                  </center>
                               </form>
                            <?php endif; ?>
+                           <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                              <center>
+                                 <?php if ($twofactor == 1) : ?>
+                                    <button class="btn btn-outline-danger btn-block" name="disable2fa" type="submit">Disable 2FA</button>
+                                 <?php else : ?>
+                                    <button class="btn btn-outline-primary btn-block" name="enable2fa" type="submit" <?php echo $user->isDiscordLinked() ? '' : 'disabled'; ?>>Enable 2FA</button>
+                                 <?php endif; ?>
+                              </center>
+                           </form>
                         </div>
                      </div>
 

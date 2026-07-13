@@ -220,7 +220,12 @@ class UserController extends Users
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin($token);
                 $this->resetfails($username);
-                Util::redirect("/index.php");
+
+                if (Util::has2faSolved($token)) {
+                    Util::redirect("/index.php");
+                } else {
+                    Util::redirect("/auth/2fa.php");
+                }
             } else {
                 $this->loginfail($username);
                 if (!$this->doesthisuserexist($username)) {
@@ -257,7 +262,12 @@ class UserController extends Users
 
             $this->log($username, "Logged in via cookie", auth_logs);
             $this->loglogin($token);
-            Util::redirect("/index.php");
+
+            if (Util::has2faSolved($token)) {
+                Util::redirect("/index.php");
+            } else {
+                Util::redirect("/auth/2fa.php");
+            }
         } else {
             $this->logoutUser(false);
             return "Login with stored token failed.";
@@ -807,5 +817,22 @@ class UserController extends Users
     public function getUserIP()
     {
         return $this->getip();
+    }
+
+    public function is2faEnabled($username)
+    {
+        return $this->is2fa($username);
+    }
+
+    public function change_2fa_status($status)
+    {
+        $username = Session::get('username');
+        $token = isset($_COOKIE['login_cookie']) ? Util::securevar($_COOKIE['login_cookie']) : '';
+        return $this->change2fa($status, $username, $token);
+    }
+
+    public function complete2faWithDiscord($username, $token, $code, $redirectUri)
+    {
+        return $this->complete2fa($username, $token, $code, $redirectUri);
     }
 }

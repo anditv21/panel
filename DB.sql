@@ -99,7 +99,8 @@ CREATE TABLE `login` (
   `os` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL,
-  `createdAt` date NOT NULL DEFAULT current_timestamp()
+  `createdAt` date NOT NULL DEFAULT current_timestamp(),
+  `twofactor_status` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -250,7 +251,8 @@ CREATE TABLE `users` (
   `discord_refresh_token` varchar(255) DEFAULT NULL,
   `dcid` varchar(255) DEFAULT NULL,
   `muted` int(1) NOT NULL DEFAULT 0,
-  `loginfails` int(255) NOT NULL DEFAULT 0
+  `loginfails` int(255) NOT NULL DEFAULT 0,
+  `twofactor_enabled` int(1) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --

@@ -303,7 +303,7 @@ class Users extends Database
         date_default_timezone_set("Europe/Vienna");
         $time = date("F d S, G:i");
 
-        $this->prepare('INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        $this->prepare('INSERT INTO `login` (`username`, `remembertoken`, `ip`, `browser`, `os`, `time`, `note`, `twofactor_status`) VALUES (?, ?, ?, ?, ?, ?, ?, 0)');
         $this->statement->execute([$username, $token, $ip, $browser, $os, $time, "none"]);
     }
 
@@ -972,6 +972,129 @@ class Users extends Database
         $data = $this->statement->fetch();
 
         return $data->embed_color;
+    }
+
+    protected function is2fa($username)
+    {
+        $this->prepare('SELECT `twofactor_enabled` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+
+        return $result ? (int) $result->twofactor_enabled : 0;
+    }
+
+    protected function change2fa($status, $username, $token)
+    {
+        $status = (int) $status === 1 ? 1 : 0;
+
+        if ($status === 1) {
+            $this->prepare('SELECT `dcid` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+            $user = $this->statement->fetch();
+
+            if (!$user || empty($user->dcid)) {
+                return false;
+            }
+        }
+
+        $this->prepare('UPDATE `users` SET `twofactor_enabled` = ? WHERE `username` = ?');
+        $this->statement->execute([$status, $username]);
+
+        if ($status === 1) {
+            $this->prepare('UPDATE `login` SET `twofactor_status` = 0 WHERE `username` = ?');
+            $this->statement->execute([$username]);
+
+            $this->prepare('UPDATE `login` SET `twofactor_status` = 1 WHERE `username` = ? AND `remembertoken` = ?');
+            $this->statement->execute([$username, $token]);
+        } else {
+            $this->prepare('UPDATE `login` SET `twofactor_status` = 1 WHERE `username` = ?');
+            $this->statement->execute([$username]);
+        }
+
+        return true;
+    }
+
+    protected function complete2fa($username, $token, $code, $redirectUri)
+    {
+        if (empty($token) || empty($code)) {
+            return "Discord verification failed.";
+        }
+
+        $this->prepare('SELECT `dcid`, `discord_refresh_token` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $user = $this->statement->fetch();
+
+        if (!$user || empty($user->dcid)) {
+            return "No linked Discord account was found.";
+        }
+
+        $payload = [
+            'client_id' => client_id,
+            'client_secret' => client_secret,
+            'grant_type' => 'authorization_code',
+            'code' => $code,
+            'redirect_uri' => $redirectUri,
+        ];
+
+        $curl = curl_init('https://discord.com/api/v10/oauth2/token');
+        curl_setopt_array($curl, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 10,
+        ]);
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($response === false || $httpCode !== 200) {
+            return "Discord authorization failed.";
+        }
+
+        $tokens = json_decode($response, true);
+        if (!is_array($tokens) || empty($tokens['access_token'])) {
+            return "Discord authorization failed.";
+        }
+
+        $curl = curl_init('https://discord.com/api/v10/users/@me');
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $tokens['access_token']],
+            CURLOPT_TIMEOUT => 10,
+        ]);
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($response === false || $httpCode !== 200) {
+            return "Discord account verification failed.";
+        }
+
+        $discordUser = json_decode($response, true);
+        if (!is_array($discordUser) || empty($discordUser['id'])) {
+            return "Discord account verification failed.";
+        }
+
+        if (!hash_equals((string) $user->dcid, (string) $discordUser['id'])) {
+            return "This Discord account does not match your linked account.";
+        }
+
+        $refreshToken = isset($tokens['refresh_token'])
+            ? $tokens['refresh_token']
+            : $user->discord_refresh_token;
+        $this->prepare('UPDATE `users` SET `discord_access_token` = ?, `discord_refresh_token` = ? WHERE `username` = ?');
+        $this->statement->execute([$tokens['access_token'], $refreshToken, $username]);
+
+        $this->prepare('UPDATE `login` SET `twofactor_status` = 1 WHERE `username` = ? AND `remembertoken` = ?');
+        $this->statement->execute([$username, $token]);
+
+        $this->prepare('SELECT `twofactor_status` FROM `login` WHERE `username` = ? AND `remembertoken` = ?');
+        $this->statement->execute([$username, $token]);
+        $login = $this->statement->fetch();
+
+        return $login && (int) $login->twofactor_status === 1
+            ? true
+            : "Login token could not be verified.";
     }
 
 

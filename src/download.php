@@ -10,6 +10,7 @@ Session::init();
 if (!Session::isLogged()) {
     Util::redirect('/auth/login.php');
 }
+Util::checktoken();
 Util::banCheck();
 if ($user->getSubStatus() < 1) {
     Util::redirect('/');
