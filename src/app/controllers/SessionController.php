@@ -9,6 +9,34 @@ class Session
         }
     }
 
+    public static function regenerate($deleteOldSession = true)
+    {
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_regenerate_id($deleteOldSession);
+        }
+    }
+
+    public static function destroy()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return;
+        }
+
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', [
+            'expires' => time() - 3600,
+            'path' => $params['path'],
+            'domain' => $params['domain'],
+            'secure' => $params['secure'],
+            'httponly' => $params['httponly'],
+            'samesite' => $params['samesite'],
+        ]);
+
+        session_unset();
+        $_SESSION = [];
+        session_destroy();
+    }
+
     public static function set($key, $val)
     {
         $_SESSION[$key] = $val;

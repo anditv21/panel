@@ -11,7 +11,7 @@ class UserController extends Users
 {
     public function createUserSession($user)
     {
-        //Session::init();
+        Session::regenerate();
         Session::set("login", true);
         Session::set("uid", (int) $user->uid);
         Session::set("username", $user->username);
@@ -36,7 +36,10 @@ class UserController extends Users
         if ($log) {
             $this->log($username, "Logged out", auth_logs);
         }
-        Util::redirect("/auth/login.php?action=logout");
+
+        setcookie("login_cookie", "", time() - 3600, '/');
+        Session::destroy();
+        Util::redirect("/auth/login.php");
     }
 
 

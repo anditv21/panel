@@ -14,9 +14,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
 
         if ($data === 'logout') {
             setcookie("login_cookie", "", time() - 3600, '/');
-            session_unset();
-            $_SESSION = [];
-            session_destroy();
+            Session::destroy();
             Util::redirect('/auth/login.php');
         }
     }
