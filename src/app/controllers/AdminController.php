@@ -14,6 +14,16 @@ class AdminController extends Admin
         return $this->UserArray();
     }
 
+    public function getPaginatedUsers($offset, $limit, $search = '')
+    {
+        return $this->getUsersPaginated($offset, $limit, $search);
+    }
+
+    public function getUserCount($search = '')
+    {
+        return $this->getUsersCount($search);
+    }
+
     //
     public function giftsub($name, $sub, $time)
     {

@@ -25,6 +25,45 @@ class Admin extends Database
         }
     }
 
+    protected function getUsersPaginated($offset, $limit, $search = '')
+    {
+        if ($this->checkadmin() or $this->checksupp()) {
+            if (!empty($search)) {
+                $search = "%$search%";
+                $this->prepare('SELECT * FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `lastIP` LIKE ? OR `hwid` LIKE ? ORDER BY uid ASC LIMIT ?, ?');
+                $this->statement->bindParam(1, $search);
+                $this->statement->bindParam(2, $search);
+                $this->statement->bindParam(3, $search);
+                $this->statement->bindParam(4, $search);
+                $this->statement->bindParam(5, $offset, PDO::PARAM_INT);
+                $this->statement->bindParam(6, $limit, PDO::PARAM_INT);
+            } else {
+                $this->prepare('SELECT * FROM `users` ORDER BY uid ASC LIMIT ?, ?');
+                $this->statement->bindParam(1, $offset, PDO::PARAM_INT);
+                $this->statement->bindParam(2, $limit, PDO::PARAM_INT);
+            }
+
+            $this->statement->execute();
+            return $this->statement->fetchAll();
+        }
+    }
+
+    protected function getUsersCount($search = '')
+    {
+        if ($this->checkadmin() or $this->checksupp()) {
+            if (!empty($search)) {
+                $search = "%$search%";
+                $this->prepare('SELECT COUNT(*) FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `lastIP` LIKE ? OR `hwid` LIKE ?');
+                $this->statement->execute([$search, $search, $search, $search]);
+            } else {
+                $this->prepare('SELECT COUNT(*) FROM `users`');
+                $this->statement->execute();
+            }
+
+            return $this->statement->fetchColumn();
+        }
+    }
+
     protected function bannedArray()
     {
         if ($this->checkadmin() or $this->checksupp()) {

@@ -13,7 +13,25 @@ if (!Session::isLogged()) {
 }
 // Get session username and user list
 $username = Session::get("username");
-$userList = $admin->getUserArray();
+
+$itemsPerPage = 15;
+$currentPage = isset($_GET["page"]) ? (int) Util::securevar($_GET["page"]) : 1;
+$search = isset($_GET["search"]) ? Util::securevar($_GET["search"]) : '';
+
+if ($currentPage < 1) {
+    $currentPage = 1;
+}
+
+$totalUsers = $admin->getUserCount($search);
+$totalPages = max(1, ceil($totalUsers / $itemsPerPage));
+
+if ($currentPage > $totalPages) {
+    $currentPage = $totalPages;
+}
+
+$offset = ($currentPage - 1) * $itemsPerPage;
+$userList = $admin->getPaginatedUsers($offset, $itemsPerPage, $search);
+$searchQuery = !empty($search) ? '&search=' . urlencode($search) : '';
 
 // Security checks and page setup
 Util::banCheck();
@@ -48,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $admin->setAdmin($adminuser);
     }
 
-    header("location: users.php");
+    header("location: users.php?page=$currentPage$searchQuery");
     exit;
 }
 ?>
@@ -68,14 +86,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                   <div class="card">
                      <div class="card-body">
                         <h5 class="card-title">User management</h5>
-                        <p class="card-description">All <code>USERS</code> in the webpanel.</p>
-                        <button onclick="window.location.href = 'users.php?min=1&max=999<?php Util::display($user->getUserCount()); ?>';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">All</button>
-                        <button onclick="window.location.href = 'users.php?min=1&max=15';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">1-15</button>
-                        <button onclick="window.location.href = 'users.php?min=15&max=25';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">15-25</button>
-                        <button onclick="window.location.href = 'users.php?min=25&max=35';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">25-35</button>
-                        <button onclick="window.location.href = 'users.php?min=35&max=45';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">35-45</button>
-                        <button onclick="window.location.href = 'users.php?min=45&max=55';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">45-55</button>
-                        <br>
+                        <p class="card-description"><code><?php Util::display($totalUsers); ?></code> user/s found.</p>
+                        <form method="GET" action="users.php" class="d-flex mb-3">
+                           <input type="text" name="search" class="form-control form-control-sm me-2" value="<?php Util::display($search); ?>" placeholder="UID, username, IP or HWID">
+                           <button type="submit" class="btn btn-outline-primary btn-sm">Search</button>
+                           <?php if (!empty($search)) : ?>
+                              <a href="users.php" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
+                           <?php endif; ?>
+                        </form>
                         <table class="table table-hover">
                            <thead>
                               <tr>
@@ -88,18 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                               </tr>
                            </thead>
                            <tbody>
+                              <?php if (empty($userList)) : ?>
+                                 <tr>
+                                    <td colspan="6" style="text-align: center;">No users found.</td>
+                                 </tr>
+                              <?php endif; ?>
                               <?php foreach ($userList as $row) : ?>
-                                 <?php
-                              if (isset($_GET["min"]) && isset($_GET["max"])) {
-                                  $min = Util::securevar($_GET["min"]);
-                                  $max = Util::securevar($_GET["max"]);
-                              }
-                                  ?>
-                                 <?php if (!isset($min) || !isset($max)) {
-                                     $min = 1;
-                                     $max = 15;
-                                 } ?>
-                                 <?php if ($row->uid <= $max && $row->uid >= $min) : ?>
                                     <tr style="text-align: center;">
                                        <td scope="row" data-aos="fade-right" data-aos-duration="1000">
                                           <?php if (Util::getavatar($row->uid) == false) : ?>
@@ -153,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                        </td>
 
                                        <td style="text-align: center;">
-                                          <form method="POST" action="<?php Util::display($_SERVER["PHP_SELF"]); ?>">
+                                          <form method="POST" action="users.php?page=<?php echo $currentPage; ?><?php Util::display($searchQuery); ?>">
                                              <button class="btn btn-warning" data-aos="fade-right" data-aos-duration="1000" value="<?php Util::display($row->uid); ?>" name="resetHWID" type="submit" id="reset-hwid">
                                                 <i class="fas fa-microchip"></i> Reset HWID
                                              </button>
@@ -169,10 +181,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                           </form>
                                        </td>
                                     </tr>
-                                 <?php endif; ?>
                               <?php endforeach; ?>
                            </tbody>
                         </table>
+                        <?php if ($totalPages > 1) : ?>
+                           <nav aria-label="User pagination">
+                              <ul class="pagination justify-content-center">
+                                 <li class="page-item <?php echo $currentPage <= 1 ? 'disabled' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $currentPage - 1; ?><?php Util::display($searchQuery); ?>">&laquo;</a>
+                                 </li>
+                                 <?php
+                                 $startPage = max(1, $currentPage - 2);
+                                 $endPage = min($totalPages, $currentPage + 2);
+                                 for ($i = $startPage; $i <= $endPage; $i++) :
+                                     ?>
+                                    <li class="page-item <?php echo $i == $currentPage ? 'active' : ''; ?>">
+                                       <a class="page-link" href="?page=<?php echo $i; ?><?php Util::display($searchQuery); ?>"><?php echo $i; ?></a>
+                                    </li>
+                                 <?php endfor; ?>
+                                 <li class="page-item <?php echo $currentPage >= $totalPages ? 'disabled' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $currentPage + 1; ?><?php Util::display($searchQuery); ?>">&raquo;</a>
+                                 </li>
+                              </ul>
+                           </nav>
+                        <?php endif; ?>
                      </div>
                   </div>
                </div>
