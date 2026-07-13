@@ -54,6 +54,43 @@ class Users extends Database
         return $result;
     }
 
+    protected function logsPaginated($username, $offset, $limit, $search = '')
+    {
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT * FROM `userlogs` WHERE `username` = ? AND (`action` LIKE ? OR `browser` LIKE ? OR `os` LIKE ? OR `ip` LIKE ?) ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $username);
+            $this->statement->bindParam(2, $search);
+            $this->statement->bindParam(3, $search);
+            $this->statement->bindParam(4, $search);
+            $this->statement->bindParam(5, $search);
+            $this->statement->bindParam(6, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(7, $limit, PDO::PARAM_INT);
+        } else {
+            $this->prepare('SELECT * FROM `userlogs` WHERE `username` = ? ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $username);
+            $this->statement->bindParam(2, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(3, $limit, PDO::PARAM_INT);
+        }
+
+        $this->statement->execute();
+        return $this->statement->fetchAll();
+    }
+
+    protected function logsCount($username, $search = '')
+    {
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT COUNT(*) FROM `userlogs` WHERE `username` = ? AND (`action` LIKE ? OR `browser` LIKE ? OR `os` LIKE ? OR `ip` LIKE ?)');
+            $this->statement->execute([$username, $search, $search, $search, $search]);
+        } else {
+            $this->prepare('SELECT COUNT(*) FROM `userlogs` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+        }
+
+        return $this->statement->fetchColumn();
+    }
+
     protected function tokenarray($username)
     {
         $this->prepare('SELECT * FROM `login` where `username` = ?');

@@ -64,6 +64,16 @@ class UserController extends Users
         return $result;
     }
 
+    public function getLogsPaginated($username, $offset, $limit, $search = '')
+    {
+        return $this->logsPaginated($username, $offset, $limit, $search);
+    }
+
+    public function getLogsCount($username, $search = '')
+    {
+        return $this->logsCount($username, $search);
+    }
+
     public function flush($password)
     {
         $result = $this->flushlogs($password);
