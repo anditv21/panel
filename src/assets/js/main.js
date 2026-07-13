@@ -1,4 +1,14 @@
 getBrowser();
+getPlatformVersion();
+
+function getPlatformVersion() {
+  if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+    navigator.userAgentData.getHighEntropyValues(["platformVersion"])
+      .then(function (platform) {
+        document.cookie = "platformVersion=" + encodeURIComponent(platform.platformVersion) + "; path=/";
+      });
+  }
+}
 
 $(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip();

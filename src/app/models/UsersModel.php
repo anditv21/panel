@@ -1161,6 +1161,15 @@ class Users extends Database
                 $os_platform = $value;
             }
         }
+
+        if ($os_platform === "Windows 10" && isset($_COOKIE['platformVersion'])) {
+            $platform_version = explode('.', Util::securevar($_COOKIE['platformVersion']));
+
+            if ((int)$platform_version[0] >= 13) {
+                $os_platform = "Windows 11";
+            }
+        }
+
         return $os_platform;
     }
 }
