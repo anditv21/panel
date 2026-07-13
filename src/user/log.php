@@ -158,10 +158,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                         $('#passwordModal').modal('show');
                      }
 
-                     function openPasswordModal() {
-                        $('#passwordModal').modal('show');
-                     }
-
                      // Function to handle form submission
                      function submitForm() {
                         $('#flushForm').submit(); // Submit the form
