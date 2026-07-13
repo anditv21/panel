@@ -45,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $supp = isset($_POST["setsupp"]) ? Util::securevar($_POST["setsupp"]) : null;
     $ban = isset($_POST["setBanned"]) ? Util::securevar($_POST["setBanned"]) : null;
     $adminuser = isset($_POST["setAdmin"]) ? Util::securevar($_POST["setAdmin"]) : null;
+    $mute = isset($_POST["setMute"]) ? Util::securevar($_POST["setMute"]) : null;
 
     if ($hwid) {
         Util::suppCheck();
@@ -64,6 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($adminuser) {
         Util::adminCheck();
         $admin->setAdmin($adminuser);
+    }
+
+    if ($mute) {
+        Util::suppCheck();
+        $admin->setMute($mute);
     }
 
     header("location: users.php?page=$currentPage$searchQuery");
@@ -174,6 +180,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                              </button>
                                              <button class="btn btn-info" data-aos="fade-left" data-aos-duration="1000" value="<?php Util::display($row->uid); ?>" name="setsupp" type="submit" id="admin">
                                                 <i class="fas fa-info-circle"></i> set Support
+                                             </button>
+                                             <button class="btn btn-info" data-aos="fade-left" data-aos-duration="1000" value="<?php Util::display($row->uid); ?>" name="setMute" type="submit">
+                                                <i class="fas fa-volume-mute"></i> <?php echo $row->muted ? 'Unmute' : 'Mute'; ?>
                                              </button>
                                              <a class="btn btn-info" data-aos="fade-left" data-aos-duration="1000" href='<?php Util::display(SITE_URL . SUB_DIR . '/user/viewprofile.php?uid=' .$row->uid); ?>' name="viewprofile">
                                                 <i class="fas fa-info-circle"></i> View Profile
