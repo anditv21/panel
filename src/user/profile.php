@@ -125,7 +125,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
             <?php endif; ?>
             <?php if (isset($_GET['alert'])) : ?>
                <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center">
-                  <?php Util::display($_GET['alert']); ?>
+                  <?php Util::display(Util::securevar($_GET['alert'])); ?>
                </div>
             <?php endif; ?>
             <div class="row">
