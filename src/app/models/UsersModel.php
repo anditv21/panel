@@ -811,18 +811,12 @@ class Users extends Database
 
     protected function getshoutbox()
     {
-        $this->prepare("SELECT * FROM `shoutbox` ORDER BY `id` DESC LIMIT 25");
+        $this->prepare("SELECT `shoutbox`.*, `users`.`username`, `users`.`displayname`, `users`.`admin`, `users`.`supp`
+                        FROM `shoutbox`
+                        LEFT JOIN `users` ON `shoutbox`.`uid` = `users`.`uid`
+                        ORDER BY `shoutbox`.`id` DESC LIMIT 25");
         $this->statement->execute();
-        $messages = $this->statement->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($messages as &$message) {
-            $this->prepare("SELECT `username` FROM `users` WHERE `uid` = ?");
-            $this->statement->execute([$message['uid']]);
-            $result = $this->statement->fetch();
-            $message['username'] = $result->username;
-        }
-
-        return $messages;
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     protected function getuserdata($identifier)

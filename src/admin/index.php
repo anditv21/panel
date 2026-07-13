@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Sanitize and assign POST variables
         $params = [
             'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
-            'flushchat', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
+            'flushchat', 'setshoutbox', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
             'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
         ];
 
@@ -65,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         if (isset($flushchat)) {
             $admin->flushchat();
+        }
+        if (isset($setshoutbox)) {
+            $admin->setshoutbox();
         }
         if (isset($setnews)) {
             $news = Util::securevar($_POST["msg"]);
@@ -316,6 +319,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                      </div>
                      <div class="col-lg-2">
                         <div class="card stats-card">
+                           <?php if ($System->getSystemData()->shoutbox == "1") : ?>
+                              <div class="card-body">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">Enabled</h5>
+                                    <p class="stats-text">Shoutbox</p>
+                                 </div>
+                                 <div class="stats-icon change-success">
+                                    <i class="material-icons">chat</i>
+                                 </div>
+                              </div>
+                           <?php else : ?>
+                              <div class="card-body">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">Disabled</h5>
+                                    <p class="stats-text">Shoutbox</p>
+                                 </div>
+                                 <div class="stats-icon change-danger">
+                                    <i class="material-icons">chat</i>
+                                 </div>
+                              </div>
+                           <?php endif; ?>
+                        </div>
+                     </div>
+                     <div class="col-lg-2">
+                        <div class="card stats-card">
                            <?php if ($System->getSystemData()->frozen == "0") : ?>
                               <div class="card-body">
                                  <div class="stats-info">
@@ -490,6 +518,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                  <button name="invite" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the invites mode?');">
                                     SET invites+-
+                                 </button>
+
+                                 <button name="setshoutbox" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to enable/disable the shoutbox?');">
+                                    SET shoutbox+-
+                                 </button>
+
+                                 <button name="flushchat" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to flush the shoutbox?');">
+                                    FLUSH shoutbox
                                  </button>
 
                                  <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to freeze/unfreeze ALL subscriptions?');">
