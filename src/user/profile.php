@@ -46,15 +46,36 @@ if (!$user->getdcid($uid) == false) {
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     if (isset($_POST["updatePassword"])) {
-        $error = $user->updateUserPass(Util::securevar($_POST));
+        $errors = $user->updateUserPass(Util::securevar($_POST));
+
+        if (!empty($errors)) {
+            $queryParams = http_build_query([
+                'alert' => implode(' ', $errors),
+                'type' => 'danger'
+            ]);
+            header("location: profile.php?$queryParams");
+            exit;
+        }
     }
+
     if (isset($_POST["activateSub"])) {
-        $error = $user->activateSub(Util::securevar($_POST['subCode']));
-        $error = Util::securevar($_POST['subCode']);
+        $result = $user->activateSub(Util::securevar($_POST['subCode']));
+        $queryParams = http_build_query([
+            'alert' => $result,
+            'type' => $result === 'Your subscription is now active!' ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
     }
+
     if (isset($_POST["change_display_name"])) {
-        $error = $user->set_display_name(Util::securevar($_POST['display_name']));
-        $error = Util::securevar($_POST['display_name']);
+        $result = $user->set_display_name(Util::securevar($_POST['display_name']));
+        $queryParams = http_build_query([
+            'alert' => $result ? 'Display name updated successfully!' : 'Display name could not be changed.',
+            'type' => $result ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
     }
 
     if (isset($_POST["enable2fa"])) {
@@ -67,7 +88,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
         Util::redirect('/user/profile.php?2fa=disabled');
     }
 
-    header("location: profile.php");
 }
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && !isset($_POST["enable2fa"]) && !isset($_POST["disable2fa"]) && $System->getSystemData()->relinkdiscord == 1) {
@@ -101,6 +121,11 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                   <?php else : ?>
                      Link your Discord account before enabling two-factor authentication.
                   <?php endif; ?>
+               </div>
+            <?php endif; ?>
+            <?php if (isset($_GET['alert'])) : ?>
+               <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center">
+                  <?php Util::display($_GET['alert']); ?>
                </div>
             <?php endif; ?>
             <div class="row">
