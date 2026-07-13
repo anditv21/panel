@@ -51,14 +51,18 @@ class UtilMod extends Database
         $this->statement->execute([$token]);
         $result = $this->statement->fetch();
 
-        if ($result) {
+        $expiresAt = $result ? Util::getRememberTokenExpiry($result->createdAt) : false;
+
+        if ($result && $expiresAt && time() <= $expiresAt) {
             return true;
         } else {
-            setcookie("login_cookie", "", time() - 3600, '/');
-            session_unset();
-            $_SESSION = [];
-            $_SESSION = array();
-            session_destroy();
+            if ($result) {
+                $this->prepare('DELETE FROM `login` WHERE `remembertoken` = ?');
+                $this->statement->execute([$token]);
+            }
+
+            Util::clearLoginCookie();
+            Session::destroy();
             Util::redirect("/auth/login.php");
         }
     }

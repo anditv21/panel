@@ -100,6 +100,12 @@ class Users extends Database
         return $result;
     }
 
+    protected function revokeRememberToken($token)
+    {
+        $this->prepare('DELETE FROM `login` WHERE `remembertoken` = ?');
+        return $this->statement->execute([$token]);
+    }
+
     protected function tokendelete($token, $password)
     {
         $username = Session::get('username');
@@ -108,8 +114,7 @@ class Users extends Database
         $result = $this->statement->fetch();
 
         if (password_verify(($password), $result->password)) {
-            $this->prepare('DELETE FROM `login` WHERE `remembertoken` = ?');
-            $this->statement->execute([$token]);
+            $this->revokeRememberToken($token);
             $username = Session::get("username");
             $this->loguser($username, "Deleted token $token");
             return true;
@@ -255,9 +260,13 @@ class Users extends Database
             $row = $this->statement->fetch();
             $username = $row->username;
 
-            if ($row) {
-                setcookie("login_cookie", $token, time() + 31556926, '/');
+            $expiresAt = Util::getRememberTokenExpiry($row->createdAt);
+            if (!$expiresAt || time() > $expiresAt) {
+                $this->revokeRememberToken($token);
+                return false;
+            }
 
+            if ($row) {
                 $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
                 $this->statement->execute([$username]);
                 $newrow = $this->statement->fetch();
@@ -272,6 +281,7 @@ class Users extends Database
                     $this->prepare("UPDATE `login` SET `time` = ?, `ip` = ?, `browser` = ?, `os` = ? WHERE `remembertoken` = ?");
                     $this->statement->execute([$time, $ip, $browser, $os, $token]);
                     $this->loguser($username, "Logged in via cookie");
+                    $newrow->rememberTokenExpiresAt = $expiresAt;
                     return $newrow; // Return username if authentication succeeds.
 
                 } else {

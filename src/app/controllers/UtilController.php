@@ -6,6 +6,52 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class Util extends UtilMod
 {
+    public const REMEMBER_TOKEN_LIFETIME_DAYS = 30;
+
+    public static function isHttpsRequest()
+    {
+        if (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+            return true;
+        }
+
+        return !empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
+            && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https';
+    }
+
+    public static function getRememberTokenExpiry($createdAt)
+    {
+        $createdDate = DateTime::createFromFormat('Y-m-d', (string) $createdAt);
+        if (!$createdDate) {
+            return false;
+        }
+
+        $createdDate->setTime(23, 59, 59);
+        $createdDate->modify('+' . self::REMEMBER_TOKEN_LIFETIME_DAYS . ' days');
+        return $createdDate->getTimestamp();
+    }
+
+    public static function setLoginCookie($token, $expiresAt)
+    {
+        setcookie('login_cookie', $token, [
+            'expires' => (int) $expiresAt,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function clearLoginCookie()
+    {
+        setcookie('login_cookie', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
     public function setPageTitle($title)
     {
         if (!empty(Session::get("username"))) {

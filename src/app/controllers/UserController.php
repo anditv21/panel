@@ -37,7 +37,11 @@ class UserController extends Users
             $this->log($username, "Logged out", auth_logs);
         }
 
-        setcookie("login_cookie", "", time() - 3600, '/');
+        if (isset($_COOKIE['login_cookie'])) {
+            $this->revokeRememberToken(Util::securevar($_COOKIE['login_cookie']));
+        }
+
+        Util::clearLoginCookie();
         Session::destroy();
         Util::redirect("/auth/login.php");
     }
@@ -211,7 +215,7 @@ class UserController extends Users
 
                 $this->addrememberToken($token, $username);
 
-                setcookie("login_cookie", $token, time() + 31556926, '/');
+                Util::setLoginCookie($token, Util::getRememberTokenExpiry(date('Y-m-d')));
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin($token);
@@ -246,6 +250,11 @@ class UserController extends Users
             // Session start
             $this->createUserSession($result);
             $username = Session::get("username");
+
+            if (!empty($result->rememberTokenExpiresAt)) {
+                Util::setLoginCookie($token, $result->rememberTokenExpiresAt);
+            }
+
             $this->log($username, "Logged in via cookie", auth_logs);
             $this->loglogin($token);
             Util::redirect("/index.php");
