@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $params = [
             'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
             'flushchat', 'setshoutbox', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
-            'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
+            'discordlogging', 'service', 'setkey', 'setsecret', 'setoption', 'setcolor'
         ];
 
         foreach ($params as $param) {
@@ -85,14 +85,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($discordlogging)) {
             $admin->setDiscordLogging();
         }
-        if (isset($captcha_option)) {
-            $admin->setCaptchaSystem($captcha_option);
+        if (isset($setoption)) {
+            $captcha_option = (int) Util::securevar($_POST['captcha_option'] ?? 0);
+            if (in_array($captcha_option, [0, 1, 2, 3])) {
+                $admin->setCaptchaSystem($captcha_option);
+            }
         }
         if (isset($setkey)) {
-            $admin->setCaptchaKey($setkey);
+            $admin->setCaptchaKey(Util::securevar($_POST['site_key'] ?? ''));
         }
         if (isset($setsecret)) {
-            $admin->setCaptchaSecret($setsecret);
+            $admin->setCaptchaSecret(Util::securevar($_POST['site_secret'] ?? ''));
         }
         if (isset($setcolor)) {
             $admin->changeEmbedColor($setcolor);
