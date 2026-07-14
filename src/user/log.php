@@ -147,7 +147,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                               </form>
                            </div>
                            <div class="modal-footer">
-                              <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+                              <button type="submit" form="flushForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
                            </div>
                         </div>
                      </div>

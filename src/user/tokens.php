@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                      </form>
                   </div>
                   <div class="modal-footer">
-                     <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+                     <button type="submit" form="passwordform" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
                   </div>
                </div>
             </div>
