@@ -517,7 +517,7 @@ class Users extends Database
         $result = $this->statement->fetch();
         $uid = $result->uid;
 
-        foreach (['png', 'jpg', 'gif'] as $extension) {
+        foreach (['webp', 'png', 'jpg', 'gif'] as $extension) {
             if (@getimagesize(IMG_DIR . $uid . "." . $extension)) {
                 return IMG_URL . $uid . "." . $extension;
             }

@@ -679,48 +679,43 @@ class UserController extends Users
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
 
-            $path = Util::securevar(IMG_DIR . $uid);
-
-            // Remove existing images
-            foreach (['png', 'jpg', 'gif'] as $ext) {
-                if (@getimagesize($path . ".$ext")) {
-                    unlink($path . ".$ext");
-                }
-            }
-
-            $url = "https://cdn.discordapp.com/avatars/$id/$avatar";
-
-            // Download the image data
-            $imageData = file_get_contents($url);
-            if ($imageData === false) {
+            if (!$this->saveDiscordAvatar($id, $avatar, $uid)) {
                 Util::display("Error: Could not download avatar image.");
                 exit();
             }
-
-            // Determine the file extension based on the image data
-            $imageInfo = getimagesizefromstring($imageData);
-            if ($imageInfo === false) {
-                Util::display("Error: Could not determine image type.");
-                exit();
-            }
-
-            $mime = $imageInfo['mime'];
-            $ext = 'png'; // default extension
-            if ($mime == 'image/jpeg') {
-                $ext = 'jpg';
-            } elseif ($mime == 'image/gif') {
-                $ext = 'gif';
-            }
-
-            $img = $path . ".$ext";
-            file_put_contents($img, $imageData);
-            chmod(IMG_DIR, 0775);
-            chmod($img, 0775);
             $this->set_access_token($access_token);
             $this->set_refresh_token($refresh_token);
             $this->set_dcid($id, $uid);
             header("location: profile.php");
         }
+    }
+
+    private function saveDiscordAvatar($discordId, $avatar, $uid)
+    {
+        if (empty($avatar)) {
+            return true;
+        }
+
+        $formats = strpos($avatar, 'a_') === 0 ? ['gif', 'png'] : ['webp', 'png'];
+
+        foreach ($formats as $format) {
+            $avatarUrl = "https://cdn.discordapp.com/avatars/$discordId/$avatar.$format?size=1024";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $avatarUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
+            $imageData = curl_exec($ch);
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($imageData !== false && $statusCode === 200 && Util::saveAvatarData($imageData, $uid)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function downloadAvatarWithAccessToken($userId, $uid)
@@ -756,43 +751,11 @@ class UserController extends Users
 
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
-            $path = Util::securevar(IMG_DIR . $uid);
 
-            // Remove existing images
-            foreach (['png', 'jpg', 'gif'] as $ext) {
-                if (@getimagesize($path . ".$ext")) {
-                    unlink($path . ".$ext");
-                }
-            }
-
-            $avatarUrl = "https://cdn.discordapp.com/avatars/$id/$avatar";
-
-            // Download the image data
-            $imageData = file_get_contents($avatarUrl);
-            if ($imageData === false) {
+            if (!$this->saveDiscordAvatar($id, $avatar, $uid)) {
                 Util::display("Error: Could not download avatar image.");
                 return false;
             }
-
-            // Determine the file extension based on the image data
-            $imageInfo = getimagesizefromstring($imageData);
-            if ($imageInfo === false) {
-                Util::display("Error: Could not determine image type.");
-                return false;
-            }
-
-            $mime = $imageInfo['mime'];
-            $ext = 'png'; // default extension
-            if ($mime == 'image/jpeg') {
-                $ext = 'jpg';
-            } elseif ($mime == 'image/gif') {
-                $ext = 'gif';
-            }
-
-            $avatarPath = $path . ".$ext";
-            file_put_contents($avatarPath, $imageData);
-            chmod(IMG_DIR, 0775);
-            chmod($avatarPath, 0775);
 
             return true;
         }

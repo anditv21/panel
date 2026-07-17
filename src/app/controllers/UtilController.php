@@ -255,44 +255,96 @@ class Util extends UtilMod
 
     public static function getavatar($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid . ".png?" . Util::randomCode(5);
-        } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
-        } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif?" . Util::randomCode(5);
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        if ($extension === false) {
             return false;
         }
+
+        return IMG_URL . $uid . "." . $extension . "?" . Util::randomCode(5);
     }
 
     public static function getavatardl($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid . ".png";
-        } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg";
-        } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif";
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        if ($extension === false) {
             return false;
         }
+
+        return IMG_URL . $uid . "." . $extension;
     }
 
     public static function getextention($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return ".png";
-        } elseif (@getimagesize($path . ".jpg")) {
-            return  ".jpg";
-        } elseif (@getimagesize($path . ".gif")) {
-            return  ".gif";
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        return $extension === false ? false : "." . $extension;
+    }
+
+    public static function saveAvatarData($imageData, $uid)
+    {
+        if (@getimagesizefromstring($imageData) === false) {
             return false;
         }
+
+        $extension = self::detectAvatarExtension($imageData);
+        if ($extension === false) {
+            return false;
+        }
+
+        $path = IMG_DIR . $uid;
+        $temporaryFile = $path . ".tmp." . $extension;
+
+        if (file_put_contents($temporaryFile, $imageData) === false || filesize($temporaryFile) < 1) {
+            @unlink($temporaryFile);
+            return false;
+        }
+
+        $avatarFile = $path . "." . $extension;
+        if (!@copy($temporaryFile, $avatarFile)) {
+            @unlink($temporaryFile);
+            return false;
+        }
+        @unlink($temporaryFile);
+
+        foreach (['webp', 'png', 'jpg', 'gif'] as $oldExtension) {
+            if ($oldExtension !== $extension) {
+                @unlink($path . "." . $oldExtension);
+            }
+        }
+
+        @chmod(IMG_DIR, 0775);
+        @chmod($avatarFile, 0775);
+        return true;
+    }
+
+    private static function getAvatarExtension($uid)
+    {
+        $path = IMG_DIR . $uid;
+
+        foreach (['webp', 'png', 'jpg', 'gif'] as $extension) {
+            if (@getimagesize($path . "." . $extension)) {
+                return $extension;
+            }
+        }
+
+        return false;
+    }
+
+    private static function detectAvatarExtension($imageData)
+    {
+        if (substr($imageData, 0, 4) === 'RIFF' && substr($imageData, 8, 4) === 'WEBP') {
+            return 'webp';
+        }
+        if (substr($imageData, 0, 6) === 'GIF87a' || substr($imageData, 0, 6) === 'GIF89a') {
+            return 'gif';
+        }
+        if (substr($imageData, 0, 8) === "\x89PNG\x0D\x0A\x1A\x0A") {
+            return 'png';
+        }
+        if (substr($imageData, 0, 3) === "\xFF\xD8\xFF") {
+            return 'jpg';
+        }
+
+        return false;
     }
 
     public static function daysago($dateString)
