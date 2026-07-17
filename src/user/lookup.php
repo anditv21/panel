@@ -1,6 +1,7 @@
 <?php
 require_once "../app/require.php";
 require_once "../app/helpers/ip_info.php";
+require_once "../includes/head.nav.inc.php";
 
 $user = new UserController();
 $System = new SystemController();
@@ -18,8 +19,7 @@ $supp = Util::suppCheck(false);
 
 Util::banCheck();
 Util::checktoken();
-Util::head("Profile");
-Util::navbar();
+Util::head("IP Lookup");
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
     if (isset($_GET["ip"])) {
@@ -50,9 +50,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <?php Util::navbar(); ?>
-</head>
+<head><?php Util::navbar(); ?></head>
+<?php display_top_nav("IP Lookup"); ?>
 
 <body class="pace-done no-loader page-sidebar-collapsed">
     <div class="page-container">
