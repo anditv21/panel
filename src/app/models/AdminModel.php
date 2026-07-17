@@ -803,8 +803,8 @@ class Admin extends Database
             $this->statement->execute([$invites, $username]);
             $adminusername = Session::get('username');
             $user = new UserController();
-            $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
-            $this->admin_log($adminusername, "Giftet $invites\s to $username");
+            $user->log($adminusername, "Gifted $invites invites to $username", system_logs);
+            $this->admin_log($adminusername, "Gifted $invites invites to $username");
         }
     }
 
