@@ -856,26 +856,59 @@ class Admin extends Database
 
     protected function ip_whitelist($ip, $username)
     {
-        if ($this->checkadmin() && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
-            $this->statement->execute([$ip, $username]);
-        } else {
-            return "This is not a valid ipv4.";
+        $ip = trim($ip);
+
+        if (!$this->checkadmin()) {
+            return "You do not have permission to whitelist IP addresses.";
         }
+
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return "This is not a valid IP address.";
+        }
+
+        $ip = inet_ntop(inet_pton($ip));
+
+        $this->prepare('SELECT `ip` FROM `ip_whitelist` WHERE `ip` = ?');
+        $this->statement->execute([$ip]);
+
+        if ($this->statement->fetch()) {
+            return "This IP address is already whitelisted.";
+        }
+
+        $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
+        $this->statement->execute([$ip, $username]);
+
+        $user = new UserController();
+        $user->log($username, "Whitelisted IP: $ip", admin_logs);
+        $this->admin_log($username, "Whitelisted IP: $ip");
+        return "IP address whitelisted successfully.";
     }
 
     protected function unlist_ip($ip, $username)
     {
-        if ($this->checkadmin()) {
-            $this->prepare('DELETE FROM `ip_whitelist` WHERE `ip` = ?');
-            $this->statement->execute([$ip]);
+        $ip = trim($ip);
 
-            $user = new UserController();
-            $user->log($username, "Added or removed whitelist $ip", system_logs);
-            $user->loguser($username, "Added or removed whitelist $ip");
-        } else {
-            return "This is not a valid ipv4.";
+        if (!$this->checkadmin()) {
+            return "You do not have permission to remove whitelisted IP addresses.";
         }
+
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return "This is not a valid IP address.";
+        }
+
+        $ip = inet_ntop(inet_pton($ip));
+
+        $this->prepare('DELETE FROM `ip_whitelist` WHERE `ip` = ?');
+        $this->statement->execute([$ip]);
+
+        if ($this->statement->rowCount() < 1) {
+            return "This IP address is not whitelisted.";
+        }
+
+        $user = new UserController();
+        $user->log($username, "Removed IP from whitelist: $ip", admin_logs);
+        $this->admin_log($username, "Removed IP from whitelist: $ip");
+        return "IP address removed successfully.";
     }
 
     protected function IPArray()

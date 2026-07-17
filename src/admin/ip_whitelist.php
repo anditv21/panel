@@ -27,17 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ip = isset($_POST["ip"]) ? Util::securevar($_POST["ip"]) : null;
     $delIP = isset($_POST["delIP"]) ? Util::securevar($_POST["delIP"]) : null;
 
+    $result = '';
+
     if ($ip) {
-        $admin->whitelist_ip($ip);
+        $result = $admin->whitelist_ip($ip);
+    } elseif ($delIP) {
+        $result = $admin->del_ip($delIP);
     }
 
-    if ($delIP) {
-        $admin->del_ip($delIP);
-    }
-
-    header("location: ip_whitelist.php");
+    $queryParams = http_build_query([
+        'alert' => $result ?: 'No IP address was provided.',
+        'type' => strpos($result, 'successfully') !== false ? 'success' : 'danger'
+    ]);
+    header("location: ip_whitelist.php?$queryParams");
     exit;
 }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,6 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="page-container">
             <div class="page-content">
                 <div class="main-wrapper">
+                    <?php if (isset($_GET['alert'])) : ?>
+                        <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center">
+                            <?php Util::display(Util::securevar($_GET['alert'])); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
                         <div class="col">
                             <div class="card">
