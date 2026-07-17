@@ -15,9 +15,7 @@ if (!Util::banCheck()) {
 
 $username = Session::get("username");
 $uid = Session::get("uid");
-$sub = $user->getSubStatus();
 
-Util::banCheck();
 Util::head("Banned");
 
 ?>
@@ -44,8 +42,8 @@ Util::head("Banned");
                             <p class="text-success">Welcome back <?php Util::display($username); ?>!</p>
                             <p class="text-success">Your account has been banned.</p>
                             <p class="text-success">Ban Reason: <?php Util::Display($user->banreason($username)); ?></p>
-                            <p class="text-success">UID: <?php Util::display($uid); ?></a></li><br>
-                                <a href="<?= SUB_DIR ?>/auth/logout.php" class="btn btn-outline-primary btn-block">Logout</a>
+                            <p class="text-success">UID: <?php Util::display($uid); ?></p>
+                            <a href="<?= SUB_DIR ?>/auth/logout.php" class="btn btn-outline-primary btn-block">Logout</a>
                         </div>
                         <form>
                             <div class="d-grid btn-group">

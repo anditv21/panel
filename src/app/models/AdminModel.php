@@ -322,7 +322,7 @@ class Admin extends Database
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
 
-            if ($userData->admin == 1) {
+            if (!$userData || $userData->admin == 1) {
                 return;
             }
 
@@ -340,12 +340,12 @@ class Admin extends Database
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Banned by $username", false);
-                $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
+                $this->admin_log($username, "Banned {$userData->username} ($uid)");
                 // Delete shoutbox entries from banned user
                 $this->prepare('DELETE FROM `shoutbox` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
             } else {
-                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
+                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Unbanned by $username", false);
                 $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
             }

@@ -1,4 +1,4 @@
-<?php if (Session::isLogged() == true) : ?>
+<?php if (Session::isLogged() == true && Session::isBanned() == false) : ?>
   <div class="page-sidebar">
     <a class="logo" href="<?= SUB_DIR ?>/index.php"><img style="border-radius: 50%;" width="50" height="50" src="<?= SUB_DIR ?>/assets/images/logo.png"></a>
     <ul class="list-unstyled accordion-menu">
