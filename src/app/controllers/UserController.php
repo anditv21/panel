@@ -464,7 +464,7 @@ class UserController extends Users
     public function get_refresh_token()
     {
         $username = Session::Get("username");
-        return $this->get_discord_refresh_token($username);
+        return $this->get_refresh_discord_access_token($username);
     }
 
     public function refresh_token()
@@ -474,18 +474,28 @@ class UserController extends Users
 
         if ($this->is_access_token_valid($current_access_token)) {
             return $current_access_token;
-        } else {
-            $refresh_token = $this->get_refresh_token();
-            $new_access_token = $this->get_new_access_token($refresh_token);
-            $this->set_refresh_discord_access_token($new_access_token, $username);
-            return $new_access_token;
         }
+
+        $refresh_token = $this->get_refresh_token();
+        $tokens = $this->get_new_access_token($refresh_token);
+
+        if (!$tokens) {
+            return null;
+        }
+
+        $new_refresh_token = isset($tokens['refresh_token']) ? $tokens['refresh_token'] : $refresh_token;
+        $this->update_discord_tokens($tokens['access_token'], $new_refresh_token, $username);
+        return $tokens['access_token'];
     }
 
     private function is_access_token_valid($access_token)
     {
+        if (!$access_token) {
+            return false;
+        }
+
         // Send a request to Discord's API to validate the access token
-        $url = 'https://discord.com/api/v6/users/@me';
+        $url = 'https://discord.com/api/v10/users/@me';
 
         $curl = curl_init();
         curl_setopt_array($curl, [
@@ -527,7 +537,11 @@ class UserController extends Users
 
     private function get_new_access_token($refresh_token)
     {
-        $url = 'https://discord.com/api/v8/oauth2/token';
+        if (!$refresh_token) {
+            return null;
+        }
+
+        $url = 'https://discord.com/api/v10/oauth2/token';
 
         $data = [
             'client_id' => Util::securevar(client_id),
@@ -547,16 +561,21 @@ class UserController extends Users
         ]);
 
         $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         curl_close($curl);
 
-        $response = json_decode($response, true);
-
-        if (isset($response['access_token'])) {
-            return $response['access_token'];
-        } else {
+        if ($response === false) {
             return null;
         }
+
+        $response = json_decode($response, true);
+
+        if ($httpCode === 200 && isset($response['access_token'])) {
+            return $response;
+        }
+
+        return null;
     }
 
     public function set_display_name($display_name)
@@ -620,7 +639,7 @@ class UserController extends Users
             ];
 
             $payload_string = http_build_query($payload);
-            $discord_token_url = "https://discordapp.com/api/v9/oauth2/token";
+            $discord_token_url = "https://discord.com/api/v10/oauth2/token";
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $discord_token_url);
@@ -651,7 +670,7 @@ class UserController extends Users
             $access_token = Util::securevar($result["access_token"]);
             $refresh_token = Util::securevar($result["refresh_token"]);
 
-            $discord_users_url = "https://discordapp.com/api/users/@me";
+            $discord_users_url = "https://discord.com/api/v10/users/@me";
             $header = [
                 "Authorization: Bearer $access_token",
                 "Content-Type: application/x-www-form-urlencoded",
@@ -724,7 +743,7 @@ class UserController extends Users
 
         // Check if access token is available and valid
         if ($accessToken && $this->is_access_token_valid($accessToken)) {
-            $url = "https://discord.com/api/v9/users/@me";
+            $url = "https://discord.com/api/v10/users/@me";
             $header = [
                 "Authorization: Bearer $accessToken"
             ];

@@ -846,6 +846,12 @@ class Users extends Database
         $this->statement->execute([$token, $username]);
     }
 
+    protected function update_discord_tokens($access_token, $refresh_token, $username)
+    {
+        $this->prepare("UPDATE `users` SET `discord_access_token` = ?, `discord_refresh_token` = ? WHERE `username` = ?");
+        $this->statement->execute([$access_token, $refresh_token, $username]);
+    }
+
     protected function get_discord_refresh_token($username)
     {
         $this->prepare("SELECT `discord_access_token` from `users` WHERE `username` = ?");
