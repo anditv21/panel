@@ -870,11 +870,10 @@ class Users extends Database
         $result = $this->statement->fetch();
 
         if ($result && $result->username_change) {
-            $last_username_change = strtotime($result->username_change);
-            $thirty_days_ago = strtotime("-30 days");
+            $cooldown_date = strtotime($result->username_change);
+            $current_date = strtotime(date('Y-m-d'));
 
-            if ($last_username_change >= $thirty_days_ago) {
-                // It hasn't been 30 days yet, so return false
+            if ($current_date < $cooldown_date) {
                 return false;
             }
         }
@@ -886,8 +885,8 @@ class Users extends Database
             return false;
         }
 
-        // Update the display name and set the username_change date
-        $this->prepare("UPDATE `users` SET `displayname` = ?, `username_change` = DATE_ADD(NOW(), INTERVAL 30 DAY) WHERE `username` = ?");
+        // Update the display name and set the cooldown date
+        $this->prepare("UPDATE `users` SET `displayname` = ?, `username_change` = DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY) WHERE `username` = ?");
         $this->statement->execute([$display_name, $username]);
         $this->loguser($username, "Changed display name to $display_name");
         return true;
