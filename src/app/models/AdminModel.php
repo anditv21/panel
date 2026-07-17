@@ -361,19 +361,19 @@ class Admin extends Database
             }
 
             // Check if user is an admin
-            $this->prepare('SELECT `admin` FROM `users` WHERE `uid` = ?');
+            $this->prepare('SELECT `admin`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set admin status to opposite of current status
             $admin = (int)!$userData->admin;
 
             $this->prepare('UPDATE `users` SET `admin` = ?, `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$admin, $admin, $uid]);
-
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
 
             $username = Session::get('username');
             $user = new UserController();
@@ -402,6 +402,10 @@ class Admin extends Database
             $this->prepare('SELECT `supp`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set supp status to opposite of current status
             $supp = $userData->supp ? 0 : 1;
@@ -435,19 +439,19 @@ class Admin extends Database
             }
 
             // Check if user is muted
-            $this->prepare('SELECT `muted` FROM `users` WHERE `uid` = ?');
+            $this->prepare('SELECT `muted`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set mute status to opposite of current status
             $muted = (int)!$userData->muted;
 
             $this->prepare('UPDATE `users` SET `muted` = ? WHERE `uid` = ?');
             $this->statement->execute([$muted, $uid]);
-
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
 
             $username = Session::get('username');
             $user = new UserController();
