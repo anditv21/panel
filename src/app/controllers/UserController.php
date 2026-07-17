@@ -467,12 +467,12 @@ class UserController extends Users
         return $this->get_refresh_discord_access_token($username);
     }
 
-    public function refresh_token()
+    public function refresh_token($force = false)
     {
         $username = Session::Get("username");
         $current_access_token = $this->get_access_token();
 
-        if ($this->is_access_token_valid($current_access_token)) {
+        if (!$force && $this->is_access_token_valid($current_access_token)) {
             return $current_access_token;
         }
 
@@ -501,6 +501,8 @@ class UserController extends Users
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $access_token,
             ],
@@ -508,13 +510,13 @@ class UserController extends Users
 
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        if ($httpCode !== 200) {
-            curl_close($curl);
-            return false;
-        }
+        $requestFailed = $response === false;
 
         curl_close($curl);
+
+        if ($requestFailed || $httpCode !== 200) {
+            return false;
+        }
 
         try {
             $data = json_decode($response, true);
@@ -558,6 +560,8 @@ class UserController extends Users
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
         ]);
 
         $response = curl_exec($curl);
@@ -737,7 +741,7 @@ class UserController extends Users
         return false;
     }
 
-    public function downloadAvatarWithAccessToken($userId, $uid)
+    public function downloadAvatarWithAccessToken($userId, $uid, $retry = true)
     {
         $accessToken = $this->get_access_token();
 
@@ -752,19 +756,26 @@ class UserController extends Users
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
             $result = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
 
             if ($result === false) {
-                Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
+                error_log("Discord avatar refresh failed: $curlError");
+                return false;
+            }
+
+            if ($httpCode !== 200) {
                 return false;
             }
 
             $result = json_decode($result, true);
 
             if (!isset($result["id"])) {
-                Util::display("Error: Failed to get user ID from Discord.");
                 return false;
             }
 
@@ -772,7 +783,6 @@ class UserController extends Users
             $avatar = Util::securevar($result["avatar"]);
 
             if (!$this->saveDiscordAvatar($id, $avatar, $uid)) {
-                Util::display("Error: Could not download avatar image.");
                 return false;
             }
 
@@ -780,12 +790,11 @@ class UserController extends Users
         }
 
         // Access token is invalid or expired, refresh it
-        $refreshedAccessToken = $this->refresh_token();
+        $refreshedAccessToken = $this->refresh_token(true);
 
         // Check if the refresh token was successful and download the avatar
-        if ($refreshedAccessToken) {
-            $this->set_access_token($refreshedAccessToken);
-            return $this->downloadAvatarWithAccessToken($userId, $uid);
+        if ($refreshedAccessToken && $retry) {
+            return $this->downloadAvatarWithAccessToken($userId, $uid, false);
         }
 
         return false;
