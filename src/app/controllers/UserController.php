@@ -49,11 +49,6 @@ class UserController extends Users
 
 
 
-    public function getUserArray()
-    {
-        return $this->UserArray();
-    }
-
     public function banreason($username)
     {
         return $this->getbanreason($username);
@@ -345,9 +340,14 @@ class UserController extends Users
         return $errors;
     }
 
-    public function getUserCount()
+    public function getUserCount($search = '')
     {
-        return $this->userCount();
+        return $this->userCount($search);
+    }
+
+    public function getPaginatedUsers($offset, $limit, $search = '')
+    {
+        return $this->usersPaginated($offset, $limit, $search);
     }
 
     public function getBannedUserCount()

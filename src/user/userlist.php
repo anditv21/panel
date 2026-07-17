@@ -1,31 +1,43 @@
 <?php
 require_once '../app/require.php';
 require_once("../includes/head.nav.inc.php");
-display_top_nav("User list");
 
 $user = new UserController();
-$ip = $user->getip();
-
 
 Session::init();
 if (!Session::isLogged()) {
     Util::redirect('/auth/login.php');
 }
 
-$username = Session::get("username");
-$uid = Session::get("uid");
-
-$userList = $user->getUserArray();
-
-
 Util::banCheck();
 Util::checktoken();
-Util::head("User list")
+
+$itemsPerPage = 15;
+$currentPage = isset($_GET['page']) ? (int) Util::securevar($_GET['page']) : 1;
+$search = isset($_GET['search']) ? Util::securevar($_GET['search']) : '';
+
+if ($currentPage < 1) {
+    $currentPage = 1;
+}
+
+$totalUsers = $user->getUserCount($search);
+$totalPages = max(1, ceil($totalUsers / $itemsPerPage));
+
+if ($currentPage > $totalPages) {
+    $currentPage = $totalPages;
+}
+
+$offset = ($currentPage - 1) * $itemsPerPage;
+$userList = $user->getPaginatedUsers($offset, $itemsPerPage, $search);
+$searchQuery = !empty($search) ? '&search=' . urlencode($search) : '';
+
+Util::head("User list");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head><?php Util::navbar();?></head>
+<?php display_top_nav("User list"); ?>
 
 <body class="pace-done no-loader page-sidebar-collapsed">
     <div class="page-container">
@@ -36,15 +48,14 @@ Util::head("User list")
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">User list</h5>
-                                <p class="card-description">By default, only the users with UID 1-10 are displayed for performance reasons.</p>
-                                <button onclick="window.location.href = 'userlist.php?min=1&max=<?php Util::display($user->getUserCount()); ?>';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">All</button>
-                                <button onclick="window.location.href = 'userlist.php?min=1&max=15';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">1-15</button>
-                                <button onclick="window.location.href = 'userlist.php?min=15&max=25';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">15-25</button>
-                                <button onclick="window.location.href = 'userlist.php?min=25&max=35';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">25-35</button>
-                                <button onclick="window.location.href = 'userlist.php?min=35&max=45';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">35-45</button>
-                                <button onclick="window.location.href = 'userlist.php?min=45&max=55';" class="btn btn-outline-primary btn-sm" style="font-size: 11px;">45-55</button>
-                                <br>
-                                <br>
+                                <p class="card-description"><code><?php Util::display($totalUsers); ?></code> user/s found.</p>
+                                <form method="GET" action="userlist.php" class="d-flex mb-3">
+                                    <input type="text" name="search" class="form-control form-control-sm me-2" value="<?php Util::display($search); ?>" placeholder="UID, username, display name or inviter">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Search</button>
+                                    <?php if (!empty($search)) : ?>
+                                        <a href="userlist.php" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
+                                    <?php endif; ?>
+                                </form>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr style="text-align: center;">
@@ -56,19 +67,12 @@ Util::head("User list")
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php if (empty($userList)) : ?>
+                                            <tr>
+                                                <td colspan="5" class="text-center">No users found.</td>
+                                            </tr>
+                                        <?php endif; ?>
                                         <?php foreach ($userList as $row) : ?>
-                                            <?php
-                                            if (isset($_GET["min"]) && isset($_GET["max"])) {
-                                                $min = Util::securevar($_GET["min"]);
-                                                $max = Util::securevar($_GET["max"]);
-                                            }
-
-                                            ?>
-                                            <?php if (!isset($min) || !isset($max)) {
-                                                $min = 1;
-                                                $max = 15;
-                                            } ?>
-                                            <?php if ($row->uid <= $max && $row->uid >= $min) : ?>
                                                 <tr style="text-align: center;">
                                                     <td scope="row" data-aos="fade-right" data-aos-duration="1000">
                                                         <?php if (Util::getavatar($row->uid) == false) : ?>
@@ -101,15 +105,9 @@ Util::head("User list")
                                                             <img title="Banned" data-toggle="tooltip" data-placement="top" src="../assets/images/banned.png" width="15" height="15">
                                                         <?php endif; ?>
 
-                                                        <?php $sub = $user->getSubStatus($row->username); ?>
-                                                        <?php if ($sub > 0) : ?>
+                                                        <?php if ($row->subscription_days > 0) : ?>
                                                             <img title="Has sub" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.png" width="15" height="15">
                                                         <?php endif; ?>
-
-
-
-
-                                                    </td>
                                                     </td>
                                                     <td data-aos="fade" data-aos-duration="2000"><?php Util::display($row->invitedBy); ?></td>
                                                     <td>
@@ -119,14 +117,38 @@ Util::head("User list")
                                                         <a class="btn btn-danger" data-aos="fade-right" data-aos-duration="1000" href="<?php Util::display(SUB_DIR . "/user/viewprofile.php?uid=" . $row->uid); ?>"><i class="fas fa-user-circle"></i> View Profile</a>
                                                     </td>
                                                 </tr>
-                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                                <?php if ($totalPages > 1) : ?>
+                                    <nav aria-label="User pagination">
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item <?php echo $currentPage <= 1 ? 'disabled' : ''; ?>">
+                                                <a class="page-link" href="?page=<?php echo $currentPage - 1; ?><?php Util::display($searchQuery); ?>">&laquo;</a>
+                                            </li>
+                                            <?php
+                                            $startPage = max(1, $currentPage - 2);
+                                            $endPage = min($totalPages, $currentPage + 2);
+                                            for ($i = $startPage; $i <= $endPage; $i++) :
+                                                ?>
+                                                <li class="page-item <?php echo $i == $currentPage ? 'active' : ''; ?>">
+                                                    <a class="page-link" href="?page=<?php echo $i; ?><?php Util::display($searchQuery); ?>"><?php echo $i; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+                                            <li class="page-item <?php echo $currentPage >= $totalPages ? 'disabled' : ''; ?>">
+                                                <a class="page-link" href="?page=<?php echo $currentPage + 1; ?><?php Util::display($searchQuery); ?>">&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            </body>
-        </html>
+        </div>
+    </div>
+</body>
+<?php Util::footer(); ?>
+
+</html>

@@ -27,13 +27,25 @@ class Users extends Database
         return $this->statement->rowCount() > 0;
     }
 
-    protected function UserArray()
+    protected function usersPaginated($offset, $limit, $search = '')
     {
-        $this->prepare('SELECT * FROM `users` ORDER BY uid ASC');
-        $this->statement->execute();
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT `uid`, `username`, `displayname`, `invitedBy`, `admin`, `supp`, `banned`, `dcid`, DATEDIFF(`sub`, CURDATE()) AS `subscription_days` FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `displayname` LIKE ? OR `invitedBy` LIKE ? ORDER BY `uid` ASC LIMIT ?, ?');
+            $this->statement->bindParam(1, $search);
+            $this->statement->bindParam(2, $search);
+            $this->statement->bindParam(3, $search);
+            $this->statement->bindParam(4, $search);
+            $this->statement->bindParam(5, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(6, $limit, PDO::PARAM_INT);
+        } else {
+            $this->prepare('SELECT `uid`, `username`, `displayname`, `invitedBy`, `admin`, `supp`, `banned`, `dcid`, DATEDIFF(`sub`, CURDATE()) AS `subscription_days` FROM `users` ORDER BY `uid` ASC LIMIT ?, ?');
+            $this->statement->bindParam(1, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(2, $limit, PDO::PARAM_INT);
+        }
 
-        $result = $this->statement->fetchAll();
-        return $result;
+        $this->statement->execute();
+        return $this->statement->fetchAll();
     }
 
     protected function getnews()
@@ -459,10 +471,17 @@ class Users extends Database
     }
 
     // Get number of users
-    protected function userCount()
+    protected function userCount($search = '')
     {
-        $this->prepare("SELECT COUNT(*) FROM `users`");
-        $this->statement->execute();
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT COUNT(*) FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `displayname` LIKE ? OR `invitedBy` LIKE ?');
+            $this->statement->execute([$search, $search, $search, $search]);
+        } else {
+            $this->prepare("SELECT COUNT(*) FROM `users`");
+            $this->statement->execute();
+        }
+
         $result = $this->statement->fetchColumn();
         return $result;
     }

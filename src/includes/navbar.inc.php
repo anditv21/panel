@@ -15,7 +15,7 @@
           <li><a href="<?= SUB_DIR ?>/user/log.php"><i class="far fa-circle"></i>Account-logs</a></li>
           <li><a href="<?= SUB_DIR ?>/user/userinvites.php"><i class="far fa-circle"></i>Invites</a></li>
           <li><a href="<?= SUB_DIR ?>/user/shoutbox.php"><i class="far fa-circle"></i>Shoutbox</a></li>
-          <?php if(Util::adminCheck(false) == false or Util::suppCheck(false) == false) :?>
+          <?php if(Util::adminCheck(false) == false && Util::suppCheck(false) == false) :?>
             <li><a href="<?= SUB_DIR ?>/user/userlist.php"><i class="far fa-circle"></i>User-list</a></li>
             <?php endif; ?>
         </ul>
