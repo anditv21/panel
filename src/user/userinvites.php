@@ -18,19 +18,20 @@ $invList = $user->getInvCodeArray();
 
 Util::banCheck();
 Util::checktoken();
-Util::head("Profiles");
+Util::head("User Invites");
 
 
 // if post request
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
     if (isset($_POST['genInv'])) {
-        $geninv = Util::securevar($_POST['genInv']);
+        $invite = $user->geninv($username);
+        $queryParams = http_build_query([
+            'alert' => $invite ? 'Invitation generated successfully.' : "You don't have any invites left.",
+            'type' => $invite ? 'success' : 'danger'
+        ]);
+        header("location: userinvites.php?$queryParams");
+        exit();
     }
-
-    if (isset($geninv)) {
-        $user->geninv($username);
-    }
-
 
     header("location: userinvites.php");
     exit();
@@ -52,9 +53,9 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                         <div class="row">
                            <div class="col-lg-6">
                               <div class="card stats-card">
-                                 <?php if (isset($_GET['error'])) : ?>
-                                    <div style='max-width: 500px; margin-bottom: -7px;' class='alert alert-danger' role='alert'>
-                                       Error. You don't have any invites left.<br>
+                                 <?php if (isset($_GET['alert'])) : ?>
+                                    <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center" role="alert">
+                                       <?php Util::display(Util::securevar($_GET['alert'])); ?>
                                     </div>
                                  <?php endif; ?>
                                  <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
@@ -78,7 +79,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                                                       <p class="spoiler"><?php Util::display($row->code); ?></p>
                                                    </th>
                                                    <td data-aos="fade-left" data-aos-duration="1200">
-                                                      <input class="btn btn-outline-primary btn-sm" type="submit" value="Copy code" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/auth/register.php?invite=" . $row->code); ?>')">
+                                                      <input class="btn btn-outline-primary btn-sm" type="button" value="Copy link" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/auth/register.php?invite=" . $row->code); ?>'); this.value='Copied';">
                                                    </td>
                                                 </tr>
                                              <?php endforeach; ?>
