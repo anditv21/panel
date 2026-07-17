@@ -13,47 +13,31 @@ Session::init();
 if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
-$uid = Session::get("uid");
-$username = Session::get("username");
 $admin = Util::adminCheck(false);
 $supp = Util::suppCheck(false);
-$getuid = Util::securevar($_GET["uid"]);
-$sub = $user->getSubStatus($username);
-$userfrozen = $user->getfrozen();
-$userbyid = $user->getuserbyuid($getuid);
-$displayname = $user->fetch_display_name($userbyid->username);
+$getuid = isset($_GET["uid"]) ? Util::securevar($_GET["uid"]) : '';
+
+if (empty($getuid)) {
+    Util::redirect('/index.php');
+}
+
+$view = $user->getuserbyuid($getuid);
+
+if (!$view || empty($view->username)) {
+    Util::redirect('/index.php');
+}
+
+$uid = $view->uid;
+$days = $user->getSubStatus($view->username);
 
 Util::banCheck();
 Util::checktoken();
-
-
-
-
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
-    if (isset($_GET["uid"])) {
-        $uid = Util::securevar($_GET["uid"]);
-
-        if (!empty($uid)) {
-            $getuid = Util::securevar($_GET["uid"]);
-            $userbyid = $user->getuserbyuid($getuid);
-            if (!empty($userbyid->username)) {
-                $username = $userbyid->username;
-            } else {
-                echo "<script>alert('Username not found for the given UID');</script>";
-                echo "<script>window.history.back();</script>";
-            }
-        } else {
-            echo "<script>alert('Please provide a valid UID');</script>";
-            echo "<script>window.history.back();</script>";
-        }
-    }
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head><?php Util::navbar();?></head>
-<?php Util::display("<title>$userbyid->username - View Profile</title>"); ?>
+<?php Util::display("<title>$view->username - View Profile</title>"); ?>
 <body class="pace-done no-loader page-sidebar-collapsed">
    <div class="page-container">
       <div class="page-content">
@@ -64,8 +48,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                   <div class="card widget widget-info card-bg">
                      <div class="card-body">
                         <div class="widget-info-container">
-                           <?php $uid = Util::securevar($_GET['uid']) ?>
-                              <?php $view = $user->getuserbyuid($uid); ?>
                               <div class="rounded-circle img-profile">
                                  <?php if (Util::getavatar($view->uid) == false) : ?>
                                     <img width="120" height="120" class="border rounded-circle img-profile" src="<?= SUB_DIR ?>/assets/images/avatars/Portrait_Placeholder.png">
@@ -99,7 +81,7 @@ if ($displayName !== null) {
                                     <img title="Banned" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/banned.png" width="15" height="15">
                                  <?php endif; ?>
 
-                                 <?php if ($view->sub > 0) : ?>
+                                 <?php if ($days > 0) : ?>
                                     <img title="Has sub" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/sub.png" width="15" height="15">
                                  <?php endif; ?>
 
