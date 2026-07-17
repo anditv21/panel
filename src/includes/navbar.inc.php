@@ -36,6 +36,7 @@
             <li><a href="<?= SUB_DIR ?>/admin/index.php"><i class="far fa-circle"></i>Settings</a></li>
             <?php if (Util::adminCheck(false) == true) : ?>
               <li><a href="<?= SUB_DIR ?>/admin/upload/loader.php"><i class="far fa-circle"></i>Loader Upload</a></li>
+              <li><a href="<?= SUB_DIR ?>/admin/upload/offsets.php"><i class="far fa-circle"></i>Offsets Upload</a></li>
             <?php endif; ?>
           </ul>
         </li>
