@@ -74,8 +74,8 @@ if ($displayName !== null) {
                               <p>Badges:
                                  <?php if ($view->admin == 1) : ?>
                                     <img title="Admin" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/admin.png" width="15" height="15">
-                                    <img title="Supporter" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/supp.png" width="18" height="18">
-                                 <?php elseif ($view->admin == 0 && $view->supp == 1) : ?>
+                                 <?php endif; ?>
+                                 <?php if ($view->supp == 1) : ?>
                                     <img title="Supporter" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/supp.png" width="18" height="18">
                                  <?php endif; ?>
 
@@ -86,6 +86,7 @@ if ($displayName !== null) {
                                  <?php if ($days > 0) : ?>
                                     <img title="Has sub" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/sub.png" width="15" height="15">
                                  <?php endif; ?>
+                              </p>
 
 
                               <p>Joined: <?php Util::display(Util::daysago($view->createdAt)); ?></p>
