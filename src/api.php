@@ -2,6 +2,13 @@
 
 header("Content-Type: application/json; charset=UTF-8");
 
+set_exception_handler(function (Throwable $e) {
+    error_log("API error: " . get_class($e) . ": " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
+    http_response_code(500);
+    echo json_encode(['status' => 'failed', 'error' => 'Internal server error']);
+    exit;
+});
+
 require_once 'app/require.php';
 require_once 'app/controllers/ApiController.php';
 
@@ -69,6 +76,8 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
 } else {
     if (empty($_GET['user']) || empty($_GET['pass']) || empty($_GET['hwid']) || empty($_GET['key'])) {
         $response = array('status' => 'failed', 'error' => 'Missing arguments');
+    } elseif (!is_string($_GET['user']) || !is_string($_GET['pass']) || !is_string($_GET['hwid']) || !is_string($_GET['key'])) {
+        $response = array('status' => 'failed', 'error' => 'Invalid arguments');
     } else {
         $username = Util::securevar($_GET['user']);
         $passwordHash = Util::securevar($_GET['pass']);
@@ -77,10 +86,14 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
 
         if (API_KEY === $key) {
             // decode
-            $password = base64_decode($passwordHash);
-            $hwid = base64_decode($hwidHash);
+            $password = base64_decode($passwordHash, true);
+            $hwid = base64_decode($hwidHash, true);
 
-            $response = $API->getUserAPI($username, $password, $hwid);
+            if ($password === false || $hwid === false) {
+                $response = array('status' => 'failed', 'error' => 'Invalid encoded arguments');
+            } else {
+                $response = $API->getUserAPI($username, $password, $hwid);
+            }
         } else {
             $response = array('status' => 'failed', 'error' => 'Invalid API key');
         }

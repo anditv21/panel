@@ -160,9 +160,9 @@ class API extends Database
     protected function count_users()
     {
         try {
-            $this->prepare("SELECT * FROM `users`");
+            $this->prepare("SELECT COUNT(*) FROM `users`");
             $this->statement->execute();
-            $usercount = $this->statement->rowCount();
+            $usercount = (int) $this->statement->fetchColumn();
             $response = [
                 "status" => "success",
                 "text" => $usercount
@@ -199,43 +199,39 @@ class API extends Database
     protected function generate_sub($dcid, $time)
     {
         try {
-            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `username`, `admin` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                $response = [
+                return [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
 
-            $code = "$time-" . Util::randomCode(20);
-            if ($result["admin"]) {
-                $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
-                $this->statement->execute([$code, $result["username"]]);
-                $user = new UserController();
-                $user->log($result["username"], "Generated a sub", 'admin_logs');
-
-                $response = [
-                    "status" => "success",
-                    "text" => $code
-                ];
-            } elseif (empty($result["admin"])) {
-                $response = [
-                    "status" => "failed",
-                    "error" => "No user with the provided Discord ID was found"
-                ];
-            } else {
-                $response = [
+            if (empty($result["admin"])) {
+                return [
                     "status" => "failed",
                     "error" => "You don't have the necessary permissions to perform this action."
                 ];
             }
+
+            $code = "$time-" . Util::randomCode(20);
+            $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
+            $this->statement->execute([$code, $result["username"]]);
+            $user = new UserController();
+            $user->log($result["username"], "Generated a sub", 'admin_logs');
+
+            $response = [
+                "status" => "success",
+                "text" => $code
+            ];
         } catch (Exception $e) {
+            error_log("Bot subscription generation failed: " . $e->getMessage());
             $response = [
                 "status" => "failed",
-                "error" => $e->getMessage()
+                "error" => "Subscription generation failed"
             ];
         }
         return $response;
@@ -244,43 +240,39 @@ class API extends Database
     protected function generate_inv($dcid)
     {
         try {
-            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `username`, `admin` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                $response = [
+                return [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
 
-            $code = Util::randomCode(20);
-            if ($result["admin"]) {
-                $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
-                $this->statement->execute([$code, $result["username"]]);
-                $user = new UserController();
-                $user->log($result["username"], "Generated an invitation", 'admin_logs');
-
-                $response = [
-                    "status" => "success",
-                    "text" => $code
-                ];
-            } elseif (empty($result["admin"] || $result["supp"])) {
-                $response = [
-                    "status" => "failed",
-                    "error" => "No user with the provided Discord ID was found"
-                ];
-            } else {
-                $response = [
+            if (empty($result["admin"])) {
+                return [
                     "status" => "failed",
                     "error" => "You don't have the necessary permissions to perform this action."
                 ];
             }
+
+            $code = Util::randomCode(20);
+            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+            $this->statement->execute([$code, $result["username"]]);
+            $user = new UserController();
+            $user->log($result["username"], "Generated an invitation", 'admin_logs');
+
+            $response = [
+                "status" => "success",
+                "text" => $code
+            ];
         } catch (Exception $e) {
+            error_log("Bot invitation generation failed: " . $e->getMessage());
             $response = [
                 "status" => "failed",
-                "error" => $e->getMessage()
+                "error" => "Invitation generation failed"
             ];
         }
         return $response;
@@ -294,8 +286,7 @@ class API extends Database
             $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
             return $result;
         } catch (PDOException $e) {
-
-            echo "Error: " . $e->getMessage();
+            error_log("IP whitelist error: " . $e->getMessage());
             return [];
         }
     }
