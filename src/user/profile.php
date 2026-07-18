@@ -193,18 +193,18 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && ($System->getSystem
                                                       $time = $user->gettime();
 if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
     $sub = $sub + $time;
-    if ($sub < 1000) {
-        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-    } elseif ($sub < 1) {
-        Util::display('You dont have a active subscription!');
-    } else {
+    if (Util::isLifetimeSubscription($sub)) {
         Util::display("Lifetime");
+    } elseif ($sub > 0) {
+        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+    } else {
+        Util::display('You dont have a active subscription!');
     }
 } else {
-    if ($sub > 8000) {
+    if (Util::isLifetimeSubscription($sub)) {
         Util::display("Lifetime");
     } else {
-        if ($sub >= 0) {
+        if ($sub > 0) {
             Util::display("$sub days");
         } else {
             Util::display('You dont have a active subscription!');

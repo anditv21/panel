@@ -6,6 +6,7 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class Util extends UtilMod
 {
+    public const LIFETIME_SUBSCRIPTION_DAYS = 1000;
     public const REMEMBER_TOKEN_LIFETIME_DAYS = 30;
 
     public static function isHttpsRequest()
@@ -175,6 +176,16 @@ class Util extends UtilMod
         // Bind data
         $username = Session::get('username');
         return $this->subActiveCheck($username);
+    }
+
+    public static function isLifetimeSubscription($days)
+    {
+        return is_numeric($days) && (int) $days >= self::LIFETIME_SUBSCRIPTION_DAYS;
+    }
+
+    public static function formatSubscriptionLabel($days, $lifetimeLabel = 'Lifetime')
+    {
+        return self::isLifetimeSubscription($days) ? $lifetimeLabel : $days;
     }
 
     // admin check

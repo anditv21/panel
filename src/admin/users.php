@@ -148,10 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                           <?php endif; ?>
                                           <?php $days = $user->getSubStatus($row->username); ?>
                                           <?php if ($days > 0) : ?>
-                                             <?php if ($days > 600) {
-                                                 $days = 'LT';
-                                             }
-                                              ?>
+                                             <?php $days = Util::formatSubscriptionLabel($days, 'LT'); ?>
                                              <img title="Has <?php Util::display($days); ?> day/s sub left" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.png" width="15" height="15">
                                           <?php endif; ?>
                                        </td>
