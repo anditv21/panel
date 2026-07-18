@@ -32,6 +32,7 @@ $displayname = $user->fetch_display_name($username);
 $admin = Session::get("admin");
 $userfrozen = $user->getfrozen();
 $sub = $user->getSubStatus();
+$hasActiveSubscription = $sub > 0;
 $twofactor = $user->is2faEnabled($username);
 
 Util::banCheck();
@@ -220,8 +221,11 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                                 </p>
                                              </div>
                                           </div>
-                                       </div> <?php if ($user->getSubStatus() > 0) : ?> <a class="btn btn-block btn-primary m-t-md" href='
-               <?= SUB_DIR ?>/download.php'" id=" DOWNLOAD">Download <i class="fas fa-cloud-download-alt"></i></a> <?php endif; ?> <?php if ($user->getSubStatus() < 1) : ?> <div class="transactions-list">
+                                       </div>
+                                       <?php if ($hasActiveSubscription) : ?>
+                                          <a class="btn btn-block btn-primary m-t-md" href="<?= SUB_DIR ?>/download.php" id="download-loader">Download <i class="fas fa-cloud-download-alt"></i></a>
+                                       <?php else : ?>
+                                          <div class="transactions-list">
                                              <div class="tr-item">
                                                 <div class="tr-company-name">
                                                    <div class="tr-icon tr-card-icon tr-card-bg-danger text-white">
@@ -233,7 +237,8 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                                 </div>
                                                 <div class="tr-rate"></div>
                                              </div>
-                                          </div> <?php endif; ?>
+                                          </div>
+                                       <?php endif; ?>
                                     </div>
                                  </div>
                               </div>
