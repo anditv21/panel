@@ -252,7 +252,7 @@ strong {
 }
 
 .custom-select {
-    background: url(../img/arrow-down.png) no-repeat right transparent;
+    background: url(../images/arrow-down.webp) no-repeat right transparent;
     background-size: 8px;
     background-position-x: 80%;
     outline: none !important;

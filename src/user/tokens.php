@@ -111,7 +111,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                      </td>
                      <td>
                         <?php if (isset($_COOKIE["login_cookie"]) && $row->remembertoken == Util::securevar($_COOKIE["login_cookie"])) : ?>
-                           <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15">
+                           <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/images/warning.webp" width="15" height="15">
                         <?php endif; ?>
                      </td>
                   </tr>

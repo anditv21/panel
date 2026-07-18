@@ -138,18 +138,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                        <td data-aos="fade" data-aos-duration="2000">
                                           <?php Util::display($row->username . " "); ?>
                                           <?php if ($row->admin == 1) : ?>
-                                             <img title="Admin" data-toggle="tooltip" data-placement="top" src="../assets/images/admin.png" width="15" height="15">
-                                             <img title="Support" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.png" width="18" height="18">
+                                             <img title="Admin" data-toggle="tooltip" data-placement="top" src="../assets/images/admin.webp" width="15" height="15">
+                                             <img title="Support" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.webp" width="18" height="18">
                                           <?php elseif ($row->admin == 0 && $row->supp == 1) : ?>
-                                             <img title="Support" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.png" width="18" height="18">
+                                             <img title="Support" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.webp" width="18" height="18">
                                           <?php endif; ?>
                                           <?php if ($row->banned == 1) : ?>
-                                             <img title="Banned" data-toggle="tooltip" data-placement="top" src="../assets/images/banned.png" width="15" height="15">
+                                             <img title="Banned" data-toggle="tooltip" data-placement="top" src="../assets/images/banned.webp" width="15" height="15">
                                           <?php endif; ?>
                                           <?php $days = $user->getSubStatus($row->username); ?>
                                           <?php if ($days > 0) : ?>
                                              <?php $days = Util::formatSubscriptionLabel($days, 'LT'); ?>
-                                             <img title="Has <?php Util::display($days); ?> day/s sub left" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.png" width="15" height="15">
+                                             <img title="Has <?php Util::display($days); ?> day/s sub left" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.webp" width="15" height="15">
                                           <?php endif; ?>
                                        </td>
                                        <td style="text-align: center;">

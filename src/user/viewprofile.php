@@ -73,18 +73,18 @@ if ($displayName !== null) {
                               <p data-aos="fade-down" data-aos-duration="1500">About me: <?php Util::display(Util::securevar($bio)); ?> </p>
                               <p>Badges:
                                  <?php if ($view->admin == 1) : ?>
-                                    <img title="Admin" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/admin.png" width="15" height="15">
+                                    <img title="Admin" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/admin.webp" width="15" height="15">
                                  <?php endif; ?>
                                  <?php if ($view->supp == 1) : ?>
-                                    <img title="Supporter" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/supp.png" width="18" height="18">
+                                    <img title="Supporter" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/supp.webp" width="18" height="18">
                                  <?php endif; ?>
 
                                  <?php if ($view->banned == 1) : ?>
-                                    <img title="Banned" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/banned.png" width="15" height="15">
+                                    <img title="Banned" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/banned.webp" width="15" height="15">
                                  <?php endif; ?>
 
                                  <?php if ($days > 0) : ?>
-                                    <img title="Has sub" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/sub.png" width="15" height="15">
+                                    <img title="Has sub" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/sub.webp" width="15" height="15">
                                  <?php endif; ?>
                               </p>
 

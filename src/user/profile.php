@@ -298,7 +298,7 @@ $days_left = Util::calculate_cooldown($cooldown_date);
                                                 <br>
                                                 <div title="You have to wait <?php Util::display(ceil($days_left)); ?> days before you can change your display name." data-toggle="tooltip" data-placement="top">
                                                    <button class="btn btn-outline-primary btn-block" disabled="disabled">
-                                                      <img src="../assets/images/warning.png" width="15" height="15">
+                                                      <img src="../assets/images/warning.webp" width="15" height="15">
                                                       Change now
                                                    </button>
                                                 </div>

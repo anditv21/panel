@@ -94,19 +94,19 @@ Util::head("User list");
                                                     <th scope="row" data-aos="fade" data-aos-duration="2000"><?php Util::display($row->uid); ?></th>
                                                     <td data-aos="fade" data-aos-duration="2000"><?php Util::display($row->username . " "); ?>
                                                         <?php if ($row->admin == 1) : ?>
-                                                            <img title="Admin" data-toggle="tooltip" data-placement="top" src="../assets/images/admin.png" width="15" height="15">
-                                                            <img title="Supporter" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.png" width="18" height="18">
+                                                            <img title="Admin" data-toggle="tooltip" data-placement="top" src="../assets/images/admin.webp" width="15" height="15">
+                                                            <img title="Supporter" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.webp" width="18" height="18">
                                                         <?php elseif ($row->admin == 0 && $row->supp == 1) : ?>
-                                                            <img title="Supporter" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.png" width="18" height="18">
+                                                            <img title="Supporter" data-toggle="tooltip" data-placement="top" src="../assets/images/supp.webp" width="18" height="18">
                                                         <?php endif; ?>
 
 
                                                         <?php if ($row->banned == 1) : ?>
-                                                            <img title="Banned" data-toggle="tooltip" data-placement="top" src="../assets/images/banned.png" width="15" height="15">
+                                                            <img title="Banned" data-toggle="tooltip" data-placement="top" src="../assets/images/banned.webp" width="15" height="15">
                                                         <?php endif; ?>
 
                                                         <?php if ($row->subscription_days > 0) : ?>
-                                                            <img title="Has sub" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.png" width="15" height="15">
+                                                            <img title="Has sub" data-toggle="tooltip" data-placement="top" src="../assets/images/sub.webp" width="15" height="15">
                                                         <?php endif; ?>
                                                     </td>
                                                     <td data-aos="fade" data-aos-duration="2000"><?php Util::display($row->invitedBy); ?></td>
