@@ -592,6 +592,16 @@ class UserController extends Users
         return $this->get_display_name($username);
     }
 
+    public function getUserbio()
+    {
+        return $this->get_bio(Session::get('username'));
+    }
+
+    public function setbio($bio)
+    {
+        return $this->set_bio(Session::get('username'), $bio);
+    }
+
     public function get_name_cooldown()
     {
         $username = Session::Get('username');

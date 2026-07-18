@@ -34,6 +34,7 @@ $userfrozen = $user->getfrozen();
 $sub = $user->getSubStatus();
 $hasActiveSubscription = $sub > 0;
 $twofactor = $user->is2faEnabled($username);
+$bio = $user->getUserbio();
 
 Util::banCheck();
 Util::checktoken();
@@ -76,6 +77,17 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
         $result = $user->set_display_name(Util::securevar($_POST['display_name']));
         $queryParams = http_build_query([
             'alert' => $result ? 'Display name updated successfully!' : 'Display name could not be changed.',
+            'type' => $result ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
+    }
+
+    if (isset($_POST["change_bio"], $_POST["bio"])) {
+        $bioInput = is_string($_POST['bio']) ? trim($_POST['bio']) : '';
+        $result = $user->setbio($bioInput);
+        $queryParams = http_build_query([
+            'alert' => $result ? 'Profile status updated successfully!' : 'Profile status could not be changed.',
             'type' => $result ? 'success' : 'danger'
         ]);
         header("location: profile.php?$queryParams");
@@ -300,6 +312,22 @@ $days_left = Util::calculate_days($cooldown_date);
                                                    Change now
                                                 </button>
                                              <?php endif; ?>
+                                          </form>
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 <div class="col-6 mb-4">
+                                    <div class="card">
+                                       <div class="card-body">
+                                          <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                             <div class="form-group">
+                                                <input autocomplete="off" class="form-control form-control-sm" maxlength="30" placeholder="Profile status" value="<?php Util::display(Util::securevar($bio)); ?>" name="bio" required>
+                                             </div>
+                                             <br>
+                                             <button class="btn btn-outline-primary btn-block" onclick="return confirm('Are you sure you want to change your profile status?');" name="change_bio" type="submit" value="submit">
+                                                Set now
+                                             </button>
                                           </form>
                                        </div>
                                     </div>

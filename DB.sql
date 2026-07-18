@@ -252,7 +252,8 @@ CREATE TABLE `users` (
   `dcid` varchar(255) DEFAULT NULL,
   `muted` int(1) NOT NULL DEFAULT 0,
   `loginfails` int(255) NOT NULL DEFAULT 0,
-  `twofactor_enabled` int(1) NOT NULL DEFAULT 0
+  `twofactor_enabled` int(1) NOT NULL DEFAULT 0,
+  `bio` varchar(30) NOT NULL DEFAULT 'N/A'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --

@@ -29,6 +29,7 @@ if (!$view || empty($view->username)) {
 
 $uid = $view->uid;
 $days = $user->getSubStatus($view->username);
+$bio = isset($view->bio) && !empty($view->bio) ? $view->bio : 'N/A';
 
 Util::banCheck();
 Util::checktoken();
@@ -69,6 +70,7 @@ if ($displayName !== null) {
 ?>
                            </h5>
                               <p data-aos="fade-down" data-aos-duration="1500">UID: <?php Util::display($view->uid); ?> </p>
+                              <p data-aos="fade-down" data-aos-duration="1500">About me: <?php Util::display(Util::securevar($bio)); ?> </p>
                               <p>Badges:
                                  <?php if ($view->admin == 1) : ?>
                                     <img title="Admin" data-toggle="tooltip" data-placement="top" src="<?= SUB_DIR ?>/assets/images/admin.png" width="15" height="15">

@@ -963,6 +963,32 @@ class Users extends Database
         }
     }
 
+    protected function get_bio($username)
+    {
+        $this->prepare("SELECT `bio` FROM `users` WHERE `username` = ?");
+        $this->statement->execute([$username]);
+        $result = $this->statement->fetch();
+
+        return $result && !empty($result->bio) ? $result->bio : 'N/A';
+    }
+
+    protected function set_bio($username, $bio)
+    {
+        if (!is_string($bio) || empty($bio) || strlen($bio) > 30) {
+            return false;
+        }
+
+        try {
+            $this->prepare("UPDATE `users` SET `bio` = ? WHERE `username` = ?");
+            $this->statement->execute([$bio, $username]);
+            $this->loguser($username, "Changed profile status");
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error changing profile status: " . $e->getMessage());
+            return false;
+        }
+    }
+
     protected function check_mute($uid)
     {
         $this->prepare('SELECT * FROM `users` WHERE `uid` = ?');
