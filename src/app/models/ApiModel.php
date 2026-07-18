@@ -23,10 +23,20 @@ class API extends Database
             // If password is correct
             if (password_verify($password, $hashedPassword)) {
                 if ($row->hwid === null) {
-                    $this->prepare(
-                        "UPDATE `users` SET `hwid` = ? WHERE `username` = ?"
-                    );
-                    $this->statement->execute([$hwid, $username]);
+                    try {
+                        $this->prepare("UPDATE `users` SET `hwid` = ? WHERE `username` = ?");
+                        $this->statement->execute([$hwid, $username]);
+                        $row->hwid = $hwid;
+                    } catch (PDOException $e) {
+                        if (isset($e->errorInfo[1]) && (int) $e->errorInfo[1] === 1062) {
+                            return [
+                                "status" => "failed",
+                                "error" => "HWID is already linked to another account"
+                            ];
+                        }
+
+                        throw $e;
+                    }
                 }
 
                 $uid = $row->uid;
@@ -44,9 +54,19 @@ class API extends Database
                         "/assets/images/avatars/Portrait_Placeholder.png";
                 }
 
-                $this->prepare("SELECT * FROM `system`");
+                $this->prepare("SELECT `frozen`, `status`, `version`, `maintenance` FROM `system`");
                 $this->statement->execute();
                 $res = $this->statement->fetch();
+
+                if (!$res) {
+                    error_log("User API could not find the system settings");
+                    $res = (object) [
+                        "frozen" => 0,
+                        "status" => "",
+                        "version" => "",
+                        "maintenance" => 0
+                    ];
+                }
 
                 $response = [
                     "status" => "success",
