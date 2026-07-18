@@ -288,7 +288,7 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
 
                                              <?php
                                              $cooldown_date = $user->get_name_cooldown();
-$days_left = Util::calculate_days($cooldown_date);
+$days_left = Util::calculate_cooldown($cooldown_date);
 ?>
 
                                              <?php if ($days_left > 0) : ?>

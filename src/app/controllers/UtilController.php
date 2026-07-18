@@ -264,6 +264,19 @@ class Util extends UtilMod
         return (int) $interval->format("%a");
     }
 
+    public static function calculate_cooldown($date)
+    {
+        $now = new DateTime();
+        $date = new DateTime($date);
+
+        if ($date < $now) {
+            return 0;
+        }
+
+        $interval = $now->diff($date);
+        return (int) $interval->format("%a");
+    }
+
     public static function getavatar($uid)
     {
         $extension = self::getAvatarExtension($uid);
