@@ -64,7 +64,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                   <div class="card">
                      <div class="card-body">
                         <form method="POST">
-                           <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal();" name="flush">Flush all logs</a>
+                           <button type="button" class="btn btn-outline-primary btn-block" onclick="openPasswordModal();" name="flush">Flush all logs</button>
                         </form>
                      </div>
                   </div>
@@ -147,7 +147,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                               </form>
                            </div>
                            <div class="modal-footer">
-                              <button type="submit" form="flushForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+                              <button type="submit" form="flushForm" class="btn btn-outline-primary btn-block">Submit</button>
                            </div>
                         </div>
                      </div>
@@ -156,11 +156,6 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                      // Function to open the Bootstrap modal dialog
                      function openPasswordModal() {
                         $('#passwordModal').modal('show');
-                     }
-
-                     // Function to handle form submission
-                     function submitForm() {
-                        $('#flushForm').submit(); // Submit the form
                      }
                   </script>
                   <script>
