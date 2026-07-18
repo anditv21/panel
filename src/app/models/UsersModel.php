@@ -406,8 +406,12 @@ class Users extends Database
 
             if (password_verify($currentPassword, $currentHashedPassword)) {
 
+                $this->prepare("DELETE FROM `login` WHERE `username` = ?");
+                $this->statement->execute([$username]);
+
                 $this->prepare("UPDATE `users` SET `password` = ? WHERE `username` = ?");
                 $this->statement->execute([$hashedPassword, $username]);
+
                 $this->loguser($username, "Changed password");
 
                 return true;
