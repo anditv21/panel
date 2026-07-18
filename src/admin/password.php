@@ -12,32 +12,29 @@ if (!Session::isLogged()) {
     Util::redirect('/auth/login.php');
 }
 
-$userList = $admin->getUserArray();
 $username = Session::get('username');
 $uid = Session::get('uid');
-
-$userList = $admin->getUserArray();
 
 Util::banCheck();
 Util::checktoken();
 Util::adminCheck();
-Util::banCheck();
 Util::head("Admin Panel");
 
-if (isset($_POST['passwordreset'])) {
-    $passwordreset = Util::securevar($_POST['passwordreset']);
-}
+$userList = $admin->getUserArray();
 
-if (isset($passwordreset)) {
-    $name = $passwordreset;
+if (isset($_POST['passwordreset']) && is_string($_POST['passwordreset'])) {
+    $name = Util::securevar($_POST['passwordreset']);
 
     $unhashedpassword = Util::randomCode(20);
     $hashedpassword = password_hash($unhashedpassword, PASSWORD_ARGON2I);
 
-    $text = 'New password is: ';
-    $admin->resetpw($hashedpassword, $name);
+    if ($admin->resetpw($hashedpassword, $name)) {
+        $text = 'New password is: ';
+    } else {
+        unset($unhashedpassword);
+        $text = 'Password could not be reset.';
+    }
 }
-unset($passwordreset);
 
 ?>
 
@@ -63,19 +60,17 @@ unset($passwordreset);
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <?php if (Session::isSupp()) : ?>
-                                                            <form action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>" method="post">
-                                                                <label>Select a user:</label><br>
-                                                                <select name="passwordreset" class="form-control form-control-sm">
-                                                                    <br>
-                                                                    <?php foreach ($userList as $row) : ?>
-                                                                        <?php Util::display("<option value='$row->username'>" . "$row->username  ($row->uid)</option>"); ?>
-                                                                    <?php endforeach; ?>
-                                                                </select>
+                                                        <form action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>" method="post">
+                                                            <label>Select a user:</label><br>
+                                                            <select name="passwordreset" class="form-control form-control-sm">
                                                                 <br>
-                                                                <button class="btn btn-outline-primary btn-sm" type="submit">Reset Password</button>
-                                                            </form>
-                                                        <?php endif; ?>
+                                                                <?php foreach ($userList as $row) : ?>
+                                                                    <?php Util::display("<option value='$row->username'>" . "$row->username  ($row->uid)</option>"); ?>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                            <br>
+                                                            <button class="btn btn-outline-primary btn-sm" type="submit">Reset Password</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                                 <br>

@@ -88,6 +88,16 @@ class Admin extends Database
     protected function pwreset($hashedPassword, $username)
     {
         if ($this->checkadmin()) {
+            $this->prepare('SELECT `username` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+
+            if (!$this->statement->fetch()) {
+                return false;
+            }
+
+            $this->prepare('DELETE FROM `login` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+
             $this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
             $this->statement->execute([$hashedPassword, $username]);
 
@@ -98,10 +108,12 @@ class Admin extends Database
 
             $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
 
-            $user->loguser($currentUsername, "Password resetted by $currentUsername", false);
+            $user->loguser($oldUsername, "Password reset by $currentUsername", false);
             $this->admin_log(Session::get("username"), "Reset the password for $oldUsername");
             return true;
         }
+
+        return false;
     }
 
     protected function bannreason($reason, $uid)
