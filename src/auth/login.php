@@ -34,6 +34,11 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
 
 
 }
+
+if (Session::isLogged()) {
+    Util::redirect("/index.php");
+}
+
 if (isset($_COOKIE["login_cookie"])) {
     $cookie = Util::securevar($_COOKIE["login_cookie"]);
     if (isset($cookie)) {

@@ -5,6 +5,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
         || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
 
     ini_set('session.use_strict_mode', 1);
+    ini_set('session.gc_maxlifetime', 604800);
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
