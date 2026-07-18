@@ -105,7 +105,7 @@ class Users extends Database
 
     protected function tokenarray($username)
     {
-        $this->prepare('SELECT * FROM `login` where `username` = ?');
+        $this->prepare('SELECT * FROM `login` WHERE `username` = ? ORDER BY `id` DESC');
         $this->statement->execute([$username]);
 
         $result = $this->statement->fetchAll();
@@ -125,10 +125,15 @@ class Users extends Database
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
 
-        if (password_verify(($password), $result->password)) {
-            $this->revokeRememberToken($token);
-            $username = Session::get("username");
-            $this->loguser($username, "Deleted token $token");
+        if ($result && password_verify($password, $result->password)) {
+            $this->prepare('DELETE FROM `login` WHERE `remembertoken` = ? AND `username` = ?');
+            $this->statement->execute([$token, $username]);
+
+            if ($this->statement->rowCount() < 1) {
+                return false;
+            }
+
+            $this->loguser($username, "Deleted a login token");
             return true;
         } else {
             // Incorrect password, do not flush logs
@@ -140,11 +145,16 @@ class Users extends Database
     protected function delother($token, $password)
     {
         $username = Session::get('username');
+
+        if (empty($token)) {
+            return false;
+        }
+
         $this->prepare("SELECT `password` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
 
-        if (password_verify(($password), $result->password)) {
+        if ($result && password_verify($password, $result->password)) {
             $this->prepare("DELETE FROM `login` WHERE `username` = ? AND `remembertoken` != ?");
             $this->statement->execute([$username, $token]);
             $this->loguser($username, "Logged out of other devices");
@@ -157,8 +167,9 @@ class Users extends Database
 
     protected function setnoteById($selectedTokenId, $note)
     {
-        $this->prepare("UPDATE `login` SET `note` = ? WHERE `id` = ?");
-        $this->statement->execute([$note, $selectedTokenId]);
+        $username = Session::get('username');
+        $this->prepare("UPDATE `login` SET `note` = ? WHERE `id` = ? AND `username` = ?");
+        $this->statement->execute([$note, $selectedTokenId, $username]);
     }
 
 
