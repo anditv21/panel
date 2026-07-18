@@ -1140,4 +1140,47 @@ class Admin extends Database
         $result = $this->statement->fetchAll();
         return $result;
     }
+
+    protected function adminLogsPaginated($offset, $limit, $search = '')
+    {
+        if (!$this->checkadmin()) {
+            return [];
+        }
+
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT * FROM `adminlogs` WHERE `username` LIKE ? OR `action` LIKE ? OR `ip` LIKE ? OR `time` LIKE ? ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $search);
+            $this->statement->bindParam(2, $search);
+            $this->statement->bindParam(3, $search);
+            $this->statement->bindParam(4, $search);
+            $this->statement->bindParam(5, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(6, $limit, PDO::PARAM_INT);
+        } else {
+            $this->prepare('SELECT * FROM `adminlogs` ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(2, $limit, PDO::PARAM_INT);
+        }
+
+        $this->statement->execute();
+        return $this->statement->fetchAll();
+    }
+
+    protected function adminLogsCount($search = '')
+    {
+        if (!$this->checkadmin()) {
+            return 0;
+        }
+
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT COUNT(*) FROM `adminlogs` WHERE `username` LIKE ? OR `action` LIKE ? OR `ip` LIKE ? OR `time` LIKE ?');
+            $this->statement->execute([$search, $search, $search, $search]);
+        } else {
+            $this->prepare('SELECT COUNT(*) FROM `adminlogs`');
+            $this->statement->execute();
+        }
+
+        return (int) $this->statement->fetchColumn();
+    }
 }

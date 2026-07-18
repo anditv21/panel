@@ -260,4 +260,14 @@ class AdminController extends Admin
         return $result;
     }
 
+    public function getAdminLogsPaginated($offset, $limit, $search = '')
+    {
+        return $this->adminLogsPaginated($offset, $limit, $search);
+    }
+
+    public function getAdminLogsCount($search = '')
+    {
+        return $this->adminLogsCount($search);
+    }
+
 }
