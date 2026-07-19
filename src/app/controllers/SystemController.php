@@ -52,8 +52,6 @@ class SystemController extends System
             curl_setopt($verify, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($verify, CURLOPT_TIMEOUT, 10);
             $response = curl_exec($verify);
-            curl_close($verify);
-
             if ($response === false) {
                 return false;
             }
@@ -83,8 +81,6 @@ class SystemController extends System
             curl_setopt($verify, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($verify, CURLOPT_TIMEOUT, 10);
             $response = curl_exec($verify);
-            curl_close($verify);
-
             if ($response === false) {
                 return false;
             }
@@ -114,8 +110,6 @@ class SystemController extends System
             curl_setopt($verify, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($verify, CURLOPT_TIMEOUT, 10);
             $response = curl_exec($verify);
-            curl_close($verify);
-
             if ($response === false) {
                 return false;
             }

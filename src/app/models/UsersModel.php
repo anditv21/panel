@@ -1108,8 +1108,6 @@ class Users extends Database
         ]);
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
         if ($response === false || $httpCode !== 200) {
             return "Discord authorization failed.";
         }
@@ -1127,8 +1125,6 @@ class Users extends Database
         ]);
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
         if ($response === false || $httpCode !== 200) {
             return "Discord account verification failed.";
         }

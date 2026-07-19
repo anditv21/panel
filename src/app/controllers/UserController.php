@@ -511,8 +511,6 @@ class UserController extends Users
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $requestFailed = $response === false;
 
-        curl_close($curl);
-
         if ($requestFailed || $httpCode !== 200) {
             return false;
         }
@@ -565,8 +563,6 @@ class UserController extends Users
 
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        curl_close($curl);
 
         if ($response === false) {
             return null;
@@ -664,7 +660,6 @@ class UserController extends Users
 
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
                 exit();
             }
 
@@ -697,7 +692,6 @@ class UserController extends Users
 
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
                 exit();
             }
 
@@ -740,8 +734,6 @@ class UserController extends Users
 
             $imageData = curl_exec($ch);
             $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
             if ($imageData !== false && $statusCode === 200 && Util::saveAvatarData($imageData, $uid)) {
                 return true;
             }
@@ -771,8 +763,6 @@ class UserController extends Users
             $result = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlError = curl_error($ch);
-            curl_close($ch);
-
             if ($result === false) {
                 error_log("Discord avatar refresh failed: $curlError");
                 return false;
