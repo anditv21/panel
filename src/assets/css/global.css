@@ -6,6 +6,15 @@ html {
     background: #050606;
 }
 
+@media (max-width: 768px) {
+    input,
+    select,
+    textarea,
+    .form-control {
+        font-size: 16px !important;
+    }
+}
+
 
 ::-webkit-scrollbar {
     width: 3px;
