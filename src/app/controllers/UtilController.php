@@ -408,16 +408,35 @@ class Util extends UtilMod
         if (!$dateString) {
             return 'Not available';
         }
+
         $date = strtotime($dateString);
+        if ($date === false) {
+            return 'Not available';
+        }
+
         $now = time();
         $diff = $now - $date;
+
+        if ($diff < 0) {
+            return 'In the future';
+        }
+
         $days = floor($diff / (60 * 60 * 24));
+
         if ($days == 0) {
             return 'Today';
         } elseif ($days == 1) {
             return 'Yesterday';
-        } else {
+        } elseif ($days < 30) {
             return $days . ' days ago';
         }
+
+        $months = floor($days / 30);
+        if ($days < 365) {
+            return $months . ' month' . ($months == 1 ? '' : 's') . ' ago';
+        }
+
+        $years = floor($days / 365);
+        return $years . ' year' . ($years == 1 ? '' : 's') . ' ago';
     }
 }
