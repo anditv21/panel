@@ -5,7 +5,18 @@ function getPlatformVersion() {
   if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
     navigator.userAgentData.getHighEntropyValues(["platformVersion"])
       .then(function (platform) {
-        document.cookie = "platformVersion=" + encodeURIComponent(platform.platformVersion) + "; path=/";
+        var expires = new Date();
+        expires.setFullYear(expires.getFullYear() + 1);
+
+        var cookie = "platformVersion=" + encodeURIComponent(platform.platformVersion)
+          + "; expires=" + expires.toUTCString()
+          + "; path=/; SameSite=Strict";
+
+        if (window.location.protocol === "https:") {
+          cookie += "; Secure";
+        }
+
+        document.cookie = cookie;
       });
   }
 }
