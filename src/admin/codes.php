@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button name="genSub" type="submit" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400">Generate</button>
             <button name="genSub2" type="submit" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400">Generate (90d/3M)</button>
             <button name="genSub3" type="submit" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400">Generate (3d/Trail)</button>
-            <button id="invdl" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('invTable'))">Bulk Download Invites</button>
-            <button style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('subTable'))">Bulk Download Sub Codes</button>
+            <button id="invdl" type="button" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('invTable'))">Bulk Download Invites</button>
+            <button type="button" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('subTable'))">Bulk Download Sub Codes</button>
             <table id="subTable" class="table table-hover">
               <thead>
                 <tr style="text-align: center;">
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       <?php Util::display($row->createdBy); ?>
                     </td>
                     <td data-aos="fade-left" data-aos-duration="1200" style="text-align: center;">
-                      <input class="btn btn-outline-primary btn-sm" type="submit" value="Copy code" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/user/profile.php?redeem=" . $row->code); ?>')">
+                      <input class="btn btn-outline-primary btn-sm" type="button" value="Copy code" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/user/profile.php?redeem=" . $row->code); ?>')">
                     </td>
                     <td data-aos="fade-left" data-aos-duration="1200" style="text-align: center;">
                       <button name="delSub" type="submit" class="btn btn-outline-danger btn-sm" value="<?php Util::display($row->code); ?>">Delete</button>
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       <?php Util::display($row->createdBy); ?>
                     </td>
                     <td data-aos="fade-left" data-aos-duration="1200" style="text-align: center;">
-                      <input class="btn btn-outline-primary btn-sm" type="submit" value="Copy code" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/auth/register.php?invite=" . $row->code); ?>')">
+                      <input class="btn btn-outline-primary btn-sm" type="button" value="Copy code" onclick="setClipboard('<?php Util::display(SITE_URL . SUB_DIR . "/auth/register.php?invite=" . $row->code); ?>')">
                     </td>
                     <td data-aos="fade-left" data-aos-duration="1200" style="text-align: center;">
                       <button name="delInv" type="submit" class="btn btn-outline-danger btn-sm" value="<?php Util::display($row->code); ?>">Delete</button>
