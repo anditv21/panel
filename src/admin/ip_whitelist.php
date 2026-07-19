@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                     <!-- Table displaying whitelisted IPs -->
                                     <div class="col-12 mb-2">
+                                        <div class="table-responsive">
                                         <table id="invTable" class="rounded table">
                                             <thead>
                                                 <tr>
@@ -120,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
 
                                 </center>

@@ -100,6 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                               <a href="users.php" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
                            <?php endif; ?>
                         </form>
+                        <div class="table-responsive">
                         <table class="table table-hover">
                            <thead>
                               <tr>
@@ -191,6 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                               <?php endforeach; ?>
                            </tbody>
                         </table>
+                        </div>
                         <?php if ($totalPages > 1) : ?>
                            <nav aria-label="User pagination">
                               <ul class="pagination justify-content-center">

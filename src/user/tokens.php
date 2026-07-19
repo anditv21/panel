@@ -71,6 +71,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
             </div>
          </div>
          <br>
+         <div class="table-responsive">
          <table class="rounded table">
             <thead>
                <tr>
@@ -118,6 +119,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                <?php endforeach; ?>
             </tbody>
          </table>
+         </div>
          <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                <div class="modal-content">

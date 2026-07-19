@@ -66,6 +66,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                                        <button style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" name="genInv" type="submit" data-aos="fade-left" data-aos-duration="1400">Generate</button>
                                        <br>
                                        <br>
+                                       <div class="table-responsive">
                                        <table class="table table-hover">
                                           <thead>
                                              <tr style="text-align: center;">
@@ -86,6 +87,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                                              <?php endforeach; ?>
                                           </tbody>
                                        </table>
+                                       </div>
                                     </div>
                                  </form>
                                  

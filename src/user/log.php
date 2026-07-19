@@ -81,6 +81,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 
                   <p class="card-description"><code><?php Util::display($totalLogs); ?></code> log/s found.</p>
 
+                  <div class="table-responsive">
                   <table class="table table-bordered">
                      <thead>
                         <tr>
@@ -110,6 +111,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
                         <?php endforeach; ?>
                      </tbody>
                   </table>
+                  </div>
 
                   <?php if ($totalPages > 1) : ?>
                      <nav aria-label="Log pagination">

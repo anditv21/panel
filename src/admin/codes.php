@@ -117,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button name="genSub3" type="submit" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400">Generate (3d/Trail)</button>
             <button id="invdl" type="button" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('invTable'))">Bulk Download Invites</button>
             <button type="button" style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" data-aos="fade-left" data-aos-duration="1400" onclick="bulkDownload(document.getElementById('subTable'))">Bulk Download Sub Codes</button>
+            <div class="table-responsive">
             <table id="subTable" class="table table-hover">
               <thead>
                 <tr style="text-align: center;">
@@ -147,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach; ?>
               </tbody>
             </table>
+            </div>
 
           </div>
         </form>
@@ -158,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h5 class="card-title" data-aos="fade-left" data-aos-duration="1000">Invite generation</h5>
             <p class="card-description" data-aos="fade-left" data-aos-duration="1200">Create <code>INVITE</code> codes.</p>
             <button style="margin-top: -5px;" class="btn btn-block btn-success m-t-md" name="genInv" type="submit" data-aos="fade-left" data-aos-duration="1400">Generate</button>
+            <div class="table-responsive">
             <table id="invTable" class="table table-hover">
               <thead>
                 <tr style="text-align: center;">
@@ -188,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach; ?>
               </tbody>
             </table>
+            </div>
 
           </div>
         </form>

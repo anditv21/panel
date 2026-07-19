@@ -68,6 +68,7 @@ Util::head("Admin Logs");
 
                         <p class="card-description"><code><?php Util::display($totalLogs); ?></code> log/s found.</p>
 
+                        <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -106,6 +107,7 @@ Util::head("Admin Logs");
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                        </div>
 
                         <?php if ($totalPages > 1) : ?>
                             <nav aria-label="Admin log pagination">
