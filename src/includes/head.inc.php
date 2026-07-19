@@ -23,7 +23,7 @@ $themeColor = $headUser->getEmbedColor();
 	<script src="<?= SUB_DIR ?>/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
 	<script src="https://unpkg.com/@popperjs/core@2"></script>
 	<script src="<?= SUB_DIR ?>/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="https://unpkg.com/feather-icons"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 	<script src="<?= SUB_DIR ?>/assets/plugins/perfectscroll/perfect-scrollbar.min.js"></script>
 	<script src="<?= SUB_DIR ?>/assets/js/main.min.js"></script>
 	<script src="<?= SUB_DIR ?>/assets/js/main.js"></script>
