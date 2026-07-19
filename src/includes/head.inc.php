@@ -11,13 +11,13 @@ $themeColor = $headUser->getEmbedColor();
 
 	<meta property="og:type" content="website" />
 	<meta property="og:site_name" content="<?= (SITE_NAME); ?>" />
-	<meta property="og:title" content="<?= htmlspecialchars(stripslashes(trim($title))); ?>" />
+	<meta property="og:title" content="<?= htmlspecialchars(stripslashes(trim($title))) . ' | ' . SITE_NAME; ?>" />
 	<meta property="og:url" content="<?= (SITE_URL); ?>" />
 	<meta property="og:description" content="<?= (SITE_DESC); ?>" />
 	<meta property="og:image" content="" />
 
 	<meta property="twitter:description" content="<?= (SITE_DESC); ?>" />
-	<meta property="twitter:title" content="<?= htmlspecialchars(stripslashes(trim($title))); ?>" />
+	<meta property="twitter:title" content="<?= htmlspecialchars(stripslashes(trim($title))) . ' | ' . SITE_NAME; ?>" />
 
 	<!-- Javascripts -->
 	<script src="<?= SUB_DIR ?>/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
