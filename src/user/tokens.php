@@ -126,6 +126,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   </div>
                   <div class="modal-body">
                      <form method="POST" id="passwordform">
+                        <?php Util::csrfField(); ?>
                         <div class="form-group">
                            <label style="color: #86c1ed;" for="password">Password:</label>
                            <input type="password" class="form-control" id="password" name="password" required>
@@ -146,6 +147,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                   </div>
                   <div class="modal-body">
                      <form method="POST" id="passwordform2">
+                        <?php Util::csrfField(); ?>
                         <div class="form-group">
                            <label style="color: #86c1ed;" for="password2">Password:</label>
                            <input type="password" class="form-control" id="password2" name="password2" required>

@@ -169,6 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                        <td style="text-align: center;">
                                           <form method="POST" action="users.php?page=<?php echo $currentPage; ?><?php Util::display($searchQuery); ?>">
+                                             <?php Util::csrfField(); ?>
                                              <button class="btn btn-warning" data-aos="fade-right" data-aos-duration="1000" value="<?php Util::display($row->uid); ?>" name="resetHWID" type="submit" id="reset-hwid">
                                                 <i class="fas fa-microchip"></i> Reset HWID
                                              </button>

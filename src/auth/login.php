@@ -21,6 +21,8 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
 
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+    Util::csrfCheck();
+
     if (isset($_POST)) {
         $data = Util::securevar($_POST);
     }
@@ -82,6 +84,7 @@ Util::navbar();
                 <div class="col-md-10 col-lg-5">
 
                     <form method='POST' action='<?php Util::display($_SERVER['PHP_SELF']); ?>'>
+                        <?php Util::csrfField(); ?>
                         <h1 style="color: #fff" data-aos="fade" data-aos-duration="3000">Sign In</h1>
                         <p style="color: #fff" data-aos="fade" data-aos-duration="2500">Sign in to manage your account</p>
                         <div class="form-input-icon mb-3 mt-4" data-aos="fade-left" data-aos-duration="1000">

@@ -82,6 +82,7 @@ Util::head("Shoutbox");
                            <br>
                            <?php if (Util::muteCheck() == false) : ?>
                               <form action="" method="post">
+                                 <?php Util::csrfField(); ?>
                                  <div class="form-group">
                                     <input autocomplete="off" maxlength="255" placeholder="What's on your mind?" class="form-control" id="shoutbox-message" name="shoutbox-message" required>
                                  </div>

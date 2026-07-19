@@ -59,6 +59,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
                                     </div>
                                  <?php endif; ?>
                                  <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                    <?php Util::csrfField(); ?>
                                     <div class="card-body">
                                        <h5 class="card-title" data-aos="fade-left" data-aos-duration="1000">Invite generation</h5>
                                        <p class="card-description" data-aos="fade-left" data-aos-duration="1200">Manage your <code>INVITES</code> easily with just a few clicks.</p>

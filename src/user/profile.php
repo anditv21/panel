@@ -162,6 +162,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && ($System->getSystem
                            <br>
                            <?php if ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
                               <form id="avatar-form" method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>" enctype="multipart/form-data">
+                                 <?php Util::csrfField(); ?>
                                  <center>
                                     <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" name="linkDiscord" type="submit">Link Discord</button>
                                     <br>
@@ -169,6 +170,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && ($System->getSystem
                               </form>
                            <?php endif; ?>
                            <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                              <?php Util::csrfField(); ?>
                               <center>
                                  <?php if ($twofactor == 1) : ?>
                                     <button class="btn btn-outline-danger btn-block" name="disable2fa" type="submit">Disable 2FA</button>
@@ -258,6 +260,7 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                  <div class="card-body">
                                     <div class="post">
                                        <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                          <?php Util::csrfField(); ?>
                                           <h5 class="card-title">Activate Subscription</h5>
                                           <div class="post-body">
                                              <div class="new-comment">
@@ -285,6 +288,7 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                        <div class="card-body">
 
                                           <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                             <?php Util::csrfField(); ?>
 
                                              <?php
                                              $cooldown_date = $user->get_name_cooldown();
@@ -321,6 +325,7 @@ $days_left = Util::calculate_cooldown($cooldown_date);
                                     <div class="card">
                                        <div class="card-body">
                                           <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                             <?php Util::csrfField(); ?>
                                              <div class="form-group">
                                                 <input autocomplete="off" class="form-control form-control-sm" maxlength="30" placeholder="Profile status" value="<?php Util::display(Util::securevar($bio)); ?>" name="bio" required>
                                              </div>
@@ -337,6 +342,7 @@ $days_left = Util::calculate_cooldown($cooldown_date);
                               <div class="card-body">
                                  <div class="post">
                                     <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                       <?php Util::csrfField(); ?>
                                        <p>Current Password</p>
                                        <div class="input-group mb-3">
                                           <input name="currentPassword" type="password" class="form-control" placeholder="●●●●●●●●●●" aria-label="●●●●●●●●●●" aria-describedby="button-addon2">

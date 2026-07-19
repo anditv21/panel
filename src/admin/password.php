@@ -61,6 +61,7 @@ if (isset($_POST['passwordreset']) && is_string($_POST['passwordreset'])) {
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <form action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>" method="post">
+                                                            <?php Util::csrfField(); ?>
                                                             <label>Select a user:</label><br>
                                                             <select name="passwordreset" class="form-control form-control-sm">
                                                                 <br>

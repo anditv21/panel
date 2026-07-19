@@ -93,6 +93,7 @@ Util::head("Loader Upload");
                         <p class="card-description">Select a Windows executable with a maximum size of 20 MB.</p>
 
                         <form method="POST" enctype="multipart/form-data">
+                           <?php Util::csrfField(); ?>
                            <div class="form-group">
                               <input type="file" name="loader" class="form-control" accept=".exe,application/x-msdownload" required>
                            </div>

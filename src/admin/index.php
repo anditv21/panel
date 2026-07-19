@@ -480,6 +480,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <form method="POST" action="<?php Util::Display(
                                Util::securevar($_SERVER["PHP_SELF"])
                            ); ?>">
+                              <?php Util::csrfField(); ?>
                               <h5 class="widget-info-title text-white">Settings</h5>
                               <p class="widget-info-text">Set System version</p>
 

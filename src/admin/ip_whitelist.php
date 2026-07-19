@@ -70,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <form action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>" method="post">
+                                                            <?php Util::csrfField(); ?>
                                                             <label>Add IP to whitelist</label><br>
                                                             <input autocomplete="off" type="text" class="form-control form-control-sm" placeholder="127.0.0.1" value="<?php Util::display($user->getUserIP()); ?>" name="ip" required>
                                                             <br>
@@ -109,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             </p>
                                                         </td>
                                                         <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                                            <?php Util::csrfField(); ?>
                                                             <td>
                                                                 <button class="btn btn-outline-primary btn-sm" type="submit" value="<?php Util::display($row->ip); ?>" name="delIP">Delete</button>
                                                                 <button class="btn btn-outline-primary btn-sm" onclick="copyToClipboard('<?php Util::display($row->ip); ?>')" title='Click to copy' data-toggle='tooltip' data-placement='top'>Copy IP</button>

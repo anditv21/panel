@@ -128,6 +128,10 @@ class Util extends UtilMod
             $util = new UtilMod();
             $result = $util->validateRememberToken($token);
 
+            if ($result) {
+                self::csrfCheck();
+            }
+
             if ($result && !self::has2faSolved() && basename($_SERVER['PHP_SELF']) !== '2fa.php') {
                 Util::redirect('/auth/2fa.php');
             }
@@ -138,6 +142,34 @@ class Util extends UtilMod
         Util::clearLoginCookie();
         Session::destroy();
         Util::redirect('/auth/login.php');
+    }
+
+    public static function csrfToken()
+    {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf_token'];
+    }
+
+    public static function csrfField()
+    {
+        echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8') . '">';
+    }
+
+    public static function csrfCheck()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+        $token = isset($_POST['csrf_token']) ? (string) $_POST['csrf_token'] : '';
+
+        if (empty($_SESSION['csrf_token']) || empty($token) || !hash_equals($_SESSION['csrf_token'], $token)) {
+            http_response_code(403);
+            exit('Invalid request.');
+        }
     }
 
     public static function has2faSolved($token = null)

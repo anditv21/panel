@@ -59,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <div class="card">
                                     <div class="card-body">
                                        <form action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>" method="post">
+                                          <?php Util::csrfField(); ?>
                                           <label for="u">Select a user:</label><br>
                                           <select name="giftsub" class="form-control form-control-sm">
                                              <br>

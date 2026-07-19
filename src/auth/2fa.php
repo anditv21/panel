@@ -93,6 +93,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['veri
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col-md-10 col-lg-5">
                     <form method="POST" action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>">
+                        <?php Util::csrfField(); ?>
                         <h1 style="color: #fff" data-aos="fade" data-aos-duration="3000">Two-factor authentication</h1>
                         <p style="color: #fff" data-aos="fade" data-aos-duration="2500">Confirm this login with your linked Discord account.</p>
                         <div data-aos="fade-left" data-aos-duration="2000">

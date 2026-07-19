@@ -11,6 +11,8 @@ if (Session::isLogged()) {
     Util::redirect('/');
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+    Util::csrfCheck();
+
     if (isset($_POST)) {
         $data = Util::securevar($_POST);
     }
@@ -68,6 +70,7 @@ Util::navbar();
                         </center>
                     <?php endif; ?>
                     <form method='POST' action='<?php Util::display($_SERVER['PHP_SELF']); ?>'>
+                        <?php Util::csrfField(); ?>
                         <div class='form-input-icon mb-3 mt-4' data-aos='fade-left' data-aos-duration='1000'>
                             <i class='fas fa-user'></i>
                             <input class='auth-input' type='text' placeholder='Username' name='username' autocomplete='off' minlength='3' required=''>
