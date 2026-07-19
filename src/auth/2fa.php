@@ -11,7 +11,7 @@ if (!Session::isLogged()) {
 Util::checktoken();
 
 if (Util::has2faSolved()) {
-    Util::redirect('/index.php');
+    Util::redirectAfterLogin();
 }
 
 $username = Session::get('username');
@@ -38,7 +38,7 @@ if (isset($_GET['code'])) {
         $result = $user->complete2faWithDiscord($username, $token, $code, $redirectUri);
 
         if ($result === true) {
-            Util::redirect('/index.php');
+            Util::redirectAfterLogin();
         }
 
         $error = $result;

@@ -217,7 +217,7 @@ class UserController extends Users
                 $this->resetfails($username);
 
                 if (Util::has2faSolved($token)) {
-                    Util::redirect("/index.php");
+                    Util::redirectAfterLogin();
                 } else {
                     Util::redirect("/auth/2fa.php");
                 }
@@ -259,7 +259,7 @@ class UserController extends Users
             $this->loglogin($token);
 
             if (Util::has2faSolved($token)) {
-                Util::redirect("/index.php");
+                Util::redirectAfterLogin();
             } else {
                 Util::redirect("/auth/2fa.php");
             }

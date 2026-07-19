@@ -66,8 +66,92 @@ class Util extends UtilMod
 
     public static function redirect($location)
     {
+        if ($location === '/auth/login.php') {
+            self::rememberLastPage();
+        }
+
         header('location:' . SUB_DIR . $location);
         exit();
+    }
+
+    private static function rememberLastPage()
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' || empty($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
+        $parts = parse_url($_SERVER['REQUEST_URI']);
+        if ($parts === false || empty($parts['path'])) {
+            return;
+        }
+
+        $path = $parts['path'];
+        $subDir = rtrim(SUB_DIR, '/');
+
+        if ($subDir !== '') {
+            if ($path !== $subDir && strpos($path, $subDir . '/') !== 0) {
+                return;
+            }
+
+            $path = substr($path, strlen($subDir));
+        }
+
+        if ($path === '') {
+            $path = '/';
+        }
+
+        if (strpos($path, '/auth/') === 0) {
+            return;
+        }
+
+        $query = [];
+        if (!empty($parts['query'])) {
+            parse_str($parts['query'], $query);
+            unset($query['alert'], $query['type']);
+        }
+
+        $lastPage = $path . (!empty($query) ? '?' . http_build_query($query) : '');
+
+        setcookie('last_page', $lastPage, [
+            'expires' => time() + 2592000,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function redirectAfterLogin()
+    {
+        $lastPage = isset($_COOKIE['last_page']) ? (string) $_COOKIE['last_page'] : '';
+
+        setcookie('last_page', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+
+        if (self::isSafePanelPath($lastPage)) {
+            self::redirect($lastPage);
+        }
+
+        self::redirect('/index.php');
+    }
+
+    private static function isSafePanelPath($path)
+    {
+        if (empty($path) || $path[0] !== '/' || substr($path, 0, 2) === '//' || preg_match('/[\r\n\\]/', $path)) {
+            return false;
+        }
+
+        $parts = parse_url($path);
+        if ($parts === false || isset($parts['scheme']) || isset($parts['host'])) {
+            return false;
+        }
+
+        return strpos($parts['path'] ?? '', '/auth/') !== 0;
     }
 
     public static function head($title)
