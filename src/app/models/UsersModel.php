@@ -504,18 +504,18 @@ class Users extends Database
     // Get number of banned users
     protected function bannedUserCount()
     {
-        $this->prepare("SELECT * FROM `users` WHERE `banned` =  1");
+        $this->prepare("SELECT COUNT(*) FROM `users` WHERE `banned` = 1");
         $this->statement->execute();
-        $result = $this->statement->rowCount();
+        $result = $this->statement->fetchColumn();
         return $result;
     }
 
     // Get number of users with sub
     protected function activeUserCount()
     {
-        $this->prepare("SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()");
+        $this->prepare("SELECT COUNT(*) FROM `users` WHERE `sub` > CURRENT_DATE()");
         $this->statement->execute();
-        $result = $this->statement->rowCount();
+        $result = $this->statement->fetchColumn();
         return $result;
     }
 
