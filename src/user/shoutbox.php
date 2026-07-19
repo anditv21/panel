@@ -126,7 +126,17 @@ Util::head("Shoutbox");
 
          var shoutbox = $('#shoutbox');
          if (shoutbox.length) {
-            shoutbox.load(shoutbox.data('url'));
+            var shoutboxElement = shoutbox[0];
+            var scrollPosition = shoutboxElement.scrollTop;
+            var isAtBottom = scrollPosition + shoutboxElement.clientHeight >= shoutboxElement.scrollHeight - 50;
+
+            shoutbox.load(shoutbox.data('url'), function () {
+               if (isAtBottom) {
+                  shoutboxElement.scrollTop = shoutboxElement.scrollHeight;
+               } else {
+                  shoutboxElement.scrollTop = scrollPosition;
+               }
+            });
          }
       }
 
@@ -164,6 +174,11 @@ Util::head("Shoutbox");
             startShoutboxRefresh();
          }
       });
+
+      var shoutbox = document.getElementById('shoutbox');
+      if (shoutbox) {
+         shoutbox.scrollTop = shoutbox.scrollHeight;
+      }
 
       startShoutboxRefresh();
    </script>
