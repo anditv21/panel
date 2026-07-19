@@ -71,7 +71,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['veri
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Two-factor authentication &ndash; <?php Util::display(SITE_NAME); ?></title>
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/config.css" rel="stylesheet">
