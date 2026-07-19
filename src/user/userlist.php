@@ -56,6 +56,7 @@ Util::head("User list");
                                         <a href="userlist.php" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
                                     <?php endif; ?>
                                 </form>
+                                <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr style="text-align: center;">
@@ -120,6 +121,7 @@ Util::head("User list");
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                                </div>
                                 <?php if ($totalPages > 1) : ?>
                                     <nav aria-label="User pagination">
                                         <ul class="pagination justify-content-center">

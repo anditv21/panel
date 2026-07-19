@@ -63,6 +63,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
                         <!-- Display IP Information -->
                         <?php if (isset($ip_info)) : ?>
+                            <div class="table-responsive">
                             <table class="rounded table" align="center">
                                 <thead>
                                     <tr>
@@ -79,6 +80,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>
