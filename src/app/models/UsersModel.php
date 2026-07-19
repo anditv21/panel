@@ -50,7 +50,7 @@ class Users extends Database
 
     protected function getnews()
     {
-        $this->prepare("SELECT * FROM `system`");
+        $this->prepare("SELECT `news` FROM `system`");
         $this->statement->execute();
         $result = $this->statement->fetch();
 
@@ -197,7 +197,7 @@ class Users extends Database
 
     protected function gethwidcount($uid)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `uid` = ?");
+        $this->prepare("SELECT `resetcount` FROM `users` WHERE `uid` = ?");
         $this->statement->execute([$uid]);
         $result = $this->statement->fetch();
         return $result->resetcount;
@@ -205,7 +205,7 @@ class Users extends Database
 
     protected function getlastreset($uid)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `uid` = ?");
+        $this->prepare("SELECT `lastreset` FROM `users` WHERE `uid` = ?");
         $this->statement->execute([$uid]);
         $result = $this->statement->fetch();
         return $result->lastreset;
@@ -213,7 +213,7 @@ class Users extends Database
 
     protected function getbanreason($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `banreason` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         $reason = $result->banreason;
@@ -398,7 +398,7 @@ class Users extends Database
     protected function updatePass($currentPassword, $hashedPassword, $username)
     {
         try {
-            $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+            $this->prepare("SELECT `password` FROM `users` WHERE `username` = ?");
             $this->statement->execute([$username]);
 
             $row = $this->statement->fetch();
@@ -530,7 +530,7 @@ class Users extends Database
 
     protected function invs($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `invites` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         return $result->invites;
@@ -546,7 +546,7 @@ class Users extends Database
 
     public function avatarname($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `uid` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         $uid = $result->uid;
@@ -702,7 +702,7 @@ class Users extends Database
 
     protected function lastlogin($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `lastLogin` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         return $result->lastLogin;
@@ -710,7 +710,7 @@ class Users extends Database
 
     protected function lastip($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `lastIP` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         return $result->lastIP;
@@ -815,7 +815,7 @@ class Users extends Database
 
     public function isfrozen($username)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` = ?");
+        $this->prepare("SELECT `frozen` FROM `users` WHERE `username` = ?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
         return $result->frozen;
@@ -839,7 +839,7 @@ class Users extends Database
 
     protected function msgsend($username, $msg)
     {
-        $this->prepare("SELECT * FROM `users` WHERE `username` =?");
+        $this->prepare("SELECT `uid` FROM `users` WHERE `username` =?");
         $this->statement->execute([$username]);
         $result = $this->statement->fetch();
 
@@ -997,7 +997,7 @@ class Users extends Database
 
     protected function check_mute($uid)
     {
-        $this->prepare('SELECT * FROM `users` WHERE `uid` = ?');
+        $this->prepare('SELECT `muted` FROM `users` WHERE `uid` = ?');
         $this->statement->execute([$uid]);
         $userData = $this->statement->fetch();
         return $userData->muted;
@@ -1005,7 +1005,7 @@ class Users extends Database
 
     protected function check_dcid($uid)
     {
-        $this->prepare('SELECT * FROM `users` WHERE `uid` =?');
+        $this->prepare('SELECT `dcid` FROM `users` WHERE `uid` =?');
         $this->statement->execute([$uid]);
         $userData = $this->statement->fetch();
         return $userData->dcid;
@@ -1020,7 +1020,7 @@ class Users extends Database
     protected function hasLinkedDiscord()
     {
         $username = Session::get('username');
-        $this->prepare('SELECT * FROM `users` WHERE `username` =?');
+        $this->prepare('SELECT `dcid` FROM `users` WHERE `username` =?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
         if ($userData->dcid != null) {

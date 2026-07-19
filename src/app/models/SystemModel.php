@@ -54,7 +54,7 @@ class System extends Database
 
     protected function getCaptcha()
     {
-        $this->prepare('SELECT * FROM `system`');
+        $this->prepare('SELECT `cap_service`, `cap_key` FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
 
@@ -77,7 +77,7 @@ class System extends Database
 
     protected function getCaptchaSecret()
     {
-        $this->prepare('SELECT * FROM `system`');
+        $this->prepare('SELECT `cap_secret` FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
 
@@ -86,7 +86,7 @@ class System extends Database
 
     protected function getCaptchaService()
     {
-        $this->prepare('SELECT * FROM `system`');
+        $this->prepare('SELECT `cap_service` FROM `system`');
         $this->statement->execute();
         $result = $this->statement->fetch();
 
