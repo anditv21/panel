@@ -607,6 +607,12 @@ class Users extends Database
         if ($logging == 0) {
             return true;
         }
+
+        $this->prepare('SELECT `uid` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $uid = $this->statement->fetchColumn();
+        $logUser = $uid === false ? $username : $username . " (`$uid`)";
+
         if ($webhook == auth_logs) {
             $title = "Auth-Log";
         } elseif ($webhook == user_logs) {
@@ -634,7 +640,7 @@ class Users extends Database
                         "fields" => [
                             [
                                 "name" => "User:",
-                                "value" => $username,
+                                "value" => $logUser,
                             ],
                             [
                                 "name" => "Action:",
