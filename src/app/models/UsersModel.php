@@ -1026,11 +1026,15 @@ class Users extends Database
 
     protected function getCurrentColor()
     {
-        $this->prepare('SELECT * FROM `system`');
+        $this->prepare('SELECT `embed_color` FROM `system`');
         $this->statement->execute();
         $data = $this->statement->fetch();
 
-        return $data->embed_color;
+        if (!$data || !preg_match('/^#?[a-fA-F0-9]{6}$/', $data->embed_color)) {
+            return '#e14eca';
+        }
+
+        return '#' . ltrim($data->embed_color, '#');
     }
 
     protected function is2fa($username)

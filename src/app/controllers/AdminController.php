@@ -249,8 +249,12 @@ class AdminController extends Admin
 
     public function changeEmbedColor($color)
     {
-
         $color = ltrim($color, '#');
+
+        if (!preg_match('/^[a-fA-F0-9]{6}$/', $color)) {
+            return "Invalid color.";
+        }
+
         return $this->setEmbedColor($color);
     }
 

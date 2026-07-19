@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $params = [
             'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
             'flushchat', 'setshoutbox', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
-            'discordlogging', 'service', 'setkey', 'setsecret', 'setoption', 'setcolor'
+            'discordlogging', 'service', 'setkey', 'setsecret', 'setoption', 'updatecolor'
         ];
 
         foreach ($params as $param) {
@@ -97,8 +97,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($setsecret)) {
             $admin->setCaptchaSecret(Util::securevar($_POST['site_secret'] ?? ''));
         }
-        if (isset($setcolor)) {
-            $admin->changeEmbedColor($setcolor);
+        if (isset($updatecolor)) {
+            $color = Util::securevar($_POST["setcolor"] ?? '');
+            $admin->changeEmbedColor($color);
         }
 
         // Redirect to system page after processing
@@ -498,6 +499,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <div class="input-group mb-3">
                                     <input autocomplete="off" type="text" class="form-control" placeholder='Captcha Secret ex: 0x...' name="site_secret" aria-describedby="button-addon2">
                                     <button class="btn btn-success" name="setsecret" type="submit" id="button-addon2">Update</button>
+                                 </div>
+                                 <div class="input-group mb-3">
+                                    <input type="color" class="form-control form-control-color" value="<?= $user->getEmbedColor(); ?>" name="setcolor" title="Choose embed color">
+                                    <button class="btn btn-success" name="updatecolor" type="submit" id="button-addon2">Update</button>
                                  </div>
                               </div>
                               <div class="input-group mb-3">
