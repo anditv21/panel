@@ -41,7 +41,9 @@ class API extends Database
 
                 $uid = $row->uid;
                 $path = IMG_DIR . $uid;
-                if (@getimagesize($path . ".png")) {
+                if (@getimagesize($path . ".webp")) {
+                    $avatarurl = IMG_URL . $uid . ".webp?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".png")) {
                     $avatarurl = IMG_URL . $uid . ".png?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".jpg")) {
                     $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
@@ -115,7 +117,9 @@ class API extends Database
             } else {
                 $uid = $result['uid'];
                 $path = IMG_DIR . $uid;
-                if (@getimagesize($path . ".png")) {
+                if (@getimagesize($path . ".webp")) {
+                    $avatarurl = IMG_URL . $uid . ".webp?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".png")) {
                     $avatarurl = IMG_URL . $uid . ".png?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".jpg")) {
                     $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
