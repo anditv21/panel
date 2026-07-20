@@ -2608,11 +2608,6 @@ textarea:focus {
     background-color: #f3f6f9
 }
 
-.table * {
-    border-color: #262635 !important
-	border: 1px solid #3C3C3C;
-}
-
 .table td,
 .table th {
     padding: 15px 20px !important;
