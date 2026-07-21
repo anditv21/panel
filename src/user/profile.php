@@ -45,8 +45,9 @@ Util::head("Profile");
 $dcid = $user->getdcid($uid);
 
 if ($dcid !== false && !Session::get('avatar_refreshed')) {
-    Session::set('avatar_refreshed', true);
-    $user->downloadAvatarWithAccessToken($dcid, $uid);
+    if ($user->downloadAvatarWithAccessToken($dcid, $uid)) {
+        Session::set('avatar_refreshed', true);
+    }
 }
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
