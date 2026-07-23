@@ -1,6 +1,7 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
+header("Cache-Control: no-store, no-cache, must-revalidate");
 
 set_exception_handler(function (Throwable $e) {
     error_log("API error: " . get_class($e) . ": " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
@@ -74,15 +75,18 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
         }
     }
 } else {
-    if (empty($_GET['user']) || empty($_GET['pass']) || empty($_GET['hwid']) || empty($_GET['key'])) {
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        http_response_code(405);
+        $response = array('status' => 'failed', 'error' => 'Login requests must use POST');
+    } elseif (empty($_POST['user']) || empty($_POST['pass']) || empty($_POST['hwid']) || empty($_POST['key'])) {
         $response = array('status' => 'failed', 'error' => 'Missing arguments');
-    } elseif (!is_string($_GET['user']) || !is_string($_GET['pass']) || !is_string($_GET['hwid']) || !is_string($_GET['key'])) {
+    } elseif (!is_string($_POST['user']) || !is_string($_POST['pass']) || !is_string($_POST['hwid']) || !is_string($_POST['key'])) {
         $response = array('status' => 'failed', 'error' => 'Invalid arguments');
     } else {
-        $username = Util::securevar($_GET['user']);
-        $passwordHash = Util::securevar($_GET['pass']);
-        $hwidHash = Util::securevar($_GET['hwid']);
-        $key = Util::securevar($_GET['key']);
+        $username = Util::securevar($_POST['user']);
+        $passwordHash = Util::securevar($_POST['pass']);
+        $hwidHash = Util::securevar($_POST['hwid']);
+        $key = Util::securevar($_POST['key']);
 
         if (API_KEY === $key) {
             // decode
