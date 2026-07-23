@@ -1162,6 +1162,26 @@ class Users extends Database
             : "Login token could not be verified.";
     }
 
+    protected function setNotification($username, $notification)
+    {
+        try {
+            $this->prepare('SELECT `dcid` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+            $result = $this->statement->fetch(PDO::FETCH_ASSOC);
+
+            if (empty($result['dcid'])) {
+                return false;
+            }
+
+            $this->prepare('INSERT INTO `notifications` (`dcid`, `message`) VALUES (?, ?)');
+            $this->statement->execute([$result['dcid'], $notification]);
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 
     protected function get_user_Browser()
     {

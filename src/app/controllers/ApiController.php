@@ -37,6 +37,16 @@ class ApiController extends API
         return $this->generate_inv($dcid);
     }
 
+    public function getUserNotifications()
+    {
+        return $this->getNotifications();
+    }
+
+    public function markAsDelivered($id)
+    {
+        return $this->setDelivered($id);
+    }
+
     public function getiparray()
     {
         return $this->getWhitelistedIPs();

@@ -117,6 +117,20 @@ INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `dcid` varchar(255) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `delivered` int(11) NOT NULL DEFAULT 0,
+  `time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rate_limit_blocks`
 --
 
@@ -323,6 +337,12 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `remembertoken` (`remembertoken`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `rate_limit_blocks`
 --
 ALTER TABLE `rate_limit_blocks`
@@ -388,6 +408,12 @@ ALTER TABLE `adminlogs`
 --
 ALTER TABLE `login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rate_limit_blocks`

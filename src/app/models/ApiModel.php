@@ -298,6 +298,37 @@ class API extends Database
         return $response;
     }
 
+    protected function getNotifications()
+    {
+        try {
+            $this->prepare('SELECT `id`, `dcid`, `message`, `time` AS `timestamp`, `delivered` FROM `notifications` WHERE `delivered` != 1 ORDER BY `time` DESC');
+            $this->statement->execute();
+            $notifications = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'status' => 'success',
+                'notifications' => $notifications
+            ];
+        } catch (PDOException $e) {
+            return [
+                'status' => 'failed',
+                'error' => 'Database error',
+                'notifications' => []
+            ];
+        }
+    }
+
+    protected function setDelivered($id)
+    {
+        try {
+            $this->prepare('UPDATE `notifications` SET `delivered` = 1 WHERE `id` = ?');
+            $this->statement->execute([(int) $id]);
+            return ['status' => 'success'];
+        } catch (PDOException $e) {
+            return ['status' => 'failed', 'error' => 'Database error'];
+        }
+    }
+
     protected function getWhitelistedIPs(): array
     {
         try {

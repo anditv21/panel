@@ -64,6 +64,14 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
                         } else {
                             $response = array('status' => 'failed', 'error' => "Missing or empty 'discord id' parameter");
                         }
+                    } elseif ($botFunction === 'get_user_notifications') {
+                        $response = $API->getUserNotifications();
+                    } elseif ($botFunction === 'set_delivered') {
+                        if (isset($_GET['id']) && ctype_digit((string) $_GET['id']) && (int) $_GET['id'] > 0) {
+                            $response = $API->markAsDelivered((int) $_GET['id']);
+                        } else {
+                            $response = array('status' => 'failed', 'error' => "Missing or invalid 'id' parameter");
+                        }
                     } else {
                         $response = array('status' => 'failed', 'error' => 'Invalid bot function');
                     }

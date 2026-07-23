@@ -215,6 +215,8 @@ class UserController extends Users
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin($token);
                 $this->resetfails($username);
+                $ip = $this->getip();
+                $this->setNewNotification($username, "New login on your account from [$ip](" . SITE_URL . SUB_DIR . "/user/lookup.php?ip=$ip).");
 
                 if (Util::has2faSolved($token)) {
                     Util::redirectAfterLogin();
@@ -288,6 +290,7 @@ class UserController extends Users
             $subCodeExists = $this->subCodeCheck($subCode);
 
             if ($subCodeExists) {
+                $this->setNewNotification($username, "A subscription code was activated on your account.");
                 $this->log($username, "Activated a sub", user_logs);
                 return $this->subscription($subCode, $username);
             } else {
@@ -331,6 +334,7 @@ class UserController extends Users
             $result = $this->updatePass($currentPassword, $hashedPassword, $username);
 
             if ($result) {
+                $this->setNewNotification($username, "Your password has been changed.");
                 Util::redirect("/auth/logout.php");
             } else {
                 $errors[] = "Your current password does not match.";
@@ -812,6 +816,11 @@ class UserController extends Users
     public function is2faEnabled($username)
     {
         return $this->is2fa($username);
+    }
+
+    public function setNewNotification($username, $notification)
+    {
+        return $this->setNotification($username, $notification);
     }
 
     public function change_2fa_status($status)
