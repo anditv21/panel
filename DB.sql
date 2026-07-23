@@ -117,6 +117,35 @@ INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rate_limit_blocks`
+--
+
+CREATE TABLE `rate_limit_blocks` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bucket` varchar(100) NOT NULL,
+  `actor` varchar(191) NOT NULL,
+  `blocked_until` int(10) UNSIGNED NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rate_limit_counters`
+--
+
+CREATE TABLE `rate_limit_counters` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bucket` varchar(100) NOT NULL,
+  `actor` varchar(191) NOT NULL,
+  `window_start` int(10) UNSIGNED NOT NULL,
+  `request_count` int(10) UNSIGNED NOT NULL DEFAULT 1,
+  `last_hit` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shoutbox`
 --
 
@@ -294,6 +323,22 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `remembertoken` (`remembertoken`);
 
 --
+-- Indexes for table `rate_limit_blocks`
+--
+ALTER TABLE `rate_limit_blocks`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_bucket_actor_block` (`bucket`,`actor`),
+  ADD KEY `idx_blocked_until` (`blocked_until`);
+
+--
+-- Indexes for table `rate_limit_counters`
+--
+ALTER TABLE `rate_limit_counters`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_bucket_actor_window` (`bucket`,`actor`,`window_start`),
+  ADD KEY `idx_window_start` (`window_start`);
+
+--
 -- Indexes for table `shoutbox`
 --
 ALTER TABLE `shoutbox`
@@ -343,6 +388,18 @@ ALTER TABLE `adminlogs`
 --
 ALTER TABLE `login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+
+--
+-- AUTO_INCREMENT for table `rate_limit_blocks`
+--
+ALTER TABLE `rate_limit_blocks`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rate_limit_counters`
+--
+ALTER TABLE `rate_limit_counters`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`

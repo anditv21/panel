@@ -5,6 +5,7 @@ require_once "../includes/head.nav.inc.php";
 
 $user = new UserController();
 $System = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -22,6 +23,16 @@ Util::checktoken();
 Util::head("IP Lookup");
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
+    if (isset($_GET["ip"]) || isset($_GET["uid"])) {
+        $lookupActor = Session::get('uid') . '|' . RateLimiter::getClientIp();
+        $lookupLimit = $rateLimiter->hit('lookup.page', $lookupActor, 60, 60, 120);
+
+        if (!$lookupLimit['allowed']) {
+            http_response_code(429);
+            exit('Too many lookup requests. Please wait ' . $lookupLimit['retry_after'] . ' seconds.');
+        }
+    }
+
     if (isset($_GET["ip"])) {
         $ip_address = Util::securevar($_GET['ip']);
         $ip_info = getipinfo($ip_address);

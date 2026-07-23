@@ -5,6 +5,7 @@ require_once "../includes/head.nav.inc.php";
 
 $user = new UserController();
 $System = new SystemController();
+$rateLimiter = new RateLimiter();
 Session::init();
 
 if (!Session::isLogged()) {
@@ -18,6 +19,13 @@ $systemData = $System->getSystemData();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shoutbox-message'])) {
     $msg = trim(Util::securevar($_POST['shoutbox-message']));
+    $messageActor = Session::get('uid') . '|' . RateLimiter::getClientIp();
+    $messageLimit = $rateLimiter->hit('shoutbox.message', $messageActor, 8, 30, 120);
+
+    if (!$messageLimit['allowed']) {
+        header('location: shoutbox.php?alert=Too+many+messages.+Please+wait+' . $messageLimit['retry_after'] . '+seconds.&type=danger');
+        exit;
+    }
 
     if ($systemData->shoutbox == 0) {
         header('location: shoutbox.php?alert=The+shoutbox+is+currently+disabled.&type=danger');

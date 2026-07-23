@@ -2,6 +2,7 @@
 require_once "../app/require.php";
 
 $user = new UserController();
+$rateLimiter = new RateLimiter();
 Session::init();
 
 if (!Session::isLogged()) {
@@ -46,7 +47,12 @@ if (isset($_GET['code'])) {
 }
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['verifyDiscord'])) {
-    if (!$user->isDiscordLinked()) {
+    $twofactorActor = strtolower((string) $username) . '|' . RateLimiter::getClientIp();
+    $twofactorLimit = $rateLimiter->hit('auth.2fa.discord', $twofactorActor, 10, 300, 600);
+
+    if (!$twofactorLimit['allowed']) {
+        $error = 'Too many verification attempts. Please wait ' . $twofactorLimit['retry_after'] . ' seconds.';
+    } elseif (!$user->isDiscordLinked()) {
         $error = 'No linked Discord account was found.';
     } else {
         $state = bin2hex(random_bytes(24));

@@ -17,5 +17,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 require_once 'core/Config.php';
 require_once 'core/DiscordConfig.php';
+require_once 'core/RateLimiter.php';
 require_once 'controllers/UtilController.php';
 require_once 'controllers/UserController.php';

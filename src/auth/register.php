@@ -4,6 +4,7 @@ require_once '../app/controllers/SystemController.php';
 
 $user = new UserController();
 $system = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -13,15 +14,19 @@ if (Session::isLogged()) {
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
     Util::csrfCheck();
 
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-    }
+    $data = Util::securevar($_POST);
+    $clientIp = RateLimiter::getClientIp();
+    $registerLimit = $rateLimiter->hit('auth.register.ip', $clientIp, 12, 900, 1800);
 
-    $captcha = $system->vaildateCaptcha($data);
-    if($captcha == true) {
-        $error = $user->registerUser($data);
+    if (!$registerLimit['allowed']) {
+        $error = 'Too many registration attempts. Please wait ' . $registerLimit['retry_after'] . ' seconds.';
     } else {
-        $error = "Captcha failed or not completed";
+        $captcha = $system->vaildateCaptcha($data);
+        if ($captcha == true) {
+            $error = $user->registerUser($data);
+        } else {
+            $error = "Captcha failed or not completed";
+        }
     }
 }
 

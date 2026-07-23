@@ -2,6 +2,7 @@
 require_once __DIR__ . "/app/require.php";
 
 $user = new UserController();
+$rateLimiter = new RateLimiter();
 Session::init();
 
 if (!Session::isLogged()) {
@@ -10,6 +11,14 @@ if (!Session::isLogged()) {
 
 Util::banCheck();
 Util::checktoken();
+
+$pollActor = Session::get('uid') . '|' . RateLimiter::getClientIp();
+$pollLimit = $rateLimiter->hit('shoutbox.poll', $pollActor, 120, 60, 120);
+
+if (!$pollLimit['allowed']) {
+    http_response_code(429);
+    exit('Too many requests.');
+}
 
 $messages = $user->getmsgs();
 

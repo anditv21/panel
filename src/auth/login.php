@@ -4,6 +4,7 @@ require_once "../app/controllers/SystemController.php";
 
 $user = new UserController();
 $system = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -23,18 +24,24 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
     Util::csrfCheck();
 
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-    }
+    $data = Util::securevar($_POST);
+    $clientIp = RateLimiter::getClientIp();
+    $ipLimit = $rateLimiter->hit('auth.login.ip', $clientIp, 30, 60, 300);
+    $usernameActor = strtolower(trim((string) ($_POST['username'] ?? 'unknown')));
+    $userLimit = $rateLimiter->hit('auth.login.username', $usernameActor, 20, 60, 300);
 
-    $captcha = $system->vaildateCaptcha($data);
-    if($captcha == true) {
-        $error = $user->loginUser($data);
+    if (!$ipLimit['allowed']) {
+        $error = 'Too many login attempts. Please wait ' . $ipLimit['retry_after'] . ' seconds.';
+    } elseif (!$userLimit['allowed']) {
+        $error = 'Too many login attempts for this account. Please wait ' . $userLimit['retry_after'] . ' seconds.';
     } else {
-        $error = "Captcha failed or not completed";
+        $captcha = $system->vaildateCaptcha($data);
+        if ($captcha == true) {
+            $error = $user->loginUser($data);
+        } else {
+            $error = "Captcha failed or not completed";
+        }
     }
-
-
 }
 
 if (Session::isLogged()) {

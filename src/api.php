@@ -14,6 +14,7 @@ require_once 'app/require.php';
 require_once 'app/controllers/ApiController.php';
 
 $API = new ApiController();
+$rateLimiter = new RateLimiter();
 
 // Get the server's IP address
 $serverIP = $_SERVER['SERVER_ADDR'];
@@ -87,8 +88,19 @@ if (isset($_GET['bot']) && $_GET['bot'] === 'true') {
         $passwordHash = Util::securevar($_POST['pass']);
         $hwidHash = Util::securevar($_POST['hwid']);
         $key = Util::securevar($_POST['key']);
+        $clientIp = RateLimiter::getClientIp();
+        $ipLimit = $rateLimiter->hit('api.user.ip', $clientIp, 120, 60, 120);
+        $userLimit = $rateLimiter->hit('api.user.username', strtolower($username), 40, 60, 120);
 
-        if (API_KEY === $key) {
+        if (!$ipLimit['allowed'] || !$userLimit['allowed']) {
+            $limit = !$ipLimit['allowed'] ? $ipLimit : $userLimit;
+            http_response_code(429);
+            $response = [
+                'status' => 'failed',
+                'error' => 'Too many requests',
+                'retry_after' => $limit['retry_after']
+            ];
+        } elseif (API_KEY === $key) {
             // decode
             $password = base64_decode($passwordHash, true);
             $hwid = base64_decode($hwidHash, true);
