@@ -25,9 +25,9 @@ class AdminController extends Admin
     }
 
     //
-    public function giftsub($name, $sub, $time)
+    public function giftsub($name, $time)
     {
-        return $this->subgift($name, $sub, $time);
+        return $this->subgift($name, $time);
     }
     //
     public function setnews($news)

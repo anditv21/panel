@@ -28,12 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $time = isset($_POST["days"]) ? Util::securevar($_POST["days"]) : null;
 
     if ($giftsub && $time) {
-        $sub = $admin->subcheckbyusername($giftsub);
-        $admin->giftsub($giftsub, $sub, $time);
+        $error = $admin->giftsub($giftsub, $time);
+    } else {
+        $error = "Please select a user and subscription time.";
     }
 
-
-    header("location: gift.php");
+    $queryParams = $error
+        ? ['alert' => $error, 'type' => 'danger']
+        : ['alert' => 'Subscription updated.', 'type' => 'success'];
+    header("location: gift.php?" . http_build_query($queryParams));
     exit;
 }
 
@@ -53,6 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                   <div class="card">
                      <center>
                         <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7 col-xs-12 my-3">
+                           <?php if (isset($_GET['alert'], $_GET['type'])) : ?>
+                              <div class="alert alert-<?php Util::display(Util::securevar($_GET['type'])); ?>">
+                                 <?php Util::display(Util::securevar($_GET['alert'])); ?>
+                              </div>
+                           <?php endif; ?>
                            <div class="row">
                               <div class="col-12 mb-4">
                                  <div class="divide2"></div>
@@ -79,9 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <ol>
                                     <p>Input Options:</p>
                                     <li>LT for Lifetime</li>
-                                    <li>T for a trail subscription</li>
+                                    <li>T for a trial subscription (3 days)</li>
                                     <li>- to remove a users sub</li>
-                                    <li>Intager for amount in days</li>
+                                    <li>Integer for amount in days</li>
                                  </ol>
                               </div>
                            </div>

@@ -127,75 +127,60 @@ class Admin extends Database
         }
     }
 
-    protected function subgift($name, $sub, $time)
+    protected function subgift($name, $time)
     {
-        if ($this->checkadmin()) {
-            if ($sub <= 0) {
-                if ($time === 'LT') {
-                    $time = '24000';
-                }
-                if ($time === 'T') {
-                    $time = '7';
-                }
-                if ($time === '-') {
-                    return false;
-                }
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
 
-                $date = new DateTime(); // Get current date
-                $days = 'P' . $time . 'D';
-                $date->add(new DateInterval($days)); // Adds custom days
-                $subTime = $date->format('Y-m-d'); // Format Year-Month-Day
+        $username = Session::get('username');
+        $user = new UserController();
 
-                $this->prepare(
-                    'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
-                );
-                $this->statement->execute([$subTime, $name]);
+        try {
+            $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$name]);
+            $currentSub = $this->statement->fetch();
 
-                $user = new UserController();
-                $username = Session::get('username');
-                $user->loguser($name, "$username gifted you a $time day/s sub");
-            } else {
-                if ($time === '-') {
-                    $this->prepare(
-                        'UPDATE `users` SET `sub` = NULL WHERE  `username` = ?'
-                    );
-                    $this->statement->execute([$name]);
-
-                    $username = Session::get('username');
-                    $user = new UserController();
-                    $user->log($username, "Removed $name`s sub", admin_logs);
-                    $this->admin_log(Session::get("username"), "Removed $name`s sub");
-                    $user->loguser($name, "$username removed your sub");
-                } else {
-                    if ($time === 'LT') {
-                        $time = '24000';
-                    }
-                    if ($time === 'T') {
-                        $time = '7';
-                    }
-
-                    $this->prepare(
-                        'SELECT `sub` FROM `users` WHERE `username` = ?'
-                    );
-                    $this->statement->execute([$name]);
-                    $date = $this->statement->fetch();
-                    $date1 = date_create($date->sub);
-                    $days = 'P' . $time . 'D';
-                    $date1->add(new DateInterval($days));
-                    $subTime = $date1->format('Y-m-d'); // Format Year-Month-Day
-
-                    $this->prepare(
-                        'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
-                    );
-                    $this->statement->execute([$subTime, $name]);
-
-                    $user = new UserController();
-                    $username = Session::get('username');
-                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
-                    $user->loguser($name, "$username gifted you a $time day/s sub", false);
-                    $this->admin_log(Session::get("username"), "Gifted a $time day/s sub.  \n to: $name");
-                }
+            if (!$currentSub) {
+                return "User was not found.";
             }
+
+            if ($time === '-') {
+                $this->prepare('UPDATE `users` SET `sub` = NULL WHERE `username` = ?');
+                $this->statement->execute([$name]);
+                $user->log($username, "Removed $name's sub", admin_logs);
+                $user->loguser($name, "$username removed your sub", false);
+                $user->setNewNotification($name, "Your subscription was removed by an administrator.");
+                $this->admin_log($username, "Removed $name's sub");
+                return false;
+            }
+
+            if ($time === 'LT') {
+                $time = 24000;
+            } elseif ($time === 'T') {
+                $time = 3;
+            } elseif (!ctype_digit((string) $time) || (int) $time < 1 || (int) $time > 24000) {
+                return "Please enter a valid number of days.";
+            }
+
+            $date = new DateTime('today');
+            if (!empty($currentSub->sub) && new DateTime($currentSub->sub) > $date) {
+                $date = new DateTime($currentSub->sub);
+            }
+
+            $date->add(new DateInterval('P' . (int) $time . 'D'));
+            $subTime = $date->format('Y-m-d');
+
+            $this->prepare('UPDATE `users` SET `sub` = ? WHERE `username` = ?');
+            $this->statement->execute([$subTime, $name]);
+
+            $user->log($username, "Gifted a $time day/s sub to $name", admin_logs);
+            $user->loguser($name, "$username gifted you a $time day/s sub", false);
+            $user->setNewNotification($name, "Your subscription was extended by $time day/s.");
+            $this->admin_log($username, "Gifted a $time day/s sub to $name");
+            return false;
+        } catch (Exception $e) {
+            return "Subscription could not be changed.";
         }
     }
 
