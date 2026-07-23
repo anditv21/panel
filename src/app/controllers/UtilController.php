@@ -191,7 +191,7 @@ class Util extends UtilMod
             $new_array = array();
             foreach ($var as $key => $value) {
                 if (is_string($value)) {
-                    $new_array[$key] = htmlspecialchars(stripslashes(trim($value)));
+                    $new_array[$key] = htmlspecialchars(stripslashes(trim($value)), ENT_QUOTES, 'UTF-8', false);
                 } elseif (is_array($value)) {
                     $new_array[$key] = self::securevar($value);
                 } else {
@@ -200,7 +200,7 @@ class Util extends UtilMod
             }
             return $new_array;
         } else {
-            return htmlspecialchars(stripslashes(trim($var)));
+            return htmlspecialchars(stripslashes(trim($var)), ENT_QUOTES, 'UTF-8', false);
         }
     }
 
