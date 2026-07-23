@@ -9,6 +9,21 @@ require_once SITE_ROOT . "/app/require.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class API extends Database
 {
+    protected function getSubscriptionDays($subDate)
+    {
+        if (empty($subDate)) {
+            return 0;
+        }
+
+        try {
+            $currentDate = new DateTime('today');
+            $subscriptionDate = new DateTime($subDate);
+            return (int) $currentDate->diff($subscriptionDate)->format('%r%a');
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
     protected function userAPI($username, $password, $hwid)
     {
         // fetch username
@@ -72,13 +87,13 @@ class API extends Database
 
                 $response = [
                     "status" => "success",
-                    "uid" => $row->uid,
+                    "uid" => (int) $row->uid,
                     "username" => $row->username,
-                    "hwid" => $row->hwid,
-                    "admin" => $row->admin,
-                    "supp" => $row->supp,
-                    "sub" => $row->sub,
-                    "banned" => $row->banned,
+                    "hwid" => is_null($row->hwid) ? "null" : $row->hwid,
+                    "admin" => (int) $row->admin,
+                    "supp" => (int) $row->supp,
+                    "sub" => $this->getSubscriptionDays($row->sub),
+                    "banned" => (int) $row->banned,
                     "invitedBy" => $row->invitedBy,
                     "createdAt" => $row->createdAt,
                     "avatarurl" => $avatarurl,
