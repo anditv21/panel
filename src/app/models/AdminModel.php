@@ -109,6 +109,7 @@ class Admin extends Database
             $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
 
             $user->loguser($oldUsername, "Password reset by $currentUsername", false);
+            $user->setNewNotification($oldUsername, "Your password was reset by an administrator.");
             $this->admin_log(Session::get("username"), "Reset the password for $oldUsername");
             return true;
         }

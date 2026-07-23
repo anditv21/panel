@@ -60,10 +60,10 @@ if (isset($_POST['passwordreset']) && is_string($_POST['passwordreset'])) {
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <form action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>" method="post">
+                                                        <form action="<?php Util::display(Util::securevar($_SERVER['PHP_SELF'])); ?>" method="post" onsubmit="return confirmPasswordReset();">
                                                             <?php Util::csrfField(); ?>
                                                             <label>Select a user:</label><br>
-                                                            <select name="passwordreset" class="form-control form-control-sm">
+                                                            <select id="passwordreset-user" name="passwordreset" class="form-control form-control-sm">
                                                                 <br>
                                                                 <?php foreach ($userList as $row) : ?>
                                                                     <?php Util::display("<option value='$row->username'>" . "$row->username  ($row->uid)</option>"); ?>
@@ -97,6 +97,12 @@ if (isset($_POST['passwordreset']) && is_string($_POST['passwordreset'])) {
             </div>
         </div>
     </div>
+    <script>
+        function confirmPasswordReset() {
+            var user = document.getElementById('passwordreset-user');
+            return confirm('Reset the password for ' + user.value + '?');
+        }
+    </script>
 </body>
 
 </html>
