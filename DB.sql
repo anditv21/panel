@@ -307,6 +307,18 @@ INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admi
 (1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'fetter_bauer-c26b15bf-a96c', 1, 1, '2089-06-17', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2024-08-20 19:17:55', '2024-08-16 01:01:10', 'none', 13, '2023-07-30', 17, 0, NULL, NULL, NULL, 0, 0),
 (2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$SGkxUDJoU083enM2anBRNQ$Vnyxq9VgVQjNAVo8ugf50LjiUwrmcPAd8g/IdaERg/8', NULL, 0, 0, '2089-08-31', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 1, '2024-05-13', 15, 0, NULL, NULL, NULL, 0, 0);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `variables`
+--
+
+CREATE TABLE `variables` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `content` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -394,6 +406,13 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `hwid` (`hwid`);
 
 --
+-- Indexes for table `variables`
+--
+ALTER TABLE `variables`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -444,6 +463,12 @@ ALTER TABLE `userlogs`
 --
 ALTER TABLE `users`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `variables`
+--
+ALTER TABLE `variables`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

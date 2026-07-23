@@ -35,6 +35,7 @@
             <li><a href="<?= SUB_DIR ?>/admin/logs.php"><i class="far fa-circle"></i>Admin logs</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/index.php"><i class="far fa-circle"></i>Settings</a></li>
             <?php if (Util::adminCheck(false) == true) : ?>
+              <li><a href="<?= SUB_DIR ?>/admin/variables.php"><i class="far fa-circle"></i>Variables</a></li>
               <li><a href="<?= SUB_DIR ?>/admin/upload/loader.php"><i class="far fa-circle"></i>Loader Upload</a></li>
             <?php endif; ?>
           </ul>

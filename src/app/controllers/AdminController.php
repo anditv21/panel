@@ -274,4 +274,24 @@ class AdminController extends Admin
         return $this->adminLogsCount($search);
     }
 
+    public function getVariables()
+    {
+        return $this->getVariablesArray();
+    }
+
+    public function createVariable($name, $content)
+    {
+        return $this->createVariableRecord($name, $content);
+    }
+
+    public function editVariable($id, $name, $content)
+    {
+        return $this->editVariableRecord($id, $name, $content);
+    }
+
+    public function deleteVariable($id)
+    {
+        return $this->deleteVariableRecord($id);
+    }
+
 }

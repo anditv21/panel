@@ -103,6 +103,7 @@ class API extends Database
                     "Systemversion" => $res->version,
                     "Systemmaintenance" => $res->maintenance,
                 ];
+                $response = $this->appendVariables($response);
             } else {
                 // Wrong pass, user exists
                 $response = [
@@ -113,6 +114,29 @@ class API extends Database
         } else {
             // Wrong username, user doesnt exists
             $response = ["status" => "failed", "error" => "Invalid username"];
+        }
+
+        return $response;
+    }
+
+    protected function appendVariables($response)
+    {
+        try {
+            $this->prepare('SELECT `name`, `content` FROM `variables` ORDER BY `id` ASC');
+            $this->statement->execute();
+            $variables = $this->statement->fetchAll();
+
+            foreach ($variables as $variable) {
+                if (is_numeric($variable->content)) {
+                    $response[$variable->name] = strpos($variable->content, '.') !== false
+                        ? (float) $variable->content
+                        : (int) $variable->content;
+                } else {
+                    $response[$variable->name] = $variable->content;
+                }
+            }
+        } catch (PDOException $e) {
+            return $response;
         }
 
         return $response;

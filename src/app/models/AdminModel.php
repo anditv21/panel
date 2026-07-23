@@ -1144,6 +1144,111 @@ class Admin extends Database
         return $result;
     }
 
+    protected function getVariablesArray()
+    {
+        if (!$this->checkadmin()) {
+            return [];
+        }
+
+        try {
+            $this->prepare('SELECT * FROM `variables` ORDER BY `id` ASC');
+            $this->statement->execute();
+            return $this->statement->fetchAll();
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    protected function createVariableRecord($name, $content)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/', $name)) {
+            return "Variable name is invalid.";
+        }
+
+        try {
+            $this->prepare('SELECT `id` FROM `variables` WHERE `name` = ?');
+            $this->statement->execute([$name]);
+            if ($this->statement->fetch()) {
+                return "Variable with this name already exists.";
+            }
+
+            $this->prepare('INSERT INTO `variables` (`name`, `content`) VALUES (?, ?)');
+            $this->statement->execute([$name, $content]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Created variable $name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be created.";
+        }
+    }
+
+    protected function editVariableRecord($id, $name, $content)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/', $name)) {
+            return "Variable name is invalid.";
+        }
+
+        try {
+            $this->prepare('SELECT * FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+            $variable = $this->statement->fetch();
+
+            if (!$variable) {
+                return "Variable was not found.";
+            }
+
+            $this->prepare('SELECT `id` FROM `variables` WHERE `name` = ? AND `id` != ?');
+            $this->statement->execute([$name, $id]);
+            if ($this->statement->fetch()) {
+                return "Variable with this name already exists.";
+            }
+
+            $this->prepare('UPDATE `variables` SET `name` = ?, `content` = ? WHERE `id` = ?');
+            $this->statement->execute([$name, $content, $id]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Updated variable $name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be updated.";
+        }
+    }
+
+    protected function deleteVariableRecord($id)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        try {
+            $this->prepare('SELECT `name` FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+            $variable = $this->statement->fetch();
+
+            if (!$variable) {
+                return "Variable was not found.";
+            }
+
+            $this->prepare('DELETE FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Deleted variable $variable->name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be deleted.";
+        }
+    }
+
     protected function logarray()
     {
         $this->prepare("SELECT * FROM `adminlogs` ORDER BY `id` DESC");
