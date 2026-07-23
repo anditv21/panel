@@ -89,6 +89,7 @@ class API extends Database
                     "status" => "success",
                     "uid" => (int) $row->uid,
                     "username" => $row->username,
+                    "displayname" => $row->displayname,
                     "hwid" => is_null($row->hwid) ? "null" : $row->hwid,
                     "admin" => (int) $row->admin,
                     "supp" => (int) $row->supp,
