@@ -367,30 +367,48 @@ class Users extends Database
         $this->statement->execute();
         $result = $this->statement->fetch();
         $inviter = 'System'; // Default inviter is 'System'
+        $inviteClaimed = false;
 
         if ($result && $result->invites && !empty($invCode)) {
             $this->prepare('SELECT `createdBy` FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             $row = $this->statement->fetch();
 
-            if ($row) {
-                $inviter = $row->createdBy;
+            if (!$row) {
+                return false;
             }
+
+            $inviter = $row->createdBy;
+            $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
+            $this->statement->execute([$invCode]);
+
+            if ($this->statement->rowCount() !== 1) {
+                return false;
+            }
+
+            $inviteClaimed = true;
         }
 
         // Prepare an insert statement to add the user to the users table.
-        $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
-        if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
-
-            // If invite system is enabled and there was an invite code, delete the invite code
-            if ($result && $result->invites && !empty($invCode)) {
-                $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
-                return $this->statement->execute([$invCode]);
+        try {
+            $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
+            if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
+                return true;
             }
-            return true;
-        } else {
-            return false;
+        } catch (Exception $e) {
+            error_log("Error registering user: " . $e->getMessage());
         }
+
+        if ($inviteClaimed) {
+            try {
+                $this->prepare('INSERT IGNORE INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+                $this->statement->execute([$invCode, $inviter]);
+            } catch (Exception $restoreError) {
+                error_log("Error restoring invite code: " . $restoreError->getMessage());
+            }
+        }
+
+        return false;
     }
 
 
@@ -433,26 +451,46 @@ class Users extends Database
     {
         // Test if subCode contains the 3 months keyword
         if (str_starts_with($subCode, "3m-") !== false) {
-            $this->activateSubscription($username, "90D", $subCode);
-            return "Your subscription is now active!";
+            return $this->activateSubscription($username, "90D", $subCode);
         }
 
         // Test if subCode contains the trial keyword
         if (str_starts_with($subCode, "Trail-") !== false) {
-            $this->activateSubscription($username, "3D", $subCode);
-            return "Your subscription is now active!";
+            return $this->activateSubscription($username, "3D", $subCode);
         }
 
         // Test if subCode contains the 1m keyword
         if (str_starts_with($subCode, "1m-") !== false) {
-            $this->activateSubscription($username, "30D", $subCode);
-            return "Your subscription is now active!";
+            return $this->activateSubscription($username, "30D", $subCode);
         }
+
+        return "Subscription code is invalid.";
     }
 
     protected function activateSubscription($username, $period, $subCode)
     {
+        $codeClaimed = false;
+        $createdBy = '';
+
         try {
+            $this->prepare('SELECT `createdBy` FROM `subscription` WHERE `code` = ?');
+            $this->statement->execute([$subCode]);
+            $code = $this->statement->fetch();
+
+            if (!$code) {
+                return "Subscription code is invalid.";
+            }
+
+            $createdBy = $code->createdBy;
+            $this->prepare('DELETE FROM `subscription` WHERE `code` = ?');
+            $this->statement->execute([$subCode]);
+
+            if ($this->statement->rowCount() !== 1) {
+                return "Subscription code is invalid.";
+            }
+
+            $codeClaimed = true;
+
             // Check if the user already has an active subscription
             $currentSubscription = $this->subActiveCheck($username);
             if ($currentSubscription <= 0) {
@@ -461,24 +499,39 @@ class Users extends Database
                 $expirationDate->add(new DateInterval("P" . $period));
                 $formattedExpirationDate = $expirationDate->format("Y-m-d");
                 $this->prepare("UPDATE `users` SET `sub` = ? WHERE `username` = ?");
-                $this->statement->execute([$formattedExpirationDate, $username]);
+                if (!$this->statement->execute([$formattedExpirationDate, $username])) {
+                    throw new RuntimeException("Could not update subscription");
+                }
             } else {
                 // If the user already has an active subscription, add the specified period to their current expiration date
                 $this->prepare("SELECT sub FROM users WHERE username = ?");
                 $this->statement->execute([$username]);
                 $currentExpirationDate = $this->statement->fetch();
+                if (!$currentExpirationDate) {
+                    throw new RuntimeException("Could not find current subscription");
+                }
                 $date = date_create($currentExpirationDate->sub);
                 $date->add(new DateInterval("P" . $period));
                 $formattedExpirationDate = $date->format("Y-m-d");
                 $this->prepare("UPDATE users SET sub = ? WHERE  username = ?");
-                $this->statement->execute([$formattedExpirationDate, $username]);
+                if (!$this->statement->execute([$formattedExpirationDate, $username])) {
+                    throw new RuntimeException("Could not update subscription");
+                }
             }
 
-            // Delete the sub code
-            $this->prepare("DELETE FROM `subscription` WHERE `code` = ?");
-            $this->statement->execute([$subCode]);
             $this->loguser($username, "Redeemed: $subCode");
-        } catch (PDOException $e) {
+
+            return "Your subscription is now active!";
+        } catch (Exception $e) {
+            if ($codeClaimed) {
+                try {
+                    $this->prepare('INSERT IGNORE INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
+                    $this->statement->execute([$subCode, $createdBy]);
+                } catch (Exception $restoreError) {
+                    error_log("Error restoring subscription code: " . $restoreError->getMessage());
+                }
+            }
+
             // Log the error and return a generic message
             error_log("Error activating subscription: " . $e->getMessage());
             return "An error occurred while activating your subscription. Please try again later.";
@@ -769,61 +822,14 @@ class Users extends Database
 
     public function getip(): string
     {
-        $headers = [
-            'HTTP_CLIENT_IP',
-            'HTTP_X_FORWARDED_FOR',
-            'HTTP_X_FORWARDED',
-            'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR',
-            'REMOTE_ADDR',
-            'HTTP_X_REAL_IP'
-        ];
+        $ip = RateLimiter::getClientIp();
+        $serverIp = isset($_SERVER['SERVER_ADDR']) ? Util::securevar($_SERVER['SERVER_ADDR']) : '';
 
-        // Initialize the server IP variable
-        $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
-
-        // Fetch whitelisted IPs
-        $whitelistedIPs = $this->getWhitelistedIPs();
-
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    // Check if it's an IPv4 address
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        if ($ip === $serverIp) {
-                            return 'localhost';
-                        } else {
-                            return $ip; // Return IPv4 address
-                        }
-                    }
-                }
-            }
+        if ($ip === $serverIp || in_array($ip, $this->getWhitelistedIPs())) {
+            return 'localhost';
         }
 
-        // If IPv4 not found or empty, proceed with IPv6
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    if ($ip === $serverIp) {
-                        return 'localhost';
-                    } else {
-                        return $ip; // Return IPv6 address
-                    }
-                }
-            }
-        }
-
-        return '';
+        return $ip === 'unknown' ? '' : $ip;
     }
 
     public function isfrozen($username)

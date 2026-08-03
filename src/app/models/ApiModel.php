@@ -345,6 +345,13 @@ class API extends Database
     protected function setDelivered($id)
     {
         try {
+            $this->prepare('SELECT `id` FROM `notifications` WHERE `id` = ?');
+            $this->statement->execute([(int) $id]);
+
+            if (!$this->statement->fetch()) {
+                return ['status' => 'failed', 'error' => 'Notification not found'];
+            }
+
             $this->prepare('UPDATE `notifications` SET `delivered` = 1 WHERE `id` = ?');
             $this->statement->execute([(int) $id]);
             return ['status' => 'success'];

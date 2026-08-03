@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/Database.php';
+$databaseFile = file_exists(__DIR__ . '/Database.php') ? __DIR__ . '/Database.php' : __DIR__ . '/Database';
+require_once $databaseFile;
 
 class RateLimiter extends Database
 {
@@ -8,21 +9,8 @@ class RateLimiter extends Database
 
     public static function getClientIp()
     {
-        $headers = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR'];
-
-        foreach ($headers as $header) {
-            if (empty($_SERVER[$header])) {
-                continue;
-            }
-
-            $value = $_SERVER[$header];
-            if ($header === 'HTTP_X_FORWARDED_FOR') {
-                $value = trim(explode(',', $value)[0]);
-            }
-
-            if (filter_var($value, FILTER_VALIDATE_IP)) {
-                return $value;
-            }
+        if (!empty($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)) {
+            return $_SERVER['REMOTE_ADDR'];
         }
 
         return 'unknown';
@@ -132,10 +120,7 @@ class RateLimiter extends Database
 
     private function cleanup($now)
     {
-        static $hits = 0;
-        $hits++;
-
-        if (($hits % 100) !== 0) {
+        if (random_int(1, 100) !== 1) {
             return;
         }
 

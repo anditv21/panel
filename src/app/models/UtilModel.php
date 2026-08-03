@@ -12,7 +12,7 @@ class UtilMod extends Database
         $this->prepare('SELECT `banned` FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
-        return $userData->banned;
+        return $userData ? $userData->banned : 0;
     }
 
     protected function checkadmin($username)
@@ -20,7 +20,7 @@ class UtilMod extends Database
         $this->prepare('SELECT `admin` FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
-        return $userData->admin;
+        return $userData ? $userData->admin : 0;
     }
 
     protected function checksupp($username)
@@ -28,7 +28,7 @@ class UtilMod extends Database
         $this->prepare('SELECT `supp` FROM `users` WHERE `username` = ?');
         $this->statement->execute([$username]);
         $userData = $this->statement->fetch();
-        return $userData->supp;
+        return $userData ? $userData->supp : 0;
     }
 
     protected function checkmute($username)

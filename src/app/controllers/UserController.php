@@ -290,9 +290,14 @@ class UserController extends Users
             $subCodeExists = $this->subCodeCheck($subCode);
 
             if ($subCodeExists) {
-                $this->setNewNotification($username, "A subscription code was activated on your account.");
-                $this->log($username, "Activated a sub", user_logs);
-                return $this->subscription($subCode, $username);
+                $result = $this->subscription($subCode, $username);
+
+                if ($result === "Your subscription is now active!") {
+                    $this->setNewNotification($username, "A subscription code was activated on your account.");
+                    $this->log($username, "Activated a sub", user_logs);
+                }
+
+                return $result;
             } else {
                 return "Subscription code is invalid.";
             }
@@ -659,6 +664,8 @@ class UserController extends Users
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
             $result = curl_exec($ch);
 

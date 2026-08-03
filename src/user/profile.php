@@ -108,11 +108,21 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
 }
 // if post request
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && isset($_POST["linkDiscord"]) && ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked()))) {
-    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
+    $state = bin2hex(random_bytes(24));
+    Session::set('discord_link_state', $state);
+    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify&state=" . rawurlencode($state));
     exit();
 }
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked()))) {
     if (isset($_GET['code'])) {
+        $state = isset($_GET['state']) ? trim((string) $_GET['state']) : '';
+        $expectedState = (string) Session::get('discord_link_state');
+        Session::set('discord_link_state', '');
+
+        if (empty($state) || empty($expectedState) || !hash_equals($expectedState, $state)) {
+            Util::redirect('/user/profile.php?alert=Discord+authorization+state+is+invalid.&type=danger');
+        }
+
         $code = Util::securevar($_GET['code']);
         $user->discord_link($code);
     }

@@ -1065,61 +1065,14 @@ class Admin extends Database
 
     public function getip(): string
     {
-        $headers = [
-            'HTTP_CLIENT_IP',
-            'HTTP_X_FORWARDED_FOR',
-            'HTTP_X_FORWARDED',
-            'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR',
-            'REMOTE_ADDR',
-            'HTTP_X_REAL_IP'
-        ];
+        $ip = RateLimiter::getClientIp();
+        $serverIp = isset($_SERVER['SERVER_ADDR']) ? Util::securevar($_SERVER['SERVER_ADDR']) : '';
 
-        // Initialize the server IP variable
-        $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
-
-        // Fetch whitelisted IPs
-        $whitelistedIPs = $this->getWhitelistedIPs();
-
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    // Check if it's an IPv4 address
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        if ($ip === $serverIp) {
-                            return 'localhost';
-                        } else {
-                            return $ip; // Return IPv4 address
-                        }
-                    }
-                }
-            }
+        if ($ip === $serverIp || in_array($ip, $this->getWhitelistedIPs())) {
+            return 'localhost';
         }
 
-        // If IPv4 not found or empty, proceed with IPv6
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    if ($ip === $serverIp) {
-                        return 'localhost';
-                    } else {
-                        return $ip; // Return IPv6 address
-                    }
-                }
-            }
-        }
-
-        return '';
+        return $ip === 'unknown' ? '' : $ip;
     }
 
     public function getWhitelistedIPs(): array
