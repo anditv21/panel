@@ -662,13 +662,26 @@ class Users extends Database
             CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FAILONERROR => 1,
+            CURLOPT_CONNECTTIMEOUT_MS => 1500,
+            CURLOPT_TIMEOUT_MS => 3000,
+            CURLOPT_DNS_CACHE_TIMEOUT => 300,
         ];
 
         $ch = curl_init();
         curl_setopt_array($ch, $options);
 
         try {
-            curl_exec($ch);
+            $result = curl_exec($ch);
+
+            if ($result === false) {
+                $errorNumber = curl_errno($ch);
+                if (!in_array($errorNumber, [6, 28], true)) {
+                    error_log("Webhook cURL Error: " . curl_error($ch));
+                }
+                return false;
+            }
+
+            return true;
         } catch (Exception $e) {
             error_log("Error sending webhook: " . $e->getMessage());
             return false;
