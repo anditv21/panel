@@ -29,8 +29,6 @@
             <li><a href="<?= SUB_DIR ?>/admin/codes.php"><i class="far fa-circle"></i>Codes</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/bans.php"><i class="far fa-circle"></i>Ban-Manager</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/password.php"><i class="far fa-circle"></i>PW-Reset</a></li>
-            <li><a href="<?= SUB_DIR ?>/admin/gift.php"><i class="far fa-circle"></i>Sub-Gift</a></li>
-            <li><a href="<?= SUB_DIR ?>/admin/userinvites.php"><i class="far fa-circle"></i>Inv-Gift</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/ip_whitelist.php"><i class="far fa-circle"></i>IP Whitelist</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/logs.php"><i class="far fa-circle"></i>Admin logs</a></li>
             <li><a href="<?= SUB_DIR ?>/admin/index.php"><i class="far fa-circle"></i>Settings</a></li>
@@ -38,6 +36,13 @@
               <li><a href="<?= SUB_DIR ?>/admin/variables.php"><i class="far fa-circle"></i>Variables</a></li>
               <li><a href="<?= SUB_DIR ?>/admin/upload/loader.php"><i class="far fa-circle"></i>Loader Upload</a></li>
             <?php endif; ?>
+          </ul>
+        </li>
+        <li>
+          <a href="#"><i data-feather="gift"></i>Gifts<i class="fas fa-chevron-right dropdown-icon"></i></a>
+          <ul>
+            <li><a href="<?= SUB_DIR ?>/admin/gift.php"><i class="far fa-circle"></i>Sub-Gift</a></li>
+            <li><a href="<?= SUB_DIR ?>/admin/userinvites.php"><i class="far fa-circle"></i>Inv-Gift</a></li>
           </ul>
         </li>
       <?php endif; ?>
