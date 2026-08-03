@@ -14,17 +14,15 @@ if ($user->getSubStatus() < 1) {
     Util::redirect('/');
 }
 
-$downloadName = Util::randomCode(35) . '.exe';
-
-if (!is_file(LOADER_URL) || !is_readable(LOADER_URL)) {
+if (!is_file(CLIENT_URL) || !is_readable(CLIENT_URL)) {
     http_response_code(404);
-    exit('Loader file not found.');
+    exit('Client file not found.');
 }
 
 header('Content-Type: application/x-dosexec');
-header('Content-Disposition: attachment; filename="' . $downloadName . '"');
-header('Content-Length: ' . filesize(LOADER_URL));
+header('Content-Disposition: attachment; filename="' . CLIENT_FILE . '"');
+header('Content-Length: ' . filesize(CLIENT_URL));
 header('X-Content-Type-Options: nosniff');
-$user->log(Session::get("username"), "Downloaded the loader", user_logs);
-readfile(LOADER_URL);
+$user->log(Session::get("username"), "Downloaded the client", user_logs);
+readfile(CLIENT_URL);
 exit;

@@ -69,7 +69,7 @@ Util::head("Main");
                                  <h5 class="card-title"><?php Util::display(
                                      $System->getSystemData()->version
                                  ); ?></h5>
-                                 <p class="stats-text">Loader version</p>
+                                 <p class="stats-text">Client version</p>
                               </div>
                               <div class="stats-icon change-success">
                                  <i class="material-icons">tag</i>

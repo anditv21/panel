@@ -248,7 +248,7 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                           </div>
                                        </div>
                                        <?php if ($hasActiveSubscription) : ?>
-                                          <a class="btn btn-block btn-primary m-t-md" href="<?= SUB_DIR ?>/download.php" id="download-loader">Download <i class="fas fa-cloud-download-alt"></i></a>
+                                          <a class="btn btn-block btn-primary m-t-md" href="<?= SUB_DIR ?>/download.php" id="download-client">Download <i class="fas fa-cloud-download-alt"></i></a>
                                        <?php else : ?>
                                           <div class="transactions-list">
                                              <div class="tr-item">

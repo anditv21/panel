@@ -4,7 +4,8 @@
 // Only Protected methods
 // Only interats with 'System' table
 
-require_once SITE_ROOT . '/app/core/Database.php';
+$databaseFile = file_exists(SITE_ROOT . '/app/core/Database.php') ? SITE_ROOT . '/app/core/Database.php' : SITE_ROOT . '/app/core/Database';
+require_once $databaseFile;
 
 class System extends Database
 {

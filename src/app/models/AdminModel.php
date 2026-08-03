@@ -6,7 +6,8 @@
 
 // ** Every block should be wrapped in $this->checkadmin(); check **
 
-require_once SITE_ROOT . '/app/core/Database.php';
+$databaseFile = file_exists(SITE_ROOT . '/app/core/Database.php') ? SITE_ROOT . '/app/core/Database.php' : SITE_ROOT . '/app/core/Database';
+require_once $databaseFile;
 require_once SITE_ROOT . "/app/require.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 

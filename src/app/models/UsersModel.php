@@ -3,7 +3,8 @@
 // Extends to class Database
 // Only Protected methods
 
-require_once SITE_ROOT . "/app/core/Database.php";
+$databaseFile = file_exists(SITE_ROOT . '/app/core/Database.php') ? SITE_ROOT . '/app/core/Database.php' : SITE_ROOT . '/app/core/Database';
+require_once $databaseFile;
 require_once SITE_ROOT . "/app/controllers/SystemController.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 

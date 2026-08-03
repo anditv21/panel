@@ -286,7 +286,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <h5 class="card-title"><?php Util::display(
                                      $System->getSystemData()->version
                                  ); ?></h5>
-                                 <p class="stats-text">Loader version</p>
+                                 <p class="stats-text">Client version</p>
                               </div>
                               <div class="stats-icon change-success">
                                  <i class="material-icons">info</i>
