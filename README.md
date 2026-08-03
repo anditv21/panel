@@ -1,213 +1,99 @@
+# ⚡ User Management Panel
 
-<h1 align="center">:zap: User Management Panel</h1>
+An invite-only PHP user management panel with subscriptions, a protected client download and administration tools.
 
+## Requirements
 
+- PHP 8.0 or newer
+- MySQL or MariaDB
+- PHP extensions: PDO MySQL, cURL, JSON, Session, Filter, Hash and Ctype
+- Apache or nginx
+- Write access for `app/core` during setup and `usercontent/avatar` while the panel is running. If the host blocks config writes, the wizard provides the completed PHP config for upload.
 
+The setup page checks the current server before making changes. It works on a VPS as well as regular shared webspace and does not require Apache rewrite rules. The included `.htaccess` protects configuration and SQL files on Apache.
 
-<h3 align="center">Overview</h3>
+## Installation
 
-<h3 align="center"><a href="https://github.com/anditv21/panel/releases/tag/v1.6.1">README</a></h3>
+1. Upload the contents of `src` to the directory from which the panel should run.
+2. Place `DB.sql` and `migration.sql` either beside `setup.php`, one directory above it, or inside an `install` directory.
+3. Open `setup.php` in your browser.
+4. Select a fresh installation, enter the database and panel details, and create the first administrator.
+5. Keep `app/core/setup.lock` in place after a successful installation.
 
-<p align="center">
+The installer can create an empty database when the supplied database user has permission. On more restricted webspaces, create the database in the hosting control panel first and uncheck automatic creation.
 
-<img  src="https://i.imgur.com/VB2ial8.png" />
+If PHP cannot write to `app/core`, use **Download LocalConfig.php**, upload that file into `app/core`, and run the installer again. The application can use the included config templates directly, so no manual file renaming is required. Remove both setup files immediately if the host also prevents creation of the setup lock.
 
-</p>
-<p align="center">
-Default login: <code>admin</code>:<code>admin</code>
-</p>
+## Updating an existing installation
 
+The setup wizard does not download panel releases by itself. Upload the new files first using FTP/SFTP or your hosting control panel. On a VPS you can alternatively deploy them with Git. Do not overwrite `app/core/LocalConfig.php`.
 
+1. Back up the panel database.
+2. Upload the new panel files and the current combined `migration.sql`.
+3. Remove `app/core/setup.lock` intentionally.
+4. Open `setup.php` and select **Upgrade existing installation**.
+5. Check the detected settings and start the upgrade.
+6. The wizard applies `migration.sql` without replacing users or panel settings and creates `setup.lock` again.
 
+An upgrade never creates another administrator. A fresh installation is also refused when the selected database already contains tables.
 
-<h3>Setup/Issues/Help/FAQ/Loaders & API-Examples</h3>
-<p>Read the Wiki <a href="https://github.com/anditv21/panel/wiki"><b>here.</b></a></p>
+### Test the setup page
 
+Open `setup_test.php` to walk through the setup form on an already installed panel. It checks the server, submitted settings and database connection, but does not write configuration files, change permissions or modify the database.
 
+Remove `setup.php` and `setup_test.php` from the public server when you no longer need them. The setup lock prevents accidental installation changes in the meantime.
 
+### Configuration
 
-### Preview
-<details>
+The installer writes all normal configuration to `app/core/LocalConfig.php`, which is kept outside Git and works reliably with Apache and nginx. Real server environment variables take priority over this file, which also makes the same installation suitable for a later Docker deployment.
 
-<summary>Click here to see Preview</summary>
+Never commit database passwords, API keys, Discord secrets or webhook URLs.
 
-<p align="center">
+When using nginx, keep `DB.sql` and `migration.sql` outside the public webroot when possible. Otherwise add this to the server block:
 
-<a href="https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png"><img src="https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png" /></a>
+```nginx
+location ~ /(?:DB\.sql|migration\.sql)$ {
+    deny all;
+    return 404;
+}
+```
 
-<a href="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png"><img src="https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png" /></a>
+## Features
 
-<p>C# Loader (gamesense/old design)</p>
-<a href="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png"><img src="https://github.com/anditv21/panel/raw/main/.examples/CSharp-API-Example/img/readme1.png" /></a>
+### Authentication and security
 
+- Invite-only registration, which administrators can disable
+- Remember-login tokens with expiry and token management
+- Optional Discord two-factor authentication
+- Cloudflare Turnstile, hCaptcha, Google reCAPTCHA or disabled captcha
+- CSRF protection and rate limiting for sensitive actions
+- Ban and maintenance pages
 
-</details>
+### Users
 
+- Subscription activation using generated codes
+- Protected client download for subscribed users
+- Public profiles, display names, short profile bios and Discord avatars
+- Password changes and login/session management
+- User notifications and activity logs
+- Optional shoutbox with user muting
 
+### Support and administration
 
-### Features
+- User, ban and invite management
+- Subscription, invite and role gifts in their own navigation section
+- Password and HWID resets
+- Subscription freezing and invite waves
+- Client upload and panel status/version management
+- Shoutbox, Discord linking and Discord logging settings
+- Configurable captcha provider and custom API variables
+- Separate supporter permissions for common moderation tasks
 
-###### AUTH
+## API examples and help
 
-<details>
+API examples are available in the `.examples` directory. Additional setup notes and common issues are documented in the [project wiki](https://github.com/anditv21/panel/wiki).
 
-<summary>Click to see Auth Features</summary>
+## Credits
 
-<ul>
-
-<li>Login (Multiple device remember Login) (Screenshot: https://ibb.co/ky6PTjm)</li>
-
-<li>Register Invite only (can be deactivated) (Screenshot: https://ibb.co/hLd9b6D)</li>
-
-<li>Banned Page (Screenshot: https://ibb.co/JkmYRYC)</li>
-
-<li>Auth captcha using Cloudflare Turnstile, hCaptcha, Google`s reCaptcha or disabled (Read the <a href="https://github.com/anditv21/panel/wiki/Setup">wiki</a> for more information)</li>
-
-</ul>
-
-</details>
-
-
-
-###### USER
-
-<details>
-
-<summary>Click to see User Features</summary>
-
-<ul>
-
-Screenshot: https://i.ibb.co/KXtHyx6/brave-f-Vnvc-Fsth-B.png / https://i.ibb.co/K03QfWm/brave-m1q3lu7-IYF.png
-
-<li>ShoutBox (can be disabled from admin dashboard & users are muteable)</li>
-
-<li>Change password</li>
-
-<li>Activate subscription´s with code (Trail/30/90 days)</li>
-
-<li>Activate Trail subscription´s with code (3 days)</li>
-
-<li>Download loader (Needs a sub)</li>
-
-<li>Change display name (30day cooldown)</li>
-
-<li>Manage login tokens/cookies (requires password)</li>
-
-<li>Public user profile (https://bit.ly/3M6BKuQ)</li>
-
-<ul>
-
-<li>Get Profile Picture from Discord (only static)</li></ul>
-
-
-
-</ul>
-
-</details>
-
-
-
-###### USER-LOGS
-
-
-
-<details>
-
-<summary>Click to see a preview</summary>
-
-<img  src="https://i.ibb.co/GHbF6Ly/opera-Bei-I6vs-O9-Z.png">
-<li>Flushing logs (requires password)</li>
-</details>
-
-
-
-###### Support/Admin-Panel
-
-<details>
-
-<summary>Click to see Supporter/Admin-Panel Features</summary>
-
-<ul>
-
-<li>Screenshot: https://ibb.co/WpxRgg8</li>
-
-<h1>Admin only:</h1>
-
-<li>Disable Invite System</li>
-
-<li>Freeze all subscriptions (Beta)</li>
-
-<li>Gift user subscription</li>
-
-<li>Password Reset</li>
-
-<li>Set News</li>
-
-<li>Enable/Disable Discord Logs</li>
-
-<li>Enable/Disable Discord Link</li>
-
-<li>Enable/Disable Discord Re-Link</li>
-
-<li>Generate subscription code</li>
-
-<li>Ban/unban user</li>
-
-<li>Make user admin/non-admin </li>
-
-<li>Make user supporter/non-supp </li>
-
-<li>Ban-Management panel</li>
-
-<li>Set status ofline/online</li>
-
-<li>Set version/maintenance/non-maintenance</li>
-
-<li>ShoutBox</li>
-<ul>
-<li>Enable/Disable ShoutBox</li>
-<li>Flush ShoutBox</li>
-</ul>
-
-<li>User Invites</li>
-<ul>
-<li>Gift useres invites</li>
-<li>Invite wave (5 Invites)</li>
-</ul>
-
-
-
-
-<h1>Supporter:</h1>
-<li>View a users last known IP address </li>
-
-<li>Generate invite code</li>
-
-<li>Mute a user for the shoutbox</li>
-
-<li>Reset HWID</li>
-</details>
-
-
-
-### Credits
-  <details>
-
-<summary>Click to see Credits</summary>
-
-
-<ul>
-
-<li><a href="https://github.com/znixbtw/">@znixbtw</a> for his awesome original <a href="https://github.com/znixbtw/php-panel-v2/">panel</a>.</li>
-<li><a href="https://github.com/Phantom-1337/">@Phantom-1337</a> and <a href="https://github.com/sxck1337/">@sxck1337</a> for their cool themes.</li>
-
-
-
-
-</ul>
-
-
-
-</details>
-
-
+- [@znixbtw](https://github.com/znixbtw/) for the original [php-panel-v2](https://github.com/znixbtw/php-panel-v2/).
+- [@Phantom-1337](https://github.com/Phantom-1337/) and [@sxck1337](https://github.com/sxck1337/) for their themes.
