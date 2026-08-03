@@ -1,6 +1,6 @@
 # ⚡ User Management Panel
 
-An invite-only PHP user management panel with subscriptions, a protected client download and administration tools.
+A PHP user management panel with optional invite-only registration, subscriptions, a protected client download and administration tools.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ location ~ /(?:DB\.sql|migration\.sql)$ {
 
 ### Authentication and security
 
-- Invite-only registration, which administrators can disable
+- Optional invite-only registration
 - Remember-login tokens with expiry and token management
 - Optional Discord two-factor authentication
 - Cloudflare Turnstile, hCaptcha, Google reCAPTCHA or disabled captcha
@@ -89,9 +89,9 @@ location ~ /(?:DB\.sql|migration\.sql)$ {
 - Configurable captcha provider and custom API variables
 - Separate supporter permissions for common moderation tasks
 
-## API examples and help
+## API
 
-API examples are available in the `.examples` directory. Additional setup notes and common issues are documented in the [project wiki](https://github.com/anditv21/panel/wiki).
+The available requests and short examples are documented in [API.md](API.md).
 
 ## Credits
 
