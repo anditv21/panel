@@ -13,9 +13,17 @@ class Database {
 	protected function connect() {
 
 		try {
-			
-			$dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName;
-			$pdo = new PDO($dsn, $this->dbUser, $this->dbPass);
+
+			require_once __DIR__ . '/Environment.php';
+			Environment::load();
+
+			$dbHost = Environment::get('DB_HOST', $this->dbHost);
+			$dbUser = Environment::get('DB_USER', $this->dbUser);
+			$dbPass = Environment::get('DB_PASS', $this->dbPass);
+			$dbName = Environment::get('DB_NAME', $this->dbName);
+
+			$dsn = 'mysql:host=' . $dbHost . ';dbname=' . $dbName;
+			$pdo = new PDO($dsn, $dbUser, $dbPass);
 			$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 			return $pdo;
 			
