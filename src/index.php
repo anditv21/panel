@@ -69,7 +69,7 @@ Util::head("Main");
                                  <h5 class="card-title"><?php Util::display(
                                      $System->getSystemData()->version
                                  ); ?></h5>
-                                 <p class="stats-text">Loader version</p>
+                                 <p class="stats-text">Client version</p>
                               </div>
                               <div class="stats-icon change-success">
                                  <i class="material-icons">tag</i>
@@ -204,7 +204,7 @@ Util::head("Main");
             $loginfails = Session::get("loginfails");
 if ($loginfails > 0) : ?>
             <br>
-            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/img/warning.png" width="15" height="15" data-original-title="Resets after every successful login."></em>
+            <em style="color: red"; >Security Warning: <?php Util::display(Util::securevar($loginfails)); ?> failed login attempts <img title="" data-toggle="tooltip" data-placement="top" src="assets/images/warning.webp" width="15" height="15" data-original-title="Resets after every successful login."></em>
 
             <?php endif; ?>
 </body>

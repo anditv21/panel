@@ -67,6 +67,7 @@ ob_end_flush();
                                     <div class="card-body">
                                        <?php if (Session::isAdmin()) : ?>
                                           <form action="<?= Util::securevar($_SERVER["PHP_SELF"]); ?>" method="post">
+                                             <?php Util::csrfField(); ?>
                                              <label>Select a user:</label><br>
                                              <select name="ban" class="form-control form-control-sm">
                                                 <br>
@@ -92,6 +93,7 @@ ob_end_flush();
 
                   <div class="card">
                      <div class="card-body">
+                        <div class="table-responsive">
                         <table class="rounded table">
                            <thead>
                               <tr>
@@ -150,6 +152,7 @@ endforeach;
 ?>
                            </tbody>
                         </table>
+                        </div>
                      </div>
                   </div>
 

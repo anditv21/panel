@@ -6,7 +6,8 @@
 
 // ** Every block should be wrapped in $this->checkadmin(); check **
 
-require_once SITE_ROOT . '/app/core/Database.php';
+$databaseFile = file_exists(SITE_ROOT . '/app/core/Database.php') ? SITE_ROOT . '/app/core/Database.php' : SITE_ROOT . '/app/core/Database';
+require_once $databaseFile;
 require_once SITE_ROOT . "/app/require.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 
@@ -22,6 +23,45 @@ class Admin extends Database
 
             $result = $this->statement->fetchAll();
             return $result;
+        }
+    }
+
+    protected function getUsersPaginated($offset, $limit, $search = '')
+    {
+        if ($this->checkadmin() or $this->checksupp()) {
+            if (!empty($search)) {
+                $search = "%$search%";
+                $this->prepare('SELECT * FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `lastIP` LIKE ? OR `hwid` LIKE ? ORDER BY uid ASC LIMIT ?, ?');
+                $this->statement->bindParam(1, $search);
+                $this->statement->bindParam(2, $search);
+                $this->statement->bindParam(3, $search);
+                $this->statement->bindParam(4, $search);
+                $this->statement->bindParam(5, $offset, PDO::PARAM_INT);
+                $this->statement->bindParam(6, $limit, PDO::PARAM_INT);
+            } else {
+                $this->prepare('SELECT * FROM `users` ORDER BY uid ASC LIMIT ?, ?');
+                $this->statement->bindParam(1, $offset, PDO::PARAM_INT);
+                $this->statement->bindParam(2, $limit, PDO::PARAM_INT);
+            }
+
+            $this->statement->execute();
+            return $this->statement->fetchAll();
+        }
+    }
+
+    protected function getUsersCount($search = '')
+    {
+        if ($this->checkadmin() or $this->checksupp()) {
+            if (!empty($search)) {
+                $search = "%$search%";
+                $this->prepare('SELECT COUNT(*) FROM `users` WHERE `uid` LIKE ? OR `username` LIKE ? OR `lastIP` LIKE ? OR `hwid` LIKE ?');
+                $this->statement->execute([$search, $search, $search, $search]);
+            } else {
+                $this->prepare('SELECT COUNT(*) FROM `users`');
+                $this->statement->execute();
+            }
+
+            return $this->statement->fetchColumn();
         }
     }
 
@@ -49,6 +89,16 @@ class Admin extends Database
     protected function pwreset($hashedPassword, $username)
     {
         if ($this->checkadmin()) {
+            $this->prepare('SELECT `username` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+
+            if (!$this->statement->fetch()) {
+                return false;
+            }
+
+            $this->prepare('DELETE FROM `login` WHERE `username` = ?');
+            $this->statement->execute([$username]);
+
             $this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
             $this->statement->execute([$hashedPassword, $username]);
 
@@ -59,10 +109,13 @@ class Admin extends Database
 
             $user->log($currentUsername, "Reset the password for $oldUsername", user_logs);
 
-            $user->loguser($currentUsername, "Password resetted by $currentUsername", false);
+            $user->loguser($oldUsername, "Password reset by $currentUsername", false);
+            $user->setNewNotification($oldUsername, "Your password was reset by an administrator.");
             $this->admin_log(Session::get("username"), "Reset the password for $oldUsername");
             return true;
         }
+
+        return false;
     }
 
     protected function bannreason($reason, $uid)
@@ -75,75 +128,60 @@ class Admin extends Database
         }
     }
 
-    protected function subgift($name, $sub, $time)
+    protected function subgift($name, $time)
     {
-        if ($this->checkadmin()) {
-            if ($sub <= 0) {
-                if ($time === 'LT') {
-                    $time = '24000';
-                }
-                if ($time === 'T') {
-                    $time = '7';
-                }
-                if ($time === '-') {
-                    return false;
-                }
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
 
-                $date = new DateTime(); // Get current date
-                $days = 'P' . $time . 'D';
-                $date->add(new DateInterval($days)); // Adds custom days
-                $subTime = $date->format('Y-m-d'); // Format Year-Month-Day
+        $username = Session::get('username');
+        $user = new UserController();
 
-                $this->prepare(
-                    'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
-                );
-                $this->statement->execute([$subTime, $name]);
+        try {
+            $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+            $this->statement->execute([$name]);
+            $currentSub = $this->statement->fetch();
 
-                $user = new UserController();
-                $username = Session::get('username');
-                $user->loguser($name, "$username gifted you a $time day/s sub");
-            } else {
-                if ($time === '-') {
-                    $this->prepare(
-                        'UPDATE `users` SET `sub` = NULL WHERE  `username` = ?'
-                    );
-                    $this->statement->execute([$name]);
-
-                    $username = Session::get('username');
-                    $user = new UserController();
-                    $user->log($username, "Removed $name`s sub", admin_logs);
-                    $this->admin_log(Session::get("username"), "Removed $name`s sub");
-                    $user->loguser($name, "$username removed your sub");
-                } else {
-                    if ($time === 'LT') {
-                        $time = '24000';
-                    }
-                    if ($time === 'T') {
-                        $time = '7';
-                    }
-
-                    $this->prepare(
-                        'SELECT `sub` FROM `users` WHERE `username` = ?'
-                    );
-                    $this->statement->execute([$name]);
-                    $date = $this->statement->fetch();
-                    $date1 = date_create($date->sub);
-                    $days = 'P' . $time . 'D';
-                    $date1->add(new DateInterval($days));
-                    $subTime = $date1->format('Y-m-d'); // Format Year-Month-Day
-
-                    $this->prepare(
-                        'UPDATE `users` SET `sub` = ? WHERE  `username` = ?'
-                    );
-                    $this->statement->execute([$subTime, $name]);
-
-                    $user = new UserController();
-                    $username = Session::get('username');
-                    $user->log($username, "Gifted a $time day/s sub.  \n to: $name", admin_logs);
-                    $user->loguser($name, "$username gifted you a $time day/s sub", false);
-                    $this->admin_log(Session::get("username"), "Gifted a $time day/s sub.  \n to: $name");
-                }
+            if (!$currentSub) {
+                return "User was not found.";
             }
+
+            if ($time === '-') {
+                $this->prepare('UPDATE `users` SET `sub` = NULL WHERE `username` = ?');
+                $this->statement->execute([$name]);
+                $user->log($username, "Removed $name's sub", admin_logs);
+                $user->loguser($name, "$username removed your sub", false);
+                $user->setNewNotification($name, "Your subscription was removed by an administrator.");
+                $this->admin_log($username, "Removed $name's sub");
+                return false;
+            }
+
+            if ($time === 'LT') {
+                $time = 24000;
+            } elseif ($time === 'T') {
+                $time = 3;
+            } elseif (!ctype_digit((string) $time) || (int) $time < 1 || (int) $time > 24000) {
+                return "Please enter a valid number of days.";
+            }
+
+            $date = new DateTime('today');
+            if (!empty($currentSub->sub) && new DateTime($currentSub->sub) > $date) {
+                $date = new DateTime($currentSub->sub);
+            }
+
+            $date->add(new DateInterval('P' . (int) $time . 'D'));
+            $subTime = $date->format('Y-m-d');
+
+            $this->prepare('UPDATE `users` SET `sub` = ? WHERE `username` = ?');
+            $this->statement->execute([$subTime, $name]);
+
+            $user->log($username, "Gifted a $time day/s sub to $name", admin_logs);
+            $user->loguser($name, "$username gifted you a $time day/s sub", false);
+            $user->setNewNotification($name, "Your subscription was extended by $time day/s.");
+            $this->admin_log($username, "Gifted a $time day/s sub to $name");
+            return false;
+        } catch (Exception $e) {
+            return "Subscription could not be changed.";
         }
     }
 
@@ -283,7 +321,7 @@ class Admin extends Database
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
 
-            if ($userData->admin == 1) {
+            if (!$userData || $userData->admin == 1) {
                 return;
             }
 
@@ -301,12 +339,12 @@ class Admin extends Database
             if ($banned) {
                 $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Banned by $username", false);
-                $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
+                $this->admin_log($username, "Banned {$userData->username} ($uid)");
                 // Delete shoutbox entries from banned user
                 $this->prepare('DELETE FROM `shoutbox` WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
             } else {
-                $user->log($username, "Banned {$userData->username} ($uid)", admin_logs);
+                $user->log($username, "Unbanned {$userData->username} ($uid)", admin_logs);
                 $user->loguser($userData->username, "Unbanned by $username", false);
                 $this->admin_log($username, "Unbanned {$userData->username} ($uid)");
             }
@@ -322,19 +360,19 @@ class Admin extends Database
             }
 
             // Check if user is an admin
-            $this->prepare('SELECT `admin` FROM `users` WHERE `uid` = ?');
+            $this->prepare('SELECT `admin`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set admin status to opposite of current status
             $admin = (int)!$userData->admin;
 
             $this->prepare('UPDATE `users` SET `admin` = ?, `supp` = ? WHERE `uid` = ?');
             $this->statement->execute([$admin, $admin, $uid]);
-
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
 
             $username = Session::get('username');
             $user = new UserController();
@@ -363,6 +401,10 @@ class Admin extends Database
             $this->prepare('SELECT `supp`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set supp status to opposite of current status
             $supp = $userData->supp ? 0 : 1;
@@ -396,19 +438,19 @@ class Admin extends Database
             }
 
             // Check if user is muted
-            $this->prepare('SELECT `muted` FROM `users` WHERE `uid` = ?');
+            $this->prepare('SELECT `muted`, `username` FROM `users` WHERE `uid` = ?');
             $this->statement->execute([$uid]);
             $userData = $this->statement->fetch();
+
+            if (!$userData) {
+                return;
+            }
 
             // Set mute status to opposite of current status
             $muted = (int)!$userData->muted;
 
             $this->prepare('UPDATE `users` SET `muted` = ? WHERE `uid` = ?');
             $this->statement->execute([$muted, $uid]);
-
-            $this->prepare('SELECT `username` FROM `users` WHERE `uid` = ?');
-            $this->statement->execute([$uid]);
-            $userData = $this->statement->fetch();
 
             $username = Session::get('username');
             $user = new UserController();
@@ -764,8 +806,8 @@ class Admin extends Database
             $this->statement->execute([$invites, $username]);
             $adminusername = Session::get('username');
             $user = new UserController();
-            $user->log($adminusername, "Giftet $invites\s to $username", system_logs);
-            $this->admin_log($adminusername, "Giftet $invites\s to $username");
+            $user->log($adminusername, "Gifted $invites invites to $username", system_logs);
+            $this->admin_log($adminusername, "Gifted $invites invites to $username");
         }
     }
 
@@ -817,26 +859,59 @@ class Admin extends Database
 
     protected function ip_whitelist($ip, $username)
     {
-        if ($this->checkadmin() && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
-            $this->statement->execute([$ip, $username]);
-        } else {
-            return "This is not a valid ipv4.";
+        $ip = trim($ip);
+
+        if (!$this->checkadmin()) {
+            return "You do not have permission to whitelist IP addresses.";
         }
+
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return "This is not a valid IP address.";
+        }
+
+        $ip = inet_ntop(inet_pton($ip));
+
+        $this->prepare('SELECT `ip` FROM `ip_whitelist` WHERE `ip` = ?');
+        $this->statement->execute([$ip]);
+
+        if ($this->statement->fetch()) {
+            return "This IP address is already whitelisted.";
+        }
+
+        $this->prepare('INSERT INTO `ip_whitelist` (`ip`, `createdBy`) VALUES (?, ?)');
+        $this->statement->execute([$ip, $username]);
+
+        $user = new UserController();
+        $user->log($username, "Whitelisted IP: $ip", admin_logs);
+        $this->admin_log($username, "Whitelisted IP: $ip");
+        return "IP address whitelisted successfully.";
     }
 
     protected function unlist_ip($ip, $username)
     {
-        if ($this->checkadmin()) {
-            $this->prepare('DELETE FROM `ip_whitelist` WHERE `ip` = ?');
-            $this->statement->execute([$ip]);
+        $ip = trim($ip);
 
-            $user = new UserController();
-            $user->log($username, "Added or removed whitelist $ip", system_logs);
-            $user->loguser($username, "Added or removed whitelist $ip");
-        } else {
-            return "This is not a valid ipv4.";
+        if (!$this->checkadmin()) {
+            return "You do not have permission to remove whitelisted IP addresses.";
         }
+
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return "This is not a valid IP address.";
+        }
+
+        $ip = inet_ntop(inet_pton($ip));
+
+        $this->prepare('DELETE FROM `ip_whitelist` WHERE `ip` = ?');
+        $this->statement->execute([$ip]);
+
+        if ($this->statement->rowCount() < 1) {
+            return "This IP address is not whitelisted.";
+        }
+
+        $user = new UserController();
+        $user->log($username, "Removed IP from whitelist: $ip", admin_logs);
+        $this->admin_log($username, "Removed IP from whitelist: $ip");
+        return "IP address removed successfully.";
     }
 
     protected function IPArray()
@@ -976,67 +1051,29 @@ class Admin extends Database
                 $os_platform = $value;
             }
         }
+
+        if ($os_platform === "Windows 10" && isset($_COOKIE['platformVersion'])) {
+            $platform_version = explode('.', Util::securevar($_COOKIE['platformVersion']));
+
+            if ((int)$platform_version[0] >= 13) {
+                $os_platform = "Windows 11";
+            }
+        }
+
         return $os_platform;
     }
 
 
     public function getip(): string
     {
-        $headers = [
-            'HTTP_CLIENT_IP',
-            'HTTP_X_FORWARDED_FOR',
-            'HTTP_X_FORWARDED',
-            'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR',
-            'REMOTE_ADDR',
-            'HTTP_X_REAL_IP'
-        ];
+        $ip = RateLimiter::getClientIp();
+        $serverIp = isset($_SERVER['SERVER_ADDR']) ? Util::securevar($_SERVER['SERVER_ADDR']) : '';
 
-        // Initialize the server IP variable
-        $serverIp = Util::securevar($_SERVER['SERVER_ADDR']);
-
-        // Fetch whitelisted IPs
-        $whitelistedIPs = $this->getWhitelistedIPs();
-
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    // Check if it's an IPv4 address
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                        if ($ip === $serverIp) {
-                            return 'localhost';
-                        } else {
-                            return $ip; // Return IPv4 address
-                        }
-                    }
-                }
-            }
+        if ($ip === $serverIp || in_array($ip, $this->getWhitelistedIPs())) {
+            return 'localhost';
         }
 
-        // If IPv4 not found or empty, proceed with IPv6
-        foreach ($headers as $header) {
-            if (array_key_exists($header, $_SERVER)) {
-                $ip = filter_var($_SERVER[$header], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
-                if ($ip !== false) {
-                    if (in_array($ip, $whitelistedIPs)) {
-                        return 'localhost';
-                    }
-
-                    if ($ip === $serverIp) {
-                        return 'localhost';
-                    } else {
-                        return $ip; // Return IPv6 address
-                    }
-                }
-            }
-        }
-
-        return '';
+        return $ip === 'unknown' ? '' : $ip;
     }
 
     public function getWhitelistedIPs(): array
@@ -1047,6 +1084,111 @@ class Admin extends Database
         return $result;
     }
 
+    protected function getVariablesArray()
+    {
+        if (!$this->checkadmin()) {
+            return [];
+        }
+
+        try {
+            $this->prepare('SELECT * FROM `variables` ORDER BY `id` ASC');
+            $this->statement->execute();
+            return $this->statement->fetchAll();
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    protected function createVariableRecord($name, $content)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/', $name)) {
+            return "Variable name is invalid.";
+        }
+
+        try {
+            $this->prepare('SELECT `id` FROM `variables` WHERE `name` = ?');
+            $this->statement->execute([$name]);
+            if ($this->statement->fetch()) {
+                return "Variable with this name already exists.";
+            }
+
+            $this->prepare('INSERT INTO `variables` (`name`, `content`) VALUES (?, ?)');
+            $this->statement->execute([$name, $content]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Created variable $name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be created.";
+        }
+    }
+
+    protected function editVariableRecord($id, $name, $content)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/', $name)) {
+            return "Variable name is invalid.";
+        }
+
+        try {
+            $this->prepare('SELECT * FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+            $variable = $this->statement->fetch();
+
+            if (!$variable) {
+                return "Variable was not found.";
+            }
+
+            $this->prepare('SELECT `id` FROM `variables` WHERE `name` = ? AND `id` != ?');
+            $this->statement->execute([$name, $id]);
+            if ($this->statement->fetch()) {
+                return "Variable with this name already exists.";
+            }
+
+            $this->prepare('UPDATE `variables` SET `name` = ?, `content` = ? WHERE `id` = ?');
+            $this->statement->execute([$name, $content, $id]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Updated variable $name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be updated.";
+        }
+    }
+
+    protected function deleteVariableRecord($id)
+    {
+        if (!$this->checkadmin()) {
+            return "Access denied.";
+        }
+
+        try {
+            $this->prepare('SELECT `name` FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+            $variable = $this->statement->fetch();
+
+            if (!$variable) {
+                return "Variable was not found.";
+            }
+
+            $this->prepare('DELETE FROM `variables` WHERE `id` = ?');
+            $this->statement->execute([$id]);
+
+            $username = Session::get('username');
+            $this->admin_log($username, "Deleted variable $variable->name");
+            return false;
+        } catch (PDOException $e) {
+            return "Variable could not be deleted.";
+        }
+    }
+
     protected function logarray()
     {
         $this->prepare("SELECT * FROM `adminlogs` ORDER BY `id` DESC");
@@ -1054,5 +1196,48 @@ class Admin extends Database
 
         $result = $this->statement->fetchAll();
         return $result;
+    }
+
+    protected function adminLogsPaginated($offset, $limit, $search = '')
+    {
+        if (!$this->checkadmin()) {
+            return [];
+        }
+
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT * FROM `adminlogs` WHERE `username` LIKE ? OR `action` LIKE ? OR `ip` LIKE ? OR `time` LIKE ? ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $search);
+            $this->statement->bindParam(2, $search);
+            $this->statement->bindParam(3, $search);
+            $this->statement->bindParam(4, $search);
+            $this->statement->bindParam(5, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(6, $limit, PDO::PARAM_INT);
+        } else {
+            $this->prepare('SELECT * FROM `adminlogs` ORDER BY `id` DESC LIMIT ?, ?');
+            $this->statement->bindParam(1, $offset, PDO::PARAM_INT);
+            $this->statement->bindParam(2, $limit, PDO::PARAM_INT);
+        }
+
+        $this->statement->execute();
+        return $this->statement->fetchAll();
+    }
+
+    protected function adminLogsCount($search = '')
+    {
+        if (!$this->checkadmin()) {
+            return 0;
+        }
+
+        if (!empty($search)) {
+            $search = "%$search%";
+            $this->prepare('SELECT COUNT(*) FROM `adminlogs` WHERE `username` LIKE ? OR `action` LIKE ? OR `ip` LIKE ? OR `time` LIKE ?');
+            $this->statement->execute([$search, $search, $search, $search]);
+        } else {
+            $this->prepare('SELECT COUNT(*) FROM `adminlogs`');
+            $this->statement->execute();
+        }
+
+        return (int) $this->statement->fetchColumn();
     }
 }

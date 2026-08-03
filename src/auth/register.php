@@ -4,6 +4,7 @@ require_once '../app/controllers/SystemController.php';
 
 $user = new UserController();
 $system = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -11,15 +12,21 @@ if (Session::isLogged()) {
     Util::redirect('/');
 }
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-    }
+    Util::csrfCheck();
 
-    $captcha = $system->vaildateCaptcha($data);
-    if($captcha == true) {
-        $error = $user->registerUser($data);
+    $data = Util::securevar($_POST);
+    $clientIp = RateLimiter::getClientIp();
+    $registerLimit = $rateLimiter->hit('auth.register.ip', $clientIp, 12, 900, 1800);
+
+    if (!$registerLimit['allowed']) {
+        $error = 'Too many registration attempts. Please wait ' . $registerLimit['retry_after'] . ' seconds.';
     } else {
-        $error = "Captcha failed or not completed";
+        $captcha = $system->vaildateCaptcha($data);
+        if ($captcha == true) {
+            $error = $user->registerUser($data);
+        } else {
+            $error = "Captcha failed or not completed";
+        }
     }
 }
 
@@ -34,7 +41,7 @@ Util::navbar();
 <head>
     <meta charset='UTF-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'>
     <title></title>
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/config.css" rel="stylesheet">
@@ -68,6 +75,7 @@ Util::navbar();
                         </center>
                     <?php endif; ?>
                     <form method='POST' action='<?php Util::display($_SERVER['PHP_SELF']); ?>'>
+                        <?php Util::csrfField(); ?>
                         <div class='form-input-icon mb-3 mt-4' data-aos='fade-left' data-aos-duration='1000'>
                             <i class='fas fa-user'></i>
                             <input class='auth-input' type='text' placeholder='Username' name='username' autocomplete='off' minlength='3' required=''>

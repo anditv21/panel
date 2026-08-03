@@ -4,11 +4,27 @@
 // Only Protected methods
 // * Interats with all tables *
 
-require_once SITE_ROOT . "/app/core/Database.php";
+$databaseFile = file_exists(SITE_ROOT . '/app/core/Database.php') ? SITE_ROOT . '/app/core/Database.php' : SITE_ROOT . '/app/core/Database';
+require_once $databaseFile;
 require_once SITE_ROOT . "/app/require.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class API extends Database
 {
+    protected function getSubscriptionDays($subDate)
+    {
+        if (empty($subDate)) {
+            return 0;
+        }
+
+        try {
+            $currentDate = new DateTime('today');
+            $subscriptionDate = new DateTime($subDate);
+            return (int) $currentDate->diff($subscriptionDate)->format('%r%a');
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
     protected function userAPI($username, $password, $hwid)
     {
         // fetch username
@@ -23,15 +39,27 @@ class API extends Database
             // If password is correct
             if (password_verify($password, $hashedPassword)) {
                 if ($row->hwid === null) {
-                    $this->prepare(
-                        "UPDATE `users` SET `hwid` = ? WHERE `username` = ?"
-                    );
-                    $this->statement->execute([$hwid, $username]);
+                    try {
+                        $this->prepare("UPDATE `users` SET `hwid` = ? WHERE `username` = ?");
+                        $this->statement->execute([$hwid, $username]);
+                        $row->hwid = $hwid;
+                    } catch (PDOException $e) {
+                        if (isset($e->errorInfo[1]) && (int) $e->errorInfo[1] === 1062) {
+                            return [
+                                "status" => "failed",
+                                "error" => "HWID is already linked to another account"
+                            ];
+                        }
+
+                        throw $e;
+                    }
                 }
 
                 $uid = $row->uid;
                 $path = IMG_DIR . $uid;
-                if (@getimagesize($path . ".png")) {
+                if (@getimagesize($path . ".webp")) {
+                    $avatarurl = IMG_URL . $uid . ".webp?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".png")) {
                     $avatarurl = IMG_URL . $uid . ".png?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".jpg")) {
                     $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
@@ -44,19 +72,30 @@ class API extends Database
                         "/assets/images/avatars/Portrait_Placeholder.png";
                 }
 
-                $this->prepare("SELECT * FROM `system`");
+                $this->prepare("SELECT `frozen`, `status`, `version`, `maintenance` FROM `system`");
                 $this->statement->execute();
                 $res = $this->statement->fetch();
 
+                if (!$res) {
+                    error_log("User API could not find the system settings");
+                    $res = (object) [
+                        "frozen" => 0,
+                        "status" => "",
+                        "version" => "",
+                        "maintenance" => 0
+                    ];
+                }
+
                 $response = [
                     "status" => "success",
-                    "uid" => $row->uid,
+                    "uid" => (int) $row->uid,
                     "username" => $row->username,
-                    "hwid" => $row->hwid,
-                    "admin" => $row->admin,
-                    "supp" => $row->supp,
-                    "sub" => $row->sub,
-                    "banned" => $row->banned,
+                    "displayname" => $row->displayname,
+                    "hwid" => is_null($row->hwid) ? "null" : $row->hwid,
+                    "admin" => (int) $row->admin,
+                    "supp" => (int) $row->supp,
+                    "sub" => $this->getSubscriptionDays($row->sub),
+                    "banned" => (int) $row->banned,
                     "invitedBy" => $row->invitedBy,
                     "createdAt" => $row->createdAt,
                     "avatarurl" => $avatarurl,
@@ -65,6 +104,7 @@ class API extends Database
                     "Systemversion" => $res->version,
                     "Systemmaintenance" => $res->maintenance,
                 ];
+                $response = $this->appendVariables($response);
             } else {
                 // Wrong pass, user exists
                 $response = [
@@ -75,6 +115,29 @@ class API extends Database
         } else {
             // Wrong username, user doesnt exists
             $response = ["status" => "failed", "error" => "Invalid username"];
+        }
+
+        return $response;
+    }
+
+    protected function appendVariables($response)
+    {
+        try {
+            $this->prepare('SELECT `name`, `content` FROM `variables` ORDER BY `id` ASC');
+            $this->statement->execute();
+            $variables = $this->statement->fetchAll();
+
+            foreach ($variables as $variable) {
+                if (is_numeric($variable->content)) {
+                    $response[$variable->name] = strpos($variable->content, '.') !== false
+                        ? (float) $variable->content
+                        : (int) $variable->content;
+                } else {
+                    $response[$variable->name] = $variable->content;
+                }
+            }
+        } catch (PDOException $e) {
+            return $response;
         }
 
         return $response;
@@ -95,7 +158,9 @@ class API extends Database
             } else {
                 $uid = $result['uid'];
                 $path = IMG_DIR . $uid;
-                if (@getimagesize($path . ".png")) {
+                if (@getimagesize($path . ".webp")) {
+                    $avatarurl = IMG_URL . $uid . ".webp?" . Util::randomCode(5);
+                } elseif (@getimagesize($path . ".png")) {
                     $avatarurl = IMG_URL . $uid . ".png?" . Util::randomCode(5);
                 } elseif (@getimagesize($path . ".jpg")) {
                     $avatarurl = IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
@@ -140,9 +205,9 @@ class API extends Database
     protected function count_users()
     {
         try {
-            $this->prepare("SELECT * FROM `users`");
+            $this->prepare("SELECT COUNT(*) FROM `users`");
             $this->statement->execute();
-            $usercount = $this->statement->rowCount();
+            $usercount = (int) $this->statement->fetchColumn();
             $response = [
                 "status" => "success",
                 "text" => $usercount
@@ -179,43 +244,39 @@ class API extends Database
     protected function generate_sub($dcid, $time)
     {
         try {
-            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `username`, `admin` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                $response = [
+                return [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
 
-            $code = "$time-" . Util::randomCode(20);
-            if ($result["admin"]) {
-                $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
-                $this->statement->execute([$code, $result["username"]]);
-                $user = new UserController();
-                $user->log($result["username"], "Generated a sub", 'admin_logs');
-
-                $response = [
-                    "status" => "success",
-                    "text" => $code
-                ];
-            } elseif (empty($result["admin"])) {
-                $response = [
-                    "status" => "failed",
-                    "error" => "No user with the provided Discord ID was found"
-                ];
-            } else {
-                $response = [
+            if (empty($result["admin"])) {
+                return [
                     "status" => "failed",
                     "error" => "You don't have the necessary permissions to perform this action."
                 ];
             }
+
+            $code = "$time-" . Util::randomCode(20);
+            $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
+            $this->statement->execute([$code, $result["username"]]);
+            $user = new UserController();
+            $user->log($result["username"], "Generated a sub", 'admin_logs');
+
+            $response = [
+                "status" => "success",
+                "text" => $code
+            ];
         } catch (Exception $e) {
+            error_log("Bot subscription generation failed: " . $e->getMessage());
             $response = [
                 "status" => "failed",
-                "error" => $e->getMessage()
+                "error" => "Subscription generation failed"
             ];
         }
         return $response;
@@ -224,46 +285,80 @@ class API extends Database
     protected function generate_inv($dcid)
     {
         try {
-            $this->prepare("SELECT * FROM `users` WHERE `dcid` = ?");
+            $this->prepare("SELECT `username`, `admin` FROM `users` WHERE `dcid` = ?");
             $this->statement->execute([$dcid]);
             $result = $this->statement->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                $response = [
+                return [
                     "status" => "failed",
                     "error" => "No user with the provided Discord ID was found"
                 ];
             }
 
-            $code = Util::randomCode(20);
-            if ($result["admin"]) {
-                $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
-                $this->statement->execute([$code, $result["username"]]);
-                $user = new UserController();
-                $user->log($result["username"], "Generated an invitation", 'admin_logs');
-
-                $response = [
-                    "status" => "success",
-                    "text" => $code
-                ];
-            } elseif (empty($result["admin"] || $result["supp"])) {
-                $response = [
-                    "status" => "failed",
-                    "error" => "No user with the provided Discord ID was found"
-                ];
-            } else {
-                $response = [
+            if (empty($result["admin"])) {
+                return [
                     "status" => "failed",
                     "error" => "You don't have the necessary permissions to perform this action."
                 ];
             }
+
+            $code = Util::randomCode(20);
+            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
+            $this->statement->execute([$code, $result["username"]]);
+            $user = new UserController();
+            $user->log($result["username"], "Generated an invitation", 'admin_logs');
+
+            $response = [
+                "status" => "success",
+                "text" => $code
+            ];
         } catch (Exception $e) {
+            error_log("Bot invitation generation failed: " . $e->getMessage());
             $response = [
                 "status" => "failed",
-                "error" => $e->getMessage()
+                "error" => "Invitation generation failed"
             ];
         }
         return $response;
+    }
+
+    protected function getNotifications()
+    {
+        try {
+            $this->prepare('SELECT `id`, `dcid`, `message`, `time` AS `timestamp`, `delivered` FROM `notifications` WHERE `delivered` != 1 ORDER BY `time` DESC');
+            $this->statement->execute();
+            $notifications = $this->statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'status' => 'success',
+                'notifications' => $notifications
+            ];
+        } catch (PDOException $e) {
+            return [
+                'status' => 'failed',
+                'error' => 'Database error',
+                'notifications' => []
+            ];
+        }
+    }
+
+    protected function setDelivered($id)
+    {
+        try {
+            $this->prepare('SELECT `id` FROM `notifications` WHERE `id` = ?');
+            $this->statement->execute([(int) $id]);
+
+            if (!$this->statement->fetch()) {
+                return ['status' => 'failed', 'error' => 'Notification not found'];
+            }
+
+            $this->prepare('UPDATE `notifications` SET `delivered` = 1 WHERE `id` = ?');
+            $this->statement->execute([(int) $id]);
+            return ['status' => 'success'];
+        } catch (PDOException $e) {
+            return ['status' => 'failed', 'error' => 'Database error'];
+        }
     }
 
     protected function getWhitelistedIPs(): array
@@ -274,8 +369,7 @@ class API extends Database
             $result = $this->statement->fetchAll(PDO::FETCH_COLUMN);
             return $result;
         } catch (PDOException $e) {
-
-            echo "Error: " . $e->getMessage();
+            error_log("IP whitelist error: " . $e->getMessage());
             return [];
         }
     }

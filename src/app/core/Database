@@ -7,22 +7,38 @@ class Database {
 	private $dbPass = '';
 	private $dbName = '';
 
+	protected $pdo;
 	protected $statement;
 	protected $error;
 
 	protected function connect() {
 
+		if ($this->pdo !== null) {
+			return $this->pdo;
+		}
+
 		try {
-			
-			$dsn = 'mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName;
-			$pdo = new PDO($dsn, $this->dbUser, $this->dbPass);
-			$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-			return $pdo;
+			require_once __DIR__ . '/Environment.php';
+			Environment::load();
+
+			$dbHost = Environment::get('DB_HOST', $this->dbHost);
+			$dbPort = Environment::get('DB_PORT', '3306');
+			$dbUser = Environment::get('DB_USER', $this->dbUser);
+			$dbPass = Environment::get('DB_PASS', $this->dbPass);
+			$dbName = Environment::get('DB_NAME', $this->dbName);
+
+			$dsn = 'mysql:host=' . $dbHost . ';port=' . $dbPort . ';dbname=' . $dbName . ';charset=utf8mb4';
+			$this->pdo = new PDO($dsn, $dbUser, $dbPass, [
+				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+				PDO::ATTR_PERSISTENT => false,
+			]);
+			return $this->pdo;
 			
 		} catch(PDOException $e) {
 
-			print "Error!: " . $e->getMessage() . "<br/>";
-			die();
+			error_log('Database connection failed: ' . $e->getMessage());
+			die('Database connection error. Please check your configuration.');
 
 		}
 

@@ -11,7 +11,7 @@ class UserController extends Users
 {
     public function createUserSession($user)
     {
-        //Session::init();
+        Session::regenerate();
         Session::set("login", true);
         Session::set("uid", (int) $user->uid);
         Session::set("username", $user->username);
@@ -36,16 +36,18 @@ class UserController extends Users
         if ($log) {
             $this->log($username, "Logged out", auth_logs);
         }
-        Util::redirect("/auth/login.php?action=logout");
+
+        if (isset($_COOKIE['login_cookie'])) {
+            $this->revokeRememberToken(Util::securevar($_COOKIE['login_cookie']));
+        }
+
+        Util::clearLoginCookie();
+        Session::destroy();
+        Util::redirect("/auth/login.php");
     }
 
 
 
-
-    public function getUserArray()
-    {
-        return $this->UserArray();
-    }
 
     public function banreason($username)
     {
@@ -62,6 +64,16 @@ class UserController extends Users
     {
         $result = $this->logarray($username);
         return $result;
+    }
+
+    public function getLogsPaginated($username, $offset, $limit, $search = '')
+    {
+        return $this->logsPaginated($username, $offset, $limit, $search);
+    }
+
+    public function getLogsCount($username, $search = '')
+    {
+        return $this->logsCount($username, $search);
     }
 
     public function flush($password)
@@ -198,12 +210,19 @@ class UserController extends Users
 
                 $this->addrememberToken($token, $username);
 
-                setcookie("login_cookie", $token, time() + 31556926, '/');
+                Util::setLoginCookie($token, Util::getRememberTokenExpiry(date('Y-m-d')));
                 $_SESSION["username"] = $username;
                 $this->log($username, "Logged in", auth_logs);
                 $this->loglogin($token);
                 $this->resetfails($username);
-                Util::redirect("/index.php");
+                $ip = $this->getip();
+                $this->setNewNotification($username, "New login on your account from [$ip](" . SITE_URL . SUB_DIR . "/user/lookup.php?ip=$ip).");
+
+                if (Util::has2faSolved($token)) {
+                    Util::redirectAfterLogin();
+                } else {
+                    Util::redirect("/auth/2fa.php");
+                }
             } else {
                 $this->loginfail($username);
                 if (!$this->doesthisuserexist($username)) {
@@ -233,9 +252,19 @@ class UserController extends Users
             // Session start
             $this->createUserSession($result);
             $username = Session::get("username");
+
+            if (!empty($result->rememberTokenExpiresAt)) {
+                Util::setLoginCookie($token, $result->rememberTokenExpiresAt);
+            }
+
             $this->log($username, "Logged in via cookie", auth_logs);
             $this->loglogin($token);
-            Util::redirect("/index.php");
+
+            if (Util::has2faSolved($token)) {
+                Util::redirectAfterLogin();
+            } else {
+                Util::redirect("/auth/2fa.php");
+            }
         } else {
             $this->logoutUser(false);
             return "Login with stored token failed.";
@@ -261,8 +290,14 @@ class UserController extends Users
             $subCodeExists = $this->subCodeCheck($subCode);
 
             if ($subCodeExists) {
-                $this->log($username, "Activated a sub", user_logs);
-                return $this->subscription($subCode, $username);
+                $result = $this->subscription($subCode, $username);
+
+                if ($result === "Your subscription is now active!") {
+                    $this->setNewNotification($username, "A subscription code was activated on your account.");
+                    $this->log($username, "Activated a sub", user_logs);
+                }
+
+                return $result;
             } else {
                 return "Subscription code is invalid.";
             }
@@ -304,7 +339,7 @@ class UserController extends Users
             $result = $this->updatePass($currentPassword, $hashedPassword, $username);
 
             if ($result) {
-                $this->delother($username, Util::securevar($_COOKIE["login_cookie"]));
+                $this->setNewNotification($username, "Your password has been changed.");
                 Util::redirect("/auth/logout.php");
             } else {
                 $errors[] = "Your current password does not match.";
@@ -313,9 +348,14 @@ class UserController extends Users
         return $errors;
     }
 
-    public function getUserCount()
+    public function getUserCount($search = '')
     {
-        return $this->userCount();
+        return $this->userCount($search);
+    }
+
+    public function getPaginatedUsers($offset, $limit, $search = '')
+    {
+        return $this->usersPaginated($offset, $limit, $search);
     }
 
     public function getBannedUserCount()
@@ -432,33 +472,45 @@ class UserController extends Users
     public function get_refresh_token()
     {
         $username = Session::Get("username");
-        return $this->get_discord_refresh_token($username);
+        return $this->get_refresh_discord_access_token($username);
     }
 
-    public function refresh_token()
+    public function refresh_token($force = false)
     {
         $username = Session::Get("username");
         $current_access_token = $this->get_access_token();
 
-        if ($this->is_access_token_valid($current_access_token)) {
+        if (!$force && $this->is_access_token_valid($current_access_token)) {
             return $current_access_token;
-        } else {
-            $refresh_token = $this->get_refresh_token();
-            $new_access_token = $this->get_new_access_token($refresh_token);
-            $this->set_refresh_discord_access_token($new_access_token, $username);
-            return $new_access_token;
         }
+
+        $refresh_token = $this->get_refresh_token();
+        $tokens = $this->get_new_access_token($refresh_token);
+
+        if (!$tokens) {
+            return null;
+        }
+
+        $new_refresh_token = isset($tokens['refresh_token']) ? $tokens['refresh_token'] : $refresh_token;
+        $this->update_discord_tokens($tokens['access_token'], $new_refresh_token, $username);
+        return $tokens['access_token'];
     }
 
     private function is_access_token_valid($access_token)
     {
+        if (!$access_token) {
+            return false;
+        }
+
         // Send a request to Discord's API to validate the access token
-        $url = 'https://discord.com/api/v6/users/@me';
+        $url = 'https://discord.com/api/v10/users/@me';
 
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $access_token,
             ],
@@ -466,13 +518,11 @@ class UserController extends Users
 
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $requestFailed = $response === false;
 
-        if ($httpCode !== 200) {
-            curl_close($curl);
+        if ($requestFailed || $httpCode !== 200) {
             return false;
         }
-
-        curl_close($curl);
 
         try {
             $data = json_decode($response, true);
@@ -495,7 +545,11 @@ class UserController extends Users
 
     private function get_new_access_token($refresh_token)
     {
-        $url = 'https://discord.com/api/v8/oauth2/token';
+        if (!$refresh_token) {
+            return null;
+        }
+
+        $url = 'https://discord.com/api/v10/oauth2/token';
 
         $data = [
             'client_id' => Util::securevar(client_id),
@@ -512,19 +566,24 @@ class UserController extends Users
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
         ]);
 
         $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        curl_close($curl);
+        if ($response === false) {
+            return null;
+        }
 
         $response = json_decode($response, true);
 
-        if (isset($response['access_token'])) {
-            return $response['access_token'];
-        } else {
-            return null;
+        if ($httpCode === 200 && isset($response['access_token'])) {
+            return $response;
         }
+
+        return null;
     }
 
     public function set_display_name($display_name)
@@ -536,6 +595,16 @@ class UserController extends Users
     public function fetch_display_name($username)
     {
         return $this->get_display_name($username);
+    }
+
+    public function getUserbio()
+    {
+        return $this->get_bio(Session::get('username'));
+    }
+
+    public function setbio($bio)
+    {
+        return $this->set_bio(Session::get('username'), $bio);
     }
 
     public function get_name_cooldown()
@@ -588,19 +657,20 @@ class UserController extends Users
             ];
 
             $payload_string = http_build_query($payload);
-            $discord_token_url = "https://discordapp.com/api/v9/oauth2/token";
+            $discord_token_url = "https://discord.com/api/v10/oauth2/token";
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $discord_token_url);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
             $result = curl_exec($ch);
 
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
                 exit();
             }
 
@@ -619,7 +689,7 @@ class UserController extends Users
             $access_token = Util::securevar($result["access_token"]);
             $refresh_token = Util::securevar($result["refresh_token"]);
 
-            $discord_users_url = "https://discordapp.com/api/users/@me";
+            $discord_users_url = "https://discord.com/api/v10/users/@me";
             $header = [
                 "Authorization: Bearer $access_token",
                 "Content-Type: application/x-www-form-urlencoded",
@@ -633,7 +703,6 @@ class UserController extends Users
 
             if ($result === false) {
                 Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
                 exit();
             }
 
@@ -647,43 +716,10 @@ class UserController extends Users
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
 
-            $path = Util::securevar(IMG_DIR . $uid);
-
-            // Remove existing images
-            foreach (['png', 'jpg', 'gif'] as $ext) {
-                if (@getimagesize($path . ".$ext")) {
-                    unlink($path . ".$ext");
-                }
-            }
-
-            $url = "https://cdn.discordapp.com/avatars/$id/$avatar";
-
-            // Download the image data
-            $imageData = file_get_contents($url);
-            if ($imageData === false) {
+            if (!$this->saveDiscordAvatar($id, $avatar, $uid)) {
                 Util::display("Error: Could not download avatar image.");
                 exit();
             }
-
-            // Determine the file extension based on the image data
-            $imageInfo = getimagesizefromstring($imageData);
-            if ($imageInfo === false) {
-                Util::display("Error: Could not determine image type.");
-                exit();
-            }
-
-            $mime = $imageInfo['mime'];
-            $ext = 'png'; // default extension
-            if ($mime == 'image/jpeg') {
-                $ext = 'jpg';
-            } elseif ($mime == 'image/gif') {
-                $ext = 'gif';
-            }
-
-            $img = $path . ".$ext";
-            file_put_contents($img, $imageData);
-            chmod(IMG_DIR, 0775);
-            chmod($img, 0775);
             $this->set_access_token($access_token);
             $this->set_refresh_token($refresh_token);
             $this->set_dcid($id, $uid);
@@ -691,13 +727,39 @@ class UserController extends Users
         }
     }
 
-    public function downloadAvatarWithAccessToken($userId, $uid)
+    private function saveDiscordAvatar($discordId, $avatar, $uid)
+    {
+        if (empty($avatar)) {
+            return true;
+        }
+
+        $formats = strpos($avatar, 'a_') === 0 ? ['gif', 'png'] : ['webp', 'png'];
+
+        foreach ($formats as $format) {
+            $avatarUrl = "https://cdn.discordapp.com/avatars/$discordId/$avatar.$format?size=1024";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $avatarUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
+            $imageData = curl_exec($ch);
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($imageData !== false && $statusCode === 200 && Util::saveAvatarData($imageData, $uid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function downloadAvatarWithAccessToken($userId, $uid, $retry = true)
     {
         $accessToken = $this->get_access_token();
 
         // Check if access token is available and valid
         if ($accessToken && $this->is_access_token_valid($accessToken)) {
-            $url = "https://discord.com/api/v9/users/@me";
+            $url = "https://discord.com/api/v10/users/@me";
             $header = [
                 "Authorization: Bearer $accessToken"
             ];
@@ -706,72 +768,43 @@ class UserController extends Users
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
             $result = curl_exec($ch);
-
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
             if ($result === false) {
-                Util::display("Error: " . Util::securevar(curl_error($ch)));
-                curl_close($ch);
+                error_log("Discord avatar refresh failed: $curlError");
+                return false;
+            }
+
+            if ($httpCode !== 200) {
                 return false;
             }
 
             $result = json_decode($result, true);
 
             if (!isset($result["id"])) {
-                Util::display("Error: Failed to get user ID from Discord.");
                 return false;
             }
 
             $id = Util::securevar($result["id"]);
             $avatar = Util::securevar($result["avatar"]);
-            $path = Util::securevar(IMG_DIR . $uid);
 
-            // Remove existing images
-            foreach (['png', 'jpg', 'gif'] as $ext) {
-                if (@getimagesize($path . ".$ext")) {
-                    unlink($path . ".$ext");
-                }
-            }
-
-            $avatarUrl = "https://cdn.discordapp.com/avatars/$id/$avatar";
-
-            // Download the image data
-            $imageData = file_get_contents($avatarUrl);
-            if ($imageData === false) {
-                Util::display("Error: Could not download avatar image.");
+            if (!$this->saveDiscordAvatar($id, $avatar, $uid)) {
                 return false;
             }
-
-            // Determine the file extension based on the image data
-            $imageInfo = getimagesizefromstring($imageData);
-            if ($imageInfo === false) {
-                Util::display("Error: Could not determine image type.");
-                return false;
-            }
-
-            $mime = $imageInfo['mime'];
-            $ext = 'png'; // default extension
-            if ($mime == 'image/jpeg') {
-                $ext = 'jpg';
-            } elseif ($mime == 'image/gif') {
-                $ext = 'gif';
-            }
-
-            $avatarPath = $path . ".$ext";
-            file_put_contents($avatarPath, $imageData);
-            chmod(IMG_DIR, 0775);
-            chmod($avatarPath, 0775);
 
             return true;
         }
 
         // Access token is invalid or expired, refresh it
-        $refreshedAccessToken = $this->refresh_token();
+        $refreshedAccessToken = $this->refresh_token(true);
 
         // Check if the refresh token was successful and download the avatar
-        if ($refreshedAccessToken) {
-            $this->set_access_token($refreshedAccessToken);
-            return $this->downloadAvatarWithAccessToken($userId, $uid);
+        if ($refreshedAccessToken && $retry) {
+            return $this->downloadAvatarWithAccessToken($userId, $uid, false);
         }
 
         return false;
@@ -785,5 +818,27 @@ class UserController extends Users
     public function getUserIP()
     {
         return $this->getip();
+    }
+
+    public function is2faEnabled($username)
+    {
+        return $this->is2fa($username);
+    }
+
+    public function setNewNotification($username, $notification)
+    {
+        return $this->setNotification($username, $notification);
+    }
+
+    public function change_2fa_status($status)
+    {
+        $username = Session::get('username');
+        $token = isset($_COOKIE['login_cookie']) ? Util::securevar($_COOKIE['login_cookie']) : '';
+        return $this->change2fa($status, $username, $token);
+    }
+
+    public function complete2faWithDiscord($username, $token, $code, $redirectUri)
+    {
+        return $this->complete2fa($username, $token, $code, $redirectUri);
     }
 }

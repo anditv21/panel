@@ -1,9 +1,11 @@
 <?php
 require_once "../app/require.php";
 require_once "../app/helpers/ip_info.php";
+require_once "../includes/head.nav.inc.php";
 
 $user = new UserController();
 $System = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -18,10 +20,19 @@ $supp = Util::suppCheck(false);
 
 Util::banCheck();
 Util::checktoken();
-Util::head("Profile");
-Util::navbar();
+Util::head("IP Lookup");
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
+    if (isset($_GET["ip"]) || isset($_GET["uid"])) {
+        $lookupActor = Session::get('uid') . '|' . RateLimiter::getClientIp();
+        $lookupLimit = $rateLimiter->hit('lookup.page', $lookupActor, 60, 60, 120);
+
+        if (!$lookupLimit['allowed']) {
+            http_response_code(429);
+            exit('Too many lookup requests. Please wait ' . $lookupLimit['retry_after'] . ' seconds.');
+        }
+    }
+
     if (isset($_GET["ip"])) {
         $ip_address = Util::securevar($_GET['ip']);
         $ip_info = getipinfo($ip_address);
@@ -50,9 +61,8 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <?php Util::navbar(); ?>
-</head>
+<head><?php Util::navbar(); ?></head>
+<?php display_top_nav("IP Lookup"); ?>
 
 <body class="pace-done no-loader page-sidebar-collapsed">
     <div class="page-container">
@@ -64,6 +74,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
 
                         <!-- Display IP Information -->
                         <?php if (isset($ip_info)) : ?>
+                            <div class="table-responsive">
                             <table class="rounded table" align="center">
                                 <thead>
                                     <tr>
@@ -80,6 +91,7 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET") {
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>

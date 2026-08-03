@@ -11,12 +11,30 @@ if (!Session::isLogged()) {
     Util::redirect("/auth/login.php");
 }
 
+if (!Util::has2faSolved() && (isset($_GET['code']) || isset($_GET['error']))) {
+    $params = [];
+    if (isset($_GET['code'])) {
+        $params['code'] = $_GET['code'];
+    }
+    if (isset($_GET['state'])) {
+        $params['state'] = $_GET['state'];
+    }
+    if (isset($_GET['error'])) {
+        $params['error'] = $_GET['error'];
+    }
+
+    Util::redirect('/auth/2fa.php?' . http_build_query($params));
+}
+
 $uid = Session::get("uid");
 $username = Session::get("username");
 $displayname = $user->fetch_display_name($username);
 $admin = Session::get("admin");
 $userfrozen = $user->getfrozen();
 $sub = $user->getSubStatus();
+$hasActiveSubscription = $sub > 0;
+$twofactor = $user->is2faEnabled($username);
+$bio = $user->getUserbio();
 
 Util::banCheck();
 Util::checktoken();
@@ -24,31 +42,87 @@ Util::head("Profile");
 
 
 
-if (!$user->getdcid($uid) == false) {
-    $user->downloadAvatarWithAccessToken($user->getdcid($uid), $uid);
+$dcid = $user->getdcid($uid);
+
+if ($dcid !== false && !Session::get('avatar_refreshed')) {
+    if ($user->downloadAvatarWithAccessToken($dcid, $uid)) {
+        Session::set('avatar_refreshed', true);
+    }
 }
 
 if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST") {
     if (isset($_POST["updatePassword"])) {
-        $error = $user->updateUserPass(Util::securevar($_POST));
+        $errors = $user->updateUserPass(Util::securevar($_POST));
+
+        if (!empty($errors)) {
+            $queryParams = http_build_query([
+                'alert' => implode(' ', $errors),
+                'type' => 'danger'
+            ]);
+            header("location: profile.php?$queryParams");
+            exit;
+        }
     }
+
     if (isset($_POST["activateSub"])) {
-        $error = $user->activateSub(Util::securevar($_POST['subCode']));
-        $error = Util::securevar($_POST['subCode']);
+        $result = $user->activateSub(Util::securevar($_POST['subCode']));
+        $queryParams = http_build_query([
+            'alert' => $result,
+            'type' => $result === 'Your subscription is now active!' ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
     }
+
     if (isset($_POST["change_display_name"])) {
-        $error = $user->set_display_name(Util::securevar($_POST['display_name']));
-        $error = Util::securevar($_POST['display_name']);
+        $result = $user->set_display_name(Util::securevar($_POST['display_name']));
+        $queryParams = http_build_query([
+            'alert' => $result ? 'Display name updated successfully!' : 'Display name could not be changed.',
+            'type' => $result ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
     }
-    header("location: profile.php");
+
+    if (isset($_POST["change_bio"], $_POST["bio"])) {
+        $bioInput = is_string($_POST['bio']) ? trim($_POST['bio']) : '';
+        $result = $user->setbio($bioInput);
+        $queryParams = http_build_query([
+            'alert' => $result ? 'Profile status updated successfully!' : 'Profile status could not be changed.',
+            'type' => $result ? 'success' : 'danger'
+        ]);
+        header("location: profile.php?$queryParams");
+        exit;
+    }
+
+    if (isset($_POST["enable2fa"])) {
+        $result = $user->change_2fa_status(1);
+        Util::redirect($result ? '/user/profile.php?2fa=enabled' : '/user/profile.php?2fa=discord');
+    }
+
+    if (isset($_POST["disable2fa"])) {
+        $user->change_2fa_status(0);
+        Util::redirect('/user/profile.php?2fa=disabled');
+    }
+
 }
 // if post request
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && !isset($_POST["activateSub"]) && !isset($_POST["updatePassword"]) && !isset($_POST["change_display_name"]) && $System->getSystemData()->relinkdiscord == 1) {
-    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify");
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "POST" && isset($_POST["linkDiscord"]) && ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked()))) {
+    $state = bin2hex(random_bytes(24));
+    Session::set('discord_link_state', $state);
+    header("Location: https://discord.com/api/oauth2/authorize?client_id=" . client_id . "&redirect_uri=" . SITE_URL . SUB_DIR . "/user/profile.php&response_type=code&scope=identify&state=" . rawurlencode($state));
     exit();
 }
-if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) {
+if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked()))) {
     if (isset($_GET['code'])) {
+        $state = isset($_GET['state']) ? trim((string) $_GET['state']) : '';
+        $expectedState = (string) Session::get('discord_link_state');
+        Session::set('discord_link_state', '');
+
+        if (empty($state) || empty($expectedState) || !hash_equals($expectedState, $state)) {
+            Util::redirect('/user/profile.php?alert=Discord+authorization+state+is+invalid.&type=danger');
+        }
+
         $code = Util::securevar($_GET['code']);
         $user->discord_link($code);
     }
@@ -65,6 +139,22 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
    <div class="page-container">
       <div class="page-content">
          <div class="main-wrapper">
+            <?php if (isset($_GET['2fa'])) : ?>
+               <div class="alert alert-info text-center">
+                  <?php if ($_GET['2fa'] === 'enabled') : ?>
+                     Two-factor authentication enabled.
+                  <?php elseif ($_GET['2fa'] === 'disabled') : ?>
+                     Two-factor authentication disabled.
+                  <?php else : ?>
+                     Link your Discord account before enabling two-factor authentication.
+                  <?php endif; ?>
+               </div>
+            <?php endif; ?>
+            <?php if (isset($_GET['alert'])) : ?>
+               <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center">
+                  <?php Util::display(Util::securevar($_GET['alert'])); ?>
+               </div>
+            <?php endif; ?>
             <div class="row">
                <div class="col-xl-12">
                   <center>
@@ -83,12 +173,23 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                            <br>
                            <?php if ($System->getSystemData()->discordlinking == 1 || $System->getSystemData()->relinkdiscord == 1 || ($System->getSystemData()->relinkdiscord == 0 && !$user->isDiscordLinked())) : ?>
                               <form id="avatar-form" method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>" enctype="multipart/form-data">
+                                 <?php Util::csrfField(); ?>
                                  <center>
-                                    <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" type="submit">Link Discord</button>
+                                    <button onclick="return confirm('WARNING: Your existing profile picture will be overridden!');" class="btn btn-outline-primary btn-block" name="linkDiscord" type="submit">Link Discord</button>
                                     <br>
                                  </center>
                               </form>
                            <?php endif; ?>
+                           <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                              <?php Util::csrfField(); ?>
+                              <center>
+                                 <?php if ($twofactor == 1) : ?>
+                                    <button class="btn btn-outline-danger btn-block" name="disable2fa" type="submit">Disable 2FA</button>
+                                 <?php else : ?>
+                                    <button class="btn btn-outline-primary btn-block" name="enable2fa" type="submit" <?php echo $user->isDiscordLinked() ? '' : 'disabled'; ?>>Enable 2FA</button>
+                                 <?php endif; ?>
+                              </center>
+                           </form>
                         </div>
                      </div>
 
@@ -117,18 +218,18 @@ if (Util::securevar($_SERVER["REQUEST_METHOD"]) === "GET" && $System->getSystemD
                                                       $time = $user->gettime();
 if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
     $sub = $sub + $time;
-    if ($sub < 1000) {
-        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
-    } elseif ($sub < 1) {
-        Util::display('You dont have a active subscription!');
-    } else {
+    if (Util::isLifetimeSubscription($sub)) {
         Util::display("Lifetime");
+    } elseif ($sub > 0) {
+        Util::display("$sub days (<i title='Frozen' data-toggle='tooltip' data-placement='top' class='fas fa-snowflake fa-sm'></i>)");
+    } else {
+        Util::display('You dont have a active subscription!');
     }
 } else {
-    if ($sub > 8000) {
+    if (Util::isLifetimeSubscription($sub)) {
         Util::display("Lifetime");
     } else {
-        if ($sub >= 0) {
+        if ($sub > 0) {
             Util::display("$sub days");
         } else {
             Util::display('You dont have a active subscription!');
@@ -145,8 +246,11 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                                 </p>
                                              </div>
                                           </div>
-                                       </div> <?php if ($user->getSubStatus() > 0) : ?> <a class="btn btn-block btn-primary m-t-md" href='
-               <?= SUB_DIR ?>/download.php'" id=" DOWNLOAD">Download <i class="fas fa-cloud-download-alt"></i></a> <?php endif; ?> <?php if ($user->getSubStatus() < 1) : ?> <div class="transactions-list">
+                                       </div>
+                                       <?php if ($hasActiveSubscription) : ?>
+                                          <a class="btn btn-block btn-primary m-t-md" href="<?= SUB_DIR ?>/download.php" id="download-client">Download <i class="fas fa-cloud-download-alt"></i></a>
+                                       <?php else : ?>
+                                          <div class="transactions-list">
                                              <div class="tr-item">
                                                 <div class="tr-company-name">
                                                    <div class="tr-icon tr-card-icon tr-card-bg-danger text-white">
@@ -158,7 +262,8 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                                 </div>
                                                 <div class="tr-rate"></div>
                                              </div>
-                                          </div> <?php endif; ?>
+                                          </div>
+                                       <?php endif; ?>
                                     </div>
                                  </div>
                               </div>
@@ -166,6 +271,7 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                  <div class="card-body">
                                     <div class="post">
                                        <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                          <?php Util::csrfField(); ?>
                                           <h5 class="card-title">Activate Subscription</h5>
                                           <div class="post-body">
                                              <div class="new-comment">
@@ -193,10 +299,11 @@ if ($System->getSystemData()->frozen == 1 && $userfrozen == 1) {
                                        <div class="card-body">
 
                                           <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                             <?php Util::csrfField(); ?>
 
                                              <?php
                                              $cooldown_date = $user->get_name_cooldown();
-$days_left = Util::calculate_days($cooldown_date);
+$days_left = Util::calculate_cooldown($cooldown_date);
 ?>
 
                                              <?php if ($days_left > 0) : ?>
@@ -206,7 +313,7 @@ $days_left = Util::calculate_days($cooldown_date);
                                                 <br>
                                                 <div title="You have to wait <?php Util::display(ceil($days_left)); ?> days before you can change your display name." data-toggle="tooltip" data-placement="top">
                                                    <button class="btn btn-outline-primary btn-block" disabled="disabled">
-                                                      <img src="../assets/images/warning.png" width="15" height="15">
+                                                      <img src="../assets/images/warning.webp" width="15" height="15">
                                                       Change now
                                                    </button>
                                                 </div>
@@ -224,11 +331,29 @@ $days_left = Util::calculate_days($cooldown_date);
                                        </div>
                                     </div>
                                  </div>
+
+                                 <div class="col-6 mb-4">
+                                    <div class="card">
+                                       <div class="card-body">
+                                          <form method="POST" action="<?php Util::display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                             <?php Util::csrfField(); ?>
+                                             <div class="form-group">
+                                                <input autocomplete="off" class="form-control form-control-sm" maxlength="30" placeholder="Profile status" value="<?php Util::display(Util::securevar($bio)); ?>" name="bio" required>
+                                             </div>
+                                             <br>
+                                             <button class="btn btn-outline-primary btn-block" onclick="return confirm('Are you sure you want to change your profile status?');" name="change_bio" type="submit" value="submit">
+                                                Set now
+                                             </button>
+                                          </form>
+                                       </div>
+                                    </div>
+                                 </div>
                               </center>
 
                               <div class="card-body">
                                  <div class="post">
                                     <form method="POST" action="<?php Util::Display(Util::securevar($_SERVER["PHP_SELF"])); ?>">
+                                       <?php Util::csrfField(); ?>
                                        <p>Current Password</p>
                                        <div class="input-group mb-3">
                                           <input name="currentPassword" type="password" class="form-control" placeholder="●●●●●●●●●●" aria-label="●●●●●●●●●●" aria-describedby="button-addon2">

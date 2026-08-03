@@ -14,10 +14,20 @@ class AdminController extends Admin
         return $this->UserArray();
     }
 
-    //
-    public function giftsub($name, $sub, $time)
+    public function getPaginatedUsers($offset, $limit, $search = '')
     {
-        return $this->subgift($name, $sub, $time);
+        return $this->getUsersPaginated($offset, $limit, $search);
+    }
+
+    public function getUserCount($search = '')
+    {
+        return $this->getUsersCount($search);
+    }
+
+    //
+    public function giftsub($name, $time)
+    {
+        return $this->subgift($name, $time);
     }
     //
     public function setnews($news)
@@ -239,8 +249,12 @@ class AdminController extends Admin
 
     public function changeEmbedColor($color)
     {
-
         $color = ltrim($color, '#');
+
+        if (!preg_match('/^[a-fA-F0-9]{6}$/', $color)) {
+            return "Invalid color.";
+        }
+
         return $this->setEmbedColor($color);
     }
 
@@ -248,6 +262,36 @@ class AdminController extends Admin
     {
         $result = $this->logarray();
         return $result;
+    }
+
+    public function getAdminLogsPaginated($offset, $limit, $search = '')
+    {
+        return $this->adminLogsPaginated($offset, $limit, $search);
+    }
+
+    public function getAdminLogsCount($search = '')
+    {
+        return $this->adminLogsCount($search);
+    }
+
+    public function getVariables()
+    {
+        return $this->getVariablesArray();
+    }
+
+    public function createVariable($name, $content)
+    {
+        return $this->createVariableRecord($name, $content);
+    }
+
+    public function editVariable($id, $name, $content)
+    {
+        return $this->editVariableRecord($id, $name, $content);
+    }
+
+    public function deleteVariable($id)
+    {
+        return $this->deleteVariableRecord($id);
     }
 
 }

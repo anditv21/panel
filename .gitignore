@@ -1,5 +1,7 @@
 src/app/core/Database.php
 src/app/core/DiscordConfig.php
+src/app/core/LocalConfig.php
+src/app/core/setup.lock
 .themes/modern/app/core/DiscordConfig.php
 .themes/modern/app/core/Database.php
 config.json

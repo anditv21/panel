@@ -4,6 +4,7 @@ require_once "../app/controllers/SystemController.php";
 
 $user = new UserController();
 $system = new SystemController();
+$rateLimiter = new RateLimiter();
 
 Session::init();
 
@@ -13,11 +14,7 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
         $data = Util::securevar($_GET['action']);
 
         if ($data === 'logout') {
-            setcookie("login_cookie", "", time() - 3600, '/');
-            session_unset();
-            $_SESSION = [];
-            session_destroy();
-            Util::redirect('/auth/login.php');
+            $user->logoutUser(false);
         }
     }
 }
@@ -25,19 +22,32 @@ if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'GET') {
 
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
-    if (isset($_POST)) {
-        $data = Util::securevar($_POST);
-    }
+    Util::csrfCheck();
 
-    $captcha = $system->vaildateCaptcha($data);
-    if($captcha == true) {
-        $error = $user->loginUser($data);
+    $data = Util::securevar($_POST);
+    $clientIp = RateLimiter::getClientIp();
+    $ipLimit = $rateLimiter->hit('auth.login.ip', $clientIp, 30, 60, 300);
+    $usernameActor = strtolower(trim((string) ($_POST['username'] ?? 'unknown')));
+    $userLimit = $rateLimiter->hit('auth.login.username', $usernameActor, 20, 60, 300);
+
+    if (!$ipLimit['allowed']) {
+        $error = 'Too many login attempts. Please wait ' . $ipLimit['retry_after'] . ' seconds.';
+    } elseif (!$userLimit['allowed']) {
+        $error = 'Too many login attempts for this account. Please wait ' . $userLimit['retry_after'] . ' seconds.';
     } else {
-        $error = "Captcha failed or not completed";
+        $captcha = $system->vaildateCaptcha($data);
+        if ($captcha == true) {
+            $error = $user->loginUser($data);
+        } else {
+            $error = "Captcha failed or not completed";
+        }
     }
-
-
 }
+
+if (Session::isLogged()) {
+    Util::redirect("/index.php");
+}
+
 if (isset($_COOKIE["login_cookie"])) {
     $cookie = Util::securevar($_COOKIE["login_cookie"]);
     if (isset($cookie)) {
@@ -53,7 +63,7 @@ Util::navbar();
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title></title>
 
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -81,6 +91,7 @@ Util::navbar();
                 <div class="col-md-10 col-lg-5">
 
                     <form method='POST' action='<?php Util::display($_SERVER['PHP_SELF']); ?>'>
+                        <?php Util::csrfField(); ?>
                         <h1 style="color: #fff" data-aos="fade" data-aos-duration="3000">Sign In</h1>
                         <p style="color: #fff" data-aos="fade" data-aos-duration="2500">Sign in to manage your account</p>
                         <div class="form-input-icon mb-3 mt-4" data-aos="fade-left" data-aos-duration="1000">

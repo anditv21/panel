@@ -6,6 +6,53 @@ require_once SITE_ROOT . "/app/models/UtilModel.php";
 require_once SITE_ROOT . "/app/helpers/set_timezone.php";
 class Util extends UtilMod
 {
+    public const LIFETIME_SUBSCRIPTION_DAYS = 1000;
+    public const REMEMBER_TOKEN_LIFETIME_DAYS = 30;
+
+    public static function isHttpsRequest()
+    {
+        if (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+            return true;
+        }
+
+        return !empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
+            && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https';
+    }
+
+    public static function getRememberTokenExpiry($createdAt)
+    {
+        $createdDate = DateTime::createFromFormat('Y-m-d', (string) $createdAt);
+        if (!$createdDate) {
+            return false;
+        }
+
+        $createdDate->setTime(23, 59, 59);
+        $createdDate->modify('+' . self::REMEMBER_TOKEN_LIFETIME_DAYS . ' days');
+        return $createdDate->getTimestamp();
+    }
+
+    public static function setLoginCookie($token, $expiresAt)
+    {
+        setcookie('login_cookie', $token, [
+            'expires' => (int) $expiresAt,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function clearLoginCookie()
+    {
+        setcookie('login_cookie', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
     public function setPageTitle($title)
     {
         if (!empty(Session::get("username"))) {
@@ -19,8 +66,92 @@ class Util extends UtilMod
 
     public static function redirect($location)
     {
+        if ($location === '/auth/login.php') {
+            self::rememberLastPage();
+        }
+
         header('location:' . SUB_DIR . $location);
         exit();
+    }
+
+    private static function rememberLastPage()
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET' || empty($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+
+        $parts = parse_url($_SERVER['REQUEST_URI']);
+        if ($parts === false || empty($parts['path'])) {
+            return;
+        }
+
+        $path = $parts['path'];
+        $subDir = rtrim(SUB_DIR, '/');
+
+        if ($subDir !== '') {
+            if ($path !== $subDir && strpos($path, $subDir . '/') !== 0) {
+                return;
+            }
+
+            $path = substr($path, strlen($subDir));
+        }
+
+        if ($path === '') {
+            $path = '/';
+        }
+
+        if (strpos($path, '/auth/') === 0) {
+            return;
+        }
+
+        $query = [];
+        if (!empty($parts['query'])) {
+            parse_str($parts['query'], $query);
+            unset($query['alert'], $query['type']);
+        }
+
+        $lastPage = $path . (!empty($query) ? '?' . http_build_query($query) : '');
+
+        setcookie('last_page', $lastPage, [
+            'expires' => time() + 2592000,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function redirectAfterLogin()
+    {
+        $lastPage = isset($_COOKIE['last_page']) ? (string) $_COOKIE['last_page'] : '';
+
+        setcookie('last_page', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => self::isHttpsRequest(),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+
+        if (self::isSafePanelPath($lastPage)) {
+            self::redirect($lastPage);
+        }
+
+        self::redirect('/index.php');
+    }
+
+    private static function isSafePanelPath($path)
+    {
+        if (empty($path) || $path[0] !== '/' || substr($path, 0, 2) === '//' || preg_match('/[\r\n\\]/', $path)) {
+            return false;
+        }
+
+        $parts = parse_url($path);
+        if ($parts === false || isset($parts['scheme']) || isset($parts['host'])) {
+            return false;
+        }
+
+        return strpos($parts['path'] ?? '', '/auth/') !== 0;
     }
 
     public static function head($title)
@@ -60,7 +191,7 @@ class Util extends UtilMod
             $new_array = array();
             foreach ($var as $key => $value) {
                 if (is_string($value)) {
-                    $new_array[$key] = htmlspecialchars(stripslashes(trim($value)));
+                    $new_array[$key] = htmlspecialchars(stripslashes(trim($value)), ENT_QUOTES, 'UTF-8', false);
                 } elseif (is_array($value)) {
                     $new_array[$key] = self::securevar($value);
                 } else {
@@ -69,7 +200,7 @@ class Util extends UtilMod
             }
             return $new_array;
         } else {
-            return htmlspecialchars(stripslashes(trim($var)));
+            return htmlspecialchars(stripslashes(trim($var)), ENT_QUOTES, 'UTF-8', false);
         }
     }
 
@@ -80,8 +211,63 @@ class Util extends UtilMod
 
             $util = new UtilMod();
             $result = $util->validateRememberToken($token);
+
+            if ($result) {
+                self::csrfCheck();
+            }
+
+            if ($result && !self::has2faSolved() && basename($_SERVER['PHP_SELF']) !== '2fa.php') {
+                Util::redirect('/auth/2fa.php');
+            }
+
             return $result;
         }
+
+        Util::clearLoginCookie();
+        Session::destroy();
+        Util::redirect('/auth/login.php');
+    }
+
+    public static function csrfToken()
+    {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf_token'];
+    }
+
+    public static function csrfField()
+    {
+        echo '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(self::csrfToken(), ENT_QUOTES, 'UTF-8') . '">';
+    }
+
+    public static function csrfCheck()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+        $token = isset($_POST['csrf_token']) ? (string) $_POST['csrf_token'] : '';
+
+        if (empty($_SESSION['csrf_token']) || empty($token) || !hash_equals($_SESSION['csrf_token'], $token)) {
+            http_response_code(403);
+            exit('Invalid request.');
+        }
+    }
+
+    public static function has2faSolved($token = null)
+    {
+        if (empty($token)) {
+            if (!isset($_COOKIE['login_cookie'])) {
+                return false;
+            }
+
+            $token = Util::securevar($_COOKIE['login_cookie']);
+        }
+
+        $util = new UtilMod();
+        return $util->check2faSolved($token);
     }
 
 
@@ -106,6 +292,16 @@ class Util extends UtilMod
         // Bind data
         $username = Session::get('username');
         return $this->subActiveCheck($username);
+    }
+
+    public static function isLifetimeSubscription($days)
+    {
+        return is_numeric($days) && (int) $days >= self::LIFETIME_SUBSCRIPTION_DAYS;
+    }
+
+    public static function formatSubscriptionLabel($days, $lifetimeLabel = 'Lifetime')
+    {
+        return self::isLifetimeSubscription($days) ? $lifetimeLabel : $days;
     }
 
     // admin check
@@ -184,46 +380,111 @@ class Util extends UtilMod
         return (int) $interval->format("%a");
     }
 
+    public static function calculate_cooldown($date)
+    {
+        $now = new DateTime();
+        $date = new DateTime($date);
+
+        if ($date < $now) {
+            return 0;
+        }
+
+        $interval = $now->diff($date);
+        return (int) $interval->format("%a");
+    }
+
     public static function getavatar($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid . ".png?" . Util::randomCode(5);
-        } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg?" . Util::randomCode(5);
-        } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif?" . Util::randomCode(5);
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        if ($extension === false) {
             return false;
         }
+
+        return IMG_URL . $uid . "." . $extension . "?" . Util::randomCode(5);
     }
 
     public static function getavatardl($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return IMG_URL . $uid . ".png";
-        } elseif (@getimagesize($path . ".jpg")) {
-            return IMG_URL . $uid . ".jpg";
-        } elseif (@getimagesize($path . ".gif")) {
-            return IMG_URL . $uid . ".gif";
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        if ($extension === false) {
             return false;
         }
+
+        return IMG_URL . $uid . "." . $extension;
     }
 
     public static function getextention($uid)
     {
-        $path = IMG_DIR . $uid;
-        if (@getimagesize($path . ".png")) {
-            return ".png";
-        } elseif (@getimagesize($path . ".jpg")) {
-            return  ".jpg";
-        } elseif (@getimagesize($path . ".gif")) {
-            return  ".gif";
-        } else {
+        $extension = self::getAvatarExtension($uid);
+        return $extension === false ? false : "." . $extension;
+    }
+
+    public static function saveAvatarData($imageData, $uid)
+    {
+        if (@getimagesizefromstring($imageData) === false) {
             return false;
         }
+
+        $extension = self::detectAvatarExtension($imageData);
+        if ($extension === false) {
+            return false;
+        }
+
+        $path = IMG_DIR . $uid;
+        $temporaryFile = $path . ".tmp." . $extension;
+
+        if (file_put_contents($temporaryFile, $imageData) === false || filesize($temporaryFile) < 1) {
+            @unlink($temporaryFile);
+            return false;
+        }
+
+        $avatarFile = $path . "." . $extension;
+        if (!@copy($temporaryFile, $avatarFile)) {
+            @unlink($temporaryFile);
+            return false;
+        }
+        @unlink($temporaryFile);
+
+        foreach (['webp', 'png', 'jpg', 'gif'] as $oldExtension) {
+            if ($oldExtension !== $extension) {
+                @unlink($path . "." . $oldExtension);
+            }
+        }
+
+        @chmod(IMG_DIR, 0775);
+        @chmod($avatarFile, 0775);
+        return true;
+    }
+
+    private static function getAvatarExtension($uid)
+    {
+        $path = IMG_DIR . $uid;
+
+        foreach (['webp', 'png', 'jpg', 'gif'] as $extension) {
+            if (@getimagesize($path . "." . $extension)) {
+                return $extension;
+            }
+        }
+
+        return false;
+    }
+
+    private static function detectAvatarExtension($imageData)
+    {
+        if (substr($imageData, 0, 4) === 'RIFF' && substr($imageData, 8, 4) === 'WEBP') {
+            return 'webp';
+        }
+        if (substr($imageData, 0, 6) === 'GIF87a' || substr($imageData, 0, 6) === 'GIF89a') {
+            return 'gif';
+        }
+        if (substr($imageData, 0, 8) === "\x89PNG\x0D\x0A\x1A\x0A") {
+            return 'png';
+        }
+        if (substr($imageData, 0, 3) === "\xFF\xD8\xFF") {
+            return 'jpg';
+        }
+
+        return false;
     }
 
     public static function daysago($dateString)
@@ -231,16 +492,35 @@ class Util extends UtilMod
         if (!$dateString) {
             return 'Not available';
         }
+
         $date = strtotime($dateString);
+        if ($date === false) {
+            return 'Not available';
+        }
+
         $now = time();
         $diff = $now - $date;
+
+        if ($diff < 0) {
+            return 'In the future';
+        }
+
         $days = floor($diff / (60 * 60 * 24));
+
         if ($days == 0) {
             return 'Today';
         } elseif ($days == 1) {
             return 'Yesterday';
-        } else {
+        } elseif ($days < 30) {
             return $days . ' days ago';
         }
+
+        $months = floor($days / 30);
+        if ($days < 365) {
+            return $months . ' month' . ($months == 1 ? '' : 's') . ' ago';
+        }
+
+        $years = floor($days / 365);
+        return $years . ' year' . ($years == 1 ? '' : 's') . ' ago';
     }
 }

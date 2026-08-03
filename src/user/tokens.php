@@ -21,27 +21,33 @@ Util::head("Tokens");
 
 
 if (Util::securevar($_SERVER['REQUEST_METHOD']) === 'POST') {
+    $result = false;
+    $successMessage = '';
+    $errorMessage = '';
 
-    if (isset($_POST["password2"])) {
-        $token = Util::securevar($_POST["deltoken"]);
-        $password = Util::securevar($_POST["password2"]);
-        if (isset($token, $password)) {
-            $user->deletetoken($token, $password);
-        }
+    if (isset($_POST["password2"], $_POST["deltoken"])) {
+        $token = is_string($_POST["deltoken"]) ? Util::securevar($_POST["deltoken"]) : '';
+        $password = is_string($_POST["password2"]) ? $_POST["password2"] : '';
+        $result = $user->deletetoken($token, $password);
+        $successMessage = $result ? 'Login token deleted successfully.' : '';
+        $errorMessage = $result ? '' : 'The token could not be deleted. Check your password.';
+    } elseif (isset($_POST["password"])) {
+        $password = is_string($_POST["password"]) ? $_POST["password"] : '';
+        $token = isset($_COOKIE['login_cookie']) ? Util::securevar($_COOKIE['login_cookie']) : '';
+        $result = $user->deleteother($token, $password);
+        $successMessage = $result ? 'Logged out of all other devices.' : '';
+        $errorMessage = $result ? '' : 'Other devices could not be logged out. Check your password.';
+    } else {
+        $errorMessage = 'Invalid token action.';
     }
-    header("location: tokens.php");
+
+    $queryParams = http_build_query([
+        'alert' => $successMessage ?: $errorMessage,
+        'type' => $successMessage ? 'success' : 'danger'
+    ]);
+    header("location: tokens.php?$queryParams");
+    exit;
 }
-
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
-    $password = Util::securevar($_POST["password"]);
-
-    $token = Util::securevar($_COOKIE['login_cookie']);
-    $error = $user->deleteother($token, $password);
-    if (!$error) {
-        header('location: tokens.php');
-    }
-}
-
 
 ?>
 <!DOCTYPE html>
@@ -53,13 +59,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
 <body class="pace-done no-loader page-sidebar-collapsed">
    <div class="page-container">
       <div class="page-content">
+         <?php if (isset($_GET['alert'])) : ?>
+            <div class="alert alert-<?php echo isset($_GET['type']) && $_GET['type'] === 'success' ? 'success' : 'danger'; ?> text-center">
+               <?php Util::display(Util::securevar($_GET['alert'])); ?>
+            </div>
+         <?php endif; ?>
          <br>
          <div class="card">
             <div class="card-body">
-               <a class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</a>
+               <button type="button" class="btn btn-outline-primary btn-block" onclick="openPasswordModal()">Log out of all other devices</button>
             </div>
          </div>
          <br>
+         <div class="table-responsive">
          <table class="rounded table">
             <thead>
                <tr>
@@ -69,10 +81,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                   <th scope="col">Browser</th>
                   <th scope="col">OS</th>
                   <th scope="col">Actions</th>
-                  <th scope="col">Notes</th>
+                  <th scope="col">Current</th>
                </tr>
             </thead>
             <tbody>
+               <?php if (empty($tokenarray)) : ?>
+                  <tr>
+                     <td colspan="7" class="text-center">No login tokens found.</td>
+                  </tr>
+               <?php endif; ?>
                <?php foreach ($tokenarray as $row) : ?>
                   <tr style="align-items: center;">
                      <td>
@@ -91,17 +108,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                         <p><?php Util::display($row->os); ?></p>
                      </td>
                      <td>
-                        <a class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</a>
+                        <button type="button" class="btn btn-outline-primary btn-sm delete-token" onclick="openPasswordModal2('<?php Util::Display(Util::securevar($row->remembertoken)); ?>')">Delete</button>
                      </td>
                      <td>
-                        <?php if ($row->remembertoken == Util::securevar($_COOKIE["login_cookie"])) : ?>
-                           <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/images/warning.png" width="15" height="15">
+                        <?php if (isset($_COOKIE["login_cookie"]) && $row->remembertoken == Util::securevar($_COOKIE["login_cookie"])) : ?>
+                           <img title="You are currently using this token to login" data-toggle="tooltip" data-placement="top" src="../assets/images/warning.webp" width="15" height="15">
                         <?php endif; ?>
                      </td>
                   </tr>
                <?php endforeach; ?>
             </tbody>
          </table>
+         </div>
          <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                <div class="modal-content">
@@ -110,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                   </div>
                   <div class="modal-body">
                      <form method="POST" id="passwordform">
+                        <?php Util::csrfField(); ?>
                         <div class="form-group">
                            <label style="color: #86c1ed;" for="password">Password:</label>
                            <input type="password" class="form-control" id="password" name="password" required>
@@ -117,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                      </form>
                   </div>
                   <div class="modal-footer">
-                     <button type="submit" form="passwordForm" class="btn btn-outline-primary btn-block" onclick="submitForm()">Submit</button>
+                     <button type="submit" form="passwordform" class="btn btn-outline-primary btn-block">Submit</button>
                   </div>
                </div>
             </div>
@@ -130,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                   </div>
                   <div class="modal-body">
                      <form method="POST" id="passwordform2">
+                        <?php Util::csrfField(); ?>
                         <div class="form-group">
                            <label style="color: #86c1ed;" for="password2">Password:</label>
                            <input type="password" class="form-control" id="password2" name="password2" required>
@@ -137,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
                      </form>
                   </div>
                   <div class="modal-footer">
-                     <button type="submit" form="passwordform2" class="btn btn-outline-primary btn-block" onclick="submitForm2()">Submit</button>
+                     <button type="button" class="btn btn-outline-primary btn-block" onclick="submitForm2()">Submit</button>
                   </div>
                </div>
             </div>
@@ -147,12 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["password"])) {
             function openPasswordModal() {
                $('#passwordModal').modal('show');
             }
-
-            // Function to handle form submission
-            function submitForm() {
-               $('#passwordform').submit(); // Submit the form
-            }
-
 
             // Function to open the Bootstrap modal dialog
             function openPasswordModal2(token) {

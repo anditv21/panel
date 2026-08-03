@@ -99,7 +99,8 @@ CREATE TABLE `login` (
   `os` varchar(255) NOT NULL,
   `time` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL,
-  `createdAt` date NOT NULL DEFAULT current_timestamp()
+  `createdAt` date NOT NULL DEFAULT current_timestamp(),
+  `twofactor_status` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -112,6 +113,49 @@ INSERT INTO `login` (`id`, `username`, `remembertoken`, `ip`, `browser`, `os`, `
 (94, 'test2', 'e9e0e3258d0c0527a92d536dffbb4edd', 'localhost', 'Brave', 'Windows 10', '2024-08-20 19:17:43', 'none', '2024-08-15'),
 (95, 'admin', '8d53ff4b0d2af6fe36ee624b2eba9a31', 'localhost', 'Brave', 'Windows 10', '2024-08-20 19:17:55', 'none', '2024-08-20'),
 (96, 'admin', '3f5d0ee5a49c191f174414256d2f2fb2', 'localhost', 'Brave', 'Windows 10', 'August 20 th, 19:35', 'none', '2024-08-20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `dcid` varchar(255) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `delivered` int(11) NOT NULL DEFAULT 0,
+  `time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rate_limit_blocks`
+--
+
+CREATE TABLE `rate_limit_blocks` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bucket` varchar(100) NOT NULL,
+  `actor` varchar(191) NOT NULL,
+  `blocked_until` int(10) UNSIGNED NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rate_limit_counters`
+--
+
+CREATE TABLE `rate_limit_counters` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `bucket` varchar(100) NOT NULL,
+  `actor` varchar(191) NOT NULL,
+  `window_start` int(10) UNSIGNED NOT NULL,
+  `request_count` int(10) UNSIGNED NOT NULL DEFAULT 1,
+  `last_hit` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -250,7 +294,9 @@ CREATE TABLE `users` (
   `discord_refresh_token` varchar(255) DEFAULT NULL,
   `dcid` varchar(255) DEFAULT NULL,
   `muted` int(1) NOT NULL DEFAULT 0,
-  `loginfails` int(255) NOT NULL DEFAULT 0
+  `loginfails` int(255) NOT NULL DEFAULT 0,
+  `twofactor_enabled` int(1) NOT NULL DEFAULT 0,
+  `bio` varchar(30) NOT NULL DEFAULT 'N/A'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -260,6 +306,18 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`uid`, `username`, `displayname`, `password`, `hwid`, `admin`, `supp`, `sub`, `username_change`, `frozen`, `banned`, `invitedBy`, `createdAt`, `lastIP`, `currentLogin`, `lastLogin`, `banreason`, `resetcount`, `lastreset`, `invites`, `invitescount`, `discord_access_token`, `discord_refresh_token`, `dcid`, `muted`, `loginfails`) VALUES
 (1, 'admin', 'andi_arbeit', '$2y$10$7wOzYc.AXpXc1nE/b0IqLOsP2w1cK9LZXDUi6hoSyuWBDj3DoBjOK', 'fetter_bauer-c26b15bf-a96c', 1, 1, '2089-06-17', NULL, 0, 0, '', '2022-07-05 22:04:37', 'localhost', '2024-08-20 19:17:55', '2024-08-16 01:01:10', 'none', 13, '2023-07-30', 17, 0, NULL, NULL, NULL, 0, 0),
 (2, 'admin2', NULL, '$argon2i$v=19$m=65536,t=4,p=1$SGkxUDJoU083enM2anBRNQ$Vnyxq9VgVQjNAVo8ugf50LjiUwrmcPAd8g/IdaERg/8', NULL, 0, 0, '2089-08-31', NULL, 0, 0, 'System', '2023-07-01 14:06:00', 'localhost', '2023-08-13 12:49:39', '2023-08-12 22:49:20', 'none', 1, '2024-05-13', 15, 0, NULL, NULL, NULL, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `variables`
+--
+
+CREATE TABLE `variables` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `content` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -289,6 +347,28 @@ ALTER TABLE `ip_whitelist`
 ALTER TABLE `login`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `remembertoken` (`remembertoken`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `rate_limit_blocks`
+--
+ALTER TABLE `rate_limit_blocks`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_bucket_actor_block` (`bucket`,`actor`),
+  ADD KEY `idx_blocked_until` (`blocked_until`);
+
+--
+-- Indexes for table `rate_limit_counters`
+--
+ALTER TABLE `rate_limit_counters`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_bucket_actor_window` (`bucket`,`actor`,`window_start`),
+  ADD KEY `idx_window_start` (`window_start`);
 
 --
 -- Indexes for table `shoutbox`
@@ -326,6 +406,13 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `hwid` (`hwid`);
 
 --
+-- Indexes for table `variables`
+--
+ALTER TABLE `variables`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -340,6 +427,24 @@ ALTER TABLE `adminlogs`
 --
 ALTER TABLE `login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rate_limit_blocks`
+--
+ALTER TABLE `rate_limit_blocks`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rate_limit_counters`
+--
+ALTER TABLE `rate_limit_counters`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `shoutbox`
@@ -358,6 +463,12 @@ ALTER TABLE `userlogs`
 --
 ALTER TABLE `users`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `variables`
+--
+ALTER TABLE `variables`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Sanitize and assign POST variables
         $params = [
             'SystemStatus', 'SystemMaint', 'SystemVersion', 'invite', 'Systemfreeze',
-            'flushchat', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
-            'discordlogging', 'service', 'setkey', 'setsecret', 'setcolor', 'captcha_option'
+            'flushchat', 'setshoutbox', 'setnews', 'invwave', 'discordlinking', 'discordrelinking',
+            'discordlogging', 'service', 'setkey', 'setsecret', 'setoption', 'updatecolor'
         ];
 
         foreach ($params as $param) {
@@ -66,6 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($flushchat)) {
             $admin->flushchat();
         }
+        if (isset($setshoutbox)) {
+            $admin->setshoutbox();
+        }
         if (isset($setnews)) {
             $news = Util::securevar($_POST["msg"]);
             $admin->setnews($news);
@@ -82,17 +85,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($discordlogging)) {
             $admin->setDiscordLogging();
         }
-        if (isset($captcha_option)) {
-            $admin->setCaptchaSystem($captcha_option);
+        if (isset($setoption)) {
+            $captcha_option = (int) Util::securevar($_POST['captcha_option'] ?? 0);
+            if (in_array($captcha_option, [0, 1, 2, 3])) {
+                $admin->setCaptchaSystem($captcha_option);
+            }
         }
         if (isset($setkey)) {
-            $admin->setCaptchaKey($setkey);
+            $admin->setCaptchaKey(Util::securevar($_POST['site_key'] ?? ''));
         }
         if (isset($setsecret)) {
-            $admin->setCaptchaSecret($setsecret);
+            $admin->setCaptchaSecret(Util::securevar($_POST['site_secret'] ?? ''));
         }
-        if (isset($setcolor)) {
-            $admin->changeEmbedColor($setcolor);
+        if (isset($updatecolor)) {
+            $color = Util::securevar($_POST["setcolor"] ?? '');
+            $admin->changeEmbedColor($color);
         }
 
         // Redirect to system page after processing
@@ -279,7 +286,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <h5 class="card-title"><?php Util::display(
                                      $System->getSystemData()->version
                                  ); ?></h5>
-                                 <p class="stats-text">Loader version</p>
+                                 <p class="stats-text">Client version</p>
                               </div>
                               <div class="stats-icon change-success">
                                  <i class="material-icons">info</i>
@@ -309,6 +316,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  </div>
                                  <div class="stats-icon change-danger">
                                     <i class="material-icons">info</i>
+                                 </div>
+                              </div>
+                           <?php endif; ?>
+                        </div>
+                     </div>
+                     <div class="col-lg-2">
+                        <div class="card stats-card">
+                           <?php if ($System->getSystemData()->shoutbox == "1") : ?>
+                              <div class="card-body">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">Enabled</h5>
+                                    <p class="stats-text">Shoutbox</p>
+                                 </div>
+                                 <div class="stats-icon change-success">
+                                    <i class="material-icons">chat</i>
+                                 </div>
+                              </div>
+                           <?php else : ?>
+                              <div class="card-body">
+                                 <div class="stats-info">
+                                    <h5 class="card-title">Disabled</h5>
+                                    <p class="stats-text">Shoutbox</p>
+                                 </div>
+                                 <div class="stats-icon change-danger">
+                                    <i class="material-icons">chat</i>
                                  </div>
                               </div>
                            <?php endif; ?>
@@ -448,6 +480,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                            <form method="POST" action="<?php Util::Display(
                                Util::securevar($_SERVER["PHP_SELF"])
                            ); ?>">
+                              <?php Util::csrfField(); ?>
                               <h5 class="widget-info-title text-white">Settings</h5>
                               <p class="widget-info-text">Set System version</p>
 
@@ -467,6 +500,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                  <div class="input-group mb-3">
                                     <input autocomplete="off" type="text" class="form-control" placeholder='Captcha Secret ex: 0x...' name="site_secret" aria-describedby="button-addon2">
                                     <button class="btn btn-success" name="setsecret" type="submit" id="button-addon2">Update</button>
+                                 </div>
+                                 <div class="input-group mb-3">
+                                    <input type="color" class="form-control form-control-color" value="<?= $user->getEmbedColor(); ?>" name="setcolor" title="Choose embed color">
+                                    <button class="btn btn-success" name="updatecolor" type="submit" id="button-addon2">Update</button>
                                  </div>
                               </div>
                               <div class="input-group mb-3">
@@ -490,6 +527,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                  <button name="invite" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to change the invites mode?');">
                                     SET invites+-
+                                 </button>
+
+                                 <button name="setshoutbox" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to enable/disable the shoutbox?');">
+                                    SET shoutbox+-
+                                 </button>
+
+                                 <button name="flushchat" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to flush the shoutbox?');">
+                                    FLUSH shoutbox
                                  </button>
 
                                  <button name="Systemfreeze" type="submit" class="btn btn-outline-primary btn-sm" onclick="return confirm('Are you sure you want to freeze/unfreeze ALL subscriptions?');">
